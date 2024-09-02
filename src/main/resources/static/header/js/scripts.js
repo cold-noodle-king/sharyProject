@@ -52,3 +52,15 @@ window.addEventListener('DOMContentLoaded', event => {
     });
 
 });
+
+document.addEventListener("DOMContentLoaded", function() {
+    var navbar = document.querySelector('.navbar'); // 헤더를 선택합니다.
+
+    window.addEventListener('scroll', function() {
+        if (window.scrollY > 50) { // 스크롤이 50px 이상일 때
+            navbar.style.backgroundColor = '#b7b7d8'; // 연보라색으로 변경
+        } else {
+            navbar.style.backgroundColor = '#9982a1'; // 기본 진청색으로 복원
+        }
+    });
+});
