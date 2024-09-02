@@ -1,17 +1,49 @@
 <!DOCTYPE html>
 <html lang="ko"
       xmlns:th="http://www.thymeleaf.org"
->
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
-    <title>회원가입</title>
+    <title>My Diary</title>
     <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
     <link href="../header/css/styles.css" rel="stylesheet">
     <link rel="stylesheet" href="../footer/css/styles.css">
+    <!-- 추가적인 외부 CSS 파일 -->
+    <link href="/css/MyDairy/MyDairy.css" rel="stylesheet"> <!-- my-diary.css 파일 경로에 맞게 수정 -->
 </head>
 <body>
 <!-- header.html의 헤더 부분 불러오기 -->
 <div th:replace="~{fragments/header :: header}"></div>
+
+<div id="container">
+    <h2>My Dairy</h2>
+
+    <!-- 다이어리 리스트 -->
+    <div class="diary-container">
+        <!-- 신규 다이어리 추가 버튼 -->
+        <div class="diary-item">
+            <a href="#" th:href="@{/personal/newDiary}">
+                <div class="add-icon">+</div>
+            </a>
+        </div>
+
+        <!-- 다이어리 표지 (반복되는 다이어리 목록) -->
+        <div class="diary-cover">
+            <span>표지</span>
+        </div>
+        <div class="diary-cover">
+            <span>표지</span>
+        </div>
+    </div>
+
+    <!-- 액션 버튼들 -->
+    <div class="actions-container">
+        <button class="action-button" th:onclick="|window.location.href='@{/personal/newDiary}'|">신규 다이어리</button>
+        <button class="action-button" th:onclick="|window.location.href='@{/personal/editDiary}'|">다이어리 수정</button>
+        <button class="action-button" th:onclick="|window.location.href='@{/personal/deleteDiary}'|">다이어리 삭제</button>
+        <button class="action-button" th:onclick="|window.location.href='@{/personal/addDiarySheet}'|">다이어리 속지 추가</button>
+    </div>
+</div>
 
 <!-- footer.html의 푸터 부분 불러오기 -->
 <div th:replace="~{fragments/footer :: footer}"></div>
