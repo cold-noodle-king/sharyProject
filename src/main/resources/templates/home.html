@@ -1,10 +1,71 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>home</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>메인 페이지</title>
+    <!-- 필요한 스타일시트 링크 -->
+    <link href="header/css/styles.css" rel="stylesheet">
+    <link rel="stylesheet" href="/footer/css/styles.css">
 </head>
-<body>
+<!-- 헤더용 JS -->
+<script src="/header/js/header-scripts.js"></script>
+<!-- 푸터용 JS -->
+<script src="/footer/js/footer-scripts.js"></script>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<body>
+<!-- header.html의 헤더 부분 불러오기 -->
+<div th:replace="~{fragments/header :: header}"></div>
+
+<!-- Home 섹션 -->
+<div id="page-top"></div>
+<!-- 페이지의 다른 콘텐츠 -->
+<section id="main-content">
+    <div class="container">
+        <h1>Welcome to the Main Page</h1>
+        <p>This is the main content of the page.</p>
+    </div>
+</section>
+
+<!-- 둘러보기 섹션 -->
+<section id="portfolio">
+    <h2>둘러보기</h2>
+    <!-- 포트폴리오 -->
+    <div th:replace="fragments/portfolio :: portfolio"></div>
+</section>
+
+<!-- 개인 다이어리 섹션 -->
+<section id="about">
+    <h2>개인 다이어리</h2>
+    <p>개인 다이어리 섹션 내용</p>
+</section>
+
+<!-- 공용 다이어리 섹션 -->
+<section id="team">
+    <h2>공용 다이어리</h2>
+    <p>공용 다이어리 섹션 내용</p>
+</section>
+
+<!-- 프로필 섹션 -->
+<section id="contact">
+    <h2>프로필</h2>
+    <p>프로필 섹션 내용</p>
+</section>
+
+<!-- 마이페이지 섹션 -->
+<section id="mypage">
+    <h2>마이페이지</h2>
+    <p>마이페이지 섹션 내용</p>
+</section>
+
+
+
+<div th:replace="fragments/modals :: modals"></div>
+
+
+<!-- footer.html의 푸터 부분 불러오기 -->
+<div th:replace="~{fragments/footer :: footer}"></div>
 </body>
 </html>
