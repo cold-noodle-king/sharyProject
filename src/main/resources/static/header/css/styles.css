@@ -91,6 +91,36 @@
   }
 }
 
+/* 슬라이더 전체 영역 스타일 */
+.image-slider {
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+/* 이미지 트랙 스타일 */
+.image-track {
+  display: flex;
+  width: calc(100% * 10); /* 이미지 개수에 따라 조정 */
+  animation: slide 20s linear infinite; /* 오른쪽에서 왼쪽으로 슬라이드 애니메이션 */
+}
+
+/* 이미지 스타일 */
+.image-track img {
+  width: auto;
+  height: 200px; /* 원하는 높이로 설정 */
+  margin-right: 10px;
+}
+
+/* 오른쪽에서 왼쪽으로 슬라이드 애니메이션 정의 */
+@keyframes slide {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
 
 
 
