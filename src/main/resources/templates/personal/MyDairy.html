@@ -1,11 +1,19 @@
 <!DOCTYPE html>
 <html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
 >
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>회원가입</title>
+    <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
+    <link href="../header/css/styles.css" rel="stylesheet">
+    <link rel="stylesheet" href="../footer/css/styles.css">
 </head>
 <body>
+<!-- header.html의 헤더 부분 불러오기 -->
+<div th:replace="~{fragments/header :: header}"></div>
 
+<!-- footer.html의 푸터 부분 불러오기 -->
+<div th:replace="~{fragments/footer :: footer}"></div>
 </body>
 </html>
