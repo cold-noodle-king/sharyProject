@@ -24,7 +24,7 @@ public class FollowController {
     // FollowController.java
     @GetMapping("/follow")
     public String follow() {
-        return "follow";
+        return "follow/follow";
     }
 
 
