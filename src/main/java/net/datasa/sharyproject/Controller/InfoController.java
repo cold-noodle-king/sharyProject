@@ -7,7 +7,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class InfoController {
     @GetMapping({"", "/"})
     public String info() {
+
         return "home"; // 나중에 info페이지 만들때 경로바꾸기
     }
 }
+
 

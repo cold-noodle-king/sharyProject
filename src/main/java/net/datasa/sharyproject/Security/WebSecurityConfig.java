@@ -22,6 +22,7 @@ public class WebSecurityConfig {
             , "thymeleaf"
     };
 
+
     @Bean // 해당 메서드가 리턴하는 객체를 메모리에 미리 만들어놓아 메서드를 따로 호출하지 않아도 시큐리티에서 사용 가능
     protected SecurityFilterChain config(HttpSecurity http) throws Exception {
         http
