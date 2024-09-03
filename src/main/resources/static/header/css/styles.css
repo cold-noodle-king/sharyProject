@@ -91,36 +91,111 @@
   }
 }
 
-/* 슬라이더 전체 영역 스타일 */
-.image-slider {
+/* 다이어리 슬라이드 무한 반복 부분 */
+
+/* 첫 번째 슬라이더 트랙 스타일 (왼쪽으로 슬라이드) */
+.image-slider1 {
   width: 100%;
   overflow: hidden;
   position: relative;
 }
 
-/* 이미지 트랙 스타일 */
-.image-track {
+.image-slider1 .image-track {
   display: flex;
-  width: calc(100% * 10); /* 이미지 개수에 따라 조정 */
-  animation: slide 20s linear infinite; /* 오른쪽에서 왼쪽으로 슬라이드 애니메이션 */
+  width: calc(300%); /* 트랙의 너비를 두 배로 설정 */
+  animation: slide-left 30s linear infinite; /* 왼쪽 방향으로 슬라이드 */
+}
+
+/* 두 번째 슬라이더 트랙 스타일 (오른쪽으로 슬라이드) */
+.image-slider2 {
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+.image-slider2 .image-track {
+  display: flex;
+  width: calc(300%); /* 트랙의 너비를 두 배로 설정 */
+  animation: slide-right 30s linear infinite; /* 오른쪽 방향으로 슬라이드 */
 }
 
 /* 이미지 스타일 */
 .image-track img {
   width: auto;
   height: 200px; /* 원하는 높이로 설정 */
-  margin-right: 10px;
+  margin-right: 10px; /* 이미지 사이의 여백 유지 */
+  flex-shrink: 0;
 }
 
-/* 오른쪽에서 왼쪽으로 슬라이드 애니메이션 정의 */
-@keyframes slide {
+/* 슬라이드 애니메이션 정의 - 왼쪽 방향 */
+@keyframes slide-left {
   0% {
-    transform: translateX(0);
+    transform: translateX(0); /* 시작 위치 */
   }
   100% {
-    transform: translateX(-100%);
+    transform: translateX(-23.3%); /* 트랙의 절반만큼 왼쪽으로 이동 */
   }
 }
+
+/* 슬라이드 애니메이션 정의 - 오른쪽 방향 */
+@keyframes slide-right {
+  0% {
+    transform: translateX(-23.3%); /* 트랙의 끝에서 시작 */
+  }
+  100% {
+    transform: translateX(0); /* 원래 위치로 돌아오도록 설정 */
+  }
+}
+
+
+/* 둘러보기 모달 이동용 스타일 */
+
+
+/* 캐러셀 컨테이너 스타일 */
+.carousel-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  width: 100%;
+}
+
+/* 트랙 컨테이너 */
+.carousel-track-container {
+  overflow: hidden;
+  width: 80%; /* 원하는 슬라이더 너비 설정 */
+}
+
+/* 슬라이드 트랙 */
+.carousel-track {
+  display: flex;
+  transition: transform 0.5s ease;
+}
+
+/* 화살표 버튼 스타일 */
+.carousel-btn {
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1;
+}
+
+.carousel-btn.left {
+  left: 10px; /* 왼쪽 화살표 위치 */
+}
+
+.carousel-btn.right {
+  right: 10px; /* 오른쪽 화살표 위치 */
+}
+
+
+
+
 
 
 
@@ -11349,4 +11424,48 @@ section#contact form#contactForm :-ms-input-placeholder {
   text-align: center;
   font-size: 0.9rem;
   font-family: "Montserrat", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+
+/* 둘러보기 모달 슬라이드 기능 부분 */
+
+/* 캐러셀 컨테이너 스타일 */
+.carousel-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  width: 100%;
+}
+
+/* 트랙 컨테이너 */
+.carousel-track-container {
+  overflow: hidden;
+  width: 80%; /* 원하는 슬라이더 너비 설정 */
+}
+
+/* 슬라이드 트랙 */
+.carousel-track {
+  display: flex;
+  transition: transform 0.5s ease;
+}
+
+/* 화살표 버튼 스타일 */
+.carousel-btn {
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1;
+}
+
+.carousel-btn.left {
+  left: 10px; /* 왼쪽 화살표 위치 */
+}
+
+.carousel-btn.right {
+  right: 10px; /* 오른쪽 화살표 위치 */
 }

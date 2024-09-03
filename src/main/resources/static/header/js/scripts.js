@@ -64,3 +64,64 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     });
 });
+
+// 이미지 슬라이더 부분
+document.addEventListener("DOMContentLoaded", function() {
+    const track = document.querySelector('.image-track');
+    let isPaused = false;
+
+    function resetSlider() {
+        if (!isPaused) {
+            track.appendChild(track.firstElementChild); // 첫 번째 이미지를 마지막에 추가하여 무한 반복 효과
+            track.style.transition = 'none'; // 애니메이션 끊김 방지
+            track.style.transform = 'translateX(0)'; // 위치 초기화
+            requestAnimationFrame(() => {
+                track.style.transition = 'transform 10s linear'; // 부드러운 애니메이션 재시작
+                track.style.transform = 'translateX(-100%)'; // 트랙을 다시 이동
+            });
+        }
+    }
+
+    track.addEventListener('transitionend', resetSlider); // 애니메이션 끝날 때 호출
+
+    track.style.transform = 'translateX(-100%)'; // 초기 슬라이드 시작
+});
+
+
+// 둘러보기 모달 이동 스크립트
+document.addEventListener('DOMContentLoaded', function() {
+    const track = document.querySelector('.carousel-track');
+    const prevButton = document.getElementById('prevBtn');
+    const nextButton = document.getElementById('nextBtn');
+
+    let currentSlideIndex = 0;
+    const slideWidth = track.children[0].getBoundingClientRect().width; // 각 슬라이드의 너비
+
+    // 각 슬라이드를 가로로 나열
+    function arrangeSlides() {
+        Array.from(track.children).forEach((slide, index) => {
+            slide.style.left = `${index * slideWidth}px`;
+        });
+    }
+
+    // 이전 슬라이드로 이동
+    function moveToPrevSlide() {
+        if (currentSlideIndex === 0) return; // 첫 슬라이드인 경우 멈춤
+        currentSlideIndex--;
+        track.style.transform = `translateX(-${currentSlideIndex * slideWidth}px)`;
+    }
+
+    // 다음 슬라이드로 이동
+    function moveToNextSlide() {
+        if (currentSlideIndex >= track.children.length - 1) return; // 마지막 슬라이드인 경우 멈춤
+        currentSlideIndex++;
+        track.style.transform = `translateX(-${currentSlideIndex * slideWidth}px)`;
+    }
+
+    // 이벤트 리스너 등록
+    prevButton.addEventListener('click', moveToPrevSlide);
+    nextButton.addEventListener('click', moveToNextSlide);
+
+    arrangeSlides(); // 초기 슬라이드 정렬
+});
+
