@@ -1,6 +1,5 @@
 package net.datasa.sharyproject.domain.dto.Member;
 
-import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -35,5 +34,5 @@ public class MemberDTO {
 
     private LocalDateTime updatedDate;
 
-    private String roleName;
+    //private String roleName;
 }
