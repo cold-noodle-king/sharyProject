@@ -1,5 +1,8 @@
 package net.datasa.sharyproject.domain.entity.Follow;
 
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinColumns;
+import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,6 +19,9 @@ public class FollowId implements Serializable {
 
     private String followerId;
     private String followingId;
+
+
+
 
 }
 
