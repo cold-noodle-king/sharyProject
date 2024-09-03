@@ -1,28 +1,45 @@
-package net.datasa.sharyproject.controller.Share;
+package net.datasa.sharyproject.Controller.Share;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("share")
 public class ShareController {
 
     @GetMapping("main")
-    public String main() {
+    public String viewMain() {
 
         return "share/main";
     }
 
-    @GetMapping("created")
-    public String created() {
-
-        return "share/created";
-    }
-
-    @GetMapping("joined")
+    @GetMapping("joinedList")
     public String joined() {
 
-        return "share/joined";
+        return "share/joinedList";
     }
+
+    @GetMapping("newNote")
+    public String newNote() {
+        return "share/main";
+    }
+
+    @GetMapping("editDiary")
+    public String editDiary() {
+
+        return "share/editDiary";
+    }
+
+    @PostMapping("deleteDiary")
+    public String deleteDiary() {
+
+        return "share/main";
+    }
+
+    @PostMapping("withdrawal")
+    public String withdrawal() {
+        return "share/main";
+    }
+
+
 }
