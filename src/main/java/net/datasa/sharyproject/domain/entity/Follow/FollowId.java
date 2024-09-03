@@ -19,7 +19,5 @@ public class FollowId implements Serializable {
     private String followingId;
 
 
-
-
 }
 
