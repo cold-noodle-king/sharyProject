@@ -14,4 +14,16 @@ public class ShareController {
 
         return "share/main";
     }
+
+    @GetMapping("created")
+    public String created() {
+
+        return "share/created";
+    }
+
+    @GetMapping("joined")
+    public String joined() {
+
+        return "share/joined";
+    }
 }
