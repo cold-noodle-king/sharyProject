@@ -15,6 +15,7 @@ public class userController {
 
     /**
      * 로그인
+     *
      * @return 로그인페이지로 이동 html
      */
     @GetMapping("login")
@@ -24,6 +25,7 @@ public class userController {
 
     /**
      * 회원가입
+     *
      * @return 회원가입페이지로 이동
      */
     @GetMapping("joinForm")
@@ -33,9 +35,10 @@ public class userController {
 
     /**
      * 회원가입
+     *
      * @return 로그인 폼으로 이동
      */
-    @PostMapping("joinF")
+    @PostMapping("joinForm")
     public String join() {
         return "user/loginForm";
     }
