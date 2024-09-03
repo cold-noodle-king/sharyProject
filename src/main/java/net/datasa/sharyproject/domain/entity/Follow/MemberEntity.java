@@ -42,10 +42,10 @@ public class MemberEntity {
     @Column(name = "birthdate", nullable = false)
     private LocalDate birthdate;
 
-    @Column(name = "created_date", nullable = false)
+    @Column(name = "created_date", nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime createdDate;
 
-    @Column(name = "updated_date", nullable = false)
+    @Column(name = "updated_date", nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
     private LocalDateTime updatedDate;
 
     @Column(name = "role_name", nullable = false, length = 50)
