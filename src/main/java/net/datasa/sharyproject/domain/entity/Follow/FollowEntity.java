@@ -21,7 +21,6 @@ public class FollowEntity {
     @Column(name = "follower_id", nullable = false)
     private String followerId;
 
-
     @Id
     @Column(name = "following_id", nullable = false)
     private String followingId;
