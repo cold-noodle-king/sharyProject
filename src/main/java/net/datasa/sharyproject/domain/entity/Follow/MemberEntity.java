@@ -36,8 +36,11 @@ public class MemberEntity {
     @Column(name = "nickname", nullable = false, length = 50)
     private String nickname;
 
-    @Column(name = "gender", nullable = false, length = 10)
+
+
+    @Column(name = "gender", nullable = false, columnDefinition = "CHAR")
     private String gender;
+
 
     @Column(name = "birthdate", nullable = false)
     private LocalDate birthdate;
