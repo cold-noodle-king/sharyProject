@@ -17,14 +17,6 @@ import java.time.LocalDateTime;
 @IdClass(FollowId.class)    //복합키 정의 클래스
 public class FollowEntity {
 
-
-    @ManyToOne
-    @JoinColumns({
-            @JoinColumn(name = "follower_id", referencedColumnName = "follower_id", insertable = false, updatable = false),
-            @JoinColumn(name = "following_id", referencedColumnName = "following_id", insertable = false, updatable = false)
-    })
-    private FollowEntity follow;
-
     @Id
     @Column(name = "follower_id", nullable = false)
     private String followerId;
