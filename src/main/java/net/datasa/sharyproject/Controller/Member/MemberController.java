@@ -1,26 +1,30 @@
-package net.datasa.sharyproject.Controller.User;
+package net.datasa.sharyproject.Controller.Member;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.datasa.sharyproject.Service.Member.MemberService;
+import net.datasa.sharyproject.domain.dto.Member.MemberDTO;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @RequiredArgsConstructor
 @Slf4j
-@RequestMapping("user")
+@RequestMapping("member")
 @Controller
-public class userController {
+public class MemberController {
 
+    private final MemberService memberService;
     /**
      * 로그인
      *
      * @return 로그인페이지로 이동 html
      */
-    @GetMapping("login")
-    public String login() {
-        return "user/loginForm";
+    @GetMapping("loginForm")
+    public String loginForm() {
+        return "/member/loginForm";
     }
 
     /**
@@ -30,7 +34,7 @@ public class userController {
      */
     @GetMapping("joinForm")
     public String joinForm() {
-        return "user/joinForm";
+        return "/member/joinForm";
     }
 
     /**
@@ -38,9 +42,12 @@ public class userController {
      *
      * @return 로그인 폼으로 이동
      */
-    @PostMapping("joinForm")
-    public String join() {
-        return "user/loginForm";
+    @PostMapping("join")
+    public String join(@ModelAttribute MemberDTO member) {
+        log.debug("전달된 회원정보: {}", member); // 어떤 값이 넘어갔는지 찍어놓기
+
+        memberService.join(member);
+        return "/member/loginForm";
     }
 
 //

@@ -18,7 +18,7 @@
 </head>
 <body>
 <section>
-    <form id="loginForm" th:action="@{/user/login}" method="post">
+    <form id="loginForm" th:action="@{/member/login}" method="post">
         <table>
             <tr>
                 <td>ID</td> <!-- 여기서 name이 콘피그에서 유저네임파라미터 이름과 동일해야함  -->
@@ -35,7 +35,7 @@
             </tr>
         </table>
     </form>
-    <a th:href="@{/user/joinForm}"><button>회원가입</button></a>
+    <a th:href="@{/member/joinForm}"><button>회원가입</button></a>
 </section>
 </body>
 </html>
