@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>My Diary</title>
+    <script th:src="@{/js/jquery-3.7.1.min.js}"></script> <!-- jQuery 로드 -->
+    <script th:src="@{/js/Personal/PersonalCategorySelect.js}"></script> <!-- 제이쿼리 외부링크 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- 부트스트랩 CSS -->
+    <link href="../header/css/styles.css" rel="stylesheet">
+    <link rel="stylesheet" href="../footer/css/styles.css">
+    <!-- 추가적인 외부 CSS 파일 -->
+    <link href="/css/Personal/MyDiary.css" rel="stylesheet"> <!-- MyDiary.css 파일 경로에 맞게 수정 -->
+</head>
+<body>
+    <!-- header.html의 헤더 부분 불러오기 -->
+    <div th:replace="~{fragments/header :: header}"></div>
+    <div id="container" class="container mt-5">
+        <div class="card text-center bg-dark text-white">
+            <div class="card-body">
+                <h4 class="card-title mb-4">일기의 카테고리를 설정해주세요!</h4>
+
+                <!-- 카테고리 버튼들 -->
+                <div class="mb-4">
+                    <button type="button" class="btn btn-secondary category-button me-2 mb-2" data-category="일상">일상</button>
+                    <button type="button" class="btn btn-secondary category-button me-2 mb-2" data-category="육아">육아</button>
+                    <button type="button" class="btn btn-secondary category-button me-2 mb-2" data-category="운동">운동</button>
+                    <button type="button" class="btn btn-secondary category-button me-2 mb-2" data-category="연애">연애</button>
+                    <button type="button" class="btn btn-secondary category-button me-2 mb-2" data-category="여행">여행</button>
+                    <button type="button" class="btn btn-secondary category-button me-2 mb-2" data-category="취미">취미</button>
+                </div>
+
+                <!-- 저장 및 취소 버튼 -->
+                <div>
+                    <button type="submit" class="btn btn-secondary me-2">저장</button>
+                    <button type="button" class="btn btn-secondary">취소</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- footer.html의 푸터 부분 불러오기 -->
+    <div th:replace="~{fragments/footer :: footer}"></div>
+
+    <!-- 부트스트랩 JS (모달을 위한 JavaScript 필요) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script> <!-- 부트스트랩 JS -->
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script> <!-- FontAwesome for icons -->
+</body>
+</html>
