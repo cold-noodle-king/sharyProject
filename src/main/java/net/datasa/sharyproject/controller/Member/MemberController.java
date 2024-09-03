@@ -1,4 +1,4 @@
-package net.datasa.sharyproject.Controller.Member;
+package net.datasa.sharyproject.controller.Member;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

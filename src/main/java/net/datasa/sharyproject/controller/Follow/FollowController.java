@@ -1,4 +1,4 @@
-package net.datasa.sharyproject.Controller.Follow;
+package net.datasa.sharyproject.controller.Follow;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
