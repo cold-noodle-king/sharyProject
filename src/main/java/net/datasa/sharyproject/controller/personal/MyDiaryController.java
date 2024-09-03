@@ -1,4 +1,4 @@
-package net.datasa.sharyproject.Controller.Personal;
+package net.datasa.sharyproject.controller.personal;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

@@ -1,9 +1,8 @@
-package net.datasa.sharyproject.Controller.Share;
+package net.datasa.sharyproject.controller.Share;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping("share")
