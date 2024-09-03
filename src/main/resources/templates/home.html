@@ -60,52 +60,8 @@
 <section id="about">
     <h2>개인 다이어리</h2>
     <p>개인 다이어리 섹션 내용</p>
-    <div class="image-slider1">
-        <div class="image-track">
-            <img src="/header/assets/img/about/1.png" alt="Book 1">
-            <img src="/header/assets/img/about/2.png" alt="Book 2">
-            <img src="/header/assets/img/about/3.png" alt="Book 3">
-            <img src="/header/assets/img/about/4.png" alt="Book 4">
-            <img src="/header/assets/img/about/1.png" alt="Book 1">
-            <img src="/header/assets/img/about/2.png" alt="Book 2">
-            <img src="/header/assets/img/about/3.png" alt="Book 3">
-
-            <!-- 이미지를 반복하여 무한 슬라이드 구현 -->
-            <img src="/header/assets/img/about/1.png" alt="Book 1">
-            <img src="/header/assets/img/about/2.png" alt="Book 2">
-            <img src="/header/assets/img/about/3.png" alt="Book 3">
-            <img src="/header/assets/img/about/4.png" alt="Book 4">
-            <img src="/header/assets/img/about/1.png" alt="Book 5">
-            <img src="/header/assets/img/about/2.png" alt="Book 6">
-            <img src="/header/assets/img/about/3.png" alt="Book 3">
-
-        </div>
-    </div>
-
-    <br>
-    <!-- 두 번째 슬라이더 -->
-    <div class="image-slider2"> <!-- 두 번째 슬라이더 -->
-        <div class="image-track">
-            <!-- 슬라이드 이미지 6개 반복 -->
-            <img src="/header/assets/img/about/1.png" alt="Book 1">
-            <img src="/header/assets/img/about/2.png" alt="Book 2">
-            <img src="/header/assets/img/about/3.png" alt="Book 3">
-            <img src="/header/assets/img/about/4.png" alt="Book 4">
-            <img src="/header/assets/img/about/2.png" alt="Book 5">
-            <img src="/header/assets/img/about/3.png" alt="Book 6">
-            <img src="/header/assets/img/about/4.png" alt="Book 4">
-
-            <!-- 이미지를 반복하여 무한 슬라이드 구현 -->
-            <img src="/header/assets/img/about/1.png" alt="Book 1">
-            <img src="/header/assets/img/about/2.png" alt="Book 2">
-            <img src="/header/assets/img/about/3.png" alt="Book 3">
-            <img src="/header/assets/img/about/4.png" alt="Book 4">
-            <img src="/header/assets/img/about/1.png" alt="Book 5">
-            <img src="/header/assets/img/about/2.png" alt="Book 6">
-            <img src="/header/assets/img/about/4.png" alt="Book 4">
-
-        </div>
-    </div>
+    <!-- 개인 다이어리 섹션 -->
+    <div th:replace="~{fragments/diary_slider :: diarySlider}"></div>
 
 </section>
 

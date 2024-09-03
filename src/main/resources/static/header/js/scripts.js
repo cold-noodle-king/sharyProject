@@ -125,3 +125,44 @@ document.addEventListener('DOMContentLoaded', function() {
     arrangeSlides(); // 초기 슬라이드 정렬
 });
 
+
+// 포트폴리오 화살표 슬라이드
+document.addEventListener('DOMContentLoaded', function () {
+    const track = document.querySelector('.carousel-track');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const itemsToShow = 3; // 한 번에 보이는 아이템 수
+    const itemWidth = track.children[0].offsetWidth; // 하나의 아이템의 너비
+    let currentIndex = 0; // 현재 슬라이드 인덱스
+
+    // 이전 버튼 클릭 이벤트
+    prevBtn.addEventListener('click', () => {
+        if (currentIndex > 0) {
+            currentIndex--;
+        } else {
+            currentIndex = track.children.length - itemsToShow;
+        }
+        updateSliderPosition();
+    });
+
+    // 다음 버튼 클릭 이벤트
+    nextBtn.addEventListener('click', () => {
+        if (currentIndex < track.children.length - itemsToShow) {
+            currentIndex++;
+        } else {
+            currentIndex = 0;
+        }
+        updateSliderPosition();
+    });
+
+    // 슬라이더 위치 업데이트
+    function updateSliderPosition() {
+        const moveDistance = -(itemWidth * currentIndex);
+        track.style.transform = `translateX(${moveDistance}px)`;
+    }
+});
+
+
+
+
+

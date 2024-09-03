@@ -11428,44 +11428,46 @@ section#contact form#contactForm :-ms-input-placeholder {
 
 /* 둘러보기 모달 슬라이드 기능 부분 */
 
-/* 캐러셀 컨테이너 스타일 */
+/* 포트폴리오 슬라이더 스타일 */
 .carousel-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
   position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+.carousel-track-container {
+  display: flex;
+  overflow: hidden;
   width: 100%;
 }
 
-/* 트랙 컨테이너 */
-.carousel-track-container {
-  overflow: hidden;
-  width: 80%; /* 원하는 슬라이더 너비 설정 */
-}
-
-/* 슬라이드 트랙 */
 .carousel-track {
   display: flex;
-  transition: transform 0.5s ease;
+  transition: transform 0.3s ease-in-out;
+  will-change: transform;
+  width: max-content; /* 아이템의 너비에 맞춰 트랙 너비 설정 */
 }
+
 
 /* 화살표 버튼 스타일 */
 .carousel-btn {
-  background-color: rgba(0, 0, 0, 0.5);
-  color: white;
-  border: none;
-  padding: 10px;
-  cursor: pointer;
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  z-index: 1;
+  background-color: rgba(0, 0, 0, 0.5);
+  border: none;
+  color: white;
+  padding: 10px;
+  cursor: pointer;
+  z-index: 10;
 }
 
 .carousel-btn.left {
-  left: 10px; /* 왼쪽 화살표 위치 */
+  left: 0;
 }
 
 .carousel-btn.right {
-  right: 10px; /* 오른쪽 화살표 위치 */
+  right: 0;
 }
+
+
