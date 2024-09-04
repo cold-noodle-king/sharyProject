@@ -16,7 +16,7 @@ public class MemberDTO {
 
     private String memberId;
 
-    private String password;
+    private String memberPw;
 
     private String email;
 
@@ -34,5 +34,7 @@ public class MemberDTO {
 
     private LocalDateTime updatedDate;
 
-    //private String roleName;
+    private boolean enabled;
+
+    private String roleName;
 }

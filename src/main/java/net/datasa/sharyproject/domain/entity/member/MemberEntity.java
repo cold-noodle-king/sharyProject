@@ -26,7 +26,7 @@ public class MemberEntity {
     private String memberId;
 
     @Column(name = "password", nullable = false, length = 100)
-    private String password;
+    private String memberPw;
 
     @Column(name = "email", nullable = false, length = 100)
     private String email;
@@ -56,4 +56,7 @@ public class MemberEntity {
 
     @Column(name = "role_name", nullable = false, length = 50)
     private String roleName;
+
+    @Column(name="enabled", columnDefinition = "tinyint(1) default 1 check(enabled in (0,1)")
+    private Boolean enabled = true; //객체이고 null을 담을 수 있음
 }

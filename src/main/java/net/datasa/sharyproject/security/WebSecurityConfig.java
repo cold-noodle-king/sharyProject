@@ -21,6 +21,7 @@ public class WebSecurityConfig {
             , "js/**"
             , "thymeleaf"
             , "/member/loginForm"     // 로그인 페이지
+            , "/member/join"      // 회원가입 처리 경로
             , "/member/joinForm"  // 회원가입 페이지
     };
 
@@ -39,8 +40,8 @@ public class WebSecurityConfig {
             //폼 로그인 설정
             .formLogin(formLogin -> formLogin
                     .loginPage("/member/loginForm")          //로그인폼 페이지 경로.로그인 해야지만 들어갈 수 있는 페이지를 클릭했을 때 로그인 폼으로 이동
-                    .usernameParameter("id")          //폼의 ID 파라미터 이름(name)
-                    .passwordParameter("password")    //폼의 비밀번호 파라미터 이름(name)
+                    .usernameParameter("memberId")          //폼의 ID 파라미터 이름(name)
+                    .passwordParameter("memberPw")    //폼의 비밀번호 파라미터 이름(name)
                     .loginProcessingUrl("/member/login")     //로그인폼 제출하여 처리할 경로(form의 action)
                     .defaultSuccessUrl("/",true)           //로그인 성공 시 이동할 경로
                     .permitAll()                      //로그인 페이지는 모두 접근 허용

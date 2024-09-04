@@ -17,13 +17,14 @@ import org.springframework.stereotype.Service;
 @Transactional
 @Service
 public class MemberService {
+
     private final MemberRepository memberRepository;
     private final BCryptPasswordEncoder passwordEncoder;
 
     public void join(MemberDTO memberDTO) {
         MemberEntity memberEntity = MemberEntity.builder()
                 .memberId(memberDTO.getMemberId())
-                .password(passwordEncoder.encode(memberDTO.getPassword()))
+                .memberPw(passwordEncoder.encode(memberDTO.getMemberPw()))
                 .birthdate(memberDTO.getBirthdate())
                 .fullName(memberDTO.getFullName())
                 .nickname(memberDTO.getNickname())

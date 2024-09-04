@@ -1,6 +1,8 @@
 package net.datasa.sharyproject.security;
 
 import jakarta.persistence.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import net.datasa.sharyproject.domain.entity.member.MemberEntity;
 import net.datasa.sharyproject.repository.member.MemberRepository;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -8,9 +10,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -27,12 +26,14 @@ public class AuthenticatedUserDetailsService implements UserDetailsService {
 				.orElseThrow(()->new EntityNotFoundException("아이디가 없습니다."));
 
 		log.debug("조회정보 : {}", memberEntity);
+		log.debug("isEnabled : {}", memberEntity.getEnabled());
 
 		AuthenticatedUser user = AuthenticatedUser.builder()
 				.memberId(username)
-				.password(memberEntity.getPassword())
+				.memberPw(memberEntity.getMemberPw())
 				.nickname(memberEntity.getNickname()) //선택적 필드
 				.roleName(memberEntity.getRoleName())// 권한 설정
+				.enabled(memberEntity.getEnabled())
 				.build();
 		log.debug("인증정보 : {}", user);
 

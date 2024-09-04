@@ -25,7 +25,7 @@ public class AuthenticatedUser implements UserDetails {
 	private static final long serialVersionUID = 8230398800837763822L; 
 
 	String memberId;
-	String password;
+	String memberPw;
 	String nickname;
 	String roleName;
 	boolean enabled;//사용가능한 아이디인지 확인하는 것
@@ -62,7 +62,7 @@ public class AuthenticatedUser implements UserDetails {
 	//비밀번호 리턴
 	@Override
 	public String getPassword() { //시큐리티가 겟 여기를 호출해서 비밀번호가 맞는지 맞춰봄.
-		return password;
+		return memberPw;
 	}
 
 	//사용자 아이디 리턴
