@@ -1,4 +1,4 @@
-package net.datasa.sharyproject.domain.entity.Follow;
+package net.datasa.sharyproject.domain.entity.follow;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

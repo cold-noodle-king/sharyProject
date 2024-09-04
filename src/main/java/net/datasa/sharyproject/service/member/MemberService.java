@@ -1,11 +1,11 @@
-package net.datasa.sharyproject.service.Member;
+package net.datasa.sharyproject.service.member;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import net.datasa.sharyproject.domain.dto.Member.MemberDTO;
-import net.datasa.sharyproject.domain.entity.Member.MemberEntity;
-import net.datasa.sharyproject.repository.Member.MemberRepository;
+import net.datasa.sharyproject.domain.dto.member.MemberDTO;
+import net.datasa.sharyproject.domain.entity.member.MemberEntity;
+import net.datasa.sharyproject.repository.member.MemberRepository;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 

@@ -1,6 +1,6 @@
-package net.datasa.sharyproject.repository.Member;
+package net.datasa.sharyproject.repository.member;
 
-import net.datasa.sharyproject.domain.entity.Member.MemberEntity;
+import net.datasa.sharyproject.domain.entity.member.MemberEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,4 +1,4 @@
-package net.datasa.sharyproject.domain.entity.Member;
+package net.datasa.sharyproject.domain.entity.member;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

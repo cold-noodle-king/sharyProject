@@ -1,11 +1,11 @@
-package net.datasa.sharyproject.service.Follow;
+package net.datasa.sharyproject.service.follow;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
-import net.datasa.sharyproject.domain.entity.Follow.FollowEntity;
-import net.datasa.sharyproject.domain.entity.Follow.FollowId;
-import net.datasa.sharyproject.repository.Follow.FollowRepository;
+import net.datasa.sharyproject.domain.entity.follow.FollowEntity;
+import net.datasa.sharyproject.domain.entity.follow.FollowId;
+import net.datasa.sharyproject.repository.follow.FollowRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;

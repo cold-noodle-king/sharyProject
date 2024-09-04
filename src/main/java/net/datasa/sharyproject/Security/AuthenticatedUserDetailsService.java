@@ -1,8 +1,8 @@
 package net.datasa.sharyproject.Security;
 
 import jakarta.persistence.EntityNotFoundException;
-import net.datasa.sharyproject.domain.entity.Member.MemberEntity;
-import net.datasa.sharyproject.repository.Member.MemberRepository;
+import net.datasa.sharyproject.domain.entity.member.MemberEntity;
+import net.datasa.sharyproject.repository.member.MemberRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

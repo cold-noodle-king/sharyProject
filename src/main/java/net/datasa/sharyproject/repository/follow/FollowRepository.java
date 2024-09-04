@@ -1,7 +1,7 @@
-package net.datasa.sharyproject.repository.Follow;
+package net.datasa.sharyproject.repository.follow;
 
-import net.datasa.sharyproject.domain.entity.Follow.FollowEntity;
-import net.datasa.sharyproject.domain.entity.Follow.FollowId;
+import net.datasa.sharyproject.domain.entity.follow.FollowEntity;
+import net.datasa.sharyproject.domain.entity.follow.FollowId;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**

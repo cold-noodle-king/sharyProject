@@ -1,4 +1,4 @@
-package net.datasa.sharyproject.domain.dto.Member;
+package net.datasa.sharyproject.domain.dto.member;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
