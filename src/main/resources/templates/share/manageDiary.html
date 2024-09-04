@@ -4,7 +4,7 @@
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
-    <title>나의 공유 다이어리</title>
+    <title>다이어리 관리</title>
 
     <!-- jQuery 로드 -->
     <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
@@ -25,30 +25,15 @@
 
 <!-- 메인 컨테이너 -->
 <div id="main" class="container mt-5">
-    <h2>다이어리 제목</h2>
-    <div>
-        <p>카테고리: 여행 방장: 치이카와 멤버수: 20</p>
-    </div>
-    <div>
-        <a th:href="@{/share/main}"><span>생성 다이어리</span></a>
-        <a th:href="@{/share/joinedList}"><span>가입 다이어리</span></a>
-    </div>
-
-    <!-- 다이어리 목록 컨테이너 -->
-    <div class="diary-list">
-        <!-- 신규 다이어리 추가 버튼 -->
-        <div class="diary-add">
-            <a href="#" th:href="@{/share/newNote}">
-                <div class="icon-add">+</div> <!-- 신규 다이어리 추가 아이콘 -->
-            </a>
-        </div>
-
-        <!-- 다이어리 표지 목록 (반복 가능) -->
-        <div class="cover">
-            <a th:href="@{/share/newNote}"><span>속지</span></a> <!-- 다이어리 표지 텍스트 -->
-        </div>
-        <div class="cover">
-            <span>속지</span> <!-- 다이어리 표지 텍스트 -->
+    <h2>다이어리 관리</h2>
+    <br>
+    <div class="diary-container">
+        <div>
+            <p><a th:href="@{/share/infoUpdate}">다이어리 정보 수정</a></p>
+            <p><a th:href="@{/share/viewMember}">멤버 관리</a></p>
+            <p><a th:href="@{/share/viewBoard}">게시물 관리</a></p>
+            <p><a th:href="@{/share/viewReply}">댓글 관리</a></p>
+            <p><a th:href="@{/share/deleteDiary}">다이어리 삭제</a></p>
         </div>
     </div>
 
@@ -74,9 +59,8 @@
             <div class="modal-body">
                 <div class="menu-list">
                     <a th:href="@{/share/newNote}" class="menu-item action-btn">새로운 노트 추가</a>
-                    <a th:href="@{/share/viewMyNotes}" class="menu-item action-btn">내가 작성한 노트</a>
-                    <a th:href="@{/share/viewMyReply}" class="menu-item action-btn">내가 작성한 댓글</a>
-                    <a th:href="@{/share/manageDiary}" class="menu-item action-btn">다이어리 관리</a>
+                    <a th:href="@{/share/editDiary}" class="menu-item action-btn">다이어리 관리</a>
+
                 </div>
             </div>
 
