@@ -5,6 +5,9 @@
 	<title>test_composite_key</title>
 </head>
 <body>
+
+<h1>[ follow list ]</h1>
+
 <table>
 	<thead>
 	<tr>
@@ -12,6 +15,7 @@
 		<th>팔로워 ID</th>
 		<th>팔로잉 ID</th>
 		<th>날짜</th>
+		<th>팔로우</th>
 		<th>삭제</th>
 	</tr>
 	</thead>
@@ -22,7 +26,9 @@
 		<td th:text="${follow.followerId}">followerId</td>
 		<td th:text="${follow.followingId}">followingId</td>
 		<td th:text="${#temporals.format(follow.followDate, 'yyyy-MM-dd HH:mm:ss')}">followDate</td>
-
+		<td>
+			<a th:href="@{/followUser(followerId=${follow.followingId}, followingId=${follow.followerId})}">팔로우</a>
+		</td>
 		<td>
 			<a th:href="@{/follow/delete(followerId=${follow.followerId}, followingId=${follow.followingId})}">삭제</a>
 		</td>

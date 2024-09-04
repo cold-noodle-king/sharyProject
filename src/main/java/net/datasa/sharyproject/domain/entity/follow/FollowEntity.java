@@ -28,4 +28,5 @@ public class FollowEntity {
     @Column(name = "follow_date", nullable = false)
     private LocalDateTime followDate;
 
+
 }
