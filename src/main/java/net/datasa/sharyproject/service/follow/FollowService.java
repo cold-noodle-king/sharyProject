@@ -8,10 +8,9 @@ import net.datasa.sharyproject.domain.dto.follow.FollowDTO;
 import net.datasa.sharyproject.domain.entity.follow.FollowEntity;
 import net.datasa.sharyproject.domain.entity.follow.FollowId;
 import net.datasa.sharyproject.repository.follow.FollowRepository;
-import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
+
+
 
 import java.time.LocalDateTime;
 import java.util.List;
