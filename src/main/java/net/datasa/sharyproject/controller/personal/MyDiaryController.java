@@ -1,6 +1,6 @@
 package net.datasa.sharyproject.controller.personal;
 
-import net.datasa.sharyproject.domain.dto.cover.CoverTemplateDTO;
+import net.datasa.sharyproject.domain.dto.personal.CoverTemplateDTO;
 import net.datasa.sharyproject.service.cover.CoverTemplateService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

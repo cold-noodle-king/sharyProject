@@ -1,4 +1,4 @@
-package net.datasa.sharyproject.Controller.Share;
+package net.datasa.sharyproject.controller.share;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +13,11 @@ public class ShareController {
         return "share/main";
     }
 
+    @GetMapping("createdDiary")
+    public String viewCreatedDiary() {
+        return "share/createdDiary";
+    }
+
     @GetMapping("joinedList")
     public String joined() {
 
@@ -24,13 +29,13 @@ public class ShareController {
         return "share/main";
     }
 
-    @GetMapping("editDiary")
-    public String editDiary() {
+    @GetMapping("manageDiary")
+    public String manageDiary() {
 
-        return "share/editDiary";
+        return "share/manageDiary";
     }
 
-    @PostMapping("deleteDiary")
+    @GetMapping("deleteDiary")
     public String deleteDiary() {
 
         return "share/main";
