@@ -2,7 +2,7 @@ package net.datasa.sharyproject.controller.share;
 
 import lombok.AllArgsConstructor;
 import net.datasa.sharyproject.domain.dto.personal.CoverTemplateDTO;
-import net.datasa.sharyproject.service.cover.CoverTemplateService;
+import net.datasa.sharyproject.service.personal.CoverTemplateService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
