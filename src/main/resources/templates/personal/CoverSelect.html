@@ -36,7 +36,7 @@
         <div class="col-md-4 mb-4" th:each="cover : ${covers}">
             <!-- 커버 템플릿 -->
             <div class="cover" data-cover-id="[[${cover.id}]]">
-                <img src="[[${cover.imagePath}]]" alt="커버 이미지" class="img-fluid cover-img">
+                <img src="[[${cover.images}]]" alt="커버 이미지" class="img-fluid cover-img">
                 <div class="cover-title mt-2">[[${cover.name}]]</div>
             </div>
         </div>

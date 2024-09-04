@@ -96,3 +96,52 @@
     background-color: #0056b3; /* 호버 시 더 어두운 파란색 */
     transform: translateY(-2px); /* 마우스를 올렸을 때 살짝 위로 이동 */
 }
+
+/* 모달 크기 조정 */
+.modal-dialog {
+    max-width: 600px; /* 모달의 최대 너비를 600px로 설정 */
+    width: 100%; /* 모달 너비가 화면 크기에 맞추어 유연하게 확장되도록 설정 */
+}
+
+/* 메뉴 항목들을 한 줄에 나타나게 설정 */
+.menu-list {
+    display: flex;
+    flex-wrap: wrap; /* 화면 크기에 따라 버튼들이 줄바꿈 되도록 설정 */
+    justify-content: space-around; /* 버튼 간의 간격을 일정하게 유지 */
+}
+
+/* 모달 내부의 a 태그에 대한 스타일 */
+.modal .menu-item {
+    margin: 10px;
+    padding: 10px 20px; /* 버튼 패딩을 줄여서 크기를 조정 */
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s, transform 0.3s;
+    text-decoration: none; /* 밑줄 제거 */
+    flex: 1 0 40%; /* 각 버튼이 줄바꿈을 고려하여 유연하게 크기를 설정 */
+}
+
+/* 모달 내부의 a 태그 호버 효과 */
+.modal .menu-item:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px); /* 마우스를 올렸을 때 살짝 위로 이동 */
+}
+
+/* 모달 내부의 닫기 버튼에 대한 스타일 */
+.modal .btn-secondary {
+    background-color: #007bff;
+    color: white;
+    border-radius: 5px;
+    padding: 10px 20px;
+    border: none;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+/* 모달 내부의 닫기 버튼 호버 효과 */
+.modal .btn-secondary:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px);
+}
