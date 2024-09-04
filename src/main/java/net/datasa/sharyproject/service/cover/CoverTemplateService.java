@@ -1,7 +1,7 @@
 package net.datasa.sharyproject.service.cover;
 
-import net.datasa.sharyproject.domain.dto.cover.CoverTemplateDTO;
-import net.datasa.sharyproject.repository.cover.CoverTemplateRepository;
+import net.datasa.sharyproject.domain.dto.personal.CoverTemplateDTO;
+import net.datasa.sharyproject.repository.personal.CoverTemplateRepository;
 import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 
@@ -22,7 +22,7 @@ public class CoverTemplateService {
                         .coverNum(entity.getCoverNum())
                         .coverName(entity.getCoverName())
                         // DB의 파일 시스템 경로를 웹 경로로 변환
-                        .coverImage(entity.getCoverImage().replace("C:/Java/workspace/sharyProject/src/main/resources/static/images/", ""))
+                        .coverImage(entity.getCoverImage().replace("C:/Java/workspace/sharyProject/src/main/resources/static/images/", "/images/"))  // 수정된 부분
                         .build())
                 .collect(Collectors.toList());
     }

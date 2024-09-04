@@ -12,7 +12,7 @@ $(document).ready(function() {
                         <div class="cover-title mt-2">${cover.coverName}</div>
                     </div>
                 </div>`;
-            $('.row').append(coverHtml);
+            $('.cover-row').append(coverHtml);  // 수정된 부분: .row -> .cover-row
         });
 
         // 동적으로 생성된 커버 클릭 이벤트 등록
