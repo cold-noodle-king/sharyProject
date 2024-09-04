@@ -5,15 +5,18 @@ import net.datasa.sharyproject.service.cover.CoverTemplateService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
-import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @RequestMapping("personal")
 @Controller
 public class MyDiaryController {
+
+    private final CoverTemplateService coverTemplateService;
 
     @GetMapping("MyDiary")
     public String MyDiary() {
@@ -28,7 +31,14 @@ public class MyDiaryController {
     // 커버 선택 페이지로 이동하는 메서드 추가
     @GetMapping("cover")
     public String cover() {
-        return "personal/CoverSelect";  // "personal/CoverSelect"가 실제 커버 선택 페이지의 뷰 이름이어야 합니다.
+        return "personal/CoverSelect";
+    }
+
+    // 커버 템플릿 데이터를 제공하는 API
+    @GetMapping("getCoverTemplates")
+    @ResponseBody
+    public List<CoverTemplateDTO> getCoverTemplates() {
+        return coverTemplateService.getCoverTemplates(); // 커버 템플릿 리스트 반환
     }
 
 }
