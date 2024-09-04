@@ -42,6 +42,11 @@ public class ShareController {
         return "share/CategorySelect";
     }
 
+    @GetMapping("categoryUpdate")
+    public String categoryUpdate() {
+        return "share/CategoryUpdate";
+    }
+
     @GetMapping("cover")
     public String cover() {
         return "share/CoverSelect";
