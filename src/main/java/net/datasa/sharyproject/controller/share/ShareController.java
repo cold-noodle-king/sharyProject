@@ -34,7 +34,7 @@ public class ShareController {
 
     @GetMapping("joinedDiary")
     public String joinedDiary() {
-        return "share/joinedDiary";
+        return "share/JoinedDiary";
     }
 
     @GetMapping("categorySelect")
@@ -77,12 +77,12 @@ public class ShareController {
     @GetMapping("infoUpdate")
     public String infoUpdate() {
 
-        return "share/infoUpdate";
+        return "share/InfoUpdate";
     }
 
     @GetMapping("viewMember")
     public String viewMember() {
-        return "share/viewMember";
+        return "share/ViewMember";
     }
 
     @GetMapping("getCoverTemplates")
