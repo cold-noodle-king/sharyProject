@@ -89,51 +89,19 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
 // 둘러보기 모달 이동 스크립트
-document.addEventListener('DOMContentLoaded', function() {
-    const track = document.querySelector('.carousel-track');
-    const prevButton = document.getElementById('prevBtn');
-    const nextButton = document.getElementById('nextBtn');
-
-    let currentSlideIndex = 0;
-    const slideWidth = track.children[0].getBoundingClientRect().width; // 각 슬라이드의 너비
-
-    // 각 슬라이드를 가로로 나열
-    function arrangeSlides() {
-        Array.from(track.children).forEach((slide, index) => {
-            slide.style.left = `${index * slideWidth}px`;
-        });
-    }
-
-    // 이전 슬라이드로 이동
-    function moveToPrevSlide() {
-        if (currentSlideIndex === 0) return; // 첫 슬라이드인 경우 멈춤
-        currentSlideIndex--;
-        track.style.transform = `translateX(-${currentSlideIndex * slideWidth}px)`;
-    }
-
-    // 다음 슬라이드로 이동
-    function moveToNextSlide() {
-        if (currentSlideIndex >= track.children.length - 1) return; // 마지막 슬라이드인 경우 멈춤
-        currentSlideIndex++;
-        track.style.transform = `translateX(-${currentSlideIndex * slideWidth}px)`;
-    }
-
-    // 이벤트 리스너 등록
-    prevButton.addEventListener('click', moveToPrevSlide);
-    nextButton.addEventListener('click', moveToNextSlide);
-
-    arrangeSlides(); // 초기 슬라이드 정렬
-});
-
-
-// 포트폴리오 화살표 슬라이드
 document.addEventListener('DOMContentLoaded', function () {
     const track = document.querySelector('.carousel-track');
     const prevBtn = document.getElementById('prevBtn');
     const nextBtn = document.getElementById('nextBtn');
-    const itemsToShow = 3; // 한 번에 보이는 아이템 수
+    const itemsToShow = 1; // 한 번에 보이는 아이템 수
     const itemWidth = track.children[0].offsetWidth; // 하나의 아이템의 너비
     let currentIndex = 0; // 현재 슬라이드 인덱스
+
+    // 슬라이더 위치 업데이트
+    function updateSliderPosition() {
+        const moveDistance = -(itemWidth * currentIndex);
+        track.style.transform = `translateX(${moveDistance}px)`;
+    }
 
     // 이전 버튼 클릭 이벤트
     prevBtn.addEventListener('click', () => {
@@ -155,12 +123,9 @@ document.addEventListener('DOMContentLoaded', function () {
         updateSliderPosition();
     });
 
-    // 슬라이더 위치 업데이트
-    function updateSliderPosition() {
-        const moveDistance = -(itemWidth * currentIndex);
-        track.style.transform = `translateX(${moveDistance}px)`;
-    }
+    updateSliderPosition(); // 초기 슬라이드 위치 설정
 });
+
 
 
 
