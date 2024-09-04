@@ -11097,6 +11097,17 @@ header.masthead .masthead-heading {
     margin-bottom: 4rem;
   }
 }
+
+/* 둘러보기 포트폴리오 부분 */
+
+/* 포트폴리오 항목 이미지 스타일 */
+#portfolio .portfolio-item img {
+  width: 100%;
+  height: auto;
+  object-fit: cover; /* 이미지가 container에 맞게 조정되도록 설정 */
+  max-height: 500px; /* 이미지 최대 높이 설정 */
+}
+
 #portfolio .portfolio-item {
   max-width: 26rem;
   margin-left: auto;
@@ -11107,29 +11118,41 @@ header.masthead .masthead-heading {
   display: block;
   margin: 0 auto;
 }
+
+/* 포트폴리오 항목 호버 스타일 수정 */
 #portfolio .portfolio-item .portfolio-link .portfolio-hover {
   display: flex;
   position: absolute;
   width: 100%;
   height: 100%;
-  background: rgba(255, 200, 0, 0.9);
-  align-items: center;
-  justify-content: center;
+  background: rgba(255, 200, 0, 0.9); /* 호버 시 배경 색상 */
+  align-items: center; /* 수직 가운데 정렬 */
+  justify-content: center; /* 수평 가운데 정렬 */
   opacity: 0;
-  transition: opacity ease-in-out 0.25s;
+  transition: all 0.3s ease; /* 부드러운 전환 효과 */
+  transform: scale(1); /* 기본 크기 */
 }
+
+/* 포트폴리오 항목 텍스트 스타일 */
 #portfolio .portfolio-item .portfolio-link .portfolio-hover .portfolio-hover-content {
   font-size: 1.25rem;
   color: white;
+  text-align: center; /* 텍스트 가운데 정렬 */
+  transition: transform 0.3s ease; /* 부드러운 텍스트 전환 효과 */
 }
+
 #portfolio .portfolio-item .portfolio-link:hover .portfolio-hover {
   opacity: 1;
+  transform: scale(1.1); /* 호버 시 크기 확대 */
+  background-color: rgba(255, 165, 0, 0.8);  /* 호버 시 배경 색상 (오렌지색으로 변경) */
 }
+
 #portfolio .portfolio-item .portfolio-caption {
   padding: 1.5rem;
   text-align: center;
   background-color: #fff;
 }
+
 #portfolio .portfolio-item .portfolio-caption .portfolio-caption-heading {
   font-size: 1.5rem;
   font-family: "Montserrat", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
@@ -11427,20 +11450,34 @@ section#contact form#contactForm :-ms-input-placeholder {
 }
 
 /* 둘러보기 모달 슬라이드 기능 부분 */
-
 /* 캐러셀 컨테이너 스타일 */
 .carousel-container {
   position: relative;
-  width: 100%; /* 컨테이너가 전체 너비를 차지하도록 설정 */
+  width: 100%;
   overflow: hidden;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 /* 캐러셀 트랙 스타일 */
 .carousel-track {
   display: flex;
-  transition: transform 0.5s ease; /* 이동 애니메이션 */
-  width: calc(100% * 6); /* 슬라이드 개수에 맞춰 너비 설정 (예: 6개의 슬라이드) */
-  overflow: visible; /* overflow를 visible로 설정 */
+  align-items: center;
+  transition: transform 0.5s ease;
+  width: calc(100% * 6);
+}
+
+.carousel-track-container {
+  overflow: hidden;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.carousel-item {
+  flex: 0 0 auto;
+  width: 250px;
+  margin-right: 10px;
 }
 
 /* 캐러셀 버튼 스타일 */
@@ -11467,9 +11504,11 @@ section#contact form#contactForm :-ms-input-placeholder {
 /* 슬라이드 이미지 스타일 */
 .carousel-track img {
   display: block;
-  width: 100%; /* 이미지가 슬라이드 항목을 넘지 않도록 설정 */
+  width: 250px;
   height: auto;
-  object-fit: cover; /* 이미지가 container에 맞게 조정되도록 설정 */
+  object-fit: cover;
+  flex-shrink: 0;
+  margin-right: 10px;
 }
 
 
