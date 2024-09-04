@@ -15,4 +15,5 @@ public class FollowDTO {
     private String followingId;
     private LocalDateTime followDate;
 
+
 }

@@ -36,8 +36,23 @@ public class FollowController {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return "redirect:/";
+        return "redirect:/followAll";
     }
+
+    /**
+     * 팔로우 버튼 클릭 시 호출되는 메서드
+     */
+    @GetMapping("/followUser")
+    public String followUser(@RequestParam("followerId") String followerId,
+                             @RequestParam("followingId") String followingId) {
+        try {
+            followService.follow(followerId, followingId);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "redirect:/followAll";
+    }
+
 
     /**
      * 전체 팔로우 목록 조회

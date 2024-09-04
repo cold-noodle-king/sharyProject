@@ -1,4 +1,4 @@
-package net.datasa.sharyproject.service.cover;
+package net.datasa.sharyproject.service.personal;
 
 import net.datasa.sharyproject.domain.dto.personal.CoverTemplateDTO;
 import net.datasa.sharyproject.repository.personal.CoverTemplateRepository;

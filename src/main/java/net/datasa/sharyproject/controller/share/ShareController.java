@@ -1,11 +1,19 @@
 package net.datasa.sharyproject.controller.share;
 
+import lombok.AllArgsConstructor;
+import net.datasa.sharyproject.domain.dto.personal.CoverTemplateDTO;
+import net.datasa.sharyproject.service.personal.CoverTemplateService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
+@AllArgsConstructor
 @Controller
 @RequestMapping("share")
 public class ShareController {
+
+    private final CoverTemplateService coverTemplateService;
 
     @GetMapping("main")
     public String viewMain() {
@@ -22,6 +30,26 @@ public class ShareController {
     public String joined() {
 
         return "share/joinedList";
+    }
+
+    @GetMapping("joinedDiary")
+    public String joinedDiary() {
+        return "share/JoinedDiary";
+    }
+
+    @GetMapping("categorySelect")
+    public String categorySelect() {
+        return "share/CategorySelect";
+    }
+
+    @GetMapping("categoryUpdate")
+    public String categoryUpdate() {
+        return "share/CategoryUpdate";
+    }
+
+    @GetMapping("cover")
+    public String cover() {
+        return "share/CoverSelect";
     }
 
     @GetMapping("newNote")
@@ -46,5 +74,21 @@ public class ShareController {
         return "share/main";
     }
 
+    @GetMapping("infoUpdate")
+    public String infoUpdate() {
+
+        return "share/InfoUpdate";
+    }
+
+    @GetMapping("viewMember")
+    public String viewMember() {
+        return "share/ViewMember";
+    }
+
+    @GetMapping("getCoverTemplates")
+    @ResponseBody
+    public List<CoverTemplateDTO> getCoverTemplates() {
+        return coverTemplateService.getCoverTemplates(); // 커버 템플릿 리스트 반환
+    }
 
 }
