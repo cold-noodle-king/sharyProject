@@ -1,4 +1,4 @@
-package net.datasa.sharyproject.Service.Member;
+package net.datasa.sharyproject.service.Member;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;

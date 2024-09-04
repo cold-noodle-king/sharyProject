@@ -1,4 +1,4 @@
-package net.datasa.sharyproject.Service.Follow;
+package net.datasa.sharyproject.service.Follow;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;

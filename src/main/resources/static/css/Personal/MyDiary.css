@@ -1,5 +1,5 @@
 /* 컨테이너 설정 */
-#container {
+#main {
     padding: 40px 20px;
     max-width: 1200px;
     margin: 80px auto 0 auto; /* 상단에 80px 마진 추가 */
@@ -7,7 +7,7 @@
 }
 
 /* 다이어리 리스트 스타일 */
-.diary-container {
+.diary-list {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -16,7 +16,7 @@
 }
 
 /* 신규 다이어리 추가 버튼 스타일 */
-.diary-item {
+.diary-add {
     border: 2px dashed #007bff;
     width: 200px;
     height: 250px;
@@ -29,27 +29,30 @@
     text-decoration: none; /* 밑줄 제거 */
 }
 
-.diary-item a {
-    text-decoration: none; /* a 태그의 밑줄 제거 */
+/* a 태그의 밑줄 제거 */
+.diary-add a {
+    text-decoration: none;
 }
 
-.diary-item:hover {
-    transform: scale(1.05);
+/* 다이어리 추가 버튼 호버 효과 */
+.diary-add:hover {
+    transform: scale(1.05); /* 마우스를 올렸을 때 살짝 확대 */
 }
 
-.add-icon {
+/* 신규 다이어리 추가 아이콘 스타일 */
+.icon-add {
     font-size: 60px;
     color: #007bff;
     text-decoration: none; /* 밑줄 제거 */
 }
 
 /* 다이어리 표지 스타일 */
-.diary-cover {
+.cover {
     border: 2px solid #007bff;
     width: 200px;
     height: 250px;
     margin: 15px;
-    background-image: linear-gradient(135deg, #6a89cc 0%, #b8e994 100%);
+    background-image: linear-gradient(135deg, #6a89cc 0%, #b8e994 100%); /* 그라데이션 배경 */
     color: white;
     display: flex;
     justify-content: center;
@@ -57,24 +60,26 @@
     font-size: 20px;
     font-family: 'Georgia', serif;
     transition: transform 0.3s, box-shadow 0.3s;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 기본 그림자 효과 */
     text-decoration: none; /* 밑줄 제거 */
 }
 
-.diary-cover:hover {
-    transform: scale(1.05);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+/* 다이어리 표지 호버 효과 */
+.cover:hover {
+    transform: scale(1.05); /* 마우스를 올렸을 때 살짝 확대 */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* 그림자 강조 */
 }
 
-/* 액션 버튼 스타일 */
-.actions-container {
+/* 액션 버튼 컨테이너 */
+.actions {
     display: flex;
     justify-content: center;
     margin-top: 30px;
-    flex-wrap: wrap;
+    flex-wrap: wrap; /* 화면 크기에 따라 버튼이 줄바꿈 되도록 설정 */
 }
 
-.action-button {
+/* 액션 버튼 스타일 */
+.action-btn {
     margin: 10px;
     padding: 15px 30px;
     background-color: #007bff;
@@ -86,7 +91,8 @@
     text-decoration: none; /* 밑줄 제거 */
 }
 
-.action-button:hover {
-    background-color: #0056b3;
-    transform: translateY(-2px);
+/* 액션 버튼 호버 효과 */
+.action-btn:hover {
+    background-color: #0056b3; /* 호버 시 더 어두운 파란색 */
+    transform: translateY(-2px); /* 마우스를 올렸을 때 살짝 위로 이동 */
 }

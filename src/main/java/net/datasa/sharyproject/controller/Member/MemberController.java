@@ -2,7 +2,7 @@ package net.datasa.sharyproject.controller.Member;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import net.datasa.sharyproject.Service.Member.MemberService;
+import net.datasa.sharyproject.service.Member.MemberService;
 import net.datasa.sharyproject.domain.dto.Member.MemberDTO;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

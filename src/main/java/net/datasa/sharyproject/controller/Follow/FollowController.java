@@ -2,7 +2,7 @@ package net.datasa.sharyproject.controller.Follow;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import net.datasa.sharyproject.Service.Follow.FollowService;
+import net.datasa.sharyproject.service.Follow.FollowService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
