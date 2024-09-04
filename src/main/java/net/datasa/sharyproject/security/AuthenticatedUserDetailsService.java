@@ -1,4 +1,4 @@
-package net.datasa.sharyproject.Security;
+package net.datasa.sharyproject.security;
 
 import jakarta.persistence.EntityNotFoundException;
 import net.datasa.sharyproject.domain.entity.member.MemberEntity;

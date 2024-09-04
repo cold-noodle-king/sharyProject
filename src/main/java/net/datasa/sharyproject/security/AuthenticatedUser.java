@@ -1,7 +1,7 @@
 /**
  * 
  */
-package net.datasa.sharyproject.Security;
+package net.datasa.sharyproject.security;
 
 import java.util.Collection;
 import java.util.Collections;

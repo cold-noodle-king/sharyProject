@@ -3,13 +3,20 @@ package net.datasa.sharyproject.service.follow;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
+
+import net.datasa.sharyproject.domain.dto.follow.FollowDTO;
 import net.datasa.sharyproject.domain.entity.follow.FollowEntity;
 import net.datasa.sharyproject.domain.entity.follow.FollowId;
 import net.datasa.sharyproject.repository.follow.FollowRepository;
+import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * 복합키 사용 테스트
@@ -19,12 +26,12 @@ import java.util.Optional;
 @Service
 public class FollowService {
 
-    private final FollowRepository repository;
+    private final FollowRepository followRepository;
+
 
     /**
      * 저장 테스트
      */
-    @Transactional
     public void insert() {
         try {
             FollowEntity entity = FollowEntity.builder()
@@ -35,16 +42,38 @@ public class FollowService {
 
             FollowId followId = new FollowId("aaa", "bbb");
 
-            Optional<FollowEntity> existingFollow = repository.findById(followId);
+            Optional<FollowEntity> existingFollow = followRepository.findById(followId);
             if (existingFollow.isPresent()) {
                 throw new RuntimeException("이미 존재하는 팔로우 관계입니다.");
             }
 
-            repository.save(entity);
+            followRepository.save(entity);
         } catch (RuntimeException e) {
-            //log.error("Error while inserting follow relationship: {}", e.getMessage());
-            throw e; // 필요시 사용자 정의 예외로 변환하거나 처리할 수 있습니다.
+            // log.error("Error while inserting follow relationship: {}", e.getMessage());
+            throw e;
         }
+    }
+
+
+    /**
+     * 전체 팔로우 목록을 가져오는 메서드
+     */
+    public List<FollowDTO> followAll() {
+        List<FollowEntity> entities = followRepository.findAll();
+        return entities.stream()
+                .map(entity -> new FollowDTO(
+                        entity.getFollowerId(),
+                        entity.getFollowingId(),
+                        entity.getFollowDate()))
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * 팔로우 관계 삭제 메서드
+     */
+    public void delete(String followerId, String followingId) {
+        FollowId followId = new FollowId(followerId, followingId);
+        followRepository.deleteById(followId);
     }
 
 

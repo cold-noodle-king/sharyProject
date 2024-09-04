@@ -1,4 +1,4 @@
-package net.datasa.sharyproject.Security;
+package net.datasa.sharyproject.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
