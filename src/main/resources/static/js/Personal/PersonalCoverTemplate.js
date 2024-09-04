@@ -7,9 +7,9 @@ $(document).ready(function() {
             // 커버 템플릿을 동적으로 HTML에 추가
             const coverHtml = `
                 <div class="col-md-4 mb-4">
-                    <div class="cover" data-cover-id="${cover.id}">
-                        <img src="${cover.imagePath}" alt="커버 이미지" class="img-fluid cover-img">
-                        <div class="cover-title mt-2">${cover.name}</div>
+                    <div class="cover" data-cover-id="${cover.coverNum}">
+                        <img src="${cover.coverImage}" alt="커버 이미지" class="img-fluid cover-img">
+                        <div class="cover-title mt-2">${cover.coverName}</div>
                     </div>
                 </div>`;
             $('.row').append(coverHtml);
@@ -35,8 +35,8 @@ $(document).ready(function() {
         }
     });
 
-    // 취소 버튼 클릭 시 다이어리 페이지로 돌아감
+    // 취소 버튼 클릭 시 이전 페이지로 돌아감
     $('#cancelBtn').on('click', function() {
-        window.location.href = '/personal/MyDiary'; // 다이어리 페이지로 이동
+        window.location.href = '/personal/MyDiary'; // 이전 페이지로 이동
     });
 });
