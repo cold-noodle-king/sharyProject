@@ -47,8 +47,9 @@
         <button class="carousel-btn left" id="prevBtn">&#10094;</button> <!-- 왼쪽 화살표 -->
         <div class="carousel-track-container">
             <div class="carousel-track">
-                <!-- 포트폴리오 모달들 -->
-                <div th:replace="fragments/portfolio :: portfolio"></div>
+                <!-- 여기에 모든 포트폴리오 항목들을 직접 포함하거나 포함할 HTML 파일을 로드 -->
+                <div class="carousel-item-group" th:replace="~{fragments/portfolio :: portfolio}"></div>
+
             </div>
         </div>
         <button class="carousel-btn right" id="nextBtn">&#10095;</button> <!-- 오른쪽 화살표 -->

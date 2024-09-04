@@ -11125,7 +11125,7 @@ header.masthead .masthead-heading {
   position: absolute;
   width: 100%;
   height: 100%;
-  background: rgba(255, 200, 0, 0.9); /* 호버 시 배경 색상 */
+  background: rgba(237, 209, 116, 0.9); /* 호버 시 배경 색상 */
   align-items: center; /* 수직 가운데 정렬 */
   justify-content: center; /* 수평 가운데 정렬 */
   opacity: 0;
@@ -11144,7 +11144,7 @@ header.masthead .masthead-heading {
 #portfolio .portfolio-item .portfolio-link:hover .portfolio-hover {
   opacity: 1;
   transform: scale(1.1); /* 호버 시 크기 확대 */
-  background-color: rgba(255, 165, 0, 0.8);  /* 호버 시 배경 색상 (오렌지색으로 변경) */
+  background-color: rgba(243, 195, 113, 0.8);  /* 호버 시 배경 색상 (오렌지색으로 변경) */
 }
 
 #portfolio .portfolio-item .portfolio-caption {
@@ -11459,6 +11459,7 @@ section#contact form#contactForm :-ms-input-placeholder {
   margin: 0 auto;
 }
 
+
 /* 캐러셀 트랙 스타일 */
 .carousel-track {
   display: flex;
@@ -11479,6 +11480,8 @@ section#contact form#contactForm :-ms-input-placeholder {
   width: 250px;
   margin-right: 10px;
 }
+
+
 
 /* 캐러셀 버튼 스타일 */
 .carousel-btn {
