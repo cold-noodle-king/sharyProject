@@ -24,7 +24,7 @@ public class MemberController {
      */
     @GetMapping("loginForm")
     public String loginForm() {
-        return "/member/loginForm";
+        return "member/loginForm";
     }
 
     /**
@@ -34,7 +34,7 @@ public class MemberController {
      */
     @GetMapping("joinForm")
     public String joinForm() {
-        return "/member/joinForm";
+        return "member/joinForm";
     }
 
     /**
@@ -43,11 +43,11 @@ public class MemberController {
      * @return 로그인 폼으로 이동
      */
     @PostMapping("join")
-    public String join(@ModelAttribute MemberDTO member) {
-        log.debug("전달된 회원정보: {}", member); // 어떤 값이 넘어갔는지 찍어놓기
+    public String join(@ModelAttribute MemberDTO memberDTO) {
+        log.debug("전달된 회원정보: {}", memberDTO); // 어떤 값이 넘어갔는지 찍어놓기
 
-        memberService.join(member);
-        return "/member/loginForm";
+        memberService.join(memberDTO);
+        return "member/loginForm";
     }
 
 //

@@ -5,6 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -15,6 +18,7 @@ import java.time.LocalDateTime;
 @SuperBuilder
 @Entity
 @Table(name = "member")
+@EntityListeners(AuditingEntityListener.class)
 public class MemberEntity {
 
     @Id
@@ -36,19 +40,18 @@ public class MemberEntity {
     @Column(name = "nickname", nullable = false, length = 50)
     private String nickname;
 
-
-
-    @Column(name = "gender", nullable = false, columnDefinition = "CHAR")
+    @Column(name = "gender", nullable = false, columnDefinition = "CHAR(10)")
     private String gender;
-
 
     @Column(name = "birthdate", nullable = false)
     private LocalDate birthdate;
 
-    @Column(name = "created_date", nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @CreatedDate
+    @Column(name = "created_date", nullable = false)
     private LocalDateTime createdDate;
 
-    @Column(name = "updated_date", nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
+    @LastModifiedDate
+    @Column(name = "updated_date", nullable = false)
     private LocalDateTime updatedDate;
 
     @Column(name = "role_name", nullable = false, length = 50)
