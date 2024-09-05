@@ -5,9 +5,11 @@ import net.datasa.sharyproject.domain.dto.personal.NoteTemplateDTO;
 import net.datasa.sharyproject.service.personal.CoverTemplateService;
 import net.datasa.sharyproject.service.personal.NoteTemplateService;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
@@ -55,4 +57,17 @@ public class MyDiaryController {
     public List<NoteTemplateDTO> getNoteTemplates() {
         return noteTemplateService.getNoteTemplates();  // 노트 템플릿 리스트 반환
     }
+
+    @GetMapping("noteForm")
+    public String createDiary(@RequestParam("noteNum") Integer noteNum, Model model) {
+        NoteTemplateDTO noteTemplate = noteTemplateService.getNoteTemplateById(noteNum);
+
+        if (noteTemplate == null || noteTemplate.getNoteImage() == null) {
+            throw new RuntimeException("NoteTemplate 또는 이미지 경로가 존재하지 않습니다.");
+        }
+
+        model.addAttribute("noteTemplate", noteTemplate);
+        return "personal/NoteForm";  // 다이어리 작성 페이지로 이동
+    }
+
 }
