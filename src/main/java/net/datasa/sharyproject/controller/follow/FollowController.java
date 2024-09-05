@@ -42,7 +42,7 @@ public class FollowController {
     /**
      * 팔로우 버튼 클릭 시 호출되는 메서드
      */
-/*    @GetMapping("/followUser")
+    @GetMapping("/followUser")
     public String followUser(@RequestParam("followerId") String followerId,
                              @RequestParam("followingId") String followingId) {
         try {
@@ -51,12 +51,12 @@ public class FollowController {
             e.printStackTrace();
         }
         return "redirect:/followAll";
-    }*/
+    }
 
     /**
      * 팔로우 버튼 클릭 시 호출되는 메서드
      */
-    @GetMapping("/followUser")
+/*    @GetMapping("/followUser")
     public String followUser(@RequestParam("followingId") String followingId) {
         try {
             followService.follow(followingId);
@@ -64,7 +64,7 @@ public class FollowController {
             e.printStackTrace();
         }
         return "redirect:/followAll";
-    }
+    }*/
 
 
     /**

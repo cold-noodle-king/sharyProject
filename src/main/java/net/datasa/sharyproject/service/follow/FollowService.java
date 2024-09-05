@@ -7,6 +7,8 @@ import net.datasa.sharyproject.domain.dto.follow.FollowDTO;
 import net.datasa.sharyproject.domain.entity.follow.FollowEntity;
 import net.datasa.sharyproject.domain.entity.follow.FollowId;
 import net.datasa.sharyproject.repository.follow.FollowRepository;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -36,7 +38,7 @@ public class FollowService {
     /**
      * 팔로우 설정 메서드
      */
-    public void follow(String followingId) {
+/*    public void follow(String followingId) {
         String followerId = getCurrentUserId(); // 현재 로그인한 사용자 ID 가져오기
 
         // followerId -> followingId 관계가 존재하는지 확인
@@ -54,13 +56,13 @@ public class FollowService {
                 .followDate(LocalDateTime.now())
                 .build();
         followRepository.save(followEntity);
-    }
+    }*/
 
 
     /**
      * 양방향 팔로우 설정 메서드
      */
-/*    public void follow(String followerId, String followingId) {
+    public void follow(String followerId, String followingId) {
         // 첫 번째 관계: followerId -> followingId
         FollowId followId1 = new FollowId(followerId, followingId);
         Optional<FollowEntity> existingFollow1 = followRepository.findById(followId1);
@@ -93,15 +95,15 @@ public class FollowService {
                     .build();
             followRepository.save(followEntity2);
         }
-    }*/
+    }
 
     /**
      * 저장 테스트 메서드
      */
-/*    public void insert() {
+    public void insert() {
         // 예제 데이터로 팔로우 관계 추가
         follow("aaa", "bbb"); // follower_id: "aaa", following_id: "bbb"
-    }*/
+    }
 
 
     /**
