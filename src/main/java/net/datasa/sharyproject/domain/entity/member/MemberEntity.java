@@ -57,6 +57,6 @@ public class MemberEntity {
     @Column(name = "role_name", nullable = false, length = 50)
     private String roleName;
 
-    @Column(name="enabled", columnDefinition = "tinyint(1) default 1 check(enabled in (0,1)")
+    @Column(name="enabled", nullable = false)
     private Boolean enabled = true; //객체이고 null을 담을 수 있음
 }

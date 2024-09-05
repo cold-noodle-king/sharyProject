@@ -31,6 +31,7 @@ public class MemberService {
                 .gender(memberDTO.getGender())
                 .email(memberDTO.getEmail())
                 .phoneNumber(memberDTO.getPhoneNumber())
+                .enabled(true)
                 .roleName("ROLE_USER")
                 .build();
 
