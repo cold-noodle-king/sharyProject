@@ -15,23 +15,28 @@ public class ShareController {
 
     private final CoverTemplateService coverTemplateService;
 
+    //공유 다이어리 메인 페이지로 이동
+    //내가 생성한 다이어리 페이지를 디폴트로 설정
     @GetMapping("main")
     public String viewMain() {
 
         return "share/main";
     }
 
+    //내가 생성한 공유 다이어리로 이동
     @GetMapping("createdDiary")
     public String viewCreatedDiary() {
         return "share/createdDiary";
     }
 
+    //내가 가입한 공유 다이어리 리스트 페이지 출력
     @GetMapping("joinedList")
     public String joined() {
 
         return "share/joinedList";
     }
 
+    //내가 가입한 공유 다어리로 이동
     @GetMapping("joinedDiary")
     public String joinedDiary() {
         return "share/JoinedDiary";
@@ -83,6 +88,16 @@ public class ShareController {
     @GetMapping("viewMember")
     public String viewMember() {
         return "share/ViewMember";
+    }
+
+    @GetMapping("memberList")
+    public String memberList() {
+        return "share/MemberList";
+    }
+
+    @GetMapping("registerRequest")
+    public String registerRequest() {
+        return "share/RegisterRequest";
     }
 
     @GetMapping("getCoverTemplates")
