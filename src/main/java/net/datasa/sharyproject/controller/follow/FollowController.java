@@ -42,11 +42,24 @@ public class FollowController {
     /**
      * 팔로우 버튼 클릭 시 호출되는 메서드
      */
-    @GetMapping("/followUser")
+/*    @GetMapping("/followUser")
     public String followUser(@RequestParam("followerId") String followerId,
                              @RequestParam("followingId") String followingId) {
         try {
             followService.follow(followerId, followingId);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "redirect:/followAll";
+    }*/
+
+    /**
+     * 팔로우 버튼 클릭 시 호출되는 메서드
+     */
+    @GetMapping("/followUser")
+    public String followUser(@RequestParam("followingId") String followingId) {
+        try {
+            followService.follow(followingId);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -57,20 +70,47 @@ public class FollowController {
     /**
      * 전체 팔로우 목록 조회
      */
-    @GetMapping("/followAll")
+/*    @GetMapping("/followAll")
     public String getFollowList(Model model) {
         List<FollowDTO> followList = followService.followAll();
         model.addAttribute("followList", followList);
         return "follow/followAll";
+    }*/
+
+    /**
+     * 전체 팔로우 목록 조회
+     */
+    @GetMapping("/followAll")
+    public String getFollowList(Model model) {
+        List<FollowDTO> followList = followService.getFollowListForCurrentUser();
+        model.addAttribute("followList", followList);
+        return "follow/followAll";
     }
+
+
+    /**
+     * 팔로우 관계 삭제
+     */
+/*    @GetMapping("/follow/delete")
+    public String deleteFollow(@RequestParam("followerId") String followerId,
+                               @RequestParam("followingId") String followingId) {
+        followService.delete(followerId, followingId);
+        return "redirect:/followAll"; // 삭제 후 전체 목록 페이지로 리다이렉트
+    }*/
+
 
     /**
      * 팔로우 관계 삭제
      */
     @GetMapping("/follow/delete")
-    public String deleteFollow(@RequestParam("followerId") String followerId,
-                               @RequestParam("followingId") String followingId) {
-        followService.delete(followerId, followingId);
+    public String deleteFollow(@RequestParam("followingId") String followingId) {
+        followService.unfollow(followingId);
         return "redirect:/followAll"; // 삭제 후 전체 목록 페이지로 리다이렉트
     }
+
+
+
+
+
+
 }
