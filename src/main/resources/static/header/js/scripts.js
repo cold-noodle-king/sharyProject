@@ -5,7 +5,7 @@
 */
 //
 // Scripts
-// 
+//
 
 window.addEventListener('DOMContentLoaded', event => {
 
@@ -21,9 +21,10 @@ window.addEventListener('DOMContentLoaded', event => {
             navbarCollapsible.classList.add('navbar-shrink')
         }
 
+
     };
 
-    // Shrink the navbar 
+    // Shrink the navbar
     navbarShrink();
 
     // Shrink the navbar when page is scrolled
@@ -50,6 +51,7 @@ window.addEventListener('DOMContentLoaded', event => {
             }
         });
     });
+
 
 });
 
@@ -88,19 +90,28 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 
-// 둘러보기 모달 이동 스크립트
+// 둘러보기 섹션 슬라이더 기능
 document.addEventListener('DOMContentLoaded', function () {
-    const track = document.querySelector('.carousel-track');
-    const prevBtn = document.getElementById('prevBtn');
-    const nextBtn = document.getElementById('nextBtn');
-    const itemsToShow = 1; // 한 번에 보이는 아이템 수
-    const itemWidth = track.children[0].offsetWidth; // 하나의 아이템의 너비
+    const slides = document.querySelectorAll('.portfolio-item'); // 모든 포트폴리오 아이템 선택
+    const prevBtn = document.getElementById('prevBtn'); // 이전 버튼 선택
+    const nextBtn = document.getElementById('nextBtn'); // 다음 버튼 선택
+
+    if (slides.length === 0) {
+        console.error('No portfolio-item elements found.'); // 슬라이드가 없으면 오류 출력
+        return; // 스크립트 실행 중지
+    }
+
     let currentIndex = 0; // 현재 슬라이드 인덱스
 
-    // 슬라이더 위치 업데이트
     function updateSliderPosition() {
-        const moveDistance = -(itemWidth * currentIndex);
-        track.style.transform = `translateX(${moveDistance}px)`;
+        slides.forEach((slide, index) => {
+            if (slide) {
+                slide.style.display = 'none'; // 모든 슬라이드 숨기기
+            }
+        });
+        if (slides[currentIndex]) {
+            slides[currentIndex].style.display = 'block'; // 현재 슬라이드만 표시
+        }
     }
 
     // 이전 버튼 클릭 이벤트
@@ -108,23 +119,27 @@ document.addEventListener('DOMContentLoaded', function () {
         if (currentIndex > 0) {
             currentIndex--;
         } else {
-            currentIndex = track.children.length - itemsToShow;
+            currentIndex = slides.length - 1; // 마지막 슬라이드로 이동
         }
         updateSliderPosition();
     });
 
     // 다음 버튼 클릭 이벤트
     nextBtn.addEventListener('click', () => {
-        if (currentIndex < track.children.length - itemsToShow) {
+        if (currentIndex < slides.length - 1) {
             currentIndex++;
         } else {
-            currentIndex = 0;
+            currentIndex = 0; // 첫 번째 슬라이드로 이동
         }
         updateSliderPosition();
     });
 
     updateSliderPosition(); // 초기 슬라이드 위치 설정
 });
+
+
+
+
 
 
 

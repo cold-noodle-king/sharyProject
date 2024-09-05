@@ -11113,6 +11113,14 @@ header.masthead .masthead-heading {
   margin-left: auto;
   margin-right: auto;
 }
+
+.portfolio-item {
+  flex: 0 0 20%; /* 슬라이드 아이템 너비를 20%로 설정하여 한 줄에 5개 나열 */
+  max-width: 20%;
+  box-sizing: border-box; /* 패딩을 포함한 크기 계산 */
+  padding: 5px; /* 슬라이드 간의 간격 */
+}
+
 #portfolio .portfolio-item .portfolio-link {
   position: relative;
   display: block;
@@ -11462,10 +11470,8 @@ section#contact form#contactForm :-ms-input-placeholder {
 
 /* 캐러셀 트랙 스타일 */
 .carousel-track {
-  display: flex;
-  align-items: center;
-  transition: transform 0.5s ease;
-  width: calc(100% * 6);
+  display: flex; /* 모든 슬라이드를 한 줄로 나열 */
+  overflow: hidden; /* 슬라이더 외부로 넘치는 내용 숨김 */
 }
 
 .carousel-track-container {
@@ -11480,6 +11486,7 @@ section#contact form#contactForm :-ms-input-placeholder {
   width: 250px;
   margin-right: 10px;
 }
+
 
 
 

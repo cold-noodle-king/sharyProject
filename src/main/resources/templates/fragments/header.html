@@ -23,7 +23,16 @@
                 <!-- 오른쪽에 위치할 링크 -->
                 <ul class="navbar-nav ms-auto text-uppercase py-4 py-lg-0"> <!-- ms-auto 클래스로 오른쪽 정렬 -->
                     <li class="nav-item"><a class="nav-link" th:href="@{/profile.html}">프로필</a></li>
+
+                    <!-- 알림 이미지 삽입 -->
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/notifications.html}">
+                            <img src="/images/notification.png" alt="알림" style="width: 24px; height: 24px;"/>
+                        </a>
+                    </li>
+
                     <li class="nav-item"><a class="nav-link" th:href="@{/mypage.html}">마이페이지</a></li>
+
                     <li class="nav-item"><a class="nav-link" th:href="@{/logout.html}">로그아웃</a></li>
                 </ul>
             </div>
