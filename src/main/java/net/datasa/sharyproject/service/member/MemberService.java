@@ -37,4 +37,22 @@ public class MemberService {
 
         memberRepository.save(memberEntity);
     }
+
+    public boolean findId(String searchId) {
+        if(memberRepository.findById(searchId).isPresent()) {
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+
+    public boolean findNick(String searchNick) {
+        if(memberRepository.findByNickname(searchNick).isPresent()) {
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
 }
