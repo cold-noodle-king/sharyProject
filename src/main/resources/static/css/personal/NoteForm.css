@@ -1,123 +1,52 @@
-/* 전체 배경에 이미지 적용 */
-body {
-    background-image: url('/images/background_image.jpg'); /* 배경 이미지 경로 */
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
-    font-family: 'Helvetica Neue', sans-serif;
-    margin: 0;
-    padding: 0;
-}
-
 /* 메인 컨테이너 */
 #main {
+    display: flex;
+    justify-content: center;
     padding: 20px;
-    max-width: 800px;
+    max-width: 100%; /* 전체 화면에 맞게 중앙 정렬 */
     margin: 0 auto;
 }
 
-/* 다이어리 폼 스타일 - 배경이 보이도록 약간 투명하게 */
+/* 다이어리 폼 스타일 */
 .diary-form {
-    background-color: rgba(255, 255, 255, 0.8); /* 약간 투명한 흰색 */
+    background-color: rgba(255, 255, 255, 0.8); /* 투명한 흰색 배경 */
+    width: 794px; /* A4 가로 크기 */
+    height: 1123px; /* A4 세로 크기 */
     border-radius: 15px;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
     padding: 30px;
-    background-size: cover;
+    background-size: contain; /* A4 사이즈 안에 이미지가 맞도록 조정 */
+    background-repeat: no-repeat;
     background-position: center;
     position: relative;
-    min-height: 500px;
-    margin-top: 20px;
+    margin: 0 auto; /* 중앙 정렬 */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
-/* 프로필 이미지 및 위치 섹션 */
+/* 프로필 이미지 및 입력 폼 스타일 */
 .profile-image img {
     border: 2px solid #ddd;
     padding: 2px;
     border-radius: 50%;
 }
 
-/* 위치 태그 스타일 */
-.location-tag input {
-    border: none;
-    border-bottom: 1px solid #ccc;
-    outline: none;
-    transition: border-color 0.3s ease;
-}
-
-.location-tag input:focus {
-    border-color: #007bff;
-}
-
-/* 감정 및 날짜 선택 섹션 */
-.right-section input, .right-section select {
-    border: none;
-    border-bottom: 1px solid #ccc;
-    outline: none;
-    transition: border-color 0.3s ease;
-}
-
-.right-section input:focus, .right-section select:focus {
-    border-color: #007bff;
-}
-
-/* 이미지 업로드 섹션 */
-#diaryImage {
-    border: none;
-    padding: 0;
-    margin-top: 10px;
-}
-
-/* 텍스트 영역 (내용 작성) */
 textarea.form-control {
     border: none;
     border-bottom: 1px solid #ccc;
-    border-radius: 0;
-    outline: none;
     resize: none;
-    padding: 10px;
-    transition: border-color 0.3s ease;
 }
 
-textarea.form-control:focus {
-    border-color: #007bff;
-}
-
-/* 해시태그 입력 필드 */
-#hashTag {
+/* 이미지 업로드 필드 */
+#diaryImage {
     border: none;
-    border-bottom: 1px solid #ccc;
-    outline: none;
-    transition: border-color 0.3s ease;
 }
 
-#hashTag:focus {
-    border-color: #007bff;
-}
-
-/* 버튼 스타일 */
+/* 저장 및 취소 버튼 */
 .submit-buttons .btn {
     border-radius: 20px;
     padding: 10px 30px;
     font-weight: bold;
-    transition: background-color 0.3s ease;
-}
-
-.submit-buttons .btn-primary {
-    background-color: #007bff;
-    border: none;
-}
-
-.submit-buttons .btn-primary:hover {
-    background-color: #0056b3;
-}
-
-.submit-buttons .btn-outline-secondary {
-    border: 1px solid #ccc;
-    color: #333;
-}
-
-.submit-buttons .btn-outline-secondary:hover {
-    border: 1px solid #333;
-    color: #000;
-    background-color: #f8f9fa;
+    margin-top: 20px;
 }
