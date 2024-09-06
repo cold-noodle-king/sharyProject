@@ -27,10 +27,10 @@
 		<td th:text="${follow.followingId}">followingId</td>
 		<td th:text="${#temporals.format(follow.followDate, 'yyyy-MM-dd HH:mm:ss')}">followDate</td>
 		<td>
-			<a th:href="@{/followUser(followerId=${follow.followingId}, followingId=${follow.followerId})}">팔로우</a>
+			<a th:href="@{/followUser(followerId=${follow.followerId}, followingId=${follow.followingId})}">팔로우</a>
 		</td>
 		<td>
-			<a th:href="@{/follow/delete(followerId=${follow.followerId}, followingId=${follow.followingId})}">삭제</a>
+			<a th:href="@{/follow/delete(followingId=${follow.followingId})}">삭제</a>
 		</td>
 	</tr>
 	</tbody>
