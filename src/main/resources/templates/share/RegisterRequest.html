@@ -5,7 +5,7 @@
 <head>
     <script src="/js/jquery-3.7.1.min.js"></script>
     <meta charset="UTF-8">
-    <title>멤버 관리</title>
+    <title>가입 요청 관리</title>
 
     <!-- jQuery 로드 -->
     <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
@@ -22,7 +22,7 @@
     <script>
         $(document).ready(function() {
             $('#goBack').click(function() {
-                window.location.href = '/share/manageDiary';
+                window.location.href = '/share/viewMember';
             });
         });
     </script>
@@ -33,19 +33,18 @@
 
 <!-- 메인 컨테이너 -->
 <div id="main" class="container mt-5">
-    <h2>멤버 관리</h2>
+    <h2>가입 요청 현황</h2>
     <br>
     <div class="diary-container">
         <div>
-            <p><a th:href="@{/share/memberList}">전체 멤버 보기</a></p>
-            <p><a th:href="@{/share/registerRequest}">가입 요청 관리</a></p>
+
         </div>
     </div>
 
     <!-- 메뉴 버튼 (햄버거 아이콘) -->
     <div class="text-center mt-4">
         <button id="goBack" class="btn btn-primary">
-            돌아가기
+            멤버 관리 페이지로
         </button>
     </div>
 </div>
