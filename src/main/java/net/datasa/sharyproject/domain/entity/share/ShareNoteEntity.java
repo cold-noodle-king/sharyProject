@@ -75,7 +75,7 @@ public class ShareNoteEntity {
     private Integer hashtagNum;
 
     @Column(name = "like_count", columnDefinition = "INT DEFAULT 0")
-    private Integer likeCount;
+    private Integer likeCount = 0;
 
     @Column(name = "share_diary_num", nullable = false)
     private Integer shareDiaryNum;

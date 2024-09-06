@@ -92,25 +92,22 @@ document.addEventListener("DOMContentLoaded", function() {
 
 // 둘러보기 섹션 슬라이더 기능
 document.addEventListener('DOMContentLoaded', function () {
-    const slides = document.querySelectorAll('.portfolio-item'); // 모든 포트폴리오 아이템 선택
+    const slides = document.querySelectorAll('.portfolio-item'); // 모든 슬라이드 아이템 선택
     const prevBtn = document.getElementById('prevBtn'); // 이전 버튼 선택
     const nextBtn = document.getElementById('nextBtn'); // 다음 버튼 선택
-
-    if (slides.length === 0) {
-        console.error('No portfolio-item elements found.'); // 슬라이드가 없으면 오류 출력
-        return; // 스크립트 실행 중지
-    }
-
+    const slidesToShow = 3; // 한 번에 보여줄 슬라이드 수
     let currentIndex = 0; // 현재 슬라이드 인덱스
 
     function updateSliderPosition() {
         slides.forEach((slide, index) => {
-            if (slide) {
-                slide.style.display = 'none'; // 모든 슬라이드 숨기기
-            }
+            slide.style.display = 'none'; // 모든 슬라이드 숨기기
         });
-        if (slides[currentIndex]) {
-            slides[currentIndex].style.display = 'block'; // 현재 슬라이드만 표시
+
+        // 현재 인덱스부터 보여줄 슬라이드 수만큼만 보이도록 설정
+        for (let i = currentIndex; i < currentIndex + slidesToShow; i++) {
+            if (slides[i]) {
+                slides[i].style.display = 'block';
+            }
         }
     }
 
@@ -119,23 +116,25 @@ document.addEventListener('DOMContentLoaded', function () {
         if (currentIndex > 0) {
             currentIndex--;
         } else {
-            currentIndex = slides.length - 1; // 마지막 슬라이드로 이동
+            currentIndex = slides.length - slidesToShow; // 첫 번째 슬라이드로 돌아가기
         }
         updateSliderPosition();
     });
 
     // 다음 버튼 클릭 이벤트
     nextBtn.addEventListener('click', () => {
-        if (currentIndex < slides.length - 1) {
+        if (currentIndex < slides.length - slidesToShow) {
             currentIndex++;
         } else {
-            currentIndex = 0; // 첫 번째 슬라이드로 이동
+            currentIndex = 0; // 첫 번째 슬라이드로 돌아가기
         }
         updateSliderPosition();
     });
 
     updateSliderPosition(); // 초기 슬라이드 위치 설정
 });
+
+
 
 
 
