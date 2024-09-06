@@ -4,6 +4,7 @@
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Note Template 선택</title>
 
     <!-- jQuery 로드 -->
@@ -23,75 +24,66 @@
     <link href="/css/personal/NoteForm.css" rel="stylesheet">
 </head>
 <body>
-    <!-- 헤더 부분 불러오기 -->
-    <div th:replace="~{fragments/header :: header}"></div>
-    <!-- 메인 컨테이너 -->
-    <div id="main">
-        <!-- 다이어리 작성 폼 -->
-        <div class="diary-form" th:style="|background-image: url('${noteTemplate.noteImage}');|">
-            <div class="header-section">
-                <!-- 프로필 이미지 -->
-                <div class="profile-image">
-                    프로필 이미지
-                </div>
+<!-- 헤더 부분 불러오기 -->
+<div th:replace="~{fragments/header :: header}"></div>
 
-                <!-- 위치 태그 -->
+<!-- 메인 컨테이너 -->
+<div id="main" class="container mt-5">
+    <!-- 다이어리 작성 폼 -->
+    <div class="diary-form" th:style="|background-image: url('${noteTemplate.noteImage}');|">
+        <!-- 프로필 및 헤더 섹션 -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div class="d-flex align-items-center">
+                <div class="profile-image me-3">
+                    <!-- 프로필 이미지 -->
+                    <img th:src="@{/images/profile_default.png}" class="rounded-circle" width="50" height="50" alt="프로필">
+                </div>
                 <div class="location-tag">
-                    <label for="locationTag" class="form-label"></label>
-                    <input type="text" id="locationTag" name="locationTag" class="form-control" placeholder="위치를 입력하세요">
-                </div>
-
-                <!-- 날짜와 감정 섹션 -->
-                <div class="right-section">
-                    <!-- 날짜 선택 -->
-                    <div class="form-section">
-                        <label for="diaryDate" class="form-label"></label>
-                        <input type="date" id="diaryDate" name="diaryDate" class="form-control">
-                    </div>
-
-                    <!-- 감정 선택 -->
-                    <div class="form-section">
-                        <label for="diaryEmotion" class="form-label"></label>
-                        <select id="diaryEmotion" name="diaryEmotion" class="form-control">
-                            <option value="기쁨">기쁨</option>
-                            <option value="슬픔">슬픔</option>
-                            <option value="분노">분노</option>
-                            <option value="평온">평온</option>
-                            <option value="놀람">놀람</option>
-                            <option value="두려움">두려움</option>
-                        </select>
-                    </div>
+                    <!-- 위치 태그 -->
+                    <input type="text" id="locationTag" name="locationTag" class="form-control" placeholder="위치 추가">
                 </div>
             </div>
-
-            <!-- 이미지 첨부 섹션 -->
-            <div class="form-section">
-                <label for="diaryImage" class="form-label"></label>
-                <input type="file" id="diaryImage" name="diaryImage" class="form-control">
-            </div>
-
-            <!-- 일기 내용 작성 섹션 -->
-            <div class="form-section">
-                <label for="diaryContent" class="form-label"></label>
-                <textarea id="diaryContent" name="diaryContent" class="form-control" rows="10" placeholder="내용을 입력하세요"></textarea>
-            </div>
-
-            <!-- 해시태그 입력 섹션 -->
-            <div class="form-section">
-                <label for="hashTag" class="form-label">해시태그</label>
-                <input type="text" id="hashTag" name="hashTag" class="form-control" placeholder="#해시태그를 입력하세요">
-            </div>
-
-            <!-- 저장 및 취소 버튼 -->
-            <div class="submit-buttons mt-4">
-                <button type="submit" class="btn btn-success">저장</button>
-                <button type="button" class="btn btn-danger">취소</button>
+            <div class="right-section d-flex">
+                <!-- 날짜 선택 -->
+                <input type="date" id="diaryDate" name="diaryDate" class="form-control me-3" required>
+                <!-- 감정 선택 -->
+                <select id="diaryEmotion" name="diaryEmotion" class="form-control" required>
+                    <option value="기쁨">기쁨</option>
+                    <option value="슬픔">슬픔</option>
+                    <option value="분노">분노</option>
+                    <option value="평온">평온</option>
+                    <option value="놀람">놀람</option>
+                    <option value="두려움">두려움</option>
+                </select>
             </div>
         </div>
-    </div>
 
-    <!-- 푸터 부분 불러오기 -->
-    <div th:replace="~{fragments/footer :: footer}"></div>
+        <!-- 이미지 첨부 섹션 -->
+        <div class="mb-4">
+            <label for="diaryImage" class="form-label"><i class="fas fa-camera"></i> 이미지 업로드</label>
+            <input type="file" id="diaryImage" name="diaryImage" class="form-control">
+        </div>
+
+        <!-- 일기 내용 작성 섹션 -->
+        <div class="mb-4">
+            <textarea id="diaryContent" name="diaryContent" class="form-control" rows="6" placeholder="오늘의 이야기를 적어보세요" required></textarea>
+        </div>
+
+        <!-- 해시태그 입력 섹션 -->
+        <div class="mb-4">
+            <input type="text" id="hashTag" name="hashTag" class="form-control" placeholder="#해시태그 추가">
+        </div>
+
+        <!-- 저장 및 취소 버튼 -->
+        <div class="submit-buttons text-end">
+            <button type="submit" class="btn btn-primary">저장</button>
+            <button type="button" class="btn btn-outline-secondary">취소</button>
+        </div>
+    </div>
+</div>
+
+<!-- 푸터 부분 불러오기 -->
+<div th:replace="~{fragments/footer :: footer}"></div>
 
 <!-- 부트스트랩 JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
