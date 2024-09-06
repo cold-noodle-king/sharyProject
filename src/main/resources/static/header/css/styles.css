@@ -197,6 +197,29 @@
 
 
 
+.emotion-images {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+.emotion-image {
+  width: 100%;
+  height: auto;
+  cursor: pointer;
+  transition: transform 0.3s ease, opacity 0.3s ease; /* 마우스 오버와 클릭 시 전환 효과 */
+}
+
+.emotion-image:hover {
+  transform: scale(1.1); /* 마우스 오버 시 이미지 확대 */
+}
+
+.emotion-image.clicked {
+  transform: rotate(360deg) scale(1.2); /* 클릭 시 360도 회전하고 약간 확대 */
+  opacity: 0.7; /* 불투명도를 낮춤 */
+}
+
 
 
 body {
@@ -11522,26 +11545,5 @@ section#contact form#contactForm :-ms-input-placeholder {
 }
 
 
-.emotion-images {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  margin-top: 20px;
-}
 
-.emotion-image {
-  width: 100%;
-  height: auto;
-  cursor: pointer;
-  transition: transform 0.3s ease, opacity 0.3s ease; /* 변환과 불투명도 전환 */
-}
-
-.emotion-image:hover {
-  transform: scale(1.1); /* 마우스 오버 시 이미지 확대 */
-}
-
-.emotion-image.clicked {
-  transform: rotate(360deg) scale(1.2); /* 클릭 시 회전 및 확대 */
-  opacity: 0.7; /* 불투명도를 낮춤 */
-}
 
