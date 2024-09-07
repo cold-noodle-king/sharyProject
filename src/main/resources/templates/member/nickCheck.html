@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>닉네임 중복확인</title>
+    <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
+    <script>
+        $(document).ready(function() {
+            //가입폼에 아이디 입력하고 창 닫기
+            $('#inputButton').click(function() {
+                let nick = $(this).data('nick');
+                $(opener.document).find('#nickname').val(nick);
+                window.close();
+            });
+        });
+    </script>
+</head>
+<body>
+<header>
+    <h1>[ 닉네임 중복 확인 ]</h1>
+</header>
+<br>
+<section>
+    <form id="searchForm" action="nickCheck" method="post">
+        검색할 닉네임 <input type="text" name="searchNick" id="searchNick" required="required">
+        <input type="submit" value="검색" />
+    </form>
+
+    <!-- 검색 후에만 출력 -->
+    <div th:if="${result != null}">
+        <!-- 사용 가능한 경우에만 출력 -->
+        <div th:if="${result}">
+            <p><span th:text="${searchNick}"></span><span> : 사용할 수 있는 닉네임입니다.</span></p>
+            <p><input type="button" value="닉네임사용하기" id="inputButton" th:data-nick="${searchNick}"></p>
+        </div>
+        <!-- 사용 불가능한 경우에만 출력 -->
+        <div th:if="${not result}">
+            <p><span th:text="${searchNick}"></span><span> : 이미 사용중인 닉네임입니다.</span></p>
+        </div>
+    </div>
+</section>
+</body>
+</html>
