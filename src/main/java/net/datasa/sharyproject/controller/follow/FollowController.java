@@ -11,13 +11,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
-
 @Slf4j
 @RequiredArgsConstructor
 @Controller
 public class FollowController {
 
     private final FollowService followService;
+
     @GetMapping("/follow")
     public String follow() {
         return "follow/follow";
@@ -47,11 +47,8 @@ public class FollowController {
     @GetMapping("/followAll")
     public String getFollowList(Model model) {
         List<FollowDTO> followList = followService.getFollowListForCurrentUser();
-        model.addAttribute("followList", followList);
-
-        // 디버깅 로그 추가
+        model.addAttribute("followList", followList);  // 모델에 속성 추가
         log.info("Follow List: {}", followList);
-
         return "follow/followAll";
     }
 
@@ -64,111 +61,4 @@ public class FollowController {
         }
         return "redirect:/followAll";
     }
-
-
-
-
-
-
-
-
-
-    /**
-     * 메인화면으로 이동
-     */
-/*    @GetMapping("/follow")
-    public String follow() {
-        return "follow/follow";
-    }*/
-
-    /**
-     * 저장 테스트
-     */
-/*    @GetMapping("/insert")
-    public String insert() {
-        try {
-            followService.insert();
-        } catch (Exception e) {
-            log.error("Error during insert operation", e);
-        }
-        return "redirect:/followAll";
-    }
-
-    @GetMapping("/followUser")
-    public String followUser(@RequestParam("followerId") String followerId,
-                             @RequestParam("followingId") String followingId) {
-        try {
-            followService.follow(followerId, followingId);
-        } catch (Exception e) {
-            log.error("Error during follow operation", e);
-        }
-        return "redirect:/followAll";
-    }
-
-    @GetMapping("/followAll")
-    public String getFollowList(Model model) {
-        List<FollowDTO> followList = followService.getFollowListForCurrentUser();
-        model.addAttribute("followList", followList);
-        return "follow/followAll";
-    }*/
-
-
-
-    /**
-     * 팔로우 버튼 클릭 시 호출되는 메서드
-     */
-/*    @GetMapping("/followUser")
-    public String followUser(@RequestParam("followingId") String followingId) {
-        try {
-            followService.follow(followingId);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return "redirect:/followAll";
-    }*/
-
-
-    /**
-     * 전체 팔로우 목록 조회
-     */
-/*    @GetMapping("/followAll")
-    public String getFollowList(Model model) {
-        List<FollowDTO> followList = followService.followAll();
-        model.addAttribute("followList", followList);
-        return "follow/followAll";
-    }*/
-
-    /**
-     * 전체 팔로우 목록 조회
-     */
-/*    public String getFollowList(Model model) {
-        List<FollowDTO> followList = followService.getFollowListForCurrentUser();
-        model.addAttribute("followList", followList);
-        return "follow/followAll";
-    }*/
-
-
-/*    @GetMapping("/follow/delete")
-    public String deleteFollow(@RequestParam("followingId") String followingId) {
-        try {
-            followService.unfollow(followingId);
-        } catch (Exception e) {
-            log.error("Error during delete operation", e);
-        }
-        return "redirect:/followAll";
-    }*/
-
-    /**
-     * 팔로우 관계 삭제
-     */
-/*    @GetMapping("/follow/delete")
-    public String deleteFollow(@RequestParam("followerId") String followerId,
-                               @RequestParam("followingId") String followingId) {
-        followService.delete(followerId, followingId);
-        return "redirect:/followAll"; // 삭제 후 전체 목록 페이지로 리다이렉트
-    }*/
-
-
-
-
 }

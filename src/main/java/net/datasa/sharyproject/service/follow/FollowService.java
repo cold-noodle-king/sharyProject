@@ -1,12 +1,13 @@
 package net.datasa.sharyproject.service.follow;
 
-
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import net.datasa.sharyproject.domain.dto.follow.FollowDTO;
 import net.datasa.sharyproject.domain.entity.follow.FollowEntity;
 import net.datasa.sharyproject.domain.entity.follow.FollowId;
+import net.datasa.sharyproject.domain.entity.member.MemberEntity; // MemberEntity 임포트 추가
 import net.datasa.sharyproject.repository.follow.FollowRepository;
+import net.datasa.sharyproject.repository.member.MemberRepository;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,7 @@ import java.util.stream.Collectors;
 public class FollowService {
 
     private final FollowRepository followRepository;
+    private final MemberRepository memberRepository; // MemberRepository 추가
 
     private String getCurrentUserId() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -33,37 +35,22 @@ public class FollowService {
     }
 
     public void follow(String followerId, String followingId) {
-        FollowId followId1 = new FollowId(followerId, followingId);
-        FollowId followId2 = new FollowId(followingId, followerId);
+        FollowId followId = new FollowId(followerId, followingId);
 
-        Optional<FollowEntity> existingFollow1 = followRepository.findById(followId1);
-        Optional<FollowEntity> existingFollow2 = followRepository.findById(followId2);
+        // 팔로우 관계가 이미 존재하는지 확인
+        Optional<FollowEntity> existingFollow = followRepository.findById(followId);
 
-        if (existingFollow1.isPresent() && existingFollow2.isPresent()) {
-            throw new RuntimeException("이미 양방향 팔로우 관계가 설정되어 있습니다.");
+        if (existingFollow.isPresent()) {
+            throw new RuntimeException("이미 팔로우하고 있는 사용자입니다.");
         }
 
-        if (!existingFollow1.isPresent()) {
-            FollowEntity followEntity1 = FollowEntity.builder()
-                    .followerId(followerId)
-                    .followingId(followingId)
-                    .followDate(LocalDateTime.now())
-                    .build();
-            followRepository.save(followEntity1);
-        }
-
-        if (!existingFollow2.isPresent()) {
-            FollowEntity followEntity2 = FollowEntity.builder()
-                    .followerId(followingId)
-                    .followingId(followerId)
-                    .followDate(LocalDateTime.now())
-                    .build();
-            followRepository.save(followEntity2);
-        }
-    }
-
-    public void insert() {
-        follow("aaa", "bbb");
+        // 팔로우 관계가 존재하지 않으면 저장
+        FollowEntity followEntity = FollowEntity.builder()
+                .followerId(followerId)
+                .followingId(followingId)
+                .followDate(LocalDateTime.now())
+                .build();
+        followRepository.save(followEntity);
     }
 
     public void unfollow(String followingId) {
@@ -75,141 +62,48 @@ public class FollowService {
     public List<FollowDTO> getFollowListForCurrentUser() {
         String currentUserId = getCurrentUserId();
         List<FollowEntity> entities = followRepository.findAll();
-        return entities.stream()
-                .filter(entity -> entity.getFollowerId().equals(currentUserId) || entity.getFollowingId().equals(currentUserId))
+
+        // 현재 사용자가 팔로우하는 사용자 목록 가져오기
+        List<FollowDTO> followingList = entities.stream()
+                .filter(entity -> entity.getFollowerId().equals(currentUserId))
                 .map(entity -> new FollowDTO(
                         entity.getFollowerId(),
                         entity.getFollowingId(),
                         entity.getFollowDate()))
                 .collect(Collectors.toList());
+
+        // 현재 사용자를 팔로우하는 사용자 목록 가져오기
+        List<FollowDTO> followerList = entities.stream()
+                .filter(entity -> entity.getFollowingId().equals(currentUserId))
+                .map(entity -> new FollowDTO(
+                        entity.getFollowerId(),
+                        entity.getFollowingId(),
+                        entity.getFollowDate()))
+                .collect(Collectors.toList());
+
+        // 필요하다면 두 목록을 합치기
+        followingList.addAll(followerList);
+        return followingList;
     }
 
-    /**
-     * 현재 로그인한 사용자 ID 가져오기
-     */
-/*    private String getCurrentUserId() {
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (principal instanceof UserDetails) {
-            return ((UserDetails) principal).getUsername();
-        } else {
-            return principal.toString();
-        }
-    }*/
+    public void insert() {
+        // 모든 회원 ID를 가져오기
+        List<String> memberIds = memberRepository.findAll()
+                .stream()
+                .map(MemberEntity::getMemberId) // MemberEntity의 getMemberId 메서드 호출
+                .collect(Collectors.toList());
 
-    /**
-     * 팔로우 설정 메서드
-     */
-/*    public void follow(String followingId) {
-        String followerId = getCurrentUserId(); // 현재 로그인한 사용자 ID 가져오기
+        // 회원들 간의 팔로우 관계 형성 (임의로)
+        for (int i = 0; i < memberIds.size(); i++) {
+            for (int j = i + 1; j < memberIds.size(); j++) {
+                String followerId = memberIds.get(i);
+                String followingId = memberIds.get(j);
 
-        // followerId -> followingId 관계가 존재하는지 확인
-        FollowId followId1 = new FollowId(followerId, followingId);
-        Optional<FollowEntity> existingFollow = followRepository.findById(followId1);
-
-        if (existingFollow.isPresent()) {
-            throw new RuntimeException("이미 팔로우 관계가 설정되어 있습니다.");
-        }
-
-        // 현재 관계가 없으면 팔로우 저장
-        FollowEntity followEntity = FollowEntity.builder()
-                .followerId(followerId)
-                .followingId(followingId)
-                .followDate(LocalDateTime.now())
-                .build();
-        followRepository.save(followEntity);
-    }*/
-
-
-    /**
-     * 양방향 팔로우 설정 메서드
-     */
-    /*public void follow(String followerId, String followingId) {
-        FollowId followId1 = new FollowId(followerId, followingId);
-        FollowId followId2 = new FollowId(followingId, followerId);
-
-        Optional<FollowEntity> existingFollow1 = followRepository.findById(followId1);
-        Optional<FollowEntity> existingFollow2 = followRepository.findById(followId2);
-
-        if (existingFollow1.isPresent() && existingFollow2.isPresent()) {
-            throw new RuntimeException("이미 양방향 팔로우 관계가 설정되어 있습니다.");
-        }
-
-        if (!existingFollow1.isPresent()) {
-            FollowEntity followEntity1 = FollowEntity.builder()
-                    .followerId(followerId)
-                    .followingId(followingId)
-                    .followDate(LocalDateTime.now())
-                    .build();
-            followRepository.save(followEntity1);
-        }
-
-        if (!existingFollow2.isPresent()) {
-            FollowEntity followEntity2 = FollowEntity.builder()
-                    .followerId(followingId)
-                    .followingId(followerId)
-                    .followDate(LocalDateTime.now())
-                    .build();
-            followRepository.save(followEntity2);
+                // 같은 ID일 경우 무시
+                if (!followerId.equals(followingId)) {
+                    follow(followerId, followingId);
+                }
+            }
         }
     }
-*/
-
-    /**
-     * 저장 테스트 메서드
-     */
-/*    public void insert() {
-        follow("aaa", "bbb");
-    }*/
-
-
-    /**
-     * 팔로우 관계 삭제 메서드
-     */
-    /*public void unfollow(String followingId) {
-        String followerId = getCurrentUserId();
-        FollowId followId = new FollowId(followerId, followingId);
-        followRepository.deleteById(followId);
-    }*/
-
-    /**
-     * 현재 사용자의 팔로우 목록을 가져오는 메서드
-     */
-    /*public List<FollowDTO> getFollowListForCurrentUser() {
-        String currentUserId = getCurrentUserId();
-        List<FollowEntity> entities = followRepository.findAll();
-        return entities.stream()
-                .filter(entity -> entity.getFollowerId().equals(currentUserId) || entity.getFollowingId().equals(currentUserId))
-                .map(entity -> new FollowDTO(
-                        entity.getFollowerId(),
-                        entity.getFollowingId(),
-                        entity.getFollowDate()))
-                .collect(Collectors.toList());
-    }*/
-
-
-    /**
-     * 전체 팔로우 목록을 가져오는 메서드
-     */
-/*    public List<FollowDTO> followAll() {
-        List<FollowEntity> entities = followRepository.findAll();
-        return entities.stream()
-                .map(entity -> new FollowDTO(
-                        entity.getFollowerId(),
-                        entity.getFollowingId(),
-                        entity.getFollowDate()))
-                .collect(Collectors.toList());
-    }*/
-
-    /**
-     * 팔로우 관계 삭제 메서드
-     */
-/*    public void delete(String followerId, String followingId) {
-        // 현재 관계 삭제
-        FollowId followId1 = new FollowId(followerId, followingId);
-        followRepository.deleteById(followId1);
-
-        // 반대 관계 삭제 (이건 관계를 모두 삭제하도록 설정)
-        *//*FollowId followId2 = new FollowId(followingId, followerId);
-        followRepository.deleteById(followId2);*//*
-    }*/
 }
