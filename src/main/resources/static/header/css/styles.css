@@ -221,6 +221,50 @@
 }
 
 
+/* Font Awesome 아이콘 사용을 위해 링크 추가 */
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css');
+
+/* 공통 스타일 */
+.custom-button {
+  background-color: #1DB954; /* Spotify 녹색 또는 Melon Music 색상 */
+  border: none;
+  color: white;
+  padding: 12px;
+  margin: 5px;
+  border-radius: 50%; /* 동그랗게 만들기 */
+  font-size: 20px;
+  width: 50px;
+  height: 50px;
+  cursor: pointer;
+  transition: background-color 0.3s ease; /* 부드러운 전환 효과 */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
+}
+
+/* 버튼에 호버 효과 추가 */
+.custom-button:hover {
+  background-color: #1ED760; /* 호버 시 약간 밝은 녹색 */
+}
+
+/* 버튼이 활성화된 경우 스타일 변경 (재생 중일 때) */
+.control-button.active {
+  background-color: #ffa500; /* 예: 주황색으로 활성화 표시 */
+}
+
+/* 아이콘 중앙 정렬 */
+.custom-button i {
+  vertical-align: middle;
+}
+
+/* 컨트롤 영역 정렬 */
+.player-controls {
+  display: flex;
+  justify-content: center; /* 중앙 정렬 */
+  align-items: center;
+  margin-top: 15px;
+}
+
+
+
 
 body {
   margin: 0;

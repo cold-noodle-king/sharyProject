@@ -8,20 +8,26 @@
     <link href="header/css/styles.css" rel="stylesheet">
     <link rel="stylesheet" href="/footer/css/styles.css">
 </head>
+
+
+
+
+
+<body>
+
+<!-- YouTube IFrame Player API 스크립트 로드 -->
+<script src="http://www.youtube.com/iframe_api"></script>
+
+<script src="/js/emotions/emotions.js"></script>
+
 <!-- 헤더용 JS -->
 <script src="/header/js/scripts.js"></script>
 <!-- 푸터용 JS -->
 <script src="/footer/js/scripts.js"></script>
 
-<script src="/js/emotions/emotions.js"></script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
 
-<!-- YouTube IFrame Player API 스크립트 로드 -->
-<script src="http://www.youtube.com/iframe_api"></script>
-
-
-<body>
 <!-- header.html의 헤더 부분 불러오기 -->
 <div th:replace="~{fragments/header :: header}"></div>
 
@@ -42,6 +48,7 @@
         <h1>Welcome to the Main Page</h1>
         <p>This is the main content of the page.</p>
         <div th:replace="fragments/home_emotions :: home-emotions"></div>
+
     </div>
 </section>
 
@@ -99,5 +106,9 @@
 
 <!-- footer.html의 푸터 부분 불러오기 -->
 <div th:replace="~{fragments/footer :: footer}"></div>
+
+
+
+
 </body>
 </html>
