@@ -93,4 +93,10 @@ public class MemberController {
         //ID검색 페이지로 포워딩
         return "member/nickCheck";
     }
+
+    @GetMapping("mypage")
+    public String mypage() {
+        return "member/mypage";
+
+    }
 }
