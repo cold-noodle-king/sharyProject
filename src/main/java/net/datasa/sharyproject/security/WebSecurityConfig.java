@@ -48,7 +48,7 @@ public class WebSecurityConfig {
             )
             //로그아웃 설정
             .logout(logout -> logout
-                    .logoutUrl("/logout")                   //로그아웃 처리 경로
+                    .logoutUrl("/member/logout")                   //로그아웃 처리 경로
                     .logoutSuccessUrl("/")                  //로그아웃 성공 시 이동할 경로
             );
 
