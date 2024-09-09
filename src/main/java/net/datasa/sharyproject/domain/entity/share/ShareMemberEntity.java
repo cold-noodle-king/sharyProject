@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.datasa.sharyproject.domain.entity.member.MemberEntity;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Slf4j
@@ -23,8 +24,9 @@ public class ShareMemberEntity {
     @Column(name = "share_member_num")
     private Integer shareMemberNum;
 
-    @Column(name = "member_id", nullable = false, length = 50)
-    private String memberId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id", referencedColumnName = "member_id")
+    private MemberEntity member;
 
     @Column(name = "share_diary_num", nullable = false)
     private Integer shareDiaryNum;

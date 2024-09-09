@@ -6,12 +6,18 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.datasa.sharyproject.domain.entity.member.MemberEntity;
+import net.datasa.sharyproject.domain.entity.personal.CategoryEntity;
+import net.datasa.sharyproject.domain.entity.personal.CoverTemplateEntity;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
+/**
+ *공유 다이어리(표지) 엔티티
+ */
 @Slf4j
 @AllArgsConstructor
 @NoArgsConstructor
@@ -38,12 +44,22 @@ public class ShareDiaryEntity {
     @Column(name = "updated_date", nullable = false)
     private LocalDateTime updatedDate;
 
-    @Column(name = "category_num", nullable = false)
-    private Integer categoryNum;
+    //다이어리 커버 정보 (외래키)
+    //다대일 관계. 다이어리 여러개가 하나의 커버를 참조한다.
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_num", referencedColumnName = "category_num")
+    private CategoryEntity category;
 
-    @Column(name = "cover_num", nullable = false)
-    private Integer coverNum;
+    //다이어리 커버 정보 (외래키)
+    //다대일 관계. 다이어리 여러개가 하나의 커버를 참조한다.
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "cover_num", referencedColumnName = "cover_num")
+    private CoverTemplateEntity coverTemplate;
 
-    @Column(name = "member_id", nullable = false, length = 50)
-    private String memberId;
+    //다이어리 주인 정보 (외래키)
+    //다대일 관계. 다이어리 여러개가 회원정보 하나를 참조한다.
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id", referencedColumnName = "member_id")
+    private MemberEntity member;
+
 }
