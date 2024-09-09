@@ -31,30 +31,33 @@
 <div id="main" class="container mt-5">
     <!-- 다이어리 작성 폼 -->
     <div class="diary-form" th:style="|background-image: url('${noteTemplate.noteImage}');|">
-        <!-- 프로필 및 헤더 섹션 -->
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <div class="d-flex align-items-center">
-                <div class="profile-image me-3">
-                    <!-- 프로필 이미지 -->
-                    <img th:src="@{/images/profile_default.png}" class="rounded-circle" width="50" height="50" alt="프로필">
+        <div class="diary-form-content">
+            <!-- 프로필 및 헤더 섹션 -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div class="d-flex align-items-center">
+                    <div class="profile-image me-3">
+                        <!-- 프로필 이미지 -->
+                        <img th:src="@{/images/profile_default.png}" class="rounded-circle" width="50" height="50"
+                             alt="프로필">
+                    </div>
+                    <div class="location-tag">
+                        <!-- 위치 태그 -->
+                        <input type="text" id="locationTag" name="locationTag" class="form-control" placeholder="위치 추가">
+                    </div>
                 </div>
-                <div class="location-tag">
-                    <!-- 위치 태그 -->
-                    <input type="text" id="locationTag" name="locationTag" class="form-control" placeholder="위치 추가">
+                <div class="right-section d-flex">
+                    <!-- 날짜 선택 -->
+                    <input type="date" id="diaryDate" name="diaryDate" class="form-control me-3" required>
+                    <!-- 감정 선택 -->
+                    <select id="diaryEmotion" name="diaryEmotion" class="form-control" required>
+                        <option value="기쁨">기쁨</option>
+                        <option value="슬픔">슬픔</option>
+                        <option value="분노">분노</option>
+                        <option value="평온">평온</option>
+                        <option value="놀람">놀람</option>
+                        <option value="두려움">두려움</option>
+                    </select>
                 </div>
-            </div>
-            <div class="right-section d-flex">
-                <!-- 날짜 선택 -->
-                <input type="date" id="diaryDate" name="diaryDate" class="form-control me-3" required>
-                <!-- 감정 선택 -->
-                <select id="diaryEmotion" name="diaryEmotion" class="form-control" required>
-                    <option value="기쁨">기쁨</option>
-                    <option value="슬픔">슬픔</option>
-                    <option value="분노">분노</option>
-                    <option value="평온">평온</option>
-                    <option value="놀람">놀람</option>
-                    <option value="두려움">두려움</option>
-                </select>
             </div>
         </div>
 

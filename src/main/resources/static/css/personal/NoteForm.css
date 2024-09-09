@@ -9,44 +9,51 @@
 
 /* 다이어리 폼 스타일 */
 .diary-form {
-    background-color: rgba(255, 255, 255, 0.8); /* 투명한 흰색 배경 */
-    width: 794px; /* A4 가로 크기 */
-    height: 1123px; /* A4 세로 크기 */
-    border-radius: 15px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-    padding: 30px;
-    background-size: contain; /* A4 사이즈 안에 이미지가 맞도록 조정 */
-    background-repeat: no-repeat;
-    background-position: center;
+    background-color: rgba(255, 255, 255, 0.9); /* 배경과 폼 내용을 구분하기 위해 약간 투명한 흰색 배경 설정 */
+    width: 794px; /* A4 용지 가로 크기 */
+    height: 1123px; /* A4 용지 세로 크기 */
+    border-radius: 15px; /* 폼 모서리를 둥글게 처리 */
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* 그림자를 넣어 폼이 떠있는 효과 부여 */
+    padding: 30px; /* 폼 안쪽 여백 설정 */
+    background-size: contain; /* 배경 이미지가 폼 크기에 맞도록 조정 */
+    background-repeat: no-repeat; /* 배경 이미지 반복 방지 */
+    background-position: top center; /* 배경 이미지를 상단 가운데에 위치 */
     position: relative;
     margin: 0 auto; /* 중앙 정렬 */
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: space-between; /* 폼 내부 요소를 위아래로 정렬 */
+}
+
+/* 다이어리 폼 상단을 가리지 않기 위한 여백 처리 */
+.diary-form-content {
+    margin-top: 150px; /* 배경 이미지 상단의 디자인을 가리지 않기 위해 150px의 여백 추가 */
+    margin: 50px;
 }
 
 /* 프로필 이미지 및 입력 폼 스타일 */
 .profile-image img {
-    border: 2px solid #ddd;
-    padding: 2px;
-    border-radius: 50%;
+    border: 2px solid #ddd; /* 프로필 이미지에 경계선 추가 */
+    padding: 2px; /* 경계선과 이미지 사이에 약간의 여백 추가 */
+    border-radius: 50%; /* 이미지 모서리를 둥글게 처리 */
 }
 
+/* 텍스트 영역 스타일 */
 textarea.form-control {
-    border: none;
-    border-bottom: 1px solid #ccc;
-    resize: none;
+    border: none; /* 기본 테두리 제거 */
+    border-bottom: 1px solid #ccc; /* 아래쪽만 테두리 추가 */
+    resize: none; /* 텍스트 영역 크기 조정 불가 */
 }
 
-/* 이미지 업로드 필드 */
+/* 이미지 업로드 필드 스타일 */
 #diaryImage {
-    border: none;
+    border: none; /* 기본 테두리 제거 */
 }
 
-/* 저장 및 취소 버튼 */
+/* 저장 및 취소 버튼 스타일 */
 .submit-buttons .btn {
-    border-radius: 20px;
-    padding: 10px 30px;
-    font-weight: bold;
-    margin-top: 20px;
+    border-radius: 20px; /* 버튼을 둥글게 처리 */
+    padding: 10px 30px; /* 버튼 내부 여백 설정 */
+    font-weight: bold; /* 버튼 텍스트 굵게 처리 */
+    margin-top: 20px; /* 버튼과 상단 요소 사이의 여백 설정 */
 }
