@@ -1,52 +1,107 @@
+/* 전체 페이지 폰트 적용 */
+body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background-color: #f9f9f9;
+    color: #333;
+}
+
 /* 메인 컨테이너 */
 #main {
     display: flex;
     justify-content: center;
+    align-items: center;
     padding: 20px;
-    max-width: 100%; /* 전체 화면에 맞게 중앙 정렬 */
-    margin: 0 auto;
+    margin-top: 150px; /* 헤더와의 간격을 더 넓힘 */
+    min-height: calc(100vh - 200px); /* 화면 중앙에 위치하도록 조정 */
 }
 
 /* 다이어리 폼 스타일 */
 .diary-form {
-    background-color: rgba(255, 255, 255, 0.8); /* 투명한 흰색 배경 */
-    width: 794px; /* A4 가로 크기 */
-    height: 1123px; /* A4 세로 크기 */
-    border-radius: 15px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-    padding: 30px;
-    background-size: contain; /* A4 사이즈 안에 이미지가 맞도록 조정 */
-    background-repeat: no-repeat;
-    background-position: center;
+    background-color: rgba(255, 255, 255, 0.95);
+    width: 600px; /* 폼 크기 유지 */
+    padding: 40px; /* 안쪽 여백 조정 */
+    border-radius: 20px;
+    box-shadow: 0px 6px 25px rgba(0, 0, 0, 0.15);
     position: relative;
-    margin: 0 auto; /* 중앙 정렬 */
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    background-image: linear-gradient(to bottom, #d3eaff, #ffffff); /* 부드러운 파스텔톤 그라데이션 */
 }
 
-/* 프로필 이미지 및 입력 폼 스타일 */
+/* 폼 내부 요소 간 간격 조정 */
+.diary-form-content .form-control,
+.diary-form-content input[type="file"] {
+    background-color: #ffffff;
+    border-radius: 10px;
+    padding: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border: none;
+    margin-bottom: 12px;
+    font-size: 14px; /* 폰트 크기를 줄임 */
+    width: 100%; /* 폼 요소가 폼에 맞게 잘리거나 넘치지 않도록 설정 */
+}
+
+/* 프로필 이미지 스타일 */
 .profile-image img {
-    border: 2px solid #ddd;
+    border: 2px solid #d3eaff;
     padding: 2px;
     border-radius: 50%;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.1);
 }
 
+/* 위치 태그 */
+.location-tag input {
+    font-size: 14px;
+    background-color: #f7f7f7;
+    border-radius: 10px;
+    padding: 10px;
+}
+
+/* 날짜, 감정 선택, 공개 권한을 한 줄에 나열 */
+.d-flex.justify-content-between {
+    display: flex;
+    justify-content: space-between;
+}
+
+.d-flex .form-control {
+    width: 30%; /* 날짜, 감정, 공개권한이 한 줄에 위치할 수 있도록 설정 */
+}
+
+/* 텍스트 영역 스타일 */
 textarea.form-control {
     border: none;
     border-bottom: 1px solid #ccc;
     resize: none;
+    padding: 10px;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.1);
+    background-color: #f0f9ff; /* 부드러운 파스텔 블루 배경 */
+    font-size: 14px; /* 폰트 크기 줄임 */
 }
 
 /* 이미지 업로드 필드 */
 #diaryImage {
     border: none;
+    padding: 10px;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.1);
 }
 
 /* 저장 및 취소 버튼 */
 .submit-buttons .btn {
-    border-radius: 20px;
+    border-radius: 25px;
     padding: 10px 30px;
     font-weight: bold;
-    margin-top: 20px;
+    margin-top: 15px; /* 버튼 간격을 줄임 */
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.2);
+    font-size: 14px;
+}
+
+.submit-buttons .btn-primary {
+    background-color: #a2d2ff; /* 부드러운 파스텔 블루 색상 */
+    color: white;
+    border: none;
+}
+
+.submit-buttons .btn-outline-secondary {
+    border-color: #6c757d;
 }
