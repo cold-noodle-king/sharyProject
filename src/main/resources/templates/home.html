@@ -15,8 +15,8 @@
 
 <body>
 
-<!-- YouTube IFrame Player API 스크립트 로드 -->
-<script src="http://www.youtube.com/iframe_api"></script>
+<script src="https://sdk.scdn.co/spotify-player.js"></script>
+
 
 <script src="/js/emotions/emotions.js"></script>
 
@@ -48,6 +48,9 @@
         <h1>Welcome to the Main Page</h1>
         <p>This is the main content of the page.</p>
         <div th:replace="fragments/home_emotions :: home-emotions"></div>
+        <!-- Spotify 로그인 버튼 -->
+        <a id="loginButton" href="#">Spotify 로그인</a>
+
 
     </div>
 </section>

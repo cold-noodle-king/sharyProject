@@ -12,39 +12,109 @@
     <!-- 헤더와 푸터용 스타일 -->
     <link href="../header/css/styles.css" rel="stylesheet">
     <link rel="stylesheet" href="../footer/css/styles.css">
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        /* 사이드바 스타일 */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 200px;
+            background-color: #343a40;
+            padding-top: 60px; /* 헤더 높이만큼 여백 추가 */
+        }
+
+        .sidebar a {
+            padding: 10px 15px;
+            text-decoration: none;
+            font-size: 18px;
+            color: white;
+            display: block;
+        }
+
+        .sidebar a:hover {
+            background-color: #495057;
+        }
+
+        /* 메인 콘텐츠 스타일 */
+        .main-content {
+            margin-left: 200px; /* 사이드바 너비만큼 여백 추가 */
+            padding: 20px;
+        }
+
+        /* 헤더 스타일 조정 */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+
+        /* 푸터 스타일 조정 */
+        footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+        }
+
+        /* 페이지 내용이 길 때 푸터 위치 유지 */
+        .page-content {
+            min-height: 100vh;
+            padding-bottom: 60px; /* 푸터 높이만큼 여백 추가 */
+        }
+    </style>
 </head>
 <body>
 
-    <!-- 헤더 부분 불러오기 -->
-    <div th:replace="~{fragments/header :: header}"></div>
-<SECTION>
-    <div>
+<!-- 헤더 부분 불러오기 -->
+<div th:replace="~{fragments/header :: header}"></div>
 
-<P>아아아아아</P>
-    </div>
-    <div>
+<!-- 사이드바 -->
+<div class="sidebar">
+    <a href="#home">Home</a>
+    <a href="#profile">Profile</a>
+    <a href="#settings">Settings</a>
+    <a href="#logout">Logout</a>
+</div>
 
-<P>아아아아아</P>
-    </div><div>
+<!-- 메인 콘텐츠 -->
+<div class="main-content">
+    <SECTION class="page-content">
+        <div>
+            <p>메인 콘텐츠 내용</p>
+        </div>
+        <div>
+            <p>메인 콘텐츠 내용</p>
+        </div>
+        <div>
+            <p>메인 콘텐츠 내용</p>
+        </div>
+        <div>
+            <p>메인 콘텐츠 내용</p>
+        </div>
+        <div>
+            <p>메인 콘텐츠 내용</p>
+        </div>
+    </SECTION>
+</div>
 
-<P>아아아아아</P>
-    </div><div>
+<div th:replace="fragments/modals :: modals"></div>
 
-<P>아아아아아</P>
-    </div><div>
+<!-- 푸터 부분 불러오기 -->
+<div th:replace="~{fragments/footer :: footer}"></div>
 
-<P>아아아아아</P>
-    </div>
+<!-- 부트스트랩 JS 로드 -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<!-- FontAwesome 아이콘 로드 -->
+<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 
-
-</SECTION>
-    <div th:replace="fragments/modals :: modals"></div>
-
-    <!-- 푸터 부분 불러오기 -->
-    <div th:replace="~{fragments/footer :: footer}"></div>
-    <!-- 부트스트랩 JS 로드 -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- FontAwesome 아이콘 로드 -->
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </body>
 </html>
