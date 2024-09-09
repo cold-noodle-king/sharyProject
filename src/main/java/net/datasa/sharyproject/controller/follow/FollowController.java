@@ -7,6 +7,7 @@ import net.datasa.sharyproject.service.follow.FollowService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
@@ -33,26 +34,37 @@ public class FollowController {
         return "redirect:/followAll";
     }
 
-    @GetMapping("/followUser")
+
+    @PostMapping("/followUser")
     public String followUser(@RequestParam("followerId") String followerId,
                              @RequestParam("followingId") String followingId) {
         try {
             followService.follow(followerId, followingId);
         } catch (Exception e) {
             log.error("Error during follow operation", e);
+            return "redirect:/followAll?error=follow_error"; // 오류 메시지 전달
         }
         return "redirect:/followAll";
     }
 
+
+
+
     @GetMapping("/followAll")
     public String getFollowList(Model model) {
-        List<FollowDTO> followList = followService.getFollowListForCurrentUser();
-        model.addAttribute("followList", followList);  // 모델에 속성 추가
-        log.info("Follow List: {}", followList);
+        List<FollowDTO> followers = followService.getFollowersForCurrentUser();
+        List<FollowDTO> following = followService.getFollowingForCurrentUser();
+
+        model.addAttribute("followers", followers);
+        model.addAttribute("following", following);
+        log.info("Followers: {}", followers);
+        log.info("Following: {}", following);
+
         return "follow/followAll";
     }
 
-    @GetMapping("/follow/delete")
+
+    @PostMapping("/follow/delete")
     public String deleteFollow(@RequestParam("followingId") String followingId) {
         try {
             followService.unfollow(followingId);

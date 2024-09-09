@@ -8,32 +8,48 @@
 
 <h1>[ follow list ]</h1>
 
+<h2>나를 팔로우하는 사람들</h2>
 <table>
 	<thead>
 	<tr>
 		<th>목록</th>
 		<th>팔로워 ID</th>
+		<th>날짜</th>
+	</tr>
+	</thead>
+	<tbody>
+	<tr th:each="follow, iterStat : ${followers}">
+		<td th:text="${iterStat.count}">1</td>
+		<td th:text="${follow.followerId}">followerId</td>
+		<td th:text="${#temporals.format(follow.followDate, 'yyyy-MM-dd HH:mm:ss')}">followDate</td>
+	</tr>
+	</tbody>
+</table>
+
+<h2>내가 팔로우하고 있는 사람들</h2>
+<table>
+	<thead>
+	<tr>
+		<th>목록</th>
 		<th>팔로잉 ID</th>
 		<th>날짜</th>
-		<th>팔로우</th>
 		<th>삭제</th>
 	</tr>
 	</thead>
 	<tbody>
-	<!-- FollowEntity 리스트를 반복하여 테이블 행을 생성 -->
-	<tr th:each="follow, iterStat : ${followList}">
-		<td th:text="${iterStat.count}">1</td> <!-- 현재 행 번호 -->
-		<td th:text="${follow.followerId}">followerId</td>
+	<tr th:each="follow, iterStat : ${following}">
+		<td th:text="${iterStat.count}">1</td>
 		<td th:text="${follow.followingId}">followingId</td>
 		<td th:text="${#temporals.format(follow.followDate, 'yyyy-MM-dd HH:mm:ss')}">followDate</td>
 		<td>
-			<a th:href="@{'/followUser(followerId=' + ${follow.followerId} + ', followingId=' + ${follow.followingId} + ')'}">팔로우</a>
-		</td>
-		<td>
-			<a th:href="@{'/follow/delete(followingId=' + ${follow.followingId} + ')'}">삭제</a>
+			<form action="/follow/delete" method="post"> <!-- POST로 변경 -->
+				<input type="hidden" name="followingId" th:value="${follow.followingId}" />
+				<button type="submit">삭제</button>
+			</form>
 		</td>
 	</tr>
 	</tbody>
 </table>
+
 </body>
 </html>

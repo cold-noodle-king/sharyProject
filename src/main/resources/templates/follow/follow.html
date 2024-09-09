@@ -9,7 +9,11 @@
 <h1>[ 복합키 테스트 ]</h1>
 
 <p>* 아래 링크 누를 때마다 동일한 내용 저장됨</p>
-<p><a th:href="@{/insert}">저장 테스트</a></p>
+<form action="/followUser" method="post">
+    <input type="hidden" name="followerId" value="로그인한 사용자 ID" /> <!-- 실제 로그인한 사용자 ID로 설정 -->
+    <input type="hidden" name="followingId" value="testUser" />
+    <button type="submit">저장 테스트</button>
+</form>
 
 <p>* 전체 팔로우 목록</p>
 <p><a th:href="@{/followAll}">전체 팔로우 목록</a></p>
