@@ -3,6 +3,7 @@ package net.datasa.sharyproject.service.follow;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import net.datasa.sharyproject.domain.dto.follow.FollowDTO;
+import net.datasa.sharyproject.domain.dto.member.MemberDTO;
 import net.datasa.sharyproject.domain.entity.follow.FollowEntity;
 import net.datasa.sharyproject.domain.entity.follow.FollowId;
 import net.datasa.sharyproject.domain.entity.member.MemberEntity;  // MemberEntity 임포트 추가
@@ -107,6 +108,26 @@ public class FollowService {
                         entity.getFollowerId(),
                         entity.getFollowingId(),
                         entity.getFollowDate()))
+                .collect(Collectors.toList());
+    }
+
+    public List<MemberDTO> getAllUsersExceptCurrentUser(String currentUserId) {
+        return memberRepository.findAll().stream()
+                .filter(member -> !member.getMemberId().equals(currentUserId)) // 현재 로그인한 사용자 제외
+                .map(member -> new MemberDTO(
+                        member.getMemberId(),
+                        null, // 비밀번호는 제외
+                        member.getEmail(),
+                        member.getPhoneNumber(),
+                        member.getFullName(),
+                        member.getNickname(),
+                        member.getGender(),
+                        member.getBirthdate(),
+                        member.getCreatedDate(),
+                        member.getUpdatedDate(),
+                        member.getEnabled(), // 필드 이름을 올바르게 사용
+                        member.getRoleName()
+                ))
                 .collect(Collectors.toList());
     }
 }

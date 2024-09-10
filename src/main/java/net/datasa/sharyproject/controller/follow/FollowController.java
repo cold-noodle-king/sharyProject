@@ -3,6 +3,7 @@ package net.datasa.sharyproject.controller.follow;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.datasa.sharyproject.domain.dto.follow.FollowDTO;
+import net.datasa.sharyproject.domain.dto.member.MemberDTO;
 import net.datasa.sharyproject.service.follow.FollowService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -72,5 +73,15 @@ public class FollowController {
             log.error("Error during delete operation", e);
         }
         return "redirect:/followAll";
+    }
+
+
+    @GetMapping("/allUsers")
+    public String getAllUsers(Model model) {
+        String currentUserId = followService.getCurrentUserId(); // 현재 로그인한 사용자 ID 가져오기
+        List<MemberDTO> allUsers = followService.getAllUsersExceptCurrentUser(currentUserId); // 현재 사용자 제외한 모든 사용자 가져오기
+
+        model.addAttribute("allUsers", allUsers);
+        return "follow/allUsers"; // 전체 사용자 목록을 보여주는 HTML 페이지
     }
 }

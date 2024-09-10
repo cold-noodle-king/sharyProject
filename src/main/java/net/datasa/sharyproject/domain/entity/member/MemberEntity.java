@@ -57,6 +57,8 @@ public class MemberEntity {
     @Column(name = "role_name", nullable = false, length = 50)
     private String roleName;
 
-    @Column(name="enabled", nullable = false)
-    private Boolean enabled = true; //객체이고 null을 담을 수 있음
+    @Column(name = "enabled", nullable = false)
+    private Boolean enabled = true;  // 필드를 Boolean으로 정의하고 기본값을 true로 설정
+
+
 }

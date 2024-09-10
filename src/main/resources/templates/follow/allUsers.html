@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>전체 사용자 목록</title>
+    <script>
+        function confirmFollow(event, form) {
+            event.preventDefault(); // 기본 폼 제출 동작 막기
+            const result = confirm('해당 사용자를 팔로우 하시겠습니까?'); // 확인 창 표시
+
+            if (result) { // '예'를 누르면
+                form.submit(); // 폼 제출
+            } else {
+                // '아니오'를 누르면 아무 동작도 하지 않음
+            }
+        }
+    </script>
+</head>
+<body>
+
+<h1>[ 전체 shary 사용자 목록 ]</h1>
+
+<table>
+    <thead>
+    <tr>
+        <th>사용자 ID</th>
+        <th>닉네임</th>
+        <th>팔로우</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="user : ${allUsers}">
+        <td th:text="${user.memberId}">사용자 ID</td>
+        <td th:text="${user.nickname}">닉네임</td>
+        <td>
+            <!-- onsubmit 이벤트 핸들러 추가 -->
+            <form th:action="@{/followUser}" method="post" onsubmit="confirmFollow(event, this)">
+                <input type="hidden" name="followerId" th:value="${#authentication.name}"/> <!-- 로그인한 사용자 ID -->
+                <input type="hidden" name="followingId" th:value="${user.memberId}"/> <!-- 팔로우할 사용자 ID -->
+                <button type="submit">팔로우</button>
+            </form>
+
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+</body>
+</html>

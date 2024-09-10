@@ -3,6 +3,18 @@
 <head>
 	<meta charset="UTF-8">
 	<title>test_composite_key</title>
+	<script>
+		function confirmUnfollow(event, form) {
+			event.preventDefault(); // 기본 폼 제출 동작 막기
+			const result = confirm('팔로우를 취소하시겠습니까?'); // 확인 창 표시
+
+			if (result) { // '예'를 누르면
+				form.submit(); // 폼 제출
+			} else {
+				// '아니오'를 누르면 아무 동작도 하지 않음
+			}
+		}
+	</script>
 </head>
 <body>
 
@@ -33,7 +45,7 @@
 		<th>목록</th>
 		<th>팔로잉 ID</th>
 		<th>날짜</th>
-		<th>삭제</th>
+		<th>팔로우 취소</th>
 	</tr>
 	</thead>
 	<tbody>
@@ -42,9 +54,9 @@
 		<td th:text="${follow.followingId}">followingId</td>
 		<td th:text="${#temporals.format(follow.followDate, 'yyyy-MM-dd HH:mm:ss')}">followDate</td>
 		<td>
-			<form action="/follow/delete" method="post"> <!-- POST로 변경 -->
+			<form action="/follow/delete" method="post" onsubmit="confirmUnfollow(event, this)">
 				<input type="hidden" name="followingId" th:value="${follow.followingId}" />
-				<button type="submit">삭제</button>
+				<button type="submit">팔로우 취소</button>
 			</form>
 		</td>
 	</tr>
