@@ -1,6 +1,8 @@
 package net.datasa.sharyproject.controller.share;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import net.datasa.sharyproject.domain.dto.personal.CategoryDTO;
 import net.datasa.sharyproject.domain.dto.personal.CoverTemplateDTO;
 import net.datasa.sharyproject.domain.dto.personal.NoteTemplateDTO;
 import net.datasa.sharyproject.service.personal.CoverTemplateService;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Slf4j
 @AllArgsConstructor
 @Controller
 @RequestMapping("share")
@@ -52,6 +55,13 @@ public class ShareController {
         return "share/CategorySelect";
     }
 
+    @PostMapping("saveDiary")
+    public String categorySave(@RequestBody CategoryDTO categoryDTO) {
+        log.debug("dto: {}", categoryDTO);
+
+        return "redirect:/";
+    }
+
     //다이어리 카테고리 수정 페이지로 이동
     @GetMapping("categoryUpdate")
     public String categoryUpdate() {
@@ -78,33 +88,40 @@ public class ShareController {
         return "share/manageDiary";
     }
 
+    //내가 생성한 공유다이어리를 삭제하는 메서드
     @GetMapping("deleteDiary")
     public String deleteDiary() {
 
         return "share/main";
     }
 
+    //가입한 공유다이어리를 탈퇴하는 메서드
     @PostMapping("withdrawal")
     public String withdrawal() {
+        
         return "share/main";
     }
 
+    //공유다이어리 정보 수정 페이지 출력
     @GetMapping("infoUpdate")
     public String infoUpdate() {
 
         return "share/InfoUpdate";
     }
 
+    //공유 다이어리 멤버 관리 페이지
     @GetMapping("viewMember")
     public String viewMember() {
         return "share/ViewMember";
     }
 
+    //공유 다이어리 멤버 리스트 출력
     @GetMapping("memberList")
     public String memberList() {
         return "share/MemberList";
     }
 
+    //공유 다이어리 가입 요청 리스트 출력
     @GetMapping("registerRequest")
     public String registerRequest() {
         return "share/RegisterRequest";
