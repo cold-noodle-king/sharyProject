@@ -31,7 +31,8 @@ public class ShareMemberEntity {
     @Column(name = "share_diary_num", nullable = false)
     private Integer shareDiaryNum;
 
-    @Column(name = "manager_id", nullable = false, length = 50)
-    private String managerId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "manager_id", referencedColumnName = "member_id")
+    private ShareDiaryEntity manager;
 
 }
