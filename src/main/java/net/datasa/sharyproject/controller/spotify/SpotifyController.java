@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
@@ -21,7 +22,6 @@ public class SpotifyController {
 
     @PostMapping("/play")
     public ResponseEntity<String> playMusic(@RequestBody Map<String, Object> requestData) {
-        // 요청 데이터에서 액세스 토큰, 장치 ID, 재생할 트랙 URI 추출
         String accessToken = (String) requestData.get("accessToken");
         String deviceId = (String) requestData.get("deviceId");
         List<String> uris = (List<String>) requestData.get("uris");
@@ -47,10 +47,15 @@ public class SpotifyController {
             );
 
             return response; // Spotify API의 응답을 그대로 반환
+        } catch (HttpClientErrorException e) {
+            // 4xx 에러 처리
+            System.err.println("HTTP Client Error: " + e.getStatusCode());
+            System.err.println("Response Body: " + e.getResponseBodyAsString());
+            return ResponseEntity.status(e.getStatusCode()).body("Spotify API 요청이 실패했습니다: " + e.getResponseBodyAsString());
         } catch (Exception e) {
-            // 예외 처리
+            // 기타 예외 처리
             e.printStackTrace();
-            return ResponseEntity.status(500).body("음악 재생 중 오류가 발생했습니다: " + e.getMessage());
+            return ResponseEntity.status(500).body("음악 재생 중 서버 오류가 발생했습니다: " + e.getMessage());
         }
     }
 }

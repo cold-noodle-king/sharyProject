@@ -50,7 +50,6 @@ document.addEventListener('DOMContentLoaded', function () {
             player.addListener('ready', ({ device_id }) => {
                 console.log('Ready with Device ID', device_id);
                 deviceId = device_id; // 장치 ID를 변수에 저장합니다.
-                playMusic(deviceId, accessToken); // 음악 자동 재생 시도
             });
 
             player.addListener('not_ready', ({ device_id }) => {
@@ -87,12 +86,58 @@ document.addEventListener('DOMContentLoaded', function () {
         };
     }
 
+    // 감정별 여러 트랙 URI 맵핑
+    const emotionTracks = {
+        "행복": [
+            "spotify:track:4uLU6hMCjMI75M1A2tKUQC", // "Happy" - Pharrell Williams
+            "spotify:track:6JV2JOEocMgcZxYSZelKcc", // "Can't Stop the Feeling!" - Justin Timberlake
+            "spotify:track:2XU0oxnq2qxCpomAAuJY8K"  // "Walking on Sunshine" - Katrina and the Waves
+        ],
+        "슬픔": [
+            "spotify:track:2B4MLg6LzjIwDIFORqZPdL", // "비가 오는 날엔" - 비스트 (B2ST)
+            "spotify:track:3gkvM6A51Uydh0bNE3u8GC", // 썬더
+            "spotify:track:4yugZvBYaoREkJKtbG08Qr", // "Someone Like You" - Adele
+            "spotify:track:1zB4vmk8tFRmM9UULNzbLB", // "Let Her Go" - Passenger
+            "spotify:track:5UEnHoDYpsA3cEH4Rz4oXT", // "All I Want" - Kodaline
+            "spotify:track:6NpP18oTkDAFhzT7s3bJGW", // "Tears in Heaven" - Eric Clapton
+            "spotify:track:0Ryd8975WihbObpp5cPW1t"  // "Goodbye My Lover" - James Blunt
+        ],
+        "화남": [
+            "spotify:track:5ghIJDpPoe3CfHMGu71E6T", // "Smells Like Teen Spirit" - Nirvana
+            "spotify:track:2G7V7zsVDxg1yRsu7Ew9RJ", // "Lose Yourself" - Eminem
+            "spotify:track:60a0Rd6pjrkxjPbaKzXjfq"  // "In the End" - Linkin Park
+        ],
+        "놀람": [
+            "spotify:track:2cGxRwrMyEAp8dEbuZaVv6", // "Thriller" - Michael Jackson
+            "spotify:track:2nLtzopw4rPReszdYBJU6h", // "Don't Stop Believin'" - Journey
+            "spotify:track:4uLU6hMCjMI75M1A2tKUQC"  // "Bohemian Rhapsody" - Queen
+        ],
+        "두려움": [
+            "spotify:track:6nDKrPlXdpomGBgAlO7UdP", // "Haunted" - Taylor Swift
+            "spotify:track:2jLLAJ2wY0JHQOUfYn7LhA", // "Disturbia" - Rihanna
+            "spotify:track:1DFD5Fotzgn6yYXkYsKiGs"  // "Psycho" - Post Malone
+        ],
+        "사랑": [
+            "spotify:track:7qiZfU4dY1lWllzX7mPBI3", // "Shape of You" - Ed Sheeran
+            "spotify:track:6gBFPUFcJLzWGx4lenP6h2", // "Thinking Out Loud" - Ed Sheeran
+            "spotify:track:3U4isOIWM3VvDubwSI3y7a"  // "All of Me" - John Legend
+        ]
+    };
+
+
     // 감정 이미지 클릭 시 이벤트
     emotionImages.forEach(image => {
         image.parentElement.addEventListener('click', function (event) {
             event.preventDefault();
 
-            const playlistUri = image.parentElement.getAttribute('data-playlist');
+            const emotion = image.alt.trim(); // 이미지의 alt 속성을 통해 감정 이름 가져오기
+            const uris = emotionTracks[emotion]; // 해당 감정에 매핑된 여러 트랙 URI 가져오기
+
+            if (!uris) {
+                console.error("해당 감정에 대한 트랙을 찾을 수 없습니다.");
+                return;
+            }
+
             fetch('/spotify/play', {
                 method: 'POST',
                 headers: {
@@ -101,36 +146,15 @@ document.addEventListener('DOMContentLoaded', function () {
                 body: JSON.stringify({
                     accessToken: accessToken,
                     deviceId: deviceId, // 서버에 전달할 장치 ID
-                    uris: ["spotify:track:3n3Ppam7vgaVa1iaRUc9Lp"] // 재생할 트랙 URI
+                    uris: uris // 선택된 감정에 대한 여러 트랙 URI 전송
                 })
             }).then(response => {
                 if (response.ok) {
-                    console.log("음악이 재생되었습니다.");
+                    console.log(`${emotion} 감정에 대한 음악이 재생되었습니다.`);
                 } else {
                     console.error("음악 재생 오류:", response);
                 }
             });
         });
     });
-
-    // 재생을 시작하는 함수
-    function playMusic(device_id, accessToken) {
-        fetch('/spotify/play', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                accessToken: accessToken,
-                deviceId: device_id,
-                uris: ["spotify:track:3n3Ppam7vgaVa1iaRUc9Lp"] // 재생할 트랙 URI
-            })
-        }).then(response => {
-            if (response.ok) {
-                console.log("음악이 재생되었습니다.");
-            } else {
-                console.error("음악 재생 오류:", response);
-            }
-        });
-    }
 });
