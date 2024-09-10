@@ -71,7 +71,7 @@ public class ShareController {
         return "share/main";
     }
 
-    //
+    //다이어리 관리 페이지로 이동
     @GetMapping("manageDiary")
     public String manageDiary() {
 
