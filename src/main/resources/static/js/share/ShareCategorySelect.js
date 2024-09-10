@@ -4,7 +4,7 @@ $(document).ready(function() {
 
     // 카테고리 버튼 클릭 시 카테고리 선택/해제 로직
     $('.cat-btn').on('click', function() {
-        const category = $(this).data('cat'); // 버튼의 데이터 속성에서 카테고리 이름을 가져옴
+        let category = $(this).data('cat'); // 버튼의 데이터 속성에서 카테고리 이름을 가져옴
 
         // 이미 선택된 카테고리가 있으면 해제
         if (selectedCategories.size >= maxSelection) {
@@ -26,7 +26,7 @@ $(document).ready(function() {
     // 저장 버튼 클릭 시 선택한 카테고리 정보를 서버로 전송 후 페이지 이동
     $("#save").click(function() {
         // 서버로 선택한 카테고리 정보를 POST 요청으로 보낼 수 있음
-        // $.post("/your-save-endpoint", { categories: Array.from(selectedCategories) });
+        $.post("/share/saveDiary", { categories: Array.from(selectedCategories)[0] });
 
         // 저장 후 커버 선택 페이지로 이동
         window.location.href = "/share/cover"; // 커버 선택 페이지로 URL 변경
