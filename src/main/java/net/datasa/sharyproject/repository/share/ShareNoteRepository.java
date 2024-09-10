@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ShareNoteRepository extends JpaRepository<ShareNoteEntity, Integer> {
+
 }

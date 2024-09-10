@@ -29,11 +29,11 @@ $(document).ready(function() {
         // $.post("/your-save-endpoint", { categories: Array.from(selectedCategories) });
 
         // 저장 후 커버 선택 페이지로 이동
-        window.location.href = "/personal/cover"; // 커버 선택 페이지로 URL 변경
+        window.location.href = "/cover/cover"; // 커버 선택 페이지로 URL 변경
     });
 
     // 취소 버튼 클릭 시 MyDiary 페이지로 돌아감
     $("#cancel").click(function() {
-        window.location.href = "/personal/MyDiary"; // MyDiary 페이지로 이동
+        window.location.href = "/cover/main"; // 공유다이어리 메인 페이지로 이동
     });
 });

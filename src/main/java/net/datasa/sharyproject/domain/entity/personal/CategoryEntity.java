@@ -15,7 +15,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Entity
 @Table(name = "category")
 public class CategoryEntity {
-
+//카테고리엔티티
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "category_num", nullable = false)

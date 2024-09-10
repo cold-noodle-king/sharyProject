@@ -40,32 +40,38 @@ public class ShareController {
         return "share/joinedList";
     }
 
-    //내가 가입한 공유 다어리로 이동
+    //내가 가입한 공유 다이어리로 이동
     @GetMapping("joinedDiary")
     public String joinedDiary() {
         return "share/JoinedDiary";
     }
 
+    //다이어리 카테고리 선택 페이지로 이동
     @GetMapping("categorySelect")
     public String categorySelect() {
         return "share/CategorySelect";
     }
 
+    //다이어리 카테고리 수정 페이지로 이동
     @GetMapping("categoryUpdate")
     public String categoryUpdate() {
         return "share/CategoryUpdate";
     }
 
+    //다이어리 커버 페이지로 이동
     @GetMapping("cover")
     public String cover() {
         return "share/CoverSelect";
     }
 
+    //새로운 노트 추가 페이지로 이동
     @GetMapping("newNote")
     public String newNote() {
+
         return "share/main";
     }
 
+    //
     @GetMapping("manageDiary")
     public String manageDiary() {
 
