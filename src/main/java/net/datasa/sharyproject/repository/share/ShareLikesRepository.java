@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ShareLIkesRepository extends JpaRepository<ShareLikeEntity, ShareLikes> {
+public interface ShareLikesRepository extends JpaRepository<ShareLikeEntity, ShareLikes> {
 }
