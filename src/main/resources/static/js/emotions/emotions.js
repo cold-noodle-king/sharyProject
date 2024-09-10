@@ -6,8 +6,8 @@ document.addEventListener('DOMContentLoaded', function () {
     let deviceId;
     let player; // Spotify Player 객체
 
-    const clientId = '0370bb5560a145aaa0899ee8e8bac122'; // 여기에 당신의 실제 클라이언트 ID를 입력
-    const redirectUri = 'http://localhost:8888'; // 여기에 당신의 리디렉트 URL을 입력
+    const clientId = '0370bb5560a145aaa0899ee8e8bac122'; // 여기에 내 실제 클라이언트 ID를 입력
+    const redirectUri = 'http://localhost:8888'; // 여기에 내 리다이렉트 URL을 입력
     const scopes = 'streaming user-read-email user-read-private user-modify-playback-state user-read-playback-state'; // 필요한 스코프 추가
 
     // URL에서 액세스 토큰 추출
@@ -89,15 +89,14 @@ document.addEventListener('DOMContentLoaded', function () {
     // 감정별 여러 트랙 URI 맵핑
     const emotionTracks = {
         "행복": [
-            "spotify:track:4uLU6hMCjMI75M1A2tKUQC", // "Happy" - Pharrell Williams
-            "spotify:track:6JV2JOEocMgcZxYSZelKcc", // "Can't Stop the Feeling!" - Justin Timberlake
-            "spotify:track:2XU0oxnq2qxCpomAAuJY8K"  // "Walking on Sunshine" - Katrina and the Waves
+            "spotify:track:60nZcImufyMA1MKQY3dcCH?si=85311777eb444bf2", // "Happy" - Pharrell Williams
+            "spotify:track:4ppKRxity3jJd2hGoVyD4u?si=1d117fb66d0c46f6", // "No make up" - 자이언티
+            "spotify:track:1pz24zu5H9A0S1a2NKT4F0?si=27f27692be264a27"  // "SoulMate" - ZICO
         ],
         "슬픔": [
-            "spotify:track:2B4MLg6LzjIwDIFORqZPdL", // "비가 오는 날엔" - 비스트 (B2ST)
-            "spotify:track:3gkvM6A51Uydh0bNE3u8GC", // 썬더
-            "spotify:track:4yugZvBYaoREkJKtbG08Qr", // "Someone Like You" - Adele
-            "spotify:track:1zB4vmk8tFRmM9UULNzbLB", // "Let Her Go" - Passenger
+            "spotify:track:2njgIBj0nJ1UUFYNuW06et?si=5337a89a01644761", // "비가 오는 날엔" - 비스트 (B2ST)
+            "spotify:track:1VnjByC7TUx5A73A4qtgoo?si=7e19abf3e28b4010", // "우산" - 에픽하이
+            "spotify:track:4RqL3r72UOdolRaOwykb32?si=1e96cbbb917441aa", // "서쪽하늘" - 울랄라세션
             "spotify:track:5UEnHoDYpsA3cEH4Rz4oXT", // "All I Want" - Kodaline
             "spotify:track:6NpP18oTkDAFhzT7s3bJGW", // "Tears in Heaven" - Eric Clapton
             "spotify:track:0Ryd8975WihbObpp5cPW1t"  // "Goodbye My Lover" - James Blunt
@@ -108,6 +107,7 @@ document.addEventListener('DOMContentLoaded', function () {
             "spotify:track:60a0Rd6pjrkxjPbaKzXjfq"  // "In the End" - Linkin Park
         ],
         "놀람": [
+            "spotify:track:3gkvM6A51Uydh0bNE3u8GC", // "Thunder" - Imagine Dragons
             "spotify:track:2cGxRwrMyEAp8dEbuZaVv6", // "Thriller" - Michael Jackson
             "spotify:track:2nLtzopw4rPReszdYBJU6h", // "Don't Stop Believin'" - Journey
             "spotify:track:4uLU6hMCjMI75M1A2tKUQC"  // "Bohemian Rhapsody" - Queen
@@ -118,7 +118,7 @@ document.addEventListener('DOMContentLoaded', function () {
             "spotify:track:1DFD5Fotzgn6yYXkYsKiGs"  // "Psycho" - Post Malone
         ],
         "사랑": [
-            "spotify:track:7qiZfU4dY1lWllzX7mPBI3", // "Shape of You" - Ed Sheeran
+            "spotify:track:6cxbaStUOFS9Ssz3bHVVDJ?si=5a294cebf2594738", // "사랑은 은하수 다방에서" - 10CM
             "spotify:track:6gBFPUFcJLzWGx4lenP6h2", // "Thinking Out Loud" - Ed Sheeran
             "spotify:track:3U4isOIWM3VvDubwSI3y7a"  // "All of Me" - John Legend
         ]
@@ -129,6 +129,14 @@ document.addEventListener('DOMContentLoaded', function () {
     emotionImages.forEach(image => {
         image.parentElement.addEventListener('click', function (event) {
             event.preventDefault();
+
+            // 애니메이션 효과 추가
+            image.classList.add('animated'); // 클릭한 이미지에 애니메이션 클래스 추가
+
+            // 일정 시간 후 애니메이션 클래스 제거 (1초 후)
+            setTimeout(() => {
+                image.classList.remove('animated');
+            }, 1000);
 
             const emotion = image.alt.trim(); // 이미지의 alt 속성을 통해 감정 이름 가져오기
             const uris = emotionTracks[emotion]; // 해당 감정에 매핑된 여러 트랙 URI 가져오기
