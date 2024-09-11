@@ -7,12 +7,16 @@ import net.datasa.sharyproject.domain.dto.personal.CoverTemplateDTO;
 import net.datasa.sharyproject.domain.dto.personal.NoteTemplateDTO;
 import net.datasa.sharyproject.service.personal.CoverTemplateService;
 import net.datasa.sharyproject.service.personal.NoteTemplateService;
+import net.datasa.sharyproject.service.share.ShareDiaryService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @AllArgsConstructor
@@ -22,6 +26,7 @@ public class ShareController {
 
     private final CoverTemplateService coverTemplateService;
     private final NoteTemplateService noteTemplateService;
+    private final ShareDiaryService shareDiaryService;
 
     //공유 다이어리 메인 페이지로 이동
     //내가 생성한 다이어리 페이지를 디폴트로 설정

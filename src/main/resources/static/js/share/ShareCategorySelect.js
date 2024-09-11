@@ -28,20 +28,36 @@ $(document).ready(function() {
 
     // 저장 버튼 클릭 시 선택한 카테고리 정보를 서버로 전송 후 페이지 이동
     $("#save").click(function() {
-        // 서버로 선택한 카테고리 정보를 POST 요청으로 보낼 수 있음
+        // 선택한 카테고리 정보를 서버로 전송
         $.post("/share/categorySave", { categories: Array.from(selectedCategories) })
             .done(function() {
-                // 요청이 성공적으로 완료되면, 페이지 이동은 서버에서 처리
-                console.log('저장 성공');
+                // 리디렉션은 서버에서 처리되므로 별도 조치가 필요 없음
+                console.log("카테고리 정보가 성공적으로 저장되었습니다.");
+                // 저장 후 커버 선택 페이지로 이동
+
             })
             .fail(function(error) {
                 console.error("Error saving categories:", error);
                 alert("카테고리 저장 중 오류가 발생했습니다."); // 오류 발생 시 알림
             });
 
+        /*// 서버로 선택한 카테고리 정보를 POST 요청으로 보낼 수 있음
+        $.post("/share/categorySave", { categories: Array.from(selectedCategories) })
+            .done(function(response) {
+                // 서버에서 리디렉션 URL을 받았다면 해당 URL로 이동
+                if (response.redirectUrl) {
+                    window.location.href = response.redirectUrl; // 서버에서 전달받은 URL로 리디렉션
+                } else {
+                    console.error("No redirect URL provided");
+                }
+            })
+            .fail(function(error) {
+                console.error("Error saving categories:", error);
+                alert("카테고리 저장 중 오류가 발생했습니다."); // 오류 발생 시 알림
+            });*/
 
-        // 저장 후 커버 선택 페이지로 이동
-        // window.location.href = "/share/cover"; // 커버 선택 페이지로 URL 변경
+
+
     });
 
     // 취소 버튼 클릭 시 MyDiary 페이지로 돌아감

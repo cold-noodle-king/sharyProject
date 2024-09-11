@@ -23,6 +23,7 @@ public class WebSecurityConfig {
             , "/member/loginForm"     // 로그인 페이지
             , "/member/join"      // 회원가입 처리 경로
             , "/member/joinForm"  // 회원가입 페이지
+            , "/share/**"
     };
 
 
