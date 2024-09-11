@@ -11676,5 +11676,73 @@ section#contact form#contactForm :-ms-input-placeholder {
 }
 
 
+/* Spotify 로그인 버튼 스타일 */
+.spotify-login-button {
+  display: inline-block;
+  padding: 12px 20px;
+  background-color: #1DB954; /* Spotify 녹색 */
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  text-decoration: none;
+  border-radius: 30px; /* 둥근 버튼 */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 8px 12px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
+  transition: transform 0.2s ease, box-shadow 0.2s ease; /* 애니메이션 효과 */
+  cursor: pointer;
+  margin-top: 10px;
+  text-align: center;
+}
 
+.spotify-login-button:hover {
+  transform: translateY(-3px); /* 마우스 오버 시 위로 약간 올라가는 효과 */
+  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2), 0 16px 24px rgba(0, 0, 0, 0.2); /* 그림자 효과 강화 */
+}
+
+.spotify-login-button:active {
+  transform: translateY(1px); /* 클릭 시 살짝 눌리는 효과 */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 4px 6px rgba(0, 0, 0, 0.1); /* 클릭 시 그림자 감소 */
+}
+
+/* Spotify 사이트 로그인 링크 스타일 */
+/* 버튼들을 포함하는 부모 요소에 대한 스타일 */
+.button-container {
+  text-align: center; /* 텍스트 및 인라인 요소를 가운데 정렬 */
+  margin-top: 20px; /* 위쪽 여백 추가 */
+}
+
+/* Spotify 사이트 로그인 링크 스타일 */
+.spotify-site-login-link {
+  display: inline-block; /* 인라인 블록 요소로 설정하여 가운데 정렬 가능 */
+  padding: 10px 18px;
+  color: #1DB954; /* Spotify 녹색 */
+  font-size: 16px;
+  font-weight: bold;
+  text-decoration: none;
+  border: 2px solid #1DB954; /* 테두리 설정 */
+  border-radius: 30px; /* 둥근 모서리 */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 8px 12px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
+  transition: background-color 0.2s ease, color 0.2s ease; /* 애니메이션 효과 */
+  margin: 5px; /* 버튼 간의 여백 설정 */
+}
+
+.spotify-site-login-link:hover {
+  transform: translateY(-3px); /* 마우스 오버 시 위로 약간 올라가는 효과 */
+  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2), 0 16px 24px rgba(0, 0, 0, 0.2); /* 그림자 효과 강화 */
+}
+
+.spotify-site-login-link:active {
+  transform: translateY(1px); /* 클릭 시 살짝 눌리는 효과 */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 4px 6px rgba(0, 0, 0, 0.1); /* 클릭 시 그림자 감소 */
+}
+
+/* 버튼 애니메이션 효과 */
+.animated-click {
+  animation: click-bounce 0.3s ease;
+}
+
+@keyframes click-bounce {
+  0% { transform: scale(1); }
+  50% { transform: scale(0.9); }
+  100% { transform: scale(1); }
+}
 
