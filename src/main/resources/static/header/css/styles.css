@@ -11746,3 +11746,22 @@ section#contact form#contactForm :-ms-input-placeholder {
   100% { transform: scale(1); }
 }
 
+/* 시크 바 스타일 */
+#seek-bar {
+  margin-top: 10px;
+  width: 100%;
+  height: 5px;
+  background-color: #ddd;
+  outline: none;
+  -webkit-appearance: none;
+}
+
+#seek-bar::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 12px;
+  height: 12px;
+  background: #1db954; /* 시크 바의 손잡이 색상 */
+  cursor: pointer;
+  border-radius: 50%;
+}
