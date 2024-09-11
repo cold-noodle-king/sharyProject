@@ -23,17 +23,23 @@ $(document).ready(function() {
         }
     });
 
-    // 저장 버튼 클릭 시 선택한 카테고리 정보를 서버로 전송 후 페이지 이동
+    // 저장 버튼 클릭 시 선택한 카테고리 정보를 sessionStorage에 저장 후 페이지 이동
     $("#save").click(function() {
-        // 서버로 선택한 카테고리 정보를 POST 요청으로 보낼 수 있음
-        // $.post("/your-save-endpoint", { categories: Array.from(selectedCategories) });
+        if (selectedCategories.size === 0) {
+            alert("카테고리를 선택해주세요!"); // 선택된 카테고리가 없을 때 경고 메시지 표시
+            return;
+        }
+
+        // 선택한 카테고리 정보를 sessionStorage에 저장
+        const selectedCategory = Array.from(selectedCategories)[0];
+        sessionStorage.setItem('selectedCategory', selectedCategory); // sessionStorage에 저장
 
         // 저장 후 커버 선택 페이지로 이동
-        window.location.href = "/cover/cover"; // 커버 선택 페이지로 URL 변경
+        window.location.href = "/personal/cover"; // 커버 선택 페이지로 URL 변경
     });
 
     // 취소 버튼 클릭 시 MyDiary 페이지로 돌아감
     $("#cancel").click(function() {
-        window.location.href = "/cover/main"; // 공유다이어리 메인 페이지로 이동
+        window.location.href = "/personal/MyDiary"; // 공유다이어리 메인 페이지로 이동
     });
 });
