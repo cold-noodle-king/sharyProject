@@ -61,6 +61,7 @@ public class ShareController {
         return "share/CategorySelect";
     }
 
+    //리스트 형태로 받아온 카테고리를 문자열로 변환하는 메서드
     public class CategoryUtil {
 
         // 리스트를 쉼표로 구분된 문자열로 변환
@@ -70,8 +71,7 @@ public class ShareController {
     }
 
     @PostMapping("categorySave")
-    public String categorySave(@RequestParam("categories") List<String> categories, Model model
-                                ,RedirectAttributes redirectAttributes) {
+    public String categorySave(@RequestParam("categories") List<String> categories, Model model) {
         log.debug("지정한 카테고리: {}", categories);
 
         String categoryName = CategoryUtil.listToString(categories);
@@ -92,6 +92,13 @@ public class ShareController {
     @GetMapping("cover")
     public String cover() {
         return "share/CoverSelect";
+    }
+
+    //다이어리를 DB에 저장하는 메서드
+    @PostMapping("saveDiary")
+    public void saveDiary(@RequestParam("diary") String diary, RedirectAttributes redirectAttributes) {
+
+
     }
 
     //새로운 노트 추가 페이지로 이동
