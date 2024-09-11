@@ -1,5 +1,5 @@
 <div th:fragment="home-emotions">
-  <div class="container">
+  <div class="emotion-container"> <!-- 수정된 클래스명 -->
     <div class="text-center">
       <h2 class="section-heading text-uppercase">Home</h2>
       <h3 class="section-subheading text-muted">감정 선택하기</h3>
@@ -44,10 +44,15 @@
     </div>
 
     <!-- 사용자 정의 컨트롤 -->
-    <div class="player-controls" style="margin-top: 10px; " id="control-buttons">
+    <div class="player-controls" style="margin-top: 10px;" id="control-buttons">
       <button id="prevButton" class="custom-button control-button"><i class="fas fa-backward"></i></button>
       <button id="playPauseButton" class="custom-button control-button"><i class="fas fa-play"></i></button>
       <button id="nextButton" class="custom-button control-button"><i class="fas fa-forward"></i></button>
     </div>
+
+    <!-- 시크바 추가 -->
+    <input type="range" id="seek-bar" value="0" max="100">
+
+
   </div>
 </div>

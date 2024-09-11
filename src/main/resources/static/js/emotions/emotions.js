@@ -5,6 +5,8 @@ document.addEventListener('DOMContentLoaded', function () {
     let accessToken;
     let deviceId;
     let player; // Spotify Player 객체
+    let currentTrackDuration = 0; // 현재 트랙 길이
+    let currentTrackPosition = 0; // 현재 트랙 위치
 
     const clientId = '0370bb5560a145aaa0899ee8e8bac122'; // 여기에 내 실제 클라이언트 ID를 입력
     const redirectUri = 'http://localhost:8888'; // 여기에 내 리다이렉트 URL을 입력
@@ -38,6 +40,9 @@ document.addEventListener('DOMContentLoaded', function () {
     if (accessToken) {
         console.log('Access Token:', accessToken);
 
+        // 로그인 성공 시 버튼 숨기기
+        hideLoginButtons();
+
         // Spotify Web Playback SDK 초기화
         window.onSpotifyWebPlaybackSDKReady = () => {
             player = new Spotify.Player({
@@ -58,6 +63,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
             player.addListener('player_state_changed', (state) => {
                 console.log('Player state changed:', state);
+                if (state) {
+                    currentTrackDuration = state.duration;
+                    currentTrackPosition = state.position;
+                    updateSeekBar();
+                }
                 if (state && !state.paused) {
                     document.getElementById('control-buttons').style.display = 'block'; // 음악 재생 시 컨트롤 표시
                 }
@@ -81,6 +91,14 @@ document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('prevButton').addEventListener('click', function () {
                 player.previousTrack().then(() => {
                     console.log('이전 곡 버튼이 눌렸습니다.');
+                });
+            });
+
+            // 시크 바 변경 시
+            document.getElementById('seek-bar').addEventListener('input', function (event) {
+                const newPosition = (event.target.value / 100) * currentTrackDuration;
+                player.seek(newPosition).then(() => {
+                    console.log('재생 위치가 조정되었습니다.');
                 });
             });
         };
@@ -124,7 +142,6 @@ document.addEventListener('DOMContentLoaded', function () {
         ]
     };
 
-
     // 감정 이미지 클릭 시 이벤트
     emotionImages.forEach(image => {
         image.parentElement.addEventListener('click', function (event) {
@@ -165,4 +182,18 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         });
     });
+
+    // 로그인 성공 시 버튼 숨기기
+    function hideLoginButtons() {
+        document.getElementById('loginButton').style.display = 'none'; // 첫 번째 버튼 숨기기
+        document.getElementById('spotifySiteLogin').style.display = 'none'; // 두 번째 링크 숨기기
+    }
+
+    // 시크 바 업데이트
+    function updateSeekBar() {
+        const seekBar = document.getElementById('seek-bar');
+        if (seekBar) {
+            seekBar.value = (currentTrackPosition / currentTrackDuration) * 100;
+        }
+    }
 });

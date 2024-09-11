@@ -10,6 +10,7 @@ import net.datasa.sharyproject.service.personal.NoteTemplateService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -55,11 +56,25 @@ public class ShareController {
         return "share/CategorySelect";
     }
 
-    @PostMapping("saveDiary")
-    public String categorySave(@RequestBody CategoryDTO categoryDTO) {
-        log.debug("dto: {}", categoryDTO);
+    public class CategoryUtil {
 
-        return "redirect:/";
+        // 리스트를 쉼표로 구분된 문자열로 변환
+        public static String listToString(List<String> categories) {
+            return String.join(", ", categories);  // 쉼표와 공백으로 구분하여 문자열 생성
+        }
+    }
+
+    @PostMapping("categorySave")
+    public String categorySave(@RequestParam("categories") List<String> categories, Model model
+                                ,RedirectAttributes redirectAttributes) {
+        log.debug("지정한 카테고리: {}", categories);
+
+        String categoryName = CategoryUtil.listToString(categories);
+        log.debug("문자열로 변환한 카테고리 이름:{}", categoryName);
+
+        model.addAttribute("categoryName", categoryName);
+
+        return "share/CoverSelect";
     }
 
     //다이어리 카테고리 수정 페이지로 이동
