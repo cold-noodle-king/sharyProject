@@ -224,6 +224,8 @@
 /* Font Awesome 아이콘 사용을 위해 링크 추가 */
 @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css');
 
+
+
 /* 공통 스타일 */
 .custom-button {
   background-color: #1DB954; /* Spotify 녹색 또는 Melon Music 색상 */
@@ -256,12 +258,97 @@
 }
 
 /* 컨트롤 영역 정렬 */
+/* 버튼 컨테이너 스타일 수정 */
 .player-controls {
-  display: flex;
-  justify-content: center; /* 중앙 정렬 */
-  align-items: center;
-  margin-top: 15px;
+  display: flex; /* Flexbox 사용 */
+  flex-direction: row; /* 가로 방향으로 정렬 */
+  justify-content: center; /* 버튼을 가로 중앙 정렬 */
+  align-items: center; /* 버튼을 세로 중앙 정렬 */
+  gap: 10px; /* 버튼 간격 설정 */
+  margin-top: 10px;
+  position: fixed; /* 고정 위치 */
+  bottom: 20px; /* 화면 아래쪽에 위치 */
+  left: 50%; /* 화면의 수평 중앙에 위치하도록 설정 */
+  transform: translateX(-50%); /* 가운데 정렬 보정 */
+  width: auto; /* 컨테이너 너비를 자동으로 설정 */
+  z-index: 10; /* 다른 요소 위에 표시 */
+  flex-wrap: nowrap !important; /* 버튼이 한 줄에 유지되도록 강제 설정 */
 }
+
+/* 버튼 스타일 */
+.control-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 60px; /* 버튼 크기 조정 */
+  height: 60px;
+  background-color: #1DB954; /* Spotify 녹색 */
+  border: none;
+  border-radius: 50%; /* 원형 버튼 */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 8px 12px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
+  color: white;
+  cursor: pointer;
+  outline: none;
+  transition: transform 0.1s ease, box-shadow 0.1s ease; /* 애니메이션 효과 */
+  margin: 0 5px; /* 버튼 간의 가로 간격 설정 */
+  flex-shrink: 0; /* 버튼 크기가 줄어들지 않도록 설정 */
+}
+
+/* 아이콘 정렬 */
+.control-button i {
+  font-size: 24px; /* 아이콘 크기 */
+  vertical-align: middle; /* 아이콘을 가운데 정렬 */
+}
+
+
+
+
+/* 애니메이션 정의 */
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-10px);
+  }
+  60% {
+    transform: translateY(-5px);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* 감정 이모티콘 애니메이션 */
+.emotion-image {
+  transition: transform 0.2s;
+  cursor: pointer;
+}
+
+.emotion-image:hover {
+  animation: bounce 1s;
+}
+
+/* 버튼 애니메이션 */
+.control-button {
+  transition: transform 0.2s;
+  cursor: pointer;
+}
+
+.control-button:hover {
+  animation: pulse 1s;
+}
+
+
 
 
 
