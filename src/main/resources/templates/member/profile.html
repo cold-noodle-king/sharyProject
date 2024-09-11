@@ -39,9 +39,27 @@
 
         /* 사이드바 스타일 */
         .sidebar {
-            width: 400px;
-            background-color: #c184c1;
-            padding-top: 260px; /* 헤더 높이만큼 여백 추가 */
+            width: 300px;
+            background-color: #e6dcb8;
+            padding-left: 10px;
+            padding-right: 10px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between; /* 사이드바에서 공간을 분리함 */
+        }
+
+        .sidebar-content {
+            margin-top: 150px; /* 텍스트를 아래로 내리기 위한 여백 */
+        }
+
+        /* 프로필 이미지 */
+        .profile-img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin-bottom: 10px;
+            object-fit: cover;
         }
 
         .sidebar a {
@@ -56,11 +74,19 @@
             background-color: #495057;
         }
 
+        /* 회원탈퇴 항목 스타일 */
+        .logout {
+            margin-bottom: 20px;
+        }
+
         /* 메인 콘텐츠 스타일 */
         .main-content {
             flex: 1; /* 남은 공간을 차지하게 함 */
-            padding: 100px;
+            display: flex;
+            justify-content: center; /* 수평 중앙 정렬 */
+            align-items: center; /* 수직 중앙 정렬 */
             text-align: center;
+            padding: 20px;
         }
 
         /* 헤더 스타일 조정 - 고정된 헤더 */
@@ -73,12 +99,24 @@
             background-color: white; /* 헤더의 배경색 추가 */
         }
 
-        /* 페이지 내용이 길 때 푸터 위치 유지 */
-        .page-content {
-            min-height: 100vh;
-            padding-bottom: 60px; /* 푸터 높이만큼 여백 추가 */
-            border: 1px solid;
-            margin-top: 60px; /* 고정된 헤더만큼의 여백 추가 */
+        table {
+            width: 400px;
+            margin: 0 auto;
+        }
+
+        input[type="textarea"] {
+            width: 100%;
+        }
+
+        .nickname {
+            font-size: 20px;
+            font-weight: bold;
+            color: white;
+        }
+
+        .profile-intro {
+            color: white;
+            margin-bottom: 20px;
         }
     </style>
 </head>
@@ -91,37 +129,51 @@
     <div class="content">
         <!-- 사이드바 -->
         <div class="sidebar">
-            <a th:href="@{/member/infoForm}">개인정보</a>
-            <a th:href="@{/member/profile}">프로필</a>
-            <a th:href="@{/member/follow}">친구</a>
-            <a th:href="@{/member/message}">쪽지</a>
-            <a th:href="@{/member/logout}">회원탈퇴</a>
+            <!-- 사이드바 내용 -->
+            <div class="sidebar-content">
+                <!-- 프로필 정보 추가 -->
+                <img src="/images/emotions/happy.png" alt="프로필사진" class="profile-img">
+                <p class="nickname">사용자 닉네임</p>
+                <p class="profile-intro">짧은 프로필 소개글</p>
+
+                <a th:href="@{/member/infoForm}">개인정보</a>
+                <a th:href="@{/member/profile}">프로필</a>
+                <a th:href="@{/member/follow}">친구</a>
+                <a th:href="@{/member/message}">쪽지</a>
+            </div>
+
+            <!-- 회원탈퇴 항목은 사이드바 하단에 배치 -->
+            <div class="logout">
+                <a th:href="@{/member/logout}">회원탈퇴</a>
+            </div>
         </div>
 
         <!-- 메인 콘텐츠 -->
         <div class="main-content">
-            <section class="page-content">
-                <table>
-                    <tr>
-                        <td>
-                            <p>프로필사진</p>
-                        </td>
-                        <td>
-                            <p>nickName</p>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="2">
-                            <input type="textarea" placeholder="프로필 소개">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="2">
-                            <input type="textarea">  <!-- 카테고리 기능 만든 후 만들기 -->
-                        </td>
-                    </tr>
-                </table>
-            </section>
+            <h1>프로필</h1>
+            <p>프로필 이미지를 변경할 수 있습니다.</p>
+
+
+            <table>
+                <tr>
+                    <td>
+                        <p>프로필사진</p>
+                    </td>
+                    <td>
+                        <p>nickName</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <input type="textarea" placeholder="프로필 소개">
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <input type="textarea">  <!-- 카테고리 기능 만든 후 만들기 -->
+                    </td>
+                </tr>
+            </table>
         </div>
     </div>
 </div>

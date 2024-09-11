@@ -50,11 +50,14 @@
         <p>This is the main content of the page.</p>
         <div th:replace="fragments/home_emotions :: home-emotions"></div>
 
-        <!-- 첫 번째 "Spotify 로그인" 버튼 (OAuth 인증) -->
-        <a id="loginButton" href="#">Spotify 로그인</a>
-        <br>
-        <!-- 두 번째 "Spotify 사이트 로그인" 링크 -->
-        <a id="spotifySiteLogin" href="https://accounts.spotify.com/ko/login" target="_blank">Spotify 사이트 로그인</a>
+        <!-- 버튼들을 감싸는 부모 요소 -->
+        <div class="button-container">
+            <!-- 첫 번째 "Spotify 로그인" 버튼 (OAuth 인증) -->
+            <a id="loginButton" href="#" class="spotify-login-button">Spotify 로그인</a>
+            <br>
+            <!-- 두 번째 "Spotify 사이트 로그인" 링크 -->
+            <a id="spotifySiteLogin" href="https://accounts.spotify.com/ko/login" target="_blank" class="spotify-site-login-link">Spotify 사이트 로그인</a>
+        </div>
 
     </div>
 </section>

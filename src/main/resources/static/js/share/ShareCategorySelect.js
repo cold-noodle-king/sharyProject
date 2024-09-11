@@ -5,10 +5,12 @@ $(document).ready(function() {
     // 카테고리 버튼 클릭 시 카테고리 선택/해제 로직
     $('.cat-btn').on('click', function() {
         let category = $(this).data('cat'); // 버튼의 데이터 속성에서 카테고리 이름을 가져옴
+        console.log(Array.from(selectedCategories));
 
         // 이미 선택된 카테고리가 있으면 해제
         if (selectedCategories.size >= maxSelection) {
-            const previouslySelected = Array.from(selectedCategories)[0]; // 이전에 선택된 카테고리를 가져옴
+            let previouslySelected = Array.from(selectedCategories)[0]; // 이전에 선택된 카테고리를 가져옴
+            console.log(previouslySelected);
             selectedCategories.delete(previouslySelected); // Set에서 제거
             $('.cat-btn').filter(`[data-cat="${previouslySelected}"]`).removeClass('btn-warning').addClass('btn-secondary'); // 스타일 초기화
         }
@@ -16,6 +18,7 @@ $(document).ready(function() {
         // 새로운 카테고리를 선택하거나 해제
         if (!selectedCategories.has(category)) {
             selectedCategories.add(category); // Set에 새 카테고리를 추가
+            console.log(category);
             $(this).removeClass('btn-secondary').addClass('btn-warning'); // 버튼 스타일 변경
         } else {
             selectedCategories.delete(category); // Set에서 선택된 카테고리 제거
@@ -26,10 +29,19 @@ $(document).ready(function() {
     // 저장 버튼 클릭 시 선택한 카테고리 정보를 서버로 전송 후 페이지 이동
     $("#save").click(function() {
         // 서버로 선택한 카테고리 정보를 POST 요청으로 보낼 수 있음
-        $.post("/share/saveDiary", { categories: Array.from(selectedCategories)[0] });
+        $.post("/share/categorySave", { categories: Array.from(selectedCategories) })
+            .done(function() {
+                // 요청이 성공적으로 완료되면, 페이지 이동은 서버에서 처리
+                console.log('저장 성공');
+            })
+            .fail(function(error) {
+                console.error("Error saving categories:", error);
+                alert("카테고리 저장 중 오류가 발생했습니다."); // 오류 발생 시 알림
+            });
+
 
         // 저장 후 커버 선택 페이지로 이동
-        window.location.href = "/share/cover"; // 커버 선택 페이지로 URL 변경
+        // window.location.href = "/share/cover"; // 커버 선택 페이지로 URL 변경
     });
 
     // 취소 버튼 클릭 시 MyDiary 페이지로 돌아감
