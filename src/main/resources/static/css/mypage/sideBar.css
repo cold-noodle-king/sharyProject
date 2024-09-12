@@ -1,0 +1,105 @@
+
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
+/* Flexbox 레이아웃을 위한 기본 설정 */
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+header, footer {
+    width: 100%;
+}
+
+/* 사이드바와 메인 콘텐츠를 나란히 배치하기 위한 Flex 설정 */
+.content {
+    display: flex;
+    flex: 1; /* 남은 공간을 차지하게 함 */
+}
+
+/* 사이드바 스타일 */
+.sidebar {
+    width: 300px;
+    background-color: #e6dcb8;
+    padding-left: 10px;
+    padding-right: 10px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* 사이드바에서 공간을 분리함 */
+}
+
+.sidebar-content {
+    margin-top: 150px; /* 텍스트를 아래로 내리기 위한 여백 */
+}
+
+/* 프로필 이미지 */
+.profile-img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    margin-bottom: 10px;
+    object-fit: cover;
+}
+
+.sidebar a {
+    padding: 10px 15px;
+    text-decoration: none;
+    font-size: 18px;
+    color: white;
+    display: block;
+}
+
+.sidebar a:hover {
+    background-color: #495057;
+}
+
+/* 회원탈퇴 항목 스타일 */
+.logout {
+    margin-bottom: 20px;
+}
+
+/* 메인 콘텐츠 스타일 */
+.main-content {
+    flex: 1; /* 남은 공간을 차지하게 함 */
+    display: flex;
+    justify-content: center; /* 수평 중앙 정렬 */
+    align-items: center; /* 수직 중앙 정렬 */
+    text-align: center;
+    padding: 20px;
+}
+
+/* 헤더 스타일 조정 - 고정된 헤더 */
+header {
+    position: fixed; /* 헤더를 고정시키기 위한 설정 */
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    background-color: white; /* 헤더의 배경색 추가 */
+}
+
+table {
+    width: 400px;
+    margin: 0 auto;
+}
+
+input[type="textarea"] {
+    width: 100%;
+}
+
+.nickname {
+    font-size: 20px;
+    font-weight: bold;
+    color: white;
+}
+
+.profile-intro {
+    color: white;
+    margin-bottom: 20px;
+}

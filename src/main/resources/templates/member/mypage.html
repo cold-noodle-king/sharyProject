@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" >
 <head>
     <meta charset="UTF-8">
     <title>마이페이지</title>
@@ -12,75 +12,8 @@
     <!-- 헤더와 푸터용 스타일 -->
     <link href="../header/css/styles.css" rel="stylesheet">
     <link rel="stylesheet" href="../footer/css/styles.css">
+    <link th:href="@{/css/mypage/sideBar.css}" rel="stylesheet">
 
-    <style>
-        body, html {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-        }
-
-        /* Flexbox 레이아웃을 위한 기본 설정 */
-        .wrapper {
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
-
-        header, footer {
-            width: 100%;
-        }
-
-        /* 사이드바와 메인 콘텐츠를 나란히 배치하기 위한 Flex 설정 */
-        .content {
-            display: flex;
-            flex: 1; /* 남은 공간을 차지하게 함 */
-        }
-
-        /* 사이드바 스타일 */
-        .sidebar {
-            width: 400px;
-            background-color: #c184c1;
-            padding-top: 260px; /* 헤더 높이만큼 여백 추가 */
-        }
-
-        .sidebar a {
-            padding: 10px 15px;
-            text-decoration: none;
-            font-size: 18px;
-            color: white;
-            display: block;
-        }
-
-        .sidebar a:hover {
-            background-color: #495057;
-        }
-
-        /* 메인 콘텐츠 스타일 */
-        .main-content {
-            flex: 1; /* 남은 공간을 차지하게 함 */
-            padding: 100px;
-        }
-
-        /* 헤더 스타일 조정 */
-        header {
-            position: relative;
-            top: 0;
-            left: 0;
-            z-index: 1000;
-        }
-
-        /* 페이지 내용이 길 때 푸터 위치 유지 */
-        .page-content {
-            min-height: 100vh;
-            padding-bottom: 60px; /* 푸터 높이만큼 여백 추가 */
-            border:1px solid;
-        }
-
-
-
-
-    </style>
 </head>
 <body>
 
@@ -102,7 +35,9 @@
         <!-- 메인 콘텐츠 -->
         <div class="main-content">
             <section class="page-content">
-                <div>
+                <div sec:authorize="isAuthenticated()">
+                    <h1>[ <span th:text="${#authentication.name}"></span>님의 마이페이지 ]</h1>
+
                     <p>메인 콘텐츠 내용</p>
                 </div>
                 <div>
