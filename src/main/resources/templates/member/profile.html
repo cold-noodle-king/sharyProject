@@ -12,113 +12,85 @@
     <!-- 헤더와 푸터용 스타일 -->
     <link href="../header/css/styles.css" rel="stylesheet">
     <link rel="stylesheet" href="../footer/css/styles.css">
+    <link th:href="@{/css/mypage/sideBar.css}" rel="stylesheet">
+<style>
+    .main-content {
+        flex: 1;
+        display: flex;
+        flex-direction: column; /* 세로로 배치 */
+        justify-content: center; /* 상단 정렬 */
+        text-align: center;
+        align-items: center; /* 중앙 정렬 */
+        padding: 20px;
+    }
 
-    <style>
-        body, html {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-        }
+    .main-content h1, .main-content p {
+        text-align: center;
+        margin-bottom: 20px; /* 여백을 통해 공간 확보 */
+    }
 
-        /* Flexbox 레이아웃을 위한 기본 설정 */
-        .wrapper {
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
+    table{
+        border: 1px solid;
+    }
 
-        header, footer {
-            width: 100%;
-        }
+    .profile-container {
+        text-align: center;
+        margin: 0 auto;
+        padding: 20px;
+        max-width: 600px;
+    }
 
-        /* 사이드바와 메인 콘텐츠를 나란히 배치하기 위한 Flex 설정 */
-        .content {
-            display: flex;
-            flex: 1; /* 남은 공간을 차지하게 함 */
-        }
+    .profile-image-container {
+        position: relative;
+        display: inline-block;
+    }
 
-        /* 사이드바 스타일 */
-        .sidebar {
-            width: 300px;
-            background-color: #e6dcb8;
-            padding-left: 10px;
-            padding-right: 10px;
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between; /* 사이드바에서 공간을 분리함 */
-        }
+    .profile-img {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid #ccc;
+    }
 
-        .sidebar-content {
-            margin-top: 150px; /* 텍스트를 아래로 내리기 위한 여백 */
-        }
+    .remove-image {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        background-color: white;
+        color: black;
+        border: 1px solid #ccc;
+        border-radius: 50%;
+        cursor: pointer;
+        padding: 2px 5px;
+    }
 
-        /* 프로필 이미지 */
-        .profile-img {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            margin-bottom: 10px;
-            object-fit: cover;
-        }
+    .profile-actions {
+        margin-top: 10px;
+    }
 
-        .sidebar a {
-            padding: 10px 15px;
-            text-decoration: none;
-            font-size: 18px;
-            color: white;
-            display: block;
-        }
+    .profile-info {
+        margin-top: 20px;
+        width: 100%;
+        text-align: left;
+        border-spacing: 0;
+    }
 
-        .sidebar a:hover {
-            background-color: #495057;
-        }
+    .profile-info td {
+        padding: 10px;
+        border-bottom: 1px solid #ccc;
+    }
 
-        /* 회원탈퇴 항목 스타일 */
-        .logout {
-            margin-bottom: 20px;
-        }
+    .profile-info td:first-child {
+        font-weight: bold;
+        color: #5a5a5a;
+    }
 
-        /* 메인 콘텐츠 스타일 */
-        .main-content {
-            flex: 1; /* 남은 공간을 차지하게 함 */
-            display: flex;
-            justify-content: center; /* 수평 중앙 정렬 */
-            align-items: center; /* 수직 중앙 정렬 */
-            text-align: center;
-            padding: 20px;
-        }
+    .btn {
+        margin-right: 10px;
+    }
+</style>
 
-        /* 헤더 스타일 조정 - 고정된 헤더 */
-        header {
-            position: fixed; /* 헤더를 고정시키기 위한 설정 */
-            top: 0;
-            left: 0;
-            width: 100%;
-            z-index: 1000;
-            background-color: white; /* 헤더의 배경색 추가 */
-        }
-
-        table {
-            width: 400px;
-            margin: 0 auto;
-        }
-
-        input[type="textarea"] {
-            width: 100%;
-        }
-
-        .nickname {
-            font-size: 20px;
-            font-weight: bold;
-            color: white;
-        }
-
-        .profile-intro {
-            color: white;
-            margin-bottom: 20px;
-        }
-    </style>
 </head>
 <body>
 <div class="wrapper">
@@ -136,6 +108,7 @@
                 <p class="nickname">사용자 닉네임</p>
                 <p class="profile-intro">짧은 프로필 소개글</p>
 
+                <br>
                 <a th:href="@{/member/infoForm}">개인정보</a>
                 <a th:href="@{/member/profile}">프로필</a>
                 <a th:href="@{/member/follow}">친구</a>
@@ -149,35 +122,35 @@
         </div>
 
         <!-- 메인 콘텐츠 -->
-        <div class="main-content">
+        <div class="profile-container">
             <h1>프로필</h1>
             <p>프로필 이미지를 변경할 수 있습니다.</p>
+            <!-- 프로필 이미지 -->
+            <div class="profile-image-container">
+                <img src="/images/emotions/happy.png" alt="프로필 이미지" class="profile-img">
+<!--                <span class="remove-image">x</span>-->
+            </div>
 
+            <!-- 이미지 선택 및 변경 버튼 -->
+            <div class="profile-actions">
+                <input type="file" id="imageUpload" class="image-upload" accept="image/*" />
+                <button class="btn btn-primary">이미지 선택</button>
+                <button class="btn btn-secondary">변경하기</button>
+            </div>
 
-            <table>
+            <table class="profile-info">
                 <tr>
-                    <td>
-                        <p>프로필사진</p>
-                    </td>
-                    <td>
-                        <p>nickName</p>
-                    </td>
+                    <td>이메일</td>
+                    <td>로그인 회원 이메일</td>
                 </tr>
                 <tr>
-                    <td colspan="2">
-                        <input type="textarea" placeholder="프로필 소개">
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="2">
-                        <input type="textarea">  <!-- 카테고리 기능 만든 후 만들기 -->
-                    </td>
+                    <td>가입일</td>
+                    <td>로그인 회원 가입일</td>
                 </tr>
             </table>
         </div>
     </div>
 </div>
-
 <!-- 푸터 부분 불러오기 -->
 <footer th:replace="~{fragments/footer :: footer}"></footer>
 
