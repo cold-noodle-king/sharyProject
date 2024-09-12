@@ -31,28 +31,53 @@
     <!-- 페이지 설명 -->
     <h4>다이어리의 표지를 선택해주세요!</h4>
 
+    <!-- 수정된 부분: Form 추가 및 수정 -->
+    <form id="coverSelectForm" action="/share/saveDiary" method="post">
+        <div class="form-group mt-4">
+            <label for="diaryTitle">다이어리 제목을 입력해주세요!</label>
+            <!-- 수정된 부분: input 요소의 name 속성 수정 -->
+            <input type="text" id="diaryTitle" name="shareDiaryName" class="form-control mt-2" placeholder="다이어리 제목">
+        </div>
+
+        <!-- 커버 선택 이미지들 (DB에서 동적으로 가져옴) -->
+        <div class="row cover-row mt-4"></div> <!-- 수정된 부분: 커버 템플릿이 추가될 위치 -->
+
+        <!-- 수정된 부분: 선택된 커버 ID를 저장할 숨겨진 input -->
+        <input type="hidden" name="coverTemplateNum" id="selectedCoverId">
+
+        <!-- 저장 및 취소 버튼 -->
+        <div class="mt-4">
+            <!-- 수정된 부분: 저장 버튼의 type을 submit으로 변경 -->
+            <button id="saveBtn" type="submit" class="btn btn-success me-2">저장</button>
+            <button id="cancelBtn" type="button" class="btn btn-danger">취소</button>
+        </div>
+    </form> <!-- 수정된 부분: Form 닫는 태그 추가 -->
+
+    <!--<form id="coverSelectForm" action="/share/saveDiary" method="post">
+
     <div class="form-group mt-4">
         <label for="diaryTitle">다이어리 제목을 입력해주세요!</label>
-        <input type="text" id="diaryTitle" class="form-control mt-2" placeholder="다이어리 제목">
+        <input type="text" id="diaryTitle" name="ShareDiaryName" class="form-control mt-2" placeholder="다이어리 제목">
     </div>
 
-    <!-- 커버 선택 이미지들 (DB에서 동적으로 가져옴) -->
-    <div class="row cover-row mt-4">  <!-- 수정된 부분: class="cover-row" -->
+    &lt;!&ndash; 커버 선택 이미지들 (DB에서 동적으로 가져옴) &ndash;&gt;
+    <div class="row cover-row mt-4">  &lt;!&ndash; 수정된 부분: class="cover-row" &ndash;&gt;
         <div class="col-md-4 mb-4" th:each="cover : ${covers}">
-            <!-- 커버 템플릿 -->
-            <div class="cover" data-cover-id="[[${cover.id}]]">
+            &lt;!&ndash; 커버 템플릿 &ndash;&gt;
+            <div class="cover" name="coverTemplateNum" data-cover-id="[[${cover.id}]]">
                 <img src="[[${cover.images}]]" alt="커버 이미지" class="img-fluid cover-img">
-                <!-- 커버 이름을 표시하지 않음 -->
-                <!-- <div class="cover-title mt-2">[[${cover.name}]]</div> -->
+                &lt;!&ndash; 커버 이름을 표시하지 않음 &ndash;&gt;
+                &lt;!&ndash; <div class="cover-title mt-2">[[${cover.name}]]</div> &ndash;&gt;
             </div>
         </div>
     </div>
-
+    </form>-->
     <!-- 저장 및 취소 버튼 -->
-    <div class="mt-4">
+   <!-- <div class="mt-4">
         <button id="saveBtn" class="btn btn-success me-2">저장</button>
         <button id="cancelBtn" class="btn btn-danger">취소</button>
-    </div>
+    </div>-->
+
 </div>
 
 <!-- 푸터 부분 불러오기 -->

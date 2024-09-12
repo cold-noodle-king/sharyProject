@@ -32,15 +32,15 @@
     <h4>다이어리의 표지를 선택해주세요!</h4>
 
     <div class="form-group mt-4">
-        <label for="diaryTitle">다이어리 제목을 입력해주세요!</label>
-        <input type="text" id="diaryTitle" class="form-control mt-2" placeholder="다이어리 제목">
+        <label for="diaryName">다이어리 제목을 입력해주세요!</label>
+        <input type="text" id="diaryName" class="form-control mt-2" placeholder="다이어리 제목">
     </div>
 
     <!-- 커버 선택 이미지들 (DB에서 동적으로 가져옴) -->
     <div class="row cover-row mt-4">  <!-- 수정된 부분: class="cover-row" -->
         <div class="col-md-4 mb-4" th:each="cover : ${covers}">
             <!-- 커버 템플릿 -->
-            <div class="cover" data-cover-id="[[${cover.id}]]">
+            <div class="cover" data-cover-id="[[${cover.Num}]]">
                 <img src="[[${cover.images}]]" alt="커버 이미지" class="img-fluid cover-img">
                 <!-- 커버 이름을 표시하지 않음 -->
                 <!-- <div class="cover-title mt-2">[[${cover.name}]]</div> -->
