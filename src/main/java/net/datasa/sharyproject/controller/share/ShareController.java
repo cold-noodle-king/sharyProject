@@ -6,6 +6,8 @@ import net.datasa.sharyproject.domain.dto.personal.CategoryDTO;
 import net.datasa.sharyproject.domain.dto.personal.CoverTemplateDTO;
 import net.datasa.sharyproject.domain.dto.personal.NoteTemplateDTO;
 import net.datasa.sharyproject.domain.dto.share.ShareDiaryDTO;
+import net.datasa.sharyproject.domain.entity.share.ShareDiaryEntity;
+import net.datasa.sharyproject.repository.share.ShareDiaryRepository;
 import net.datasa.sharyproject.security.AuthenticatedUser;
 import net.datasa.sharyproject.service.personal.CoverTemplateService;
 import net.datasa.sharyproject.service.personal.NoteTemplateService;
@@ -30,6 +32,7 @@ public class ShareController {
     private final CoverTemplateService coverTemplateService;
     private final NoteTemplateService noteTemplateService;
     private final ShareDiaryService shareDiaryService;
+    private final ShareDiaryRepository shareDiaryRepository;
 
     //공유 다이어리 메인 페이지로 이동
     //내가 생성한 다이어리 페이지를 디폴트로 설정
@@ -100,21 +103,25 @@ public class ShareController {
     //다이어리를 DB에 저장하는 메서드
     @PostMapping("saveDiary")
     public String saveDiary(@ModelAttribute ShareDiaryDTO shareDiaryDTO
-                          ,@AuthenticationPrincipal AuthenticatedUser user
-                          ,RedirectAttributes redirectAttributes){
-        log.debug("컨틀롤러로 갔는지 확인:{}", shareDiaryDTO);
+                          , @AuthenticationPrincipal AuthenticatedUser user
+                          , RedirectAttributes redirectAttributes){
 
-        shareDiaryService.saveDiary(shareDiaryDTO, user);
+        log.debug("컨틀롤러로 갔는지 확인:{}", shareDiaryDTO);
+        ShareDiaryEntity entity = shareDiaryService.saveDiary(shareDiaryDTO, user);
+        log.debug("엔티티로 잘 넘어왔니?:{}", entity);
+
+        redirectAttributes.addFlashAttribute("msg", "다이어리가 저장되었습니다. 이어서 노트를 작성하시겠습니까?");
+        redirectAttributes.addFlashAttribute("diaryNum", entity.getShareDiaryNum());
 
         return "redirect:/share/main";
     }
 
-    //새로운 노트 추가 페이지로 이동
+    /*//새로운 노트 추가 페이지로 이동
     @GetMapping("newNote")
     public String newNote() {
 
         return "share/main";
-    }
+    }*/
 
     //다이어리 관리 페이지로 이동
     @GetMapping("manageDiary")
@@ -170,7 +177,9 @@ public class ShareController {
 
     // 노트 선택 페이지로 이동하는 메서드 추가
     @GetMapping("note")
-    public String note() {
+    public String note(@RequestParam("shareDiaryNum") Integer shareDiaryNum, Model model) {
+
+        model.addAttribute("shareDiaryNum", shareDiaryNum);
         return "share/NoteSelect";  // 노트 템플릿 선택 페이지로 이동
     }
 
