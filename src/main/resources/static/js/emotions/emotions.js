@@ -2,11 +2,13 @@ document.addEventListener('DOMContentLoaded', function () {
     console.log("emotions.js 파일이 로드되었습니다.");
 
     const emotionImages = document.querySelectorAll('.emotion-image');
+    const seekBar = document.getElementById('seek-bar'); // 시크바 요소 가져오기
+    const currentTimeDisplay = document.getElementById('current-time'); // 현재 재생 시간을 표시할 요소
+    const totalTimeDisplay = document.getElementById('total-time'); // 총 재생 시간을 표시할 요소
     let accessToken;
     let deviceId;
     let player; // Spotify Player 객체
-    let currentTrackDuration = 0; // 현재 트랙 길이
-    let currentTrackPosition = 0; // 현재 트랙 위치
+    let isSeeking = false; // 사용자가 시크바를 조작 중인지 확인하는 변수
 
     const clientId = '0370bb5560a145aaa0899ee8e8bac122'; // 여기에 내 실제 클라이언트 ID를 입력
     const redirectUri = 'http://localhost:8888'; // 여기에 내 리다이렉트 URL을 입력
@@ -64,11 +66,8 @@ document.addEventListener('DOMContentLoaded', function () {
             player.addListener('player_state_changed', (state) => {
                 console.log('Player state changed:', state);
                 if (state) {
-                    currentTrackDuration = state.duration;
-                    currentTrackPosition = state.position;
-                    updateSeekBar();
-                }
-                if (state && !state.paused) {
+                    updateSeekBar(state);
+                    updateTimeDisplays(state);
                     document.getElementById('control-buttons').style.display = 'block'; // 음악 재생 시 컨트롤 표시
                 }
             });
@@ -94,13 +93,15 @@ document.addEventListener('DOMContentLoaded', function () {
                 });
             });
 
-            // 시크 바 변경 시
-            document.getElementById('seek-bar').addEventListener('input', function (event) {
-                const newPosition = (event.target.value / 100) * currentTrackDuration;
-                player.seek(newPosition).then(() => {
-                    console.log('재생 위치가 조정되었습니다.');
+            // 시크바가 실시간으로 움직이도록 업데이트
+            setInterval(function () {
+                player.getCurrentState().then(state => {
+                    if (state) {
+                        updateSeekBar(state);
+                        updateTimeDisplays(state);
+                    }
                 });
-            });
+            }, 1000); // 1초마다 상태를 확인하고 업데이트
         };
     }
 
@@ -189,11 +190,47 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('spotifySiteLogin').style.display = 'none'; // 두 번째 링크 숨기기
     }
 
-    // 시크 바 업데이트
-    function updateSeekBar() {
-        const seekBar = document.getElementById('seek-bar');
-        if (seekBar) {
-            seekBar.value = (currentTrackPosition / currentTrackDuration) * 100;
+    // 시크바 업데이트 함수
+    function updateSeekBar(state) {
+        const currentPosition = state.position; // 현재 재생 위치 (밀리초)
+        const duration = state.duration; // 총 재생 길이 (밀리초)
+        const progress = (currentPosition / duration) * 100; // 현재 재생 퍼센트 계산
+
+        if (!isSeeking) { // 사용자가 시크바를 조작 중이 아닌 경우에만 시크바 업데이트
+            seekBar.value = progress; // 시크바의 값을 업데이트
         }
     }
+
+    // 재생 시간 업데이트 함수
+    function updateTimeDisplays(state) {
+        const currentPosition = state.position; // 현재 재생 위치 (밀리초)
+        const duration = state.duration; // 총 재생 길이 (밀리초)
+
+        currentTimeDisplay.textContent = formatTime(currentPosition); // 현재 시간 표시
+        totalTimeDisplay.textContent = formatTime(duration); // 총 재생 시간 표시
+    }
+
+    // 시간 형식 변환 함수 (밀리초 -> MM:SS)
+    function formatTime(milliseconds) {
+        const minutes = Math.floor(milliseconds / 60000);
+        const seconds = Math.floor((milliseconds % 60000) / 1000);
+        return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+    }
+
+    // 시크바 변경 시 플레이어에 반영
+    seekBar.addEventListener('input', function () {
+        isSeeking = true; // 시크바를 사용자가 조작 중임을 표시
+    });
+
+    seekBar.addEventListener('change', function () {
+        player.getCurrentState().then(state => {
+            if (state) {
+                const seekValue = (seekBar.value / 100) * state.duration; // 사용자가 설정한 위치 계산
+                player.seek(seekValue).then(() => {
+                    console.log(`시크바 위치로 이동: ${seekValue}ms`);
+                    isSeeking = false; // 시크바 조작 끝
+                });
+            }
+        });
+    });
 });

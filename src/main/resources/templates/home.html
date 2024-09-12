@@ -32,14 +32,8 @@
 <!-- header.html의 헤더 부분 불러오기 -->
 <div th:replace="~{fragments/header :: header}"></div>
 
- <!--배경 이미지와 버튼 섹션-->
-<header class="masthead" style="background-image: url('/header/assets/img/header_background.jpg');"> <!-- 경로 수정 -->
-    <div class="container">
-        <div class="masthead-subheading">Welcome To Shary!</div>
-        <div class="masthead-heading text-uppercase">It's Nice To Meet You</div>
-        <a class="btn btn-primary btn-xl text-uppercase" th:href="@{/member/loginForm}">로그인</a> <!-- 버튼 클릭 시 Home으로 스크롤 -->
-    </div>
-</header>
+<!-- wave_animation.html의 파도 애니메이션 섹션 불러오기 -->
+<div th:replace="~{fragments/wave_animation :: wave_animation}"></div>
 
 <!-- Home 섹션 -->
 <div id="page-top"></div>
@@ -53,7 +47,7 @@
         <!-- 버튼들을 감싸는 부모 요소 -->
         <div class="button-container">
             <!-- 첫 번째 "Spotify 로그인" 버튼 (OAuth 인증) -->
-            <a id="loginButton" href="#" class="spotify-login-button">Spotify 로그인</a>
+            <a id="loginButton" href="#" class="spotify-login-button">Spotify 인증</a>
             <br>
             <!-- 두 번째 "Spotify 사이트 로그인" 링크 -->
             <a id="spotifySiteLogin" href="https://accounts.spotify.com/ko/login" target="_blank" class="spotify-site-login-link">Spotify 사이트 로그인</a>

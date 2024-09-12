@@ -5,10 +5,13 @@ import lombok.extern.slf4j.Slf4j;
 import net.datasa.sharyproject.domain.dto.personal.CategoryDTO;
 import net.datasa.sharyproject.domain.dto.personal.CoverTemplateDTO;
 import net.datasa.sharyproject.domain.dto.personal.NoteTemplateDTO;
+import net.datasa.sharyproject.domain.dto.share.ShareDiaryDTO;
+import net.datasa.sharyproject.security.AuthenticatedUser;
 import net.datasa.sharyproject.service.personal.CoverTemplateService;
 import net.datasa.sharyproject.service.personal.NoteTemplateService;
 import net.datasa.sharyproject.service.share.ShareDiaryService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -96,9 +99,14 @@ public class ShareController {
 
     //다이어리를 DB에 저장하는 메서드
     @PostMapping("saveDiary")
-    public void saveDiary(@RequestParam("diary") String diary, RedirectAttributes redirectAttributes) {
+    public String saveDiary(@ModelAttribute ShareDiaryDTO shareDiaryDTO
+                          ,@AuthenticationPrincipal AuthenticatedUser user
+                          ,RedirectAttributes redirectAttributes){
+        log.debug("컨틀롤러로 갔는지 확인:{}", shareDiaryDTO);
 
+        shareDiaryService.saveDiary(shareDiaryDTO, user);
 
+        return "redirect:/share/main";
     }
 
     //새로운 노트 추가 페이지로 이동
