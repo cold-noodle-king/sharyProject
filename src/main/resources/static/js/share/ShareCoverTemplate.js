@@ -28,6 +28,16 @@ $(document).ready(function() {
         });
     });
 
+    $('#saveBtn').on('click', function() {
+        if (!selectedCoverId) {
+            alert('커버를 선택해주세요!');
+        } else {
+            // 커버 ID와 함께 노트 템플릿 선택 페이지로 이동 (필요시 쿼리 파라미터 전달 가능)
+            // window.location.href = '/share/note?coverId=' + selectedCoverId;  // 커버 ID와 함께 노트 템플릿 페이지로 이동
+            $('#coverSelectForm').submit();
+        }
+    });
+
     // 수정된 부분: 취소 버튼 클릭 시 이전 페이지로 돌아감
     $('#cancelBtn').on('click', function() {
         window.location.href = '/share/main'; // 이전 페이지로 이동
