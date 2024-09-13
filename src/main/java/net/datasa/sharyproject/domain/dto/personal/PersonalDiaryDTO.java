@@ -17,11 +17,13 @@ import java.sql.Timestamp;
 @AllArgsConstructor
 public class PersonalDiaryDTO {
 
-    private Integer personalDiaryNum; // 다이어리 고유 번호
-    private String diaryName; // 다이어리 이름
-    private Timestamp createdDate; // 생성 날짜
-    private Timestamp updatedDate; // 수정 날짜
-    private Integer categoryNum; // 카테고리 번호 (외래 키)
-    private Integer coverNum; // 커버 번호 (외래 키)
-    private String memberId; // 회원 ID (외래 키)
+    private Integer personalDiaryNum;  // 다이어리 고유 번호
+    private String diaryName;          // 다이어리 이름
+    private Timestamp createdDate;     // 생성 날짜
+    private Timestamp updatedDate;     // 수정 날짜
+    private Integer categoryNum;       // 카테고리 번호 (외래 키)
+    private String categoryName;       // 카테고리 이름
+    private Integer coverNum;          // 커버 번호 (외래 키)
+    private String coverName;          // 커버 이름 (추가)
+    private String memberId;           // 회원 ID (외래 키)
 }

@@ -37,4 +37,13 @@ public interface PersonalDiaryRepository extends JpaRepository<PersonalDiaryEnti
      */
     @Query("SELECT pd FROM PersonalDiaryEntity pd WHERE pd.coverTemplate.coverNum = :coverNum")
     List<PersonalDiaryEntity> findByCoverNum(@Param("coverNum") Integer coverNum);
+
+    /**
+     * 회원 ID와 카테고리 번호로 다이어리를 조회합니다.
+     * @param memberId 회원 ID
+     * @param categoryNum 카테고리 번호
+     * @return 회원의 특정 카테고리 다이어리 리스트
+     */
+    @Query("SELECT pd FROM PersonalDiaryEntity pd WHERE pd.member.memberId = :memberId AND pd.category.categoryNum = :categoryNum")
+    List<PersonalDiaryEntity> findByMemberAndCategory(@Param("memberId") String memberId, @Param("categoryNum") Integer categoryNum);
 }

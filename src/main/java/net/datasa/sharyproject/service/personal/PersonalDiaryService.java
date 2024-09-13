@@ -12,6 +12,9 @@ import net.datasa.sharyproject.repository.member.MemberRepository;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 public class PersonalDiaryService {
@@ -36,6 +39,7 @@ public class PersonalDiaryService {
         // 카테고리 조회
         CategoryEntity category = categoryRepository.findById(diaryDTO.getCategoryNum())
                 .orElseThrow(() -> new RuntimeException("카테고리를 찾을 수 없습니다."));
+
         // 현재 로그인된 사용자 조회
         var member = memberRepository.findById(currentMemberId)
                 .orElseThrow(() -> new RuntimeException("회원 정보를 찾을 수 없습니다."));
@@ -50,5 +54,41 @@ public class PersonalDiaryService {
 
         // 다이어리 저장
         personalDiaryRepository.save(personalDiary);
+    }
+
+    /**
+     * 현재 로그인한 사용자의 다이어리 목록을 조회하는 메서드
+     * @return 로그인한 사용자의 다이어리 목록
+     */
+    public List<PersonalDiaryDTO> getDiariesByLoggedInMember() {
+        // 로그인된 사용자의 ID를 가져옴
+        String currentMemberId = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        // 로그인된 사용자의 다이어리 목록을 조회
+        List<PersonalDiaryEntity> diaryEntities = personalDiaryRepository.findByMember_MemberId(currentMemberId);
+
+        // 조회한 엔티티를 DTO로 변환하여 반환
+        return diaryEntities.stream()
+                .map(this::convertEntityToDTO) // 엔티티를 DTO로 변환하는 메서드 호출
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * PersonalDiaryEntity를 PersonalDiaryDTO로 변환하는 메서드
+     * @param diary PersonalDiaryEntity
+     * @return PersonalDiaryDTO
+     */
+    private PersonalDiaryDTO convertEntityToDTO(PersonalDiaryEntity diary) {
+        return PersonalDiaryDTO.builder()
+                .personalDiaryNum(diary.getPersonalDiaryNum())   // 다이어리 고유 번호
+                .diaryName(diary.getDiaryName())                 // 다이어리 제목
+                .createdDate(diary.getCreatedDate())             // 다이어리 생성 날짜
+                .updatedDate(diary.getUpdatedDate())             // 다이어리 수정 날짜
+                .categoryNum(diary.getCategory().getCategoryNum()) // 카테고리 번호
+                .categoryName(diary.getCategory().getCategoryName()) // 카테고리 이름
+                .coverNum(diary.getCoverTemplate().getCoverNum())  // 커버 번호
+                .coverName(diary.getCoverTemplate().getCoverName()) // 커버 이름 (추가)
+                .memberId(diary.getMember().getMemberId())        // 회원 ID
+                .build();
     }
 }
