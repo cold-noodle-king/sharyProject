@@ -1,147 +1,130 @@
-/* 컨테이너 설정 */
+/* 메인 컨테이너 스타일 */
 #main {
-    padding: 40px 20px;
-    max-width: 1200px;
-    margin: 80px auto 0 auto; /* 상단에 80px 마진 추가 */
-    text-align: center;
+    background-color: #f9f9f9; /* 배경색 설정 */
+    padding: 20px; /* 안쪽 여백 추가 */
+    border-radius: 8px; /* 둥근 모서리 설정 */
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* 부드러운 그림자 효과 */
 }
 
-/* 다이어리 리스트 스타일 */
+/* 다이어리 목록 스타일 */
 .diary-list {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-wrap: wrap;  /* 화면 크기에 따라 줄바꿈을 하도록 설정 */
-    margin-bottom: 30px;
+    display: flex; /* 플렉스박스를 사용해 다이어리 목록 정렬 */
+    flex-wrap: wrap; /* 작은 화면에서는 줄바꿈되도록 설정 */
 }
 
-/* 신규 다이어리 추가 버튼 스타일 */
-.diary-add {
-    border: 2px dashed #007bff;
-    width: 200px;
-    height: 250px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 15px;
-    background-color: #f8f9fa;
-    transition: transform 0.3s;
-    text-decoration: none; /* 밑줄 제거 */
-}
-
-/* a 태그의 밑줄 제거 */
-.diary-add a {
-    text-decoration: none;
-}
-
-/* 다이어리 추가 버튼 호버 효과 */
-.diary-add:hover {
-    transform: scale(1.05); /* 마우스를 올렸을 때 살짝 확대 */
-}
-
-/* 신규 다이어리 추가 아이콘 스타일 */
-.icon-add {
-    font-size: 60px;
-    color: #007bff;
-    text-decoration: none; /* 밑줄 제거 */
-}
-
-/* 다이어리 표지 스타일 */
-.cover {
-    border: 2px solid #007bff;
-    width: 200px;
-    height: 250px;
-    margin: 15px;
-    background-image: linear-gradient(135deg, #6a89cc 0%, #b8e994 100%); /* 그라데이션 배경 */
-    color: white;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 20px;
-    font-family: 'Georgia', serif;
-    transition: transform 0.3s, box-shadow 0.3s;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 기본 그림자 효과 */
-    text-decoration: none; /* 밑줄 제거 */
-}
-
-/* 다이어리 표지 호버 효과 */
-.cover:hover {
-    transform: scale(1.05); /* 마우스를 올렸을 때 살짝 확대 */
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* 그림자 강조 */
-}
-
-/* 액션 버튼 컨테이너 */
-.actions {
-    display: flex;
-    justify-content: center;
-    margin-top: 30px;
-    flex-wrap: wrap; /* 화면 크기에 따라 버튼이 줄바꿈 되도록 설정 */
-}
-
-/* 액션 버튼 스타일 */
-.action-btn {
-    margin: 10px;
-    padding: 15px 30px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    cursor: pointer;
+/* 다이어리 카드 스타일 (책 느낌, 세로로 긴 비율) */
+.my-diary-card {
+    background-color: white;
+    border: 1px solid #ddd;
     border-radius: 5px;
-    transition: background-color 0.3s, transform 0.3s;
-    text-decoration: none; /* 밑줄 제거 */
+    box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.2), 8px 12px 16px rgba(0, 0, 0, 0.1);
+    transform: rotate(-1deg);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    overflow: hidden;
+    padding-bottom: 10px;
+    height: 400px; /* 책처럼 세로로 긴 비율 */
+    width: 280px;  /* A4 비율에 맞춰서 너비 조정 */
 }
 
-/* 액션 버튼 호버 효과 */
-.action-btn:hover {
-    background-color: #0056b3; /* 호버 시 더 어두운 파란색 */
-    transform: translateY(-2px); /* 마우스를 올렸을 때 살짝 위로 이동 */
+/* 다이어리 카드에 마우스 오버 시 효과 */
+.my-diary-card:hover {
+    transform: rotate(0deg) scale(1.05);
+    box-shadow: 4px 8px 16px rgba(0, 0, 0, 0.3), 10px 16px 24px rgba(0, 0, 0, 0.2);
 }
 
-/* 모달 크기 조정 */
-.modal-dialog {
-    max-width: 600px; /* 모달의 최대 너비를 600px로 설정 */
-    width: 100%; /* 모달 너비가 화면 크기에 맞추어 유연하게 확장되도록 설정 */
+/* 다이어리 카드의 이미지 (A4 비율 맞춤) */
+.my-diary-card img {
+    width: 100%;
+    height: calc(100% - 60px); /* 전체 카드 높이에서 여백을 뺀 이미지 높이 */
+    object-fit: cover; /* 이미지 비율을 유지하면서 꽉 차게 */
+    border-bottom: 2px solid #eee;
 }
 
-/* 메뉴 항목들을 한 줄에 나타나게 설정 */
+/* 다이어리 이름 텍스트 스타일 */
+.my-diary-card .card-footer p {
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin: 10px 0;
+    color: #333;
+    text-align: center; /* 이름을 중앙 정렬 */
+    height: 40px; /* 이름 부분의 고정 높이 설정 */
+    display: flex;
+    justify-content: center;
+    align-items: center; /* 이름 텍스트가 중앙에 위치하도록 */
+}
+
+/* 신규 다이어리 추가 버튼 스타일 (다이어리 카드와 동일하게 적용) */
+.my-diary-add-btn {
+    height: 400px; /* 다이어리 카드와 동일한 높이 */
+    width: 280px; /* 다이어리 카드와 동일한 너비 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+    background-color: white;
+    border: 1px solid #ddd;
+    box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.2), 8px 12px 16px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.my-diary-add-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 4px 8px 16px rgba(0, 0, 0, 0.3), 10px 16px 24px rgba(0, 0, 0, 0.2);
+}
+
+.my-icon-add {
+    font-size: 3rem;
+    color: #007bff; /* 부트스트랩 기본 파란색 */
+    background-color: white;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* 신규 다이어리 추가 버튼의 플러스 아이콘에 마우스 오버 시 효과 */
+.my-icon-add:hover {
+    background-color: #0056b3;
+    color: white;
+}
+
+/* 모달 내 메뉴 리스트 스타일 */
 .menu-list {
-    display: flex;
-    flex-wrap: wrap; /* 화면 크기에 따라 버튼들이 줄바꿈 되도록 설정 */
-    justify-content: space-around; /* 버튼 간의 간격을 일정하게 유지 */
+    display: flex; /* 플렉스박스로 메뉴 정렬 */
+    flex-direction: column; /* 세로 방향으로 정렬 */
+    gap: 15px; /* 메뉴 아이템 간의 간격 */
 }
 
-/* 모달 내부의 a 태그에 대한 스타일 */
-.modal .menu-item {
-    margin: 10px;
-    padding: 10px 20px; /* 버튼 패딩을 줄여서 크기를 조정 */
-    background-color: #007bff;
-    color: white;
-    border: none;
-    cursor: pointer;
-    border-radius: 5px;
-    transition: background-color 0.3s, transform 0.3s;
-    text-decoration: none; /* 밑줄 제거 */
-    flex: 1 0 40%; /* 각 버튼이 줄바꿈을 고려하여 유연하게 크기를 설정 */
+/* 모달 내 메뉴 아이템 스타일 */
+.menu-item {
+    display: block; /* 블록 요소로 설정 */
+    background-color: #007bff; /* 배경색 설정 */
+    color: white; /* 텍스트 색상 설정 */
+    padding: 10px 20px; /* 안쪽 여백 설정 */
+    text-align: center; /* 텍스트 중앙 정렬 */
+    border-radius: 5px; /* 둥근 모서리 설정 */
+    text-decoration: none; /* 링크 밑줄 제거 */
+    transition: background-color 0.3s ease; /* 배경색 변화 트랜지션 */
 }
 
-/* 모달 내부의 a 태그 호버 효과 */
-.modal .menu-item:hover {
-    background-color: #0056b3;
-    transform: translateY(-2px); /* 마우스를 올렸을 때 살짝 위로 이동 */
+/* 모달 내 메뉴 아이템에 마우스 오버 시 배경색 변경 */
+.menu-item:hover {
+    background-color: #0056b3; /* 어두운 파란색으로 변경 */
 }
 
-/* 모달 내부의 닫기 버튼에 대한 스타일 */
-.modal .btn-secondary {
-    background-color: #007bff;
-    color: white;
-    border-radius: 5px;
-    padding: 10px 20px;
-    border: none;
-    transition: background-color 0.3s, transform 0.3s;
+/* 모달 푸터 버튼 스타일 */
+.modal-footer .action-btn {
+    background-color: #6c757d; /* 부트스트랩의 기본 회색 버튼 */
+    color: white; /* 텍스트 색상 설정 */
+    padding: 10px 20px; /* 버튼 크기 설정 */
+    border-radius: 5px; /* 둥근 모서리 설정 */
+    text-decoration: none; /* 텍스트 밑줄 제거 */
 }
 
-/* 모달 내부의 닫기 버튼 호버 효과 */
-.modal .btn-secondary:hover {
-    background-color: #0056b3;
-    transform: translateY(-2px);
+/* 모달 푸터 버튼에 마우스 오버 시 배경색 변경 */
+.modal-footer .action-btn:hover {
+    background-color: #5a6268; /* 어두운 회색으로 변경 */
 }

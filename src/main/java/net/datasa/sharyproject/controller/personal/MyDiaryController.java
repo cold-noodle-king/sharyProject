@@ -34,9 +34,15 @@ public class MyDiaryController {
      * MyDiary 메인 페이지로 이동하는 메서드
      * @return MyDiary 페이지
      */
-    @GetMapping("MyDiary")
-    public String MyDiary() {
-        return "personal/MyDiary";  // MyDiary 페이지로 이동
+    @GetMapping("/MyDiary")
+    public String getMyDiaryList(Model model) {
+        // 로그인된 사용자의 다이어리 목록을 조회
+        List<PersonalDiaryDTO> diaryList = personalDiaryService.getDiariesByLoggedInMember();
+
+        // 다이어리 목록을 모델에 추가하여 뷰로 전달
+        model.addAttribute("diaryList", diaryList);
+
+        return "personal/MyDiary"; // MyDiary 페이지로 이동
     }
 
     /**
