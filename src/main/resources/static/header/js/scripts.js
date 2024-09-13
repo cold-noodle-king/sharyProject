@@ -136,6 +136,57 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
+// 메인페이지 wave 부분
+document.addEventListener('DOMContentLoaded', function() {
+    const waveContainer = document.getElementById('waveContainer');
+
+    // 파도 색상 배열에서 첫 번째 색상을 보라색이나 진청색으로 변경
+    const colors = ['#dd43c0', '#ffffff', '#072153', '#f33f50', '#9982a1']; // 파도 색상 배열
+    const durations = [5, 8, 6, 3, 13]; // 각 파도 애니메이션 지속 시간
+
+    // SVG 파도 생성 함수
+    function createWave(color, duration, index) {
+        const svgNS = "http://www.w3.org/2000/svg";
+        const svg = document.createElementNS(svgNS, "svg");
+        svg.setAttribute("class", `wave wave${index + 1}`);
+        svg.setAttribute("viewBox", "0 0 1440 320");
+        svg.setAttribute("xmlns", svgNS);
+
+        const path = document.createElementNS(svgNS, "path");
+        path.setAttribute("fill", color);
+        path.setAttribute("fill-opacity", 0.5);
+        path.setAttribute("d", "M0,224L48,197.3C96,171,192,117,288,128C384,139,480,213,576,229.3C672,245,768,203,864,202.7C960,203,1056,245,1152,245.3C1248,245,1344,203,1392,181.3L1440,160L1440,320L0,320Z");
+
+        const animate = document.createElementNS(svgNS, "animate");
+        animate.setAttribute("attributeName", "d");
+        animate.setAttribute("dur", `${duration}s`);
+        animate.setAttribute("repeatCount", "indefinite");
+        animate.setAttribute("values", `
+            M0,224L48,197.3C96,171,192,117,288,128C384,139,480,213,576,229.3C672,245,768,203,864,202.7C960,203,1056,245,1152,245.3C1248,245,1344,203,1392,181.3L1440,160L1440,320L0,320Z;
+            M0,220L48,218.7C96,213,192,171,288,154.7C384,139,480,149,576,160C672,171,768,245,864,272C960,299,1056,277,1152,245.3C1248,213,1344,171,1392,149.3L1440,128L1440,320L0,320Z;
+            M0,224L48,197.3C96,171,192,117,288,128C384,139,480,213,576,229.3C672,245,768,203,864,202.7C960,203,1056,245,1152,245.3C1248,245,1344,203,1392,181.3L1440,160L1440,320L0,320Z;
+            M0,224L48,197.3C96,171,192,117,288,128C384,139,480,213,576,229.3C672,245,768,203,864,202.7C960,203,1056,245,1152,245.3C1248,245,1344,203,1392,181.3L1440,160L1440,320L0,320Z
+
+        `);
+
+        path.appendChild(animate);
+        svg.appendChild(path);
+        return svg;
+    }
+
+    // 각 색상과 지속 시간으로 SVG 파도 생성
+    colors.forEach((color, index) => {
+        const wave = createWave(color, durations[index], index);
+        waveContainer.appendChild(wave);
+    });
+
+    // 파도를 Shary의 중심에 맞춰 위치시키기 위한 스타일 조정
+    const waveElements = document.querySelectorAll('.wave');
+    waveElements.forEach(wave => {
+        wave.style.transform = 'translateY(-75%)'; // 파도의 수직 위치를 Shary 텍스트 중심에 맞춤
+    });
+});
+
 
 
 
