@@ -1,6 +1,7 @@
 package net.datasa.sharyproject.controller.personal;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import net.datasa.sharyproject.domain.dto.personal.CoverTemplateDTO;
 import net.datasa.sharyproject.domain.dto.personal.NoteTemplateDTO;
 import net.datasa.sharyproject.domain.dto.personal.PersonalDiaryDTO;
@@ -8,6 +9,8 @@ import net.datasa.sharyproject.service.personal.CoverTemplateService;
 import net.datasa.sharyproject.service.personal.NoteTemplateService;
 import net.datasa.sharyproject.service.personal.PersonalDiaryService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +23,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("personal")
 @Controller
+@Slf4j
 public class MyDiaryController {
 
     private final CoverTemplateService coverTemplateService; // 커버 템플릿 서비스
@@ -45,11 +49,27 @@ public class MyDiaryController {
     }
 
     /**
+     * 카테고리 저장 후 커버 선택 페이지로 리디렉션하는 메서드
+     * @param categoryNum 선택된 카테고리
+     * @param model 카테고리 정보를 모델에 저장
+     * @return 커버 선택 페이지로 리디렉션
+     */
+    @PostMapping("categorySave")
+    public String categorySave(@RequestParam("categoryNum") Integer categoryNum, Model model) {
+        // 선택된 카테고리 정보를 모델에 추가
+        model.addAttribute("categoryNum", categoryNum);
+
+        // 커버 템플릿 선택 페이지로 리디렉션
+        return "redirect:/personal/cover?categoryNum=" + categoryNum; // 쿼리 파라미터로 전달
+    }
+
+    /**
      * 커버 선택 페이지로 이동하는 메서드
      * @return 커버 선택 페이지
      */
     @GetMapping("cover")
-    public String cover() {
+    public String cover(@RequestParam(name = "categoryNum", required = false) Integer categoryNum, Model model) {
+        model.addAttribute("categoryNum", categoryNum); // 카테고리 번호를 모델에 추가
         return "personal/CoverSelect";  // 커버 선택 페이지로 이동
     }
 
@@ -83,17 +103,38 @@ public class MyDiaryController {
     }
 
     /**
-     * 다이어리 제목과 커버를 저장하는 메서드
-     * @param diaryDTO 다이어리 정보가 포함된 DTO
+     * 다이어리 제목과 커버를 저장하는 메서드 (로그인한 사용자 정보 활용)
+     * @param diaryName 다이어리 제목
+     * @param coverTemplateNum 커버 템플릿 번호
+     * @param categoryNum 카테고리 번호
+     * @param loggedInUser 로그인된 사용자 정보
      * @return 저장 결과에 따른 응답
      */
-    @PostMapping("diary/save")
+    @PostMapping("saveDiary")
     @ResponseBody
-    public ResponseEntity<String> saveDiary(@RequestBody PersonalDiaryDTO diaryDTO) {
+    public ResponseEntity<String> saveDiary(@RequestParam String diaryName,
+                                            @RequestParam Integer coverTemplateNum,
+                                            @RequestParam Integer categoryNum,
+                                            @AuthenticationPrincipal UserDetails loggedInUser) {
         try {
-            personalDiaryService.saveDiary(diaryDTO);  // 다이어리 저장 로직 호출
+            // PersonalDiaryDTO에 받은 데이터를 설정
+            PersonalDiaryDTO diaryDTO = new PersonalDiaryDTO();
+            diaryDTO.setDiaryName(diaryName);
+            diaryDTO.setCoverNum(coverTemplateNum);
+            diaryDTO.setCategoryNum(categoryNum);
+            diaryDTO.setMemberId(loggedInUser.getUsername()); // 로그인된 사용자 ID
+
+            // 로그로 값을 출력하여 확인
+            log.debug("Diary Name: {}", diaryName);
+            log.debug("Cover Template Num: {}", coverTemplateNum);
+            log.debug("Category Num: {}", categoryNum); // 이 로그를 통해 categoryNum을 확인
+
+            // 다이어리 저장 로직 호출
+            personalDiaryService.saveDiary(diaryDTO);
+
             return ResponseEntity.ok("다이어리가 성공적으로 저장되었습니다.");
         } catch (Exception e) {
+            log.error("다이어리 저장 실패", e);
             return ResponseEntity.status(500).body("다이어리 저장에 실패했습니다.");
         }
     }

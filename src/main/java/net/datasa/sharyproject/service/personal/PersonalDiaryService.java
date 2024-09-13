@@ -2,8 +2,10 @@ package net.datasa.sharyproject.service.personal;
 
 import lombok.RequiredArgsConstructor;
 import net.datasa.sharyproject.domain.dto.personal.PersonalDiaryDTO;
+import net.datasa.sharyproject.domain.entity.personal.CategoryEntity;
 import net.datasa.sharyproject.domain.entity.personal.CoverTemplateEntity;
 import net.datasa.sharyproject.domain.entity.personal.PersonalDiaryEntity;
+import net.datasa.sharyproject.repository.personal.CategoryRepository;
 import net.datasa.sharyproject.repository.personal.CoverTemplateRepository;
 import net.datasa.sharyproject.repository.personal.PersonalDiaryRepository;
 import net.datasa.sharyproject.repository.member.MemberRepository;
@@ -17,9 +19,10 @@ public class PersonalDiaryService {
     private final PersonalDiaryRepository personalDiaryRepository; // 다이어리 저장소
     private final CoverTemplateRepository coverTemplateRepository; // 커버 템플릿 저장소
     private final MemberRepository memberRepository; // 회원 저장소
+    private final CategoryRepository categoryRepository; // 카테고리 저장소 추가
 
     /**
-     * 다이어리 제목과 커버를 저장하는 메서드
+     * 다이어리 제목, 카테고리, 커버를 저장하는 메서드
      * @param diaryDTO 다이어리 정보가 포함된 DTO
      */
     public void saveDiary(PersonalDiaryDTO diaryDTO) {
@@ -30,15 +33,19 @@ public class PersonalDiaryService {
         CoverTemplateEntity coverTemplate = coverTemplateRepository.findById(diaryDTO.getCoverNum())
                 .orElseThrow(() -> new RuntimeException("커버 템플릿을 찾을 수 없습니다."));
 
+        // 카테고리 조회
+        CategoryEntity category = categoryRepository.findById(diaryDTO.getCategoryNum())
+                .orElseThrow(() -> new RuntimeException("카테고리를 찾을 수 없습니다."));
         // 현재 로그인된 사용자 조회
         var member = memberRepository.findById(currentMemberId)
                 .orElseThrow(() -> new RuntimeException("회원 정보를 찾을 수 없습니다."));
 
         // 다이어리 엔티티 생성
         PersonalDiaryEntity personalDiary = PersonalDiaryEntity.builder()
-                .diaryName(diaryDTO.getDiaryName())
-                .coverTemplate(coverTemplate)
-                .member(member)
+                .diaryName(diaryDTO.getDiaryName())   // 다이어리 제목 설정
+                .category(category)                   // 카테고리 설정
+                .coverTemplate(coverTemplate)         // 커버 템플릿 설정
+                .member(member)                       // 회원 정보 설정
                 .build();
 
         // 다이어리 저장

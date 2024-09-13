@@ -27,7 +27,7 @@ public class ShareDiaryService {
     private final CoverTemplateRepository coverTemplateRepository;
     private final CategoryRepository categoryRepository;
 
-    public void saveDiary(ShareDiaryDTO shareDiaryDTO, AuthenticatedUser user){
+    public ShareDiaryEntity saveDiary(ShareDiaryDTO shareDiaryDTO, AuthenticatedUser user){
         MemberEntity memberEntity = memberRepository.findById(user.getUsername())
                 .orElseThrow(() -> new EntityNotFoundException("사용자를 찾을 수 없습니다."));
 
@@ -63,6 +63,8 @@ public class ShareDiaryService {
         shareDiaryRepository.save(shareDiaryEntity);
 
         log.debug("저장되는 엔티티:{}", shareDiaryEntity);
+
+        return shareDiaryEntity;
     }
 
 }
