@@ -163,4 +163,6 @@ public class MyDiaryController {
         model.addAttribute("noteTemplate", noteTemplate);  // 모델에 노트 템플릿 데이터를 추가
         return "personal/NoteForm";  // 다이어리 작성 페이지로 이동
     }
+
+
 }
