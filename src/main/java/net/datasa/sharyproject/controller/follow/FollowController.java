@@ -20,11 +20,19 @@ public class FollowController {
 
     private final FollowService followService;
 
+    /**
+     * follow 기능
+     * @return
+     */
     @GetMapping("/follow")
     public String follow() {
         return "follow/follow";
     }
 
+    /**
+     * insert 기능
+     * @return
+     */
     @GetMapping("/insert")
     public String insert() {
         try {
@@ -35,7 +43,12 @@ public class FollowController {
         return "redirect:/followAll";
     }
 
-
+    /**
+     * followUser 기능
+     * @param followerId
+     * @param followingId
+     * @return
+     */
     @PostMapping("/followUser")
     public String followUser(@RequestParam("followerId") String followerId,
                              @RequestParam("followingId") String followingId) {
@@ -48,9 +61,11 @@ public class FollowController {
         return "redirect:/followAll";
     }
 
-
-
-
+    /**
+     * followAll 기능
+     * @param model
+     * @return
+     */
     @GetMapping("/followAll")
     public String getFollowList(Model model) {
         List<FollowDTO> followers = followService.getFollowersForCurrentUser();
@@ -64,7 +79,11 @@ public class FollowController {
         return "follow/followAll";
     }
 
-
+    /**
+     * followingId 기능
+     * @param followingId
+     * @return
+     */
     @PostMapping("/follow/delete")
     public String deleteFollow(@RequestParam("followingId") String followingId) {
         try {
@@ -75,7 +94,11 @@ public class FollowController {
         return "redirect:/followAll";
     }
 
-
+    /**
+     * allUsers 기능
+     * @param model
+     * @return
+     */
     @GetMapping("/allUsers")
     public String getAllUsers(Model model) {
         String currentUserId = followService.getCurrentUserId(); // 현재 로그인한 사용자 ID 가져오기

@@ -37,4 +37,7 @@ public class FollowEntity {
     @ManyToOne
     @JoinColumn(name = "following_id", insertable = false, updatable = false)
     private MemberEntity following;
+
+    public FollowEntity(String followerId, String followingId, LocalDateTime now) {
+    }
 }

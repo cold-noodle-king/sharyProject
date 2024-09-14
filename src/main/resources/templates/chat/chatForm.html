@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>채팅 시작하기</title>
+</head>
+<body>
+<h2>채팅 시작하기</h2>
+<p>팔로잉 중인 사용자와 대화를 시작하세요! </p>
+<table>
+    <thead>
+    <tr>
+        <th>사용자 ID</th>
+        <th>대화 시작</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="user : ${following}">
+        <td th:text="${user.followingId}"></td>
+        <td>
+            <form th:action="@{/chat/room}" method="get">
+                <input type="hidden" name="participant1Id" th:value="${#authentication.name}" />
+                <input type="hidden" name="participant2Id" th:value="${user.followingId}" />
+                <button type="submit">대화 시작</button>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+</body>
+</html>
