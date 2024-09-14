@@ -1,0 +1,9 @@
+
+
+
+
+commit;
+
+
+select * from follow;
+

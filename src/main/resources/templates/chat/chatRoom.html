@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>채팅 방</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h2, h3 {
+            text-align: center;
+            color: #333;
+        }
+
+        .chat-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .messages {
+            list-style-type: none;
+            padding: 0;
+            margin: 20px 0;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .message-item {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .message-left {
+            justify-content: flex-start;
+        }
+
+        .message-right {
+            justify-content: flex-end;
+        }
+
+        .message-content {
+            max-width: 60%;
+            padding: 10px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        .message-left .message-content {
+            background-color: #d4e6f1;
+            text-align: left;
+        }
+
+        .message-right .message-content {
+            background-color: #f8c471;
+            text-align: right;
+        }
+
+        .sender-name {
+            font-weight: bold;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        .timestamp {
+            font-size: 12px;
+            color: #888;
+            margin-top: 5px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        textarea {
+            width: 100%;
+            max-width: 500px;
+            height: 80px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        button {
+            background-color: #5dade2;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #3498db;
+        }
+
+        a {
+            text-decoration: none;
+            color: #3498db;
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+<div class="chat-container">
+    <h2>Shary Talk</h2>
+
+    <div>
+        <h3>대화에 참여중인 멤버: <span th:text="${chat.participant1Id}"></span> 와 <span th:text="${chat.participant2Id}"></span></h3>
+    </div>
+
+    <div>
+
+        <ul class="messages">
+            <li th:each="message : ${messages}"
+                th:classappend="${message.senderId == #authentication.name} ? 'message-item message-right' : 'message-item message-left'">
+                <div class="message-content">
+                    <span class="sender-name" th:text="${message.senderId} + ':'">Sender</span>
+                    <span th:text="${message.messageContent}"></span>
+                    <span class="timestamp" th:text="${#temporals.format(message.createdDate, 'yyyy-MM-dd HH:mm:ss')}"></span>
+                </div>
+            </li>
+        </ul>
+    </div>
+
+    <form th:action="@{/chat/send}" method="post">
+        <input type="hidden" name="chatId" th:value="${chat.chatId}" />
+        <input type="hidden" name="senderId" th:value="${#authentication.name}" />
+        <textarea name="messageContent" placeholder="메시지를 입력하세요"></textarea>
+        <button type="submit">보내기</button>
+    </form>
+
+    <a href="/chat">채팅 홈으로 돌아가기</a>
+</div>
+</body>
+</html>
