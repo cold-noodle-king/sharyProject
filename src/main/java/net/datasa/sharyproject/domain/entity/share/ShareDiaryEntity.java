@@ -62,4 +62,7 @@ public class ShareDiaryEntity {
     @JoinColumn(name = "member_id", referencedColumnName = "member_id")
     private MemberEntity member;
 
+    @Column(name = "diary_bio")
+    private String diaryBio;
+
 }
