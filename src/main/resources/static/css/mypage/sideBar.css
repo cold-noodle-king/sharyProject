@@ -12,9 +12,9 @@ body, html {
     min-height: 100vh;
 }
 
-header, footer {
-    width: 100%;
-}
+/*header, footer {*/
+/*    width: 100%;*/
+/*}*/
 
 /* 사이드바와 메인 콘텐츠를 나란히 배치하기 위한 Flex 설정 */
 .content {
@@ -74,24 +74,16 @@ header, footer {
     padding: 20px;
 }
 
-/* 헤더 스타일 조정 - 고정된 헤더 */
-header {
-    position: fixed; /* 헤더를 고정시키기 위한 설정 */
-    top: 0;
-    left: 0;
-    width: 100%;
-    z-index: 1000;
-    background-color: white; /* 헤더의 배경색 추가 */
-}
 
-table {
-    width: 400px;
-    margin: 0 auto;
-}
 
-input[type="textarea"] {
-    width: 100%;
-}
+/*table {*/
+/*    width: 400px;*/
+/*    margin: 0 auto;*/
+/*}*/
+
+/*input[type="textarea"] {*/
+/*    width: 100%;*/
+/*}*/
 
 .nickname {
     font-size: 20px;

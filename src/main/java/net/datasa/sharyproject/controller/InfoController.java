@@ -5,11 +5,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class InfoController {
-    @GetMapping({"", "/"})
+    @GetMapping({"info"})   //나중에 html 컨트롤러랑 경로 바꾸기
     public String info() {
 
-        return "home"; // 나중에 info페이지 만들때 경로바꾸기
+        return "info";
     }
+
+
 }
 
 

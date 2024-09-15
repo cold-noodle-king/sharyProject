@@ -13,84 +13,18 @@
     <link href="../header/css/styles.css" rel="stylesheet">
     <link rel="stylesheet" href="../footer/css/styles.css">
     <link th:href="@{/css/mypage/sideBar.css}" rel="stylesheet">
-<style>
-    .main-content {
-        flex: 1;
-        display: flex;
-        flex-direction: column; /* 세로로 배치 */
-        justify-content: center; /* 상단 정렬 */
-        text-align: center;
-        align-items: center; /* 중앙 정렬 */
-        padding: 20px;
-    }
 
-    .main-content h1, .main-content p {
-        text-align: center;
-        margin-bottom: 20px; /* 여백을 통해 공간 확보 */
-    }
+    <style>
+        .profile-container {
+            margin: auto;
+        }
 
-    table{
-        border: 1px solid;
-    }
-
-    .profile-container {
-        text-align: center;
-        margin: 0 auto;
-        padding: 20px;
-        max-width: 600px;
-    }
-
-    .profile-image-container {
-        position: relative;
-        display: inline-block;
-    }
-
-    .profile-img {
-        width: 150px;
-        height: 150px;
-        border-radius: 50%;
-        object-fit: cover;
-        border: 2px solid #ccc;
-    }
-
-    .remove-image {
-        position: absolute;
-        top: 5px;
-        right: 5px;
-        background-color: white;
-        color: black;
-        border: 1px solid #ccc;
-        border-radius: 50%;
-        cursor: pointer;
-        padding: 2px 5px;
-    }
-
-    .profile-actions {
-        margin-top: 10px;
-    }
-
-    .profile-info {
-        margin-top: 20px;
-        width: 100%;
-        text-align: left;
-        border-spacing: 0;
-    }
-
-    .profile-info td {
-        padding: 10px;
-        border-bottom: 1px solid #ccc;
-    }
-
-    .profile-info td:first-child {
-        font-weight: bold;
-        color: #5a5a5a;
-    }
-
-    .btn {
-        margin-right: 10px;
-    }
-</style>
-
+        .profile-img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+        }
+    </style>
 </head>
 <body>
 <div class="wrapper">
@@ -108,7 +42,6 @@
                 <p class="nickname">사용자 닉네임</p>
                 <p class="profile-intro">짧은 프로필 소개글</p>
 
-                <br>
                 <a th:href="@{/member/infoForm}">개인정보</a>
                 <a th:href="@{/member/profile}">프로필</a>
                 <a th:href="@{/member/follow}">친구</a>
@@ -123,30 +56,27 @@
 
         <!-- 메인 콘텐츠 -->
         <div class="profile-container">
-            <h1>프로필</h1>
+            <h2>프로필</h2>
             <p>프로필 이미지를 변경할 수 있습니다.</p>
             <!-- 프로필 이미지 -->
             <div class="profile-image-container">
-                <img src="/images/emotions/happy.png" alt="프로필 이미지" class="profile-img">
+                <img id="profileImage" src="/images/emotions/happy.png" alt="기본 프로필 이미지" class="profile-img">
 <!--                <span class="remove-image">x</span>-->
             </div>
 
             <!-- 이미지 선택 및 변경 버튼 -->
             <div class="profile-actions">
                 <input type="file" id="imageUpload" class="image-upload" accept="image/*" />
-                <button class="btn btn-primary">이미지 선택</button>
-                <button class="btn btn-secondary">변경하기</button>
+                <button class="btn btn-primary" onclick="document.getElementById('imageUpload').click()">이미지 선택</button>
+                <button class="btn btn-secondary">삭제</button>
             </div>
 
             <table class="profile-info">
                 <tr>
-                    <td>이메일</td>
-                    <td>로그인 회원 이메일</td>
+                    <td>닉네임</td>
+                    <td>닉네임 중복확인</td>
                 </tr>
-                <tr>
-                    <td>가입일</td>
-                    <td>로그인 회원 가입일</td>
-                </tr>
+
             </table>
         </div>
     </div>
@@ -159,5 +89,16 @@
 <!-- FontAwesome 아이콘 로드 -->
 <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 
+<script>
+    // 이미지 미리보기 기능 구현
+    document.getElementById('imageUpload').addEventListener('change', function(event) {
+        var reader = new FileReader();
+        reader.onload = function(){
+            var output = document.getElementById('profileImage');
+            output.src = reader.result;
+        };
+        reader.readAsDataURL(event.target.files[0]);
+    });
+</script>
 </body>
 </html>
