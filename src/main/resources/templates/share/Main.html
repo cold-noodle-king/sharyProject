@@ -34,7 +34,7 @@
     <link rel="stylesheet" href="../footer/css/styles.css">
 
     <!-- MyDiary 페이지 전용 CSS 파일 -->
-    <link href="/css/Personal/MyDiary.css" rel="stylesheet">
+    <link href="/css/share/MyDiary2.css" rel="stylesheet">
 </head>
 <body>
 <!-- 헤더 부분 불러오기 -->
@@ -44,34 +44,94 @@
 <div id="main" class="container mt-5">
     <h2>My Share Diary</h2>
     <div>
-        <a th:href="@{/share/main}"><span>생성 다이어리</span></a>
-        <a th:href="@{/share/joinedList}"><span>가입 다이어리</span></a>
+        <a th:href="@{/share/main}"><span>생성한 다이어리</span></a>
+        <a th:href="@{/share/joinedList}"><span>가입한 다이어리</span></a>
     </div>
 
-    <!-- 다이어리 목록 컨테이너 -->
+   <!-- &lt;!&ndash; 다이어리 목록 컨테이너 &ndash;&gt;
     <div class="diary-list">
-        <!-- 신규 다이어리 추가 버튼 -->
+        &lt;!&ndash; 신규 다이어리 추가 버튼 &ndash;&gt;
         <div class="diary-add">
             <a href="#" th:href="@{/share/categorySelect}">
-                <div class="icon-add">+</div> <!-- 신규 다이어리 추가 아이콘 -->
+                <div class="icon-add">+</div> &lt;!&ndash; 신규 다이어리 추가 아이콘 &ndash;&gt;
             </a>
         </div>
 
-        <!-- 다이어리 표지 목록 (반복 가능) -->
+        &lt;!&ndash; 다이어리 표지 목록 (반복 가능) &ndash;&gt;
         <div class="cover">
-            <a th:href="@{/share/createdDiary}"><span>표지</span></a> <!-- 다이어리 표지 텍스트 -->
+            <a th:href="@{/share/createdDiary}"><span>표지</span></a> &lt;!&ndash; 다이어리 표지 텍스트 &ndash;&gt;
         </div>
         <div class="cover">
-            <span>표지</span> <!-- 다이어리 표지 텍스트 -->
+            <span>표지</span> &lt;!&ndash; 다이어리 표지 텍스트 &ndash;&gt;
         </div>
     </div>
 
-    <!-- 메뉴 버튼 (햄버거 아이콘) -->
+    &lt;!&ndash; 메뉴 버튼 (햄버거 아이콘) &ndash;&gt;
     <div class="text-center mt-4">
         <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#menuModal">
-            <i class="fas fa-bars"></i> 메뉴 <!-- 햄버거 아이콘과 함께 메뉴 텍스트 -->
+            <i class="fas fa-bars"></i> 메뉴 &lt;!&ndash; 햄버거 아이콘과 함께 메뉴 텍스트 &ndash;&gt;
         </button>
     </div>
+</div>
+
+&lt;!&ndash; 메뉴 모달 &ndash;&gt;
+<div class="modal fade" id="menuModal" tabindex="-1" aria-labelledby="menuLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            &lt;!&ndash; 모달 헤더 &ndash;&gt;
+            <div class="modal-header">
+                <h5 class="modal-title" id="menuLabel">다이어리 관리</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            &lt;!&ndash; 모달 본문 &ndash;&gt;
+            <div class="modal-body">
+                <div class="menu-list">
+                    <a href="#" th:href="@{/share/categorySelect}" class="menu-item action-btn">신규 다이어리</a>
+                    <a href="#" th:href="@{/share/editDiary}" class="menu-item action-btn">다이어리 수정</a>
+                    <a href="#" th:href="@{/share/deleteDiary}" class="menu-item action-btn">다이어리 삭제</a>
+                    <a href="#" th:href="@{/share/addDiarySheet}" class="menu-item action-btn">다이어리 속지 추가</a>
+                </div>
+            </div>
+
+            &lt;!&ndash; 모달 푸터 &ndash;&gt;
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary action-btn" data-bs-dismiss="modal">닫기</button>
+            </div>
+        </div>
+    </div>
+</div>
+-->
+<!-- 다이어리 목록 컨테이너 -->
+<div class="diary-list row">
+    <!-- 신규 다이어리 추가 버튼 -->
+    <div class="my-diary-add-btn col-md-3 mb-4">
+        <a href="#" th:href="@{/share/categorySelect}">
+            <div class="my-icon-add">+</div> <!-- 신규 다이어리 추가 아이콘 -->
+        </a>
+    </div>
+
+    <!-- 다이어리 목록 반복 출력 -->
+    <div class="col-md-3 mb-4" th:each="diary : ${diaryList}">
+        <div class="my-diary-card h-100">
+            <!-- 커버 이름을 사용해 절대경로에서 이미지를 불러오는 코드 -->
+            <a th:href="|/share/createdDiary?diaryNum=|+${diary.shareDiaryNum}"><img th:src="@{'/images/' + ${diary.coverTemplateName} + '.png'}"
+                 alt="커버 이미지" class="card-img-top"></a>
+
+            <!-- 다이어리 이름을 이미지 하단에 표시 -->
+            <div class="card-footer text-center">
+                <p th:text="${diary.shareDiaryName} != null ? ${diary.shareDiaryName} : '이름 없음'"></p> <!-- 다이어리 이름 -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 메뉴 버튼 -->
+<div class="text-center mt-4">
+    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#menuModal">
+        메뉴 <!-- 메뉴 텍스트 -->
+    </button>
+</div>
 </div>
 
 <!-- 메뉴 모달 -->
@@ -89,7 +149,7 @@
                 <div class="menu-list">
                     <a href="#" th:href="@{/share/categorySelect}" class="menu-item action-btn">신규 다이어리</a>
                     <a href="#" th:href="@{/share/editDiary}" class="menu-item action-btn">다이어리 수정</a>
-                    <a href="#" th:href="@{/share/deleteDiary}" class="menu-item action-btn">다이어리 삭제</a>
+                    <a href="#" th:href="@{/sahre/deleteDiary}" class="menu-item action-btn">다이어리 삭제</a>
                     <a href="#" th:href="@{/share/addDiarySheet}" class="menu-item action-btn">다이어리 속지 추가</a>
                 </div>
             </div>
@@ -101,7 +161,6 @@
         </div>
     </div>
 </div>
-
 <!-- 푸터 부분 불러오기 -->
 <div th:replace="~{fragments/footer :: footer}"></div>
 

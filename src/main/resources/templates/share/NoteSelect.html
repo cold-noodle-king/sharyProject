@@ -33,7 +33,10 @@
 
     <div class="form-group mt-4">
         <label for="noteTitle">노트 제목을 입력해주세요!</label>
+        <form id="titleForm" action="/share/noteForm" method="post">
         <input type="text" id="noteTitle" name="shareNoteTitle" class="form-control mt-2" placeholder="노트 제목">
+        <input type="hidden" id="shareDiaryNum" name="shareDiaryNum" th:value="${shareDiaryNum}">
+        </form>
     </div>
 
     <!-- 노트 선택 이미지들 (DB에서 동적으로 가져옴) -->
