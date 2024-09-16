@@ -1,5 +1,5 @@
 <div th:fragment="home-emotions">
-  <div class="emotion-container"> <!-- 수정된 클래스명 -->
+  <div class="emotion-container">
     <div class="text-center">
       <h2 class="section-heading text-uppercase">Emotion</h2>
       <h3 class="section-subheading text-muted">감정 선택하기</h3>
@@ -7,44 +7,32 @@
     <div class="row emotion-images">
       <!-- 감정 이미지 1 -->
       <div class="col-lg-2 col-md-4 col-sm-6">
-        <a href="#" data-playlist="spotify:playlist:5LKqTCo3KRjeoybZ2F1oD1">
-          <img src="/images/emotions/happy.png" alt="행복" class="img-fluid emotion-image">
-        </a>
+        <img src="/images/emotions/happy.png" alt="행복" class="img-fluid emotion-image">
       </div>
       <!-- 감정 이미지 2 -->
       <div class="col-lg-2 col-md-4 col-sm-6">
-        <a href="#" data-playlist="spotify:playlist:5LKqTCo3KRjeoybZ2F1oD1">
-          <img src="/images/emotions/sad.png" alt="슬픔" class="img-fluid emotion-image">
-        </a>
+        <img src="/images/emotions/sad.png" alt="슬픔" class="img-fluid emotion-image">
       </div>
       <!-- 감정 이미지 3 -->
       <div class="col-lg-2 col-md-4 col-sm-6">
-        <a href="#" data-playlist="spotify:playlist:5LKqTCo3KRjeoybZ2F1oD1">
-          <img src="/images/emotions/angry.png" alt="화남" class="img-fluid emotion-image">
-        </a>
+        <img src="/images/emotions/angry.png" alt="화남" class="img-fluid emotion-image">
       </div>
       <!-- 감정 이미지 4 -->
       <div class="col-lg-2 col-md-4 col-sm-6">
-        <a href="#" data-playlist="spotify:playlist:5LKqTCo3KRjeoybZ2F1oD1">
-          <img src="/images/emotions/surprised.png" alt="놀람" class="img-fluid emotion-image">
-        </a>
+        <img src="/images/emotions/surprised.png" alt="놀람" class="img-fluid emotion-image">
       </div>
       <!-- 감정 이미지 5 -->
       <div class="col-lg-2 col-md-4 col-sm-6">
-        <a href="#" data-playlist="spotify:playlist:5LKqTCo3KRjeoybZ2F1oD1">
-          <img src="/images/emotions/scared.png" alt="두려움" class="img-fluid emotion-image">
-        </a>
+        <img src="/images/emotions/scared.png" alt="두려움" class="img-fluid emotion-image">
       </div>
       <!-- 감정 이미지 6 -->
       <div class="col-lg-2 col-md-4 col-sm-6">
-        <a href="#" data-playlist="spotify:playlist:5LKqTCo3KRjeoybZ2F1oD1">
-          <img src="/images/emotions/love.png" alt="사랑" class="img-fluid emotion-image">
-        </a>
+        <img src="/images/emotions/love.png" alt="사랑" class="img-fluid emotion-image">
       </div>
     </div>
 
     <!-- 사용자 정의 컨트롤 -->
-    <div class="player-controls" style="margin-top: 10px;" id="control-buttons">
+    <div class="player-controls" id="control-buttons">
       <button id="prevButton" class="custom-button control-button"><i class="fas fa-backward"></i></button>
       <button id="playPauseButton" class="custom-button control-button"><i class="fas fa-play"></i></button>
       <button id="nextButton" class="custom-button control-button"><i class="fas fa-forward"></i></button>
@@ -53,6 +41,10 @@
     <!-- 시크바 추가 -->
     <input type="range" id="seek-bar" value="0" max="100">
 
-
+    <!-- 볼륨 슬라이더 -->
+    <div class="volume-control">
+      <label for="volume-slider">볼륨</label>
+      <input type="range" id="volume-slider" min="0" max="100" value="50">
+    </div>
   </div>
 </div>

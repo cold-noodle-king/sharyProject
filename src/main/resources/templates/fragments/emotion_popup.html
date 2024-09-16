@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Emotion Player</title>
+    <!-- 필요한 스타일시트 링크 -->
+    <link href="/header/css/styles.css" rel="stylesheet">
+    <link href="/footer/css/styles.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" crossorigin="anonymous">
+    <!-- AOS 라이브러리 사용 링크 -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <!-- 추가 스타일 -->
+    <!-- 반응형 디자인을 위한 추가 스타일 -->
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* 전체 컨테이너 스타일 */
+        .emotion-container {
+            width: 90%;
+            max-width: 400px;
+            margin: 10px auto;
+            text-align: center;
+        }
+
+        /* 감정 이미지 크기 키우기 */
+        .emotion-image {
+            width: 80px; /* 이미지 너비 조정 */
+            height: 80px; /* 이미지 높이 조정 */
+            margin: 10px;
+            cursor: pointer; /* 마우스 포인터 변경 */
+            transition: transform 0.3s; /* 호버 시 애니메이션 효과 추가 */
+        }
+
+        .emotion-image:hover {
+            transform: scale(1.1); /* 호버 시 이미지 확대 */
+        }
+
+        /* 재생 버튼 스타일 변경 */
+        .control-button {
+            width: 50px; /* 버튼 크기 */
+            height: 50px;
+            border-radius: 50%; /* 동그란 모양으로 변경 */
+            border: none;
+            background-color: #D8BFD8; /* 원하는 배경색으로 설정 */
+            color: white;
+            font-size: 18px;
+            margin: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 그림자 추가 */
+            transition: background-color 0.3s, transform 0.3s; /* 애니메이션 효과 추가 */
+        }
+
+        .control-button:hover {
+            background-color: #C0A7C7; /* 호버 시 버튼 배경색 변경 */
+            transform: scale(1.1); /* 호버 시 버튼 확대 */
+        }
+
+        /* 볼륨 슬라이더 스타일 */
+        .volume-control {
+            margin-top: 15px;
+        }
+
+        input[type="range"] {
+            width: 80%; /* 슬라이더 너비 조정 */
+        }
+
+    </style>
+</head>
+<body>
+<!-- Spotify SDK 스크립트 -->
+<script src="https://sdk.scdn.co/spotify-player.js"></script>
+
+<!-- Emotion 섹션 -->
+<div th:replace="fragments/home_emotions :: home-emotions"></div>
+
+<!-- 버튼들을 감싸는 부모 요소 -->
+<div class="button-container">
+    <!-- Spotify 인증 버튼 -->
+    <a id="loginButton" href="#" class="spotify-login-button">Spotify 인증</a>
+    <br>
+    <!-- Spotify 사이트 로그인 링크 -->
+    <a id="spotifySiteLogin" href="https://accounts.spotify.com/ko/login" target="_blank" class="spotify-site-login-link">Spotify 사이트 로그인</a>
+</div>
+
+<!-- 필요한 스크립트 -->
+<script src="/js/emotions/emotions.js"></script>
+<!-- AOS 스크립트 -->
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+    AOS.init();
+</script>
+</body>
+</html>

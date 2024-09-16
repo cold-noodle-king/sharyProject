@@ -9,4 +9,10 @@ public class HomeController {
     public String home() {
         return "home";
     }
+
+    @GetMapping("/emotion-popup")
+    public String emotion_popup() {
+        return "fragments/emotion_popup";
+    }
+
 }

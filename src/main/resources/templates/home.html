@@ -8,9 +8,10 @@
     <link href="header/css/styles.css" rel="stylesheet">
     <link rel="stylesheet" href="/footer/css/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" crossorigin="anonymous">
+    <!-- AOS 라이브러리 사용 링크 -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
 </head>
-
-
 
 
 
@@ -35,13 +36,22 @@
 <!-- wave_animation.html의 파도 애니메이션 섹션 불러오기 -->
 <div th:replace="~{fragments/wave_animation :: wave_animation}"></div>
 
-<!-- Home 섹션 -->
+<!-- Emotion 섹션 -->
 <div id="page-top"></div>
+
+
 <!-- 페이지의 다른 콘텐츠 -->
-<section id="main-content">
+<section id="main-content" data-aos="fade-up">
     <div class="container">
         <h1>Welcome to the Main Page</h1>
         <p>This is the main content of the page.</p>
+
+        <!-- 헤더나 원하는 위치에 음악 아이콘 버튼 추가 -->
+        <button id="musicButton" class="btn btn-primary">
+            <i class="fas fa-music"></i>
+        </button>
+
+
         <div th:replace="fragments/home_emotions :: home-emotions"></div>
 
         <!-- 버튼들을 감싸는 부모 요소 -->
@@ -56,7 +66,7 @@
     </div>
 </section>
 
-<section id="portfolio">
+<section id="portfolio" data-aos="fade-right">
     <h2>둘러보기 섹션</h2>
 
     <!-- 화살표 버튼 추가 -->
@@ -77,7 +87,7 @@
 
 
 <!-- 개인 다이어리 섹션 -->
-<section id="about">
+<section id="about" data-aos="fade-left">
     <h2>개인 다이어리</h2>
     <p>개인 다이어리 섹션 내용</p>
     <!-- 개인 다이어리 섹션 -->
@@ -86,7 +96,7 @@
 </section>
 
 <!-- 공용 다이어리 섹션 -->
-<section id="team">
+<section id="team" data-aos="zoom-in">
     <h2>공용 다이어리</h2>
     <p>공용 다이어리 섹션 내용</p>
 </section>
@@ -112,7 +122,21 @@
 <div th:replace="~{fragments/footer :: footer}"></div>
 
 
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+    AOS.init();
+</script>
+<!-- 팝업 창 열기 스크립트 -->
+<script>
+    document.getElementById('musicButton').addEventListener('click', function() {
+        const popupWidth = 800;
+        const popupHeight = 700;
+        const left = (screen.width - popupWidth) / 2;
+        const top = (screen.height - popupHeight) / 2;
 
+        window.open('/emotion-popup', 'EmotionPlayer', `width=${popupWidth},height=${popupHeight},top=${top},left=${left}`);
+    });
+</script>
 
 </body>
 </html>
