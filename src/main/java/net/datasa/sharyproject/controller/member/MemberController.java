@@ -94,31 +94,6 @@ public class MemberController {
         return "member/nickCheck";
     }
 
-    @GetMapping("mypage")
-    public String mypage() {
-        return "member/mypage";
-
-    }
-
-    @GetMapping("infoForm")
-    public String infoForm() {
-        return "member/infoForm";
-    }
-
-    @GetMapping("profile")
-    public String profile() {
-        return "member/profile";
-    }
-
-    @GetMapping("follow")
-    public String follow() {
-        return "member/follow";
-    }
-
-    @GetMapping("message")
-    public String message() {
-        return "member/message";
-    }
 
 
 
