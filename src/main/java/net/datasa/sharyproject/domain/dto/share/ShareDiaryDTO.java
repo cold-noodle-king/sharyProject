@@ -11,7 +11,6 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-
 public class ShareDiaryDTO {
 
     private Integer shareDiaryNum;
@@ -28,6 +27,9 @@ public class ShareDiaryDTO {
     private String coverTemplateName; // 커버 템플릿 이름 (선택 사항)
 
     // 다이어리 주인 정보 (MemberDTO를 이용하여 설정 가능)
-    private Integer memberId; // MemberEntity의 참조 ID
-    private String memberName; // 추가적으로 회원 이름 포함 가능 (선택 사항)
+    private String memberId; // MemberEntity의 참조 ID
+    private String nickname; // 추가적으로 회원 이름 포함 가능 (선택 사항)
+
+    // 다이어리 소개글
+    private String diaryBio;
 }

@@ -7,6 +7,7 @@ import net.datasa.sharyproject.domain.entity.personal.CoverTemplateEntity;
 import net.datasa.sharyproject.domain.entity.personal.PersonalDiaryEntity;
 import net.datasa.sharyproject.repository.personal.CategoryRepository;
 import net.datasa.sharyproject.repository.personal.CoverTemplateRepository;
+import net.datasa.sharyproject.repository.personal.NoteTemplateRepository;
 import net.datasa.sharyproject.repository.personal.PersonalDiaryRepository;
 import net.datasa.sharyproject.repository.member.MemberRepository;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -23,6 +24,7 @@ public class PersonalDiaryService {
     private final CoverTemplateRepository coverTemplateRepository; // 커버 템플릿 저장소
     private final MemberRepository memberRepository; // 회원 저장소
     private final CategoryRepository categoryRepository; // 카테고리 저장소 추가
+    private final NoteTemplateRepository noteTemplateRepository; // 노트 템플릿 저장소 추가
 
     /**
      * 다이어리 제목, 카테고리, 커버를 저장하는 메서드
@@ -91,4 +93,6 @@ public class PersonalDiaryService {
                 .memberId(diary.getMember().getMemberId())        // 회원 ID
                 .build();
     }
+
+
 }
