@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>프로필</title>
+    <!-- jQuery 로드 -->
+    <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
+
+    <!-- 부트스트랩 CSS 로드 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- 헤더와 푸터용 스타일 -->
+    <link href="../header/css/styles.css" rel="stylesheet">
+    <link rel="stylesheet" href="../footer/css/styles.css">
+    <link th:href="@{/css/mypage/sideBar.css}" rel="stylesheet">
+
+    <style>
+        .profile-container {
+            margin: auto;
+        }
+
+        .profile-img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+        }
+
+        td {
+            width: 180px;
+            height: 100px;
+        }
+
+        #imageUpload {
+            display: none;
+        }
+
+        .btn{
+            /*padding: 8px 5px;*/
+            /*background-color:#c184c1;*/
+            /*border-radius: 7px;*/
+            /*color: white;*/
+            /*cursor: pointer;*/
+
+        }
+
+    </style>
+<script>
+
+</script>
+</head>
+<body>
+<div class="wrapper">
+    <!-- 헤더 부분 불러오기 -->
+    <header th:replace="~{fragments/header :: header}"></header>
+
+    <!-- 사이드바와 메인 콘텐츠를 포함하는 레이아웃 -->
+    <div class="content">
+        <!-- 사이드바 -->
+        <div class="sidebar">
+            <!-- 사이드바 내용 -->
+            <div class="sidebar-content">
+                <!-- 프로필 정보 추가 -->
+                <img src="/images/emotions/happy.png" alt="프로필사진" class="profile-img">
+                <p class="nickname">사용자 닉네임</p>
+                <p class="profile-intro">짧은 프로필 소개글</p>
+
+                <a th:href="@{/mypage/infoForm}">개인정보</a>
+                <a th:href="@{/mypage/profile}">프로필</a>
+                <a th:href="@{/mypage/follow}">친구</a>
+                <a th:href="@{/mypage/message}">채팅</a>
+            </div>
+
+            <!-- 회원탈퇴 항목은 사이드바 하단에 배치 -->
+            <div class="logout">
+                <a th:href="@{/member/logout}">회원탈퇴</a>
+            </div>
+        </div>
+
+        <!-- 메인 콘텐츠 -->
+        <div class="profile-container">
+            <h2>프로필</h2>
+            <p>프로필 이미지와 소개글을 변경할 수 있습니다.</p>
+            <!-- 프로필 이미지 -->
+            <form action="profileUpdate" method="post" id="profileUpdate" enctype="multipart/form-data">
+                <!-- 숨겨진 필드로 memberId 값을 전송 -->
+                <input type="hidden" name="memberId" value="${memberId}">
+                <table class="profile-info">
+                    <tr>
+                        <td>
+                            <div class="profile-image-container">
+                            <img id="profileImage" src="/images/profile.png" alt="기본 프로필 이미지" class="profile-img">
+                            </div>
+                        </td>
+                        <td>
+                            <label class="btn btn-primary" for="imageUpload">
+                                이미지변경
+                            </label>
+                            <input type="file" id="imageUpload" name="profileImage" accept="image/*"/>
+                            <button type="button" class="btn btn-secondary">삭제</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <textarea name="ment" rows="3" placeholder="여기를 클릭해 간단한 소개글을 작성해보세요." style="width:100%; border: 0; resize: none;"></textarea>
+
+                        </td>
+                    </tr>
+                </table>
+                <br>
+                <div id="FormBtn">
+                    <button type="button" class="btn btn-primary" id="saveProfile">저장</button> <!-- 저장 버튼 수정 -->
+                    <button type="reset" class="btn btn-secondary">취소</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- 푸터 부분 불러오기 -->
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+
+<!-- 부트스트랩 JS 로드 -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<!-- FontAwesome 아이콘 로드 -->
+<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+
+<script>
+    // 이미지 미리보기 기능 구현
+    document.getElementById('imageUpload').addEventListener('change', function(event) {
+        var reader = new FileReader();
+        reader.onload = function(){
+            var output = document.getElementById('profileImage');
+            output.src = reader.result;
+        };
+        reader.readAsDataURL(event.target.files[0]);
+    });
+
+    // 이미지 삭제 기능
+    document.getElementById('resetImage').addEventListener('click', function() {
+        document.getElementById('profileImage').src = '/images/profile.png';
+        document.getElementById('imageUpload').value = '';
+    });
+
+    // AJAX로 프로필 저장
+    document.getElementById('saveProfile').addEventListener('click', function() {
+        console.log("저장 버튼이 클릭되었습니다.");  // 이 부분이 출력되는지 확인
+        var formData = new FormData(document.getElementById('profileUpdate'));
+
+        console.log("폼 데이터를 전송합니다...");  // 요청 전에 로그를 추가하여 디버깅
+
+        fetch('/mypage/profileUpdate', {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok.');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // 수정된 이미지와 소개글을 화면에 즉시 반영
+                document.getElementById('profileImage').src = data.profilePicture;
+                document.querySelector('textarea[name="ment"]').value = data.ment;
+                alert('프로필이 성공적으로 업데이트되었습니다.');
+            })
+            .catch(error => {
+                console.error('프로필 업데이트 실패:', error);
+                alert('프로필 업데이트 중 오류가 발생했습니다.');
+            });
+    });
+
+</script>
+</body>
+</html>

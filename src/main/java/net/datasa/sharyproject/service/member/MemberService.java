@@ -9,6 +9,8 @@ import net.datasa.sharyproject.repository.member.MemberRepository;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 /**
  * 회원정보 관련 처리 서비스
  */
@@ -55,4 +57,8 @@ public class MemberService {
             return true;
         }
     }
+
+    public Optional<MemberEntity> findById(String memberId) {
+        return memberRepository.findById(memberId);
+   }
 }

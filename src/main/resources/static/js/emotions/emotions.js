@@ -5,6 +5,8 @@ document.addEventListener('DOMContentLoaded', function () {
     const seekBar = document.getElementById('seek-bar'); // 시크바 요소 가져오기
     const currentTimeDisplay = document.getElementById('current-time'); // 현재 재생 시간을 표시할 요소
     const totalTimeDisplay = document.getElementById('total-time'); // 총 재생 시간을 표시할 요소
+    // 볼륨 슬라이더 요소 가져오기
+    const volumeSlider = document.getElementById('volume-slider');
     let accessToken;
     let deviceId;
     let player; // Spotify Player 객체
@@ -233,4 +235,18 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     });
+
+    // 볼륨 슬라이더 변경 시 이벤트 처리
+    volumeSlider.addEventListener('input', function() {
+        const volume = volumeSlider.value / 100; // 0 ~ 1 사이의 값으로 변환
+        if (player) {
+            player.setVolume(volume).then(() => {
+                console.log(`볼륨이 ${volume * 100}%로 설정되었습니다.`);
+            });
+        }
+    });
+
 });
+
+
+

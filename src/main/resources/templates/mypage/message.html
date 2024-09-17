@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" >
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>마이페이지</title>
+    <title>채팅</title>
     <!-- jQuery 로드 -->
     <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
 
@@ -16,7 +16,6 @@
 
 </head>
 <body>
-
 <div class="wrapper">
     <!-- 헤더 부분 불러오기 -->
     <header th:replace="~{fragments/header :: header}"></header>
@@ -30,10 +29,10 @@
                 <p class="nickname">사용자 닉네임</p>
                 <p class="profile-intro">짧은 프로필 소개글</p>
 
-                <a th:href="@{/member/infoForm}">개인정보</a>
-                <a th:href="@{/member/profile}">프로필</a>
-                <a th:href="@{/member/follow}">친구</a>
-                <a th:href="@{/member/message}">채팅</a>
+                <a th:href="@{/mypage/infoForm}">개인정보</a>
+                <a th:href="@{/mypage/profile}">프로필</a>
+                <a th:href="@{/mypage/follow}">친구</a>
+                <a th:href="@{/mypage/message}">채팅</a>
 
             </div>
             <!-- 회원탈퇴 항목 -->
@@ -44,38 +43,28 @@
         <!-- 메인 콘텐츠 -->
         <div class="main-content">
             <section class="page-content">
-                <div sec:authorize="isAuthenticated()">
-                    <h1>[ <span th:text="${#authentication.name}"></span>님의 마이페이지 ]</h1>
-
-                    <p>메인 콘텐츠 내용</p>
+                <div>
+                    <p>채팅채팅채팅</p>
                 </div>
                 <div>
-                    <p>메인 콘텐츠 내용</p>
+                    <p>채팅채팅채팅</p>
                 </div>
                 <div>
-                    <p>메인 콘텐츠 내용</p>
+                    <p>채팅채팅채팅</p>
                 </div>
                 <div>
-                    <p>메인 콘텐츠 내용</p>
+                    <p>채팅채팅채팅</p>
                 </div>
                 <div>
-                    <p>메인 콘텐츠 내용</p>
+                    <p>채팅채팅채팅</p>
                 </div>
-                <table>
-                    <tr>
-                        <td>
-                            <p>테이블 시험</p>
-                        </td>
-                    </tr>
-
-                </table>
             </section>
         </div>
     </div>
 </div>
 
-    <!-- 푸터 부분 불러오기 -->
-    <footer th:replace="~{fragments/footer :: footer}"></footer>
+<!-- 푸터 부분 불러오기 -->
+<footer th:replace="~{fragments/footer :: footer}"></footer>
 
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
