@@ -2,30 +2,24 @@ package net.datasa.sharyproject.controller.share;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import net.datasa.sharyproject.domain.dto.personal.CategoryDTO;
 import net.datasa.sharyproject.domain.dto.personal.CoverTemplateDTO;
 import net.datasa.sharyproject.domain.dto.personal.NoteTemplateDTO;
 import net.datasa.sharyproject.domain.dto.share.SelectedNoteDTO;
 import net.datasa.sharyproject.domain.dto.share.ShareDiaryDTO;
 import net.datasa.sharyproject.domain.dto.share.ShareNoteDTO;
 import net.datasa.sharyproject.domain.entity.share.ShareDiaryEntity;
-import net.datasa.sharyproject.domain.entity.share.ShareNoteEntity;
 import net.datasa.sharyproject.repository.share.ShareDiaryRepository;
 import net.datasa.sharyproject.security.AuthenticatedUser;
 import net.datasa.sharyproject.service.personal.CoverTemplateService;
 import net.datasa.sharyproject.service.personal.NoteTemplateService;
 import net.datasa.sharyproject.service.share.ShareDiaryService;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Slf4j
 @AllArgsConstructor

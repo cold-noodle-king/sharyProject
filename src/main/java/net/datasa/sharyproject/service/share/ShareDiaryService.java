@@ -6,18 +6,17 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.datasa.sharyproject.domain.dto.share.ShareDiaryDTO;
 import net.datasa.sharyproject.domain.entity.member.MemberEntity;
-import net.datasa.sharyproject.domain.entity.personal.CategoryEntity;
+import net.datasa.sharyproject.domain.entity.CategoryEntity;
 import net.datasa.sharyproject.domain.entity.personal.CoverTemplateEntity;
 import net.datasa.sharyproject.domain.entity.share.ShareDiaryEntity;
 import net.datasa.sharyproject.repository.member.MemberRepository;
-import net.datasa.sharyproject.repository.personal.CategoryRepository;
+import net.datasa.sharyproject.repository.CategoryRepository;
 import net.datasa.sharyproject.repository.personal.CoverTemplateRepository;
 import net.datasa.sharyproject.repository.share.ShareDiaryRepository;
 import net.datasa.sharyproject.security.AuthenticatedUser;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 

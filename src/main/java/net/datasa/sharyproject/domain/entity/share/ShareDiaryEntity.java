@@ -7,7 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.datasa.sharyproject.domain.entity.member.MemberEntity;
-import net.datasa.sharyproject.domain.entity.personal.CategoryEntity;
+import net.datasa.sharyproject.domain.entity.CategoryEntity;
 import net.datasa.sharyproject.domain.entity.personal.CoverTemplateEntity;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;

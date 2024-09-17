@@ -2,10 +2,10 @@ package net.datasa.sharyproject.service.personal;
 
 import lombok.RequiredArgsConstructor;
 import net.datasa.sharyproject.domain.dto.personal.PersonalDiaryDTO;
-import net.datasa.sharyproject.domain.entity.personal.CategoryEntity;
+import net.datasa.sharyproject.domain.entity.CategoryEntity;
 import net.datasa.sharyproject.domain.entity.personal.CoverTemplateEntity;
 import net.datasa.sharyproject.domain.entity.personal.PersonalDiaryEntity;
-import net.datasa.sharyproject.repository.personal.CategoryRepository;
+import net.datasa.sharyproject.repository.CategoryRepository;
 import net.datasa.sharyproject.repository.personal.CoverTemplateRepository;
 import net.datasa.sharyproject.repository.personal.NoteTemplateRepository;
 import net.datasa.sharyproject.repository.personal.PersonalDiaryRepository;
