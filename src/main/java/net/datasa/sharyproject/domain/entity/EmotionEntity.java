@@ -23,8 +23,4 @@ public class EmotionEntity {
     @Column(nullable = false)
     private String emotionName; // 감정 이름 (예: 기쁨, 슬픔 등)
 
-    // 외래키로 연결된 member 테이블 참조
-    @ManyToOne
-    @JoinColumn(name = "member_id", nullable = false)
-    private MemberEntity member; // 사용자 정보 (외래키)
 }
