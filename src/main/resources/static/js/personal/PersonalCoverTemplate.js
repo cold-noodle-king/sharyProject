@@ -58,8 +58,27 @@ $(document).ready(function() {
                     coverTemplateNum: selectedCoverId,
                     categoryNum: categoryNum // 카테고리 번호 전송
                 },
-                success: function() {
-                    $('#diaryModal').modal('show'); // 성공하면 모달 띄움
+                success: function(response) {
+                    // 서버로부터 diaryNum을 받아옴
+                    const diaryNum = response.diaryNum;
+
+                    if (!diaryNum) {
+                        console.error("diaryNum is undefined");
+                        return;
+                    }
+
+                    // 모달 띄우기
+                    $('#diaryModal').modal('show');
+
+                    // Yes 버튼 클릭 시 다이어리 번호를 포함하여 속지 템플릿 선택 페이지로 이동
+                    $('#yesBtn').on('click', function() {
+                        window.location.href = '/personal/note?diaryNum=' + diaryNum;
+                    });
+
+                    // No 버튼 클릭 시 MyDiary 페이지로 이동
+                    $('#noBtn').on('click', function() {
+                        window.location.href = '/personal/MyDiary';
+                    });
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     console.error("Diary save failed: ", textStatus, errorThrown);
@@ -67,11 +86,6 @@ $(document).ready(function() {
                 }
             });
         }
-    });
-
-    // 모달에서 Yes 버튼 클릭 시 속지 템플릿 선택 페이지로 이동
-    $('#yesBtn').on('click', function() {
-        window.location.href = '/personal/note';
     });
 
     // 모달에서 No 버튼 클릭 시 MyDiary 페이지로 이동

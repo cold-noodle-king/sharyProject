@@ -49,19 +49,14 @@
 
                 <!-- 감정 선택 -->
                 <select id="diaryEmotion" name="diaryEmotion" class="form-control me-3" required>
-                    <option value="기쁨">😊 행복</option>
-                    <option value="슬픔">😢 슬픔</option>
-                    <option value="분노">😠 화남</option>
-                    <option value="평온">😌 놀람</option>
-                    <option value="놀람">😲 두려움</option>
-                    <option value="두려움">😨 사랑</option>
+                    <option value="">감정을 선택하세요</option>
+                    <option th:each="emotion : ${emotions}" th:value="${emotion.emotionNum}" th:text="${emotion.emotionName}"></option>
                 </select>
 
-                <!-- 공개 권한 -->
+                <!-- 공개 권한 선택 -->
                 <select id="diaryPermission" name="diaryPermission" class="form-control" required>
-                    <option value="private">비공개</option>
-                    <option value="friends">친구공개</option>
-                    <option value="public">전체공개</option>
+                    <option value="">공개 권한을 선택하세요</option>
+                    <option th:each="permission : ${permissions}" th:value="${permission.grantedNum}" th:text="${permission.grantedName}"></option>
                 </select>
             </div>
 
@@ -76,9 +71,13 @@
                 <textarea id="diaryContent" name="diaryContent" class="form-control" rows="6" placeholder="오늘의 이야기를 적어보세요" required></textarea>
             </div>
 
-            <!-- 해시태그 입력 섹션 -->
+            <!-- 해시태그 선택 -->
             <div class="mb-4">
-                <input type="text" id="hashTag" name="hashTag" class="form-control" placeholder="#해시태그 추가">
+                <label>해시태그 선택</label><br>
+                <div th:each="hashtag : ${hashtags}" class="form-check">
+                    <input type="checkbox" th:id="'hashtag-' + ${hashtag.hashtagNum}" th:value="${hashtag.hashtagNum}" th:name="hashtags" class="form-check-input">
+                    <label th:for="'hashtag-' + ${hashtag.hashtagNum}" th:text="${hashtag.hashtagName}" class="form-check-label"></label>
+                </div>
             </div>
 
             <!-- 저장 및 취소 버튼 -->

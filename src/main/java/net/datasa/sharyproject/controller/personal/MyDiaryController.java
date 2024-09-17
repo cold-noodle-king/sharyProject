@@ -2,12 +2,12 @@ package net.datasa.sharyproject.controller.personal;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import net.datasa.sharyproject.domain.dto.personal.CoverTemplateDTO;
-import net.datasa.sharyproject.domain.dto.personal.NoteTemplateDTO;
-import net.datasa.sharyproject.domain.dto.personal.PersonalDiaryDTO;
-import net.datasa.sharyproject.service.personal.CoverTemplateService;
-import net.datasa.sharyproject.service.personal.NoteTemplateService;
-import net.datasa.sharyproject.service.personal.PersonalDiaryService;
+import net.datasa.sharyproject.domain.dto.EmotionDTO;
+import net.datasa.sharyproject.domain.dto.HashtagDTO;
+import net.datasa.sharyproject.domain.dto.personal.*;
+import net.datasa.sharyproject.service.EmotionService;
+import net.datasa.sharyproject.service.HashtagService;
+import net.datasa.sharyproject.service.personal.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,20 +15,23 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-/**
- * 개인 다이어리와 관련된 요청을 처리하는 컨트롤러입니다.
- */
 @RequiredArgsConstructor
 @RequestMapping("personal")
 @Controller
 @Slf4j
 public class MyDiaryController {
 
-    private final CoverTemplateService coverTemplateService; // 커버 템플릿 서비스
-    private final NoteTemplateService noteTemplateService; // 노트 템플릿 서비스
     private final PersonalDiaryService personalDiaryService; // 개인 다이어리 서비스
+    private final PersonalNoteService personalNoteService;   // 개인 노트 서비스
+    private final CoverTemplateService coverTemplateService;
+    private final NoteTemplateService noteTemplateService;
+    private final EmotionService emotionService;
+    private final GrantedService grantedService;
+    private final HashtagService hashtagService;
 
     /**
      * MyDiary 메인 페이지로 이동하는 메서드
@@ -43,6 +46,28 @@ public class MyDiaryController {
         model.addAttribute("diaryList", diaryList);
 
         return "personal/MyDiary"; // MyDiary 페이지로 이동
+    }
+
+    /**
+     * 다이어리 상세 페이지 (myNote)로 이동하는 메서드
+     * @param diaryNum 선택된 다이어리 번호
+     * @param model 다이어리 정보와 노트 목록을 모델에 추가
+     * @return MyNote 페이지
+     */
+    @GetMapping("/MyNote/{diaryNum}")
+    public String viewDiaryNotes(@PathVariable("diaryNum") Integer diaryNum, Model model) {
+        // 선택된 다이어리 정보를 가져오기
+        PersonalDiaryDTO selectedDiary = personalDiaryService.getDiaryById(diaryNum);
+        model.addAttribute("selectedDiary", selectedDiary);
+
+        // 선택된 다이어리의 노트 목록을 가져오기
+        List<PersonalNoteDTO> noteList = personalNoteService.getNotesByDiaryNum(diaryNum);
+        model.addAttribute("noteList", noteList);
+
+        // diaryNum을 모델에 추가
+        model.addAttribute("diaryNum", diaryNum);
+
+        return "personal/MyNote"; // MyNote 페이지로 이동
     }
 
     /**
@@ -94,7 +119,11 @@ public class MyDiaryController {
      * @return 노트 선택 페이지
      */
     @GetMapping("note")
-    public String note() {
+    public String note(@RequestParam(value = "diaryNum", required = false) Integer diaryNum, Model model) {
+        if (diaryNum == null) {
+            throw new RuntimeException("Diary number is missing");
+        }
+        model.addAttribute("diaryNum", diaryNum);
         return "personal/NoteSelect";  // 노트 템플릿 선택 페이지로 이동
     }
 
@@ -118,10 +147,10 @@ public class MyDiaryController {
      */
     @PostMapping("saveDiary")
     @ResponseBody
-    public ResponseEntity<String> saveDiary(@RequestParam String diaryName,
-                                            @RequestParam Integer coverTemplateNum,
-                                            @RequestParam Integer categoryNum,
-                                            @AuthenticationPrincipal UserDetails loggedInUser) {
+    public ResponseEntity<Map<String, Object>> saveDiary(@RequestParam String diaryName,
+                                                         @RequestParam Integer coverTemplateNum,
+                                                         @RequestParam Integer categoryNum,
+                                                         @AuthenticationPrincipal UserDetails loggedInUser) {
         try {
             // PersonalDiaryDTO에 받은 데이터를 설정
             PersonalDiaryDTO diaryDTO = new PersonalDiaryDTO();
@@ -130,37 +159,59 @@ public class MyDiaryController {
             diaryDTO.setCategoryNum(categoryNum);
             diaryDTO.setMemberId(loggedInUser.getUsername()); // 로그인된 사용자 ID
 
-            // 로그로 값을 출력하여 확인
-            log.debug("Diary Name: {}", diaryName);
-            log.debug("Cover Template Num: {}", coverTemplateNum);
-            log.debug("Category Num: {}", categoryNum); // 이 로그를 통해 categoryNum을 확인
+            // 다이어리 저장 후 생성된 다이어리 번호 반환
+            Integer savedDiaryNum = personalDiaryService.saveDiary(diaryDTO);
 
-            // 다이어리 저장 로직 호출
-            personalDiaryService.saveDiary(diaryDTO);
+            // 응답에 diaryNum을 포함하여 반환
+            Map<String, Object> response = new HashMap<>();
+            response.put("message", "다이어리가 성공적으로 저장되었습니다.");
+            response.put("diaryNum", savedDiaryNum);
 
-            return ResponseEntity.ok("다이어리가 성공적으로 저장되었습니다.");
+            return ResponseEntity.ok(response);
         } catch (Exception e) {
             log.error("다이어리 저장 실패", e);
-            return ResponseEntity.status(500).body("다이어리 저장에 실패했습니다.");
+            return ResponseEntity.status(500).body(Map.of("error", "다이어리 저장에 실패했습니다."));
         }
     }
 
     /**
      * 노트 템플릿을 기반으로 다이어리 작성 페이지로 이동하는 메서드
-     * @param noteNum 노트 템플릿 ID
      * @param model 모델 객체에 노트 템플릿 데이터를 추가
      * @return 다이어리 작성 페이지
      */
     @GetMapping("noteForm")
-    public String createDiary(@RequestParam("noteNum") Integer noteNum, Model model) {
+    public String createDiary(@RequestParam("noteNum") Integer noteNum,
+                              @RequestParam("diaryNum") Integer diaryNum,
+                              @RequestParam("noteName") String noteName,
+                              Model model) {
+        // 노트 템플릿 정보 가져오기
         NoteTemplateDTO noteTemplate = noteTemplateService.getNoteTemplateById(noteNum);
 
-        // 노트 템플릿이 없거나 이미지가 없는 경우 예외 발생
         if (noteTemplate == null || noteTemplate.getNoteImage() == null) {
             throw new RuntimeException("NoteTemplate 또는 이미지 경로가 존재하지 않습니다.");
         }
 
-        model.addAttribute("noteTemplate", noteTemplate);  // 모델에 노트 템플릿 데이터를 추가
+        // 다이어리 정보 가져오기 (카테고리 등)
+        PersonalDiaryDTO diary = personalDiaryService.getDiaryById(diaryNum);
+
+        // 감정 목록 가져오기
+        List<EmotionDTO> emotions = emotionService.getAllEmotions();
+
+        // 공개 권한 목록 가져오기
+        List<GrantedDTO> permissions = grantedService.getAllPermissions();
+
+        // 다이어리 카테고리에 맞는 해시태그 목록 가져오기
+        Integer categoryNum = diary.getCategoryNum();
+        List<HashtagDTO> hashtags = hashtagService.getHashtagsByCategory(categoryNum);
+
+        // 모델에 데이터 추가
+        model.addAttribute("noteTemplate", noteTemplate);  // 노트 템플릿 정보
+        model.addAttribute("diaryNum", diaryNum);          // 다이어리 번호
+        model.addAttribute("noteName", noteName);          // 노트 이름
+        model.addAttribute("emotions", emotions);          // 감정 목록
+        model.addAttribute("permissions", permissions);    // 공개 권한 목록
+        model.addAttribute("hashtags", hashtags);          // 해시태그 목록
+
         return "personal/NoteForm";  // 다이어리 작성 페이지로 이동
     }
 

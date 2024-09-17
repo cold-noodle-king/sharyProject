@@ -1,33 +1,79 @@
-/* 메인 컨테이너와 헤더 사이의 간격 더 추가 */
-#main {
+/* 메인 컨테이너 스타일 */
+#my-note-main {
     background-color: #f9f9f9;
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-    margin-top: 100px; /* 헤더와의 간격 더 추가 */
+    margin-top: 100px;
+}
+
+/* 선택한 다이어리 카드 스타일 */
+.selected-diary-card {
+    width: 100%; /* 다이어리 카드의 너비를 고정 */
+    max-width: 250px; /* 최대 크기 제한 */
+    margin-left: 0; /* 왼쪽 정렬 */
+}
+
+/* 세로 경계선 스타일 */
+.vertical-line {
+    border-left: 2px solid #ccc;
+    height: auto;
+    margin: 0 auto;
 }
 
 /* 신규 다이어리 추가 버튼의 링크 밑줄 제거 */
-.my-diary-add-btn a {
+.my-note-add-btn a {
     text-decoration: none; /* 링크의 밑줄 제거 */
 }
 
-/* "My Diary" 텍스트와 다이어리 리스트 사이의 간격 추가 */
-h2 {
-    text-align: center; /* 텍스트 중앙 정렬 */
-    font-size: 2.5rem; /* 텍스트 크기 조정 */
-    font-weight: bold; /* 굵은 텍스트 */
-    margin-bottom: 50px; /* 다이어리 리스트와의 간격 더 추가 */
+/* 노트 목록 */
+.my-note-list .my-note-card {
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    padding-bottom: 10px;
 }
 
-/* 다이어리 목록 스타일 */
-.diary-list {
-    display: flex; /* 플렉스박스를 사용해 다이어리 목록 정렬 */
-    flex-wrap: wrap; /* 작은 화면에서는 줄바꿈되도록 설정 */
+/* 노트 이미지 */
+.my-note-card img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-bottom: 2px solid #eee;
+}
+
+/* 노트 목록이 한 줄에 4개의 카드가 나오도록 설정 */
+.my-note-list .col-md-3 {
+    display: flex;
+}
+
+.my-note-card {
+    width: 100%;
+}
+
+/* 신규 노트 추가 버튼 스타일 */
+.my-note-add-btn {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.my-note-icon-add {
+    font-size: 3rem;
+    color: #007bff;
+    background-color: white;
+    width: 80px;
+    height: 80px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 /* 다이어리 카드 스타일 (책 느낌, 세로로 긴 비율) */
-.my-diary-card {
+.my-note-card h-100 {
     background-color: white;
     border: 1px solid #ddd;
     border-radius: 5px;
@@ -40,105 +86,7 @@ h2 {
     width: 280px;  /* A4 비율에 맞춰서 너비 조정 */
 }
 
-/* 다이어리 카드에 마우스 오버 시 효과 */
-.my-diary-card:hover {
-    transform: rotate(0deg) scale(1.05);
-    box-shadow: 4px 8px 16px rgba(0, 0, 0, 0.3), 10px 16px 24px rgba(0, 0, 0, 0.2);
-}
-
-/* 다이어리 카드의 이미지 (A4 비율 맞춤) */
-.my-diary-card img {
-    width: 100%;
-    height: calc(100% - 60px); /* 전체 카드 높이에서 여백을 뺀 이미지 높이 */
-    object-fit: cover; /* 이미지 비율을 유지하면서 꽉 차게 */
-    border-bottom: 2px solid #eee;
-}
-
-/* 다이어리 이름 텍스트 스타일 */
-.my-diary-card .card-footer p {
-    font-size: 1.1rem;
-    font-weight: bold;
-    margin: 10px 0;
-    color: #333;
-    text-align: center; /* 이름을 중앙 정렬 */
-    height: 40px; /* 이름 부분의 고정 높이 설정 */
-    display: flex;
-    justify-content: center;
-    align-items: center; /* 이름 텍스트가 중앙에 위치하도록 */
-}
-
-/* 신규 다이어리 추가 버튼 스타일 (다이어리 카드와 동일하게 적용) */
-.my-diary-add-btn {
-    height: 400px; /* 다이어리 카드와 동일한 높이 */
-    width: 280px; /* 다이어리 카드와 동일한 너비 */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 5px;
-    background-color: white;
-    border: 1px solid #ddd;
-    box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.2), 8px 12px 16px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.my-diary-add-btn:hover {
-    transform: scale(1.05);
-    box-shadow: 4px 8px 16px rgba(0, 0, 0, 0.3), 10px 16px 24px rgba(0, 0, 0, 0.2);
-}
-
-.my-icon-add {
-    font-size: 3rem;
-    color: #007bff; /* 부트스트랩 기본 파란색 */
-    background-color: white;
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-/* 신규 다이어리 추가 버튼의 플러스 아이콘에 마우스 오버 시 효과 */
-.my-icon-add:hover {
+.my-note-icon-add:hover {
     background-color: #0056b3;
     color: white;
-}
-
-/* 모달 내 메뉴 리스트 스타일 */
-.menu-list {
-    display: flex; /* 플렉스박스로 메뉴 정렬 */
-    flex-direction: column; /* 세로 방향으로 정렬 */
-    gap: 15px; /* 메뉴 아이템 간의 간격 */
-}
-
-/* 모달 내 메뉴 아이템 스타일 */
-.menu-item {
-    display: block; /* 블록 요소로 설정 */
-    background-color: #007bff; /* 배경색 설정 */
-    color: white; /* 텍스트 색상 설정 */
-    padding: 10px 20px; /* 안쪽 여백 설정 */
-    text-align: center; /* 텍스트 중앙 정렬 */
-    border-radius: 5px; /* 둥근 모서리 설정 */
-    text-decoration: none; /* 링크 밑줄 제거 */
-    transition: background-color 0.3s ease; /* 배경색 변화 트랜지션 */
-}
-
-/* 모달 내 메뉴 아이템에 마우스 오버 시 배경색 변경 */
-.menu-item:hover {
-    background-color: #0056b3; /* 어두운 파란색으로 변경 */
-}
-
-/* 모달 푸터 버튼 스타일 */
-.modal-footer .action-btn {
-    background-color: #6c757d; /* 부트스트랩의 기본 회색 버튼 */
-    color: white; /* 텍스트 색상 설정 */
-    padding: 10px 20px; /* 버튼 크기 설정 */
-    border-radius: 5px; /* 둥근 모서리 설정 */
-    text-decoration: none; /* 텍스트 밑줄 제거 */
-}
-
-/* 모달 푸터 버튼에 마우스 오버 시 배경색 변경 */
-.modal-footer .action-btn:hover {
-    background-color: #5a6268; /* 어두운 회색으로 변경 */
 }

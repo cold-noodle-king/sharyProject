@@ -42,9 +42,10 @@
         <div class="col-md-3 mb-4" th:each="diary : ${diaryList}">
             <div class="my-diary-card h-100">
                 <!-- 커버 이름을 사용해 절대경로에서 이미지를 불러오는 코드 -->
-                <img th:src="@{'/images/' + ${diary.coverName} + '.png'}"
-                     alt="커버 이미지" class="card-img-top">
-
+                <a th:href="@{'/personal/MyNote/' + ${diary.personalDiaryNum}}"> <!-- 클릭 시 myNote 페이지로 이동하며 diaryNum을 전달 -->
+                    <img th:src="@{'/images/' + ${diary.coverName} + '.png'}"
+                         alt="커버 이미지" class="card-img-top">
+                </a>
                 <!-- 다이어리 이름을 이미지 하단에 표시 -->
                 <div class="card-footer text-center">
                     <p th:text="${diary.diaryName} != null ? ${diary.diaryName} : '이름 없음'"></p> <!-- 다이어리 이름 -->

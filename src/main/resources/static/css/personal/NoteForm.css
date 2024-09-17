@@ -86,6 +86,12 @@ textarea.form-control {
     box-shadow: 0 3px 12px rgba(0, 0, 0, 0.1);
 }
 
+/* 해시태그 선택 스타일 */
+.mb-4 .form-check {
+    display: inline-block; /* 체크박스를 한 줄로 나열하도록 설정 */
+    margin-right: 15px; /* 체크박스 간의 간격 조정 */
+}
+
 /* 저장 및 취소 버튼 */
 .submit-buttons .btn {
     border-radius: 25px;
