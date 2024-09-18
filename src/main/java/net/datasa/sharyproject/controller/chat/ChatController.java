@@ -33,7 +33,7 @@ public class ChatController {
         return "chat/chatHome";
     }
 
-    @GetMapping("/room")
+/*  @GetMapping("/room")
     public String getChatRoom(@RequestParam("participant1Id") String participant1Id,
                               @RequestParam("participant2Id") String participant2Id, Model model) {
         ChatDTO chat = chatService.findOrCreateChat(participant1Id, participant2Id);
@@ -41,13 +41,32 @@ public class ChatController {
         model.addAttribute("chat", chat);
         model.addAttribute("messages", messages);
         return "chat/chatRoom";
+    }*/
+
+    @GetMapping("/room")
+    public String getChatRoom(@RequestParam("participant1Id") String participant1Id,
+                              @RequestParam("participant2Id") String participant2Id, Model model) {
+        // 두 사용자의 관계에 해당하는 채팅방을 찾거나 생성
+        ChatDTO chat = chatService.findOrCreateChat(participant1Id, participant2Id);
+
+        // 해당 채팅방의 메시지들을 가져오기
+        List<ChatMessageDTO> messages = chatService.getMessages(chat.getChatId());
+
+        // 모델에 채팅방과 메시지 추가
+        model.addAttribute("chat", chat);
+        model.addAttribute("messages", messages);
+
+        return "chat/chatRoom";
     }
+
 
     @GetMapping("/chatForm")
     public String showChatForm(Model model) {
         String currentUserId = followService.getCurrentUserId();
         List<FollowDTO> following = followService.getFollowingForCurrentUser();
+        List<FollowDTO> followers = followService.getFollowersForCurrentUser(); // 추가: 나를 팔로우하는 사용자 목록 가져오기
         model.addAttribute("following", following);
+        model.addAttribute("followers", followers); // 추가: 팔로워 리스트 추가
         return "chat/chatForm";
     }
 
