@@ -11,6 +11,7 @@ import net.datasa.sharyproject.domain.entity.member.MemberEntity;
 import net.datasa.sharyproject.domain.entity.mypage.ProfileEntity;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 @Entity
 @Table(name = "personal_note")
@@ -79,14 +80,12 @@ public class PersonalNoteEntity {
     @JoinColumn(name = "member_id", nullable = false)
     private MemberEntity member;
 
-    // 외래키로 연결된 Hashtag 테이블 참조
-    @ManyToOne
-    @JoinColumn(name = "hashtag_num", nullable = false)
-    private HashtagEntity hashtag;
-
-    // 외래키로 연결된 Granted 테이블 참조
-    @ManyToOne
-    @JoinColumn(name = "granted_num", nullable = false)
-    private GrantedEntity granted;
+    // 변경: 다대다 관계로 해시태그 설정
+    @ManyToMany
+    @JoinTable(
+            name = "personal_note_hashtag", // 중간 테이블 이름
+            joinColumns = @JoinColumn(name = "personal_note_num"), // PersonalNoteEntity의 외래키
+            inverseJoinColumns = @JoinColumn(name = "hashtag_num") // HashtagEntity의 외래키
+    )
+    private List<HashtagEntity> hashtags; // 여러 해시태그와 연관
 }
-

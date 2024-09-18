@@ -36,6 +36,11 @@ public class PersonalNoteService {
      * @return PersonalNoteDTO
      */
     private PersonalNoteDTO convertEntityToDTO(PersonalNoteEntity note) {
+        // 해시태그 이름 리스트로 변환
+        List<String> hashtagNames = note.getHashtags().stream()
+                .map(hashtag -> hashtag.getHashtagName())  // 해시태그 이름 추출
+                .collect(Collectors.toList());
+
         return PersonalNoteDTO.builder()
                 .personalNoteNum(note.getPersonalNoteNum())  // 노트 고유 번호
                 .noteTitle(note.getNoteTitle())              // 노트 제목
@@ -45,6 +50,7 @@ public class PersonalNoteService {
                 .viewCount(note.getViewCount())              // 조회 수
                 .weather(note.getWeather())                  // 날씨
                 .emotionName(note.getEmotion().getEmotionName()) // 감정 이름
+                .hashtagNames(hashtagNames)                 // 해시태그 이름 리스트 추가
                 .build();
     }
 }

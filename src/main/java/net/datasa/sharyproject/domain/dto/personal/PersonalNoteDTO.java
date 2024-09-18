@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -26,9 +27,10 @@ public class PersonalNoteDTO {
 
     private int viewCount; // 조회 수
 
-    // 외래키로 연결된 엔티티 정보를 DTO로 참조할 수 있음
+    // 수정: 하나의 해시태그가 아니라 해시태그 리스트로 변경
+    private List<String> hashtagNames; // 여러 해시태그 이름 리스트
+
     private String emotionName; // 감정 이름
-    private String hashtagName; // 해시태그 이름
+
     private String grantedName; // 권한 이름
 }
-
