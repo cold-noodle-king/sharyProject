@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class GrantedDTO {
-    private int grantedNum;    // 권한 번호
+    private Integer grantedNum;    // 권한 번호
     private String grantedName;  // 권한 이름 (예: 읽기, 쓰기 등)
 }

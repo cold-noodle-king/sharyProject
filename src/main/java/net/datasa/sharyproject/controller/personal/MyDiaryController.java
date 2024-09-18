@@ -174,46 +174,4 @@ public class MyDiaryController {
         }
     }
 
-    /**
-     * 노트 템플릿을 기반으로 다이어리 작성 페이지로 이동하는 메서드
-     * @param model 모델 객체에 노트 템플릿 데이터를 추가
-     * @return 다이어리 작성 페이지
-     */
-    @GetMapping("noteForm")
-    public String createDiary(@RequestParam("noteNum") Integer noteNum,
-                              @RequestParam("diaryNum") Integer diaryNum,
-                              @RequestParam("noteName") String noteName,
-                              Model model) {
-        // 노트 템플릿 정보 가져오기
-        NoteTemplateDTO noteTemplate = noteTemplateService.getNoteTemplateById(noteNum);
-
-        if (noteTemplate == null || noteTemplate.getNoteImage() == null) {
-            throw new RuntimeException("NoteTemplate 또는 이미지 경로가 존재하지 않습니다.");
-        }
-
-        // 다이어리 정보 가져오기 (카테고리 등)
-        PersonalDiaryDTO diary = personalDiaryService.getDiaryById(diaryNum);
-
-        // 감정 목록 가져오기
-        List<EmotionDTO> emotions = emotionService.getAllEmotions();
-
-        // 공개 권한 목록 가져오기
-        List<GrantedDTO> permissions = grantedService.getAllPermissions();
-
-        // 다이어리 카테고리에 맞는 해시태그 목록 가져오기
-        Integer categoryNum = diary.getCategoryNum();
-        List<HashtagDTO> hashtags = hashtagService.getHashtagsByCategory(categoryNum);
-
-        // 모델에 데이터 추가
-        model.addAttribute("noteTemplate", noteTemplate);  // 노트 템플릿 정보
-        model.addAttribute("diaryNum", diaryNum);          // 다이어리 번호
-        model.addAttribute("noteName", noteName);          // 노트 이름
-        model.addAttribute("emotions", emotions);          // 감정 목록
-        model.addAttribute("permissions", permissions);    // 공개 권한 목록
-        model.addAttribute("hashtags", hashtags);          // 해시태그 목록
-
-        return "personal/NoteForm";  // 다이어리 작성 페이지로 이동
-    }
-
-
 }

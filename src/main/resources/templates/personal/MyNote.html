@@ -63,11 +63,11 @@
                 <!-- 노트 목록 -->
                 <div class="col-md-3 mb-4" th:each="note : ${noteList}">
                     <div class="my-note-card h-100">
-                        <img th:src="@{'/images/notes/' + ${note.coverImage} + '.png'}" alt="노트 이미지" class="card-img-top">
+                        <!-- noteTemplate.noteImage를 이용해 노트 템플릿 이미지를 표시 -->
+                        <img th:src="@{'/images/' + ${note.noteTemplate.noteName} + '.png'}" alt="노트 이미지" class="card-img-top">
                         <div class="card-body">
                             <h5 class="card-title" th:text="${note.noteTitle}">노트 제목</h5>
-                            <p class="card-text" th:text="${note.noteContent}">노트 내용 요약</p>
-                            <a href="#" th:href="@{'/personal/viewNote/' + ${note.num}}" class="btn btn-primary">노트 보기</a>
+                            <a href="#" th:href="@{'/personal/viewNote/' + ${note.personalNoteNum}}" class="btn btn-primary">노트 보기</a>
                         </div>
                     </div>
                 </div>

@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class EmotionDTO {
-    private int emotionNum;    // 감정 번호
+    private Integer emotionNum;    // 감정 번호
     private String emotionName;  // 감정 이름
 }

@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 public class HashtagEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int hashtagNum; // 해시태그 번호 (Primary Key)
+    private Integer hashtagNum; // 해시태그 번호 (Primary Key)
 
     @Column(length = 50)
     private String hashtagName; // 해시태그 이름

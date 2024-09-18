@@ -1,114 +1,122 @@
 window.onload = function() {
-    // Kakao Maps API 로드 여부 확인
     if (typeof kakao !== 'undefined') {
-        var mapContainer = document.getElementById('map'),
-            mapOption = {
-                center: new kakao.maps.LatLng(33.450701, 126.570667), // 초기 지도 중심 좌표
-                level: 3 // 초기 지도 확대 레벨
-            };
+        var map = null; // 지도 객체 초기화
+        var marker = null; // 마커 객체 초기화
+        var geocoder = new kakao.maps.services.Geocoder(); // 주소 검색을 위한 geocoder 객체
+        var ps = new kakao.maps.services.Places(); // 장소 검색을 위한 Places 객체
+        var selectedAddress = ''; // 선택된 주소 저장 변수
+        var mapInitialized = false; // 지도 초기화 여부
 
-        var map = null; // 지도 객체를 null로 초기화
-        var marker = null; // 마커 객체도 null로 초기화
-        var selectedAddress = ''; // 선택된 주소를 저장할 변수
-        var lastCoords = null; // 마지막 검색된 좌표를 저장하는 변수
-        var ps = new kakao.maps.services.Places(); // 장소 검색을 위한 Places 서비스 객체 생성
+        // 사용자의 현재 위치를 가져와 지도에 반영
+        function updateMapWithCurrentLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    var lat = position.coords.latitude; // 위도
+                    var lng = position.coords.longitude; // 경도
+                    var currentCoords = new kakao.maps.LatLng(lat, lng); // 사용자의 현재 좌표
 
-        // 모달이 열릴 때 지도 초기화 또는 재로드
-        document.getElementById('mapModal').addEventListener('shown.bs.modal', function () {
-            if (!map) { // 지도 객체가 없을 때만 초기화
-                map = new kakao.maps.Map(mapContainer, mapOption);
-                marker = new kakao.maps.Marker({
-                    position: map.getCenter() // 초기 마커 위치
-                });
-                marker.setMap(map);
+                    // 현재 위치를 지도 중심으로 설정
+                    map.setCenter(currentCoords);
+                    marker.setPosition(currentCoords);
+                    marker.setMap(map);
 
-                // 지도 클릭 시 주소 및 장소 정보 검색
-                kakao.maps.event.addListener(map, 'click', function(mouseEvent) {
-                    var latlng = mouseEvent.latLng; // 클릭한 좌표
-
-                    var geocoder = new kakao.maps.services.Geocoder();
-
-                    // 주소 정보 검색
-                    geocoder.coord2Address(latlng.getLng(), latlng.getLat(), function(result, status) {
+                    // 좌표를 주소로 변환하여 결과 표시
+                    geocoder.coord2Address(lng, lat, function(result, status) {
                         if (status === kakao.maps.services.Status.OK) {
                             var roadAddr = result[0].road_address ? result[0].road_address.address_name : '';  // 도로명 주소
                             var jibunAddr = result[0].address.address_name; // 지번 주소
-
-                            // 기본 주소 세팅
                             selectedAddress = roadAddr ? roadAddr : jibunAddr;
 
-                            // 장소 정보 검색 (역명, 건물명 등)
+                            // 장소 검색 (건물명, 역명 등)
                             ps.keywordSearch(selectedAddress, function(data, status) {
                                 if (status === kakao.maps.services.Status.OK && data.length > 0) {
-                                    // 가장 첫 번째 결과(역명, 건물명 등)를 주소와 함께 표시
                                     selectedAddress = data[0].place_name + ' (' + selectedAddress + ')';
                                 }
 
-                                // 모달 내 주소 표시
+                                // 모달 내부에 선택된 주소 표시
                                 document.getElementById('selectedAddress').textContent = '선택된 주소: ' + selectedAddress;
+                                document.getElementById('locationTag').value = selectedAddress; // 선택된 주소를 숨겨진 필드에 저장
+                                document.getElementById('locationDisplay').value = selectedAddress; // 선택된 주소를 표시
                             });
-
-                            // 마커 위치 변경
-                            marker.setPosition(latlng);
-                            lastCoords = latlng; // 마지막 클릭한 좌표를 저장
                         }
                     });
+                }, function(error) {
+                    console.error("Geolocation failed: " + error.message);
                 });
             } else {
-                // 지도 객체가 이미 존재할 경우, 검색된 좌표가 있으면 그 좌표로 설정
-                if (lastCoords) {
-                    map.setCenter(lastCoords); // 마지막 검색된 좌표로 중심 설정
-                }
-                map.relayout(); // 지도의 크기를 재조정
+                alert("Geolocation을 지원하지 않는 브라우저입니다.");
             }
-        });
+        }
 
-        // 위치 검색 버튼 클릭 시
-        document.getElementById('searchLocation').onclick = function() {
-            var location = document.getElementById('locationTag').value.trim(); // 공백 제거
+        // 지도에서 위치 선택 버튼 클릭 시 모달 열기 및 지도 초기화
+        document.getElementById('openMapModal').onclick = function() {
+            var mapModal = new bootstrap.Modal(document.getElementById('mapModal'));
+            mapModal.show();
 
-            if (location === '') {
-                alert('검색할 주소를 입력해주세요.');
-                return;
+            if (!mapInitialized) {
+                var mapContainer = document.getElementById('map');
+                var mapOption = {
+                    center: new kakao.maps.LatLng(33.450701, 126.570667), // 초기 지도 중심 좌표 설정
+                    level: 3 // 초기 지도 확대 레벨 설정
+                };
+
+                map = new kakao.maps.Map(mapContainer, mapOption); // 지도 객체 생성
+                marker = new kakao.maps.Marker(); // 마커 객체 생성
+                mapInitialized = true; // 지도 초기화 완료
             }
 
-            var geocoder = new kakao.maps.services.Geocoder();
-
-            // 주소 검색
-            geocoder.addressSearch(location, function(result, status) {
-                if (status === kakao.maps.services.Status.OK) {
-                    if (result && result.length > 0) {
-                        var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
-
-                        // 지도 객체가 초기화되지 않았을 경우 처리
-                        if (map) {
-                            map.setCenter(coords);  // 지도 중심 설정
-                            marker.setPosition(coords);  // 마커 위치 설정
-                        }
-
-                        // 마지막 검색된 좌표 저장
-                        lastCoords = coords;
-
-                        // 모달 열기
-                        var mapModal = new bootstrap.Modal(document.getElementById('mapModal'));
-                        mapModal.show();
-                    } else {
-                        alert('검색 결과가 없습니다.');
-                    }
-                } else {
-                    alert('주소를 찾을 수 없습니다.');
-                }
-            });
+            // 모달이 열릴 때 현재 위치로 지도 업데이트
+            updateMapWithCurrentLocation();
         };
 
-        // 선택 버튼 클릭 시 입력창에 주소 반영
+        // 지도 클릭 시 클릭한 좌표의 주소를 찾아서 선택
+        document.getElementById('mapModal').addEventListener('shown.bs.modal', function () {
+            kakao.maps.event.addListener(map, 'click', function(mouseEvent) {
+                var latlng = mouseEvent.latLng;
+                geocoder.coord2Address(latlng.getLng(), latlng.getLat(), function(result, status) {
+                    if (status === kakao.maps.services.Status.OK) {
+                        var roadAddr = result[0].road_address ? result[0].road_address.address_name : '';  // 도로명 주소
+                        var jibunAddr = result[0].address.address_name; // 지번 주소
+
+                        selectedAddress = roadAddr ? roadAddr : jibunAddr;
+                        document.getElementById('selectedAddress').textContent = '선택된 주소: ' + selectedAddress;
+                        document.getElementById('locationTag').value = selectedAddress; // 선택된 주소 저장
+                        document.getElementById('locationDisplay').value = selectedAddress; // 선택된 주소 표시
+
+                        // 마커 위치 변경
+                        marker.setPosition(latlng);
+                        marker.setMap(map);
+
+                        // 건물명, 역명 등 검색 추가
+                        ps.keywordSearch(selectedAddress, function(data, status) {
+                            if (status === kakao.maps.services.Status.OK && data.length > 0) {
+                                selectedAddress = data[0].place_name + ' (' + selectedAddress + ')';
+                                document.getElementById('selectedAddress').textContent = '선택된 주소: ' + selectedAddress;
+                                document.getElementById('locationTag').value = selectedAddress; // 선택된 주소 저장
+                                document.getElementById('locationDisplay').value = selectedAddress; // 선택된 주소 표시
+                            }
+                        });
+                    } else {
+                        alert('주소를 찾을 수 없습니다.');
+                    }
+                });
+            });
+        });
+
+        // 선택 버튼 클릭 시 주소를 폼에 반영
         document.getElementById('confirmAddress').onclick = function() {
             if (selectedAddress) {
-                document.getElementById('locationTag').value = selectedAddress;
+                document.getElementById('locationTag').value = selectedAddress; // 선택된 주소를 숨겨진 필드에 저장
+                document.getElementById('locationDisplay').value = selectedAddress; // 선택된 주소를 표시
             }
             var mapModal = bootstrap.Modal.getInstance(document.getElementById('mapModal'));
             mapModal.hide(); // 모달 닫기
         };
+
+        // 모달이 열릴 때 현재 위치로 지도 초기화
+        document.getElementById('mapModal').addEventListener('shown.bs.modal', function () {
+            updateMapWithCurrentLocation(); // 현재 위치로 지도 업데이트
+        });
     } else {
         console.error("Kakao Maps API is not loaded.");
     }

@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class HashtagDTO {
-    private int hashtagNum;    // 해시태그 번호
+    private Integer hashtagNum;    // 해시태그 번호
     private String hashtagName;  // 해시태그 이름
-    private int categoryNum;    // 카테고리 번호 (외래키)
+    private Integer categoryNum;    // 카테고리 번호 (외래키)
 }

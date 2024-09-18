@@ -53,4 +53,9 @@ public class PersonalDiaryEntity {
     @ManyToOne
     @JoinColumn(name = "member_id", nullable = false)
     private MemberEntity member; // 회원 외래 키 (MemberEntity 참조)
+
+    // 파라미터를 받는 생성자 추가
+    public PersonalDiaryEntity(Integer personalDiaryNum) {
+        this.personalDiaryNum = personalDiaryNum;
+    }
 }

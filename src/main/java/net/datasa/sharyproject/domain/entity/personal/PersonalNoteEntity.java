@@ -1,10 +1,7 @@
 package net.datasa.sharyproject.domain.entity.personal;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import net.datasa.sharyproject.domain.entity.EmotionEntity;
 import net.datasa.sharyproject.domain.entity.HashtagEntity;
 import net.datasa.sharyproject.domain.entity.member.MemberEntity;
@@ -20,9 +17,10 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class PersonalNoteEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int personalNoteNum; // 노트 번호 (Primary Key)
+    private Integer personalNoteNum; // 노트 번호 (Primary Key)
 
     @Column(nullable = false)
     private String noteTitle; // 노트 제목
@@ -46,46 +44,63 @@ public class PersonalNoteEntity {
     private Timestamp updatedDate; // 수정일
 
     @Column(nullable = false)
-    private int likeCount; // 추천 수
+    private Integer likeCount; // 추천 수
 
     @Column(nullable = false)
-    private int viewCount; // 조회 수
+    private Integer viewCount; // 조회 수
 
     @Lob
     @Column(name = "contents", columnDefinition = "TEXT")
     private String contents; // 내용
 
-    // 외래키로 연결된 NoteTemplate 테이블 참조
+    // NoteTemplateEntity와 다대일 관계
     @ManyToOne
     @JoinColumn(name = "note_num", nullable = false)
     private NoteTemplateEntity noteTemplate;
 
-    // 외래키로 연결된 Emotion 테이블 참조
+    // EmotionEntity와 다대일 관계
     @ManyToOne
     @JoinColumn(name = "emotion_num", nullable = false)
     private EmotionEntity emotion;
 
-    // 외래키로 연결된 PersonalDiary 테이블 참조
+    // PersonalDiaryEntity와 다대일 관계
     @ManyToOne
     @JoinColumn(name = "personal_diary_num", nullable = false)
     private PersonalDiaryEntity personalDiary;
 
-    // 외래키로 연결된 Profile 테이블 참조
+    // ProfileEntity와 다대일 관계
     @ManyToOne
     @JoinColumn(name = "profile_num", nullable = false)
     private ProfileEntity profile;
 
-    // 외래키로 연결된 Member 테이블 참조
+    // MemberEntity와 다대일 관계
     @ManyToOne
     @JoinColumn(name = "member_id", nullable = false)
     private MemberEntity member;
 
-    // 변경: 다대다 관계로 해시태그 설정
-    @ManyToMany
+    // GrantedEntity와 다대일 관계
+    @ManyToOne
+    @JoinColumn(name = "granted_num", nullable = false)
+    private GrantedEntity granted;
+
+    // HashtagEntity와 다대다 관계
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
-            name = "personal_note_hashtag", // 중간 테이블 이름
-            joinColumns = @JoinColumn(name = "personal_note_num"), // PersonalNoteEntity의 외래키
-            inverseJoinColumns = @JoinColumn(name = "hashtag_num") // HashtagEntity의 외래키
+            name = "personal_note_hashtag",
+            joinColumns = @JoinColumn(name = "personal_note_num"),
+            inverseJoinColumns = @JoinColumn(name = "hashtag_num")
     )
-    private List<HashtagEntity> hashtags; // 여러 해시태그와 연관
+    private List<HashtagEntity> hashtags;
+
+    // 생성 및 수정 날짜 자동 처리
+    @PrePersist
+    protected void onCreate() {
+        this.createdDate = new Timestamp(System.currentTimeMillis());
+        this.updatedDate = this.createdDate;
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedDate = new Timestamp(System.currentTimeMillis());
+    }
 }
