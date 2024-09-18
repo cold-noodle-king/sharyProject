@@ -19,7 +19,7 @@ import java.util.UUID;
 @Service
 @Transactional
 public class ProfileService {
-    private ProfileRepository profileRepository;
+    private final ProfileRepository profileRepository;
 
     public ProfileDTO updateProfile(MultipartFile profileImage, String ment, MemberEntity member) {
         // 기존 프로필이 있는지 확인

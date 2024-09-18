@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <title>개인정보</title>
@@ -13,6 +14,53 @@
     <link href="../header/css/styles.css" rel="stylesheet">
     <link rel="stylesheet" href="../footer/css/styles.css">
     <link th:href="@{/css/mypage/sideBar.css}" rel="stylesheet">
+
+    <script>
+        $(document).ready(function() {
+            $('#nickCheck').click(nickOpen); // 아이디 중복버튼 클릭시 이벤트 처리
+            $('#updateInfo').submit(function() {
+                let pw = $('#memberPw').val();
+                let pw2 = $('#memberPw2').val();
+                let name = $('#fullName').val();
+                const phone = $("#phoneNumber").val().trim();
+                const email = $("#email").val().trim();
+
+                if (pw != '' && (pw.length < 3 || pw.length > 10)) {
+                    alert("비밀번호는 3~10자로 입력하세요.");
+                    return false;
+                }
+                if (pw != pw2) {
+                    alert("비밀번호를 정확하게 다시 입력하세요.");
+                    return false;
+                }
+                if (name == '') {
+                    alert("이름을 입력하세요.");
+                    return false;
+                }
+                // 전화번호 검증
+                if (!phone || !/^[0-9]{2,3}-[0-9]{3,4}-[0-9]{4}$/.test(phone)) {
+                    alert(" '-' 포함해 전화번호를 입력해주세요.");
+                    $("#phoneNumber").focus();
+                    return false;
+                }
+                // 이메일 검증 (@ 필수 포함)
+                if (!email || !email.includes("@")) {
+                    alert("유효한 이메일을 입력해주세요. '@'를 포함해야 합니다.");
+                    $("#email").focus();
+                    return false;
+                }
+
+                return true;
+
+            });
+
+        });
+        function nickOpen() {
+            window.open('/member/nickCheck', 'idWin', 'left=500, top=100, width=400, height=300, location=no, titlebar=no');
+        }
+
+    </script>
+
 </head>
 <body>
 <div class="wrapper">
@@ -28,7 +76,7 @@
                 <p class="nickname">사용자 닉네임</p>
                 <p class="profile-intro">짧은 프로필 소개글</p>
 
-            <a th:href="@{/mypage/infoForm}">개인정보</a>
+            <a th:href="@{/mypage/info}">개인정보</a>
             <a th:href="@{/mypage/profile}">프로필</a>
             <a th:href="@{/mypage/follow}">친구</a>
             <a th:href="@{/mypage/message}">채팅</a>
@@ -42,21 +90,44 @@
         <!-- 메인 콘텐츠 -->
         <div class="main-content">
             <section class="page-content">
-                <div>
-                    <p>개인정보 개인정보 개인정보</p>
-                </div>
-                <div>
-                    <p>개인정보 개인정보 개인정보</p>
-                </div>
-                <div>
-                    <p>개인정보 개인정보 개인정보</p>
-                </div>
-                <div>
-                    <p>개인정보 개인정보 개인정보</p>
-                </div>
-                <div>
-                    <p>개인정보 개인정보 개인정보</p>
-                </div>
+                <form id="updateInfo" th:action="@{/mypage/info}"  method="post">
+                    <table>
+                        <tr>
+                            <th>ID</th>
+                            <td th:text="${member.memberId}"></td>
+                        </tr>
+                        <tr>
+                            <th>비밀번호</th>
+                            <td><input type="password" name="memberPw" id="memberPw" placeholder="비밀번호를 변경하려면 입력하세요."><br>
+                                <input type="password" id="memberPw2" placeholder="비밀번호 다시 입력"></td>
+                        </tr>
+                        <tr>
+                            <th>이름</th>
+                            <td><input type="text" name="fullName" id="fullName" th:value="${member.fullName}" placeholder="이름 입력"></td>
+                        </tr>
+                        <tr>
+                            <th>닉네임</th>
+                            <td>
+                                <input type="text" name="nickname" id="nickname" th:value="${member.nickname}" readonly="readonly">
+                                <input type="button" id="nickCheck" value="중복">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>이메일</th>
+                            <td><input type="text" name="email" id="email" th:value="${member.email}" placeholder="이메일 입력"></td>
+                        </tr>
+                        <tr>
+                            <th>전화번호</th>
+                            <td><input type="text" name="phoneNumber" th:value="${member.phoneNumber}" placeholder="전화번호 입력"></td>
+                        </tr>
+
+                    </table>
+                    <br>
+
+                    <input type="submit" value="수정" />
+                    <input type="reset" value="취소" />
+
+                </form>
 
             </section>
         </div>

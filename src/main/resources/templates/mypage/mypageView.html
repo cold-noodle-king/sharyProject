@@ -30,7 +30,7 @@
                 <p class="nickname">사용자 닉네임</p>
                 <p class="profile-intro">짧은 프로필 소개글</p>
 
-                <a th:href="@{/mypage/infoForm}">개인정보</a>
+                <a th:href="@{/mypage/info}">개인정보</a>
                 <a th:href="@{/mypage/profile}">프로필</a>
                 <a th:href="@{/mypage/follow}">친구</a>
                 <a th:href="@{/mypage/message}">채팅</a>
@@ -44,31 +44,13 @@
         <!-- 메인 콘텐츠 -->
         <div class="main-content">
             <section class="page-content">
-                <div sec:authorize="isAuthenticated()">
-                    <h1>[ <span th:text="${#authentication.name}"></span>님의 마이페이지 ]</h1>
-
-                    <p>메인 콘텐츠 내용</p>
-                </div>
                 <div>
-                    <p>메인 콘텐츠 내용</p>
+                    <h1><span th:text="${member.nickname}"></span>님 환영합니다.</h1>
                 </div>
+                <br>
                 <div>
-                    <p>메인 콘텐츠 내용</p>
+                    <p>마이페이지에서는 개인정보, 프로필 수정, 친구, 채팅 확인이 가능합니다. </p>
                 </div>
-                <div>
-                    <p>메인 콘텐츠 내용</p>
-                </div>
-                <div>
-                    <p>메인 콘텐츠 내용</p>
-                </div>
-                <table>
-                    <tr>
-                        <td>
-                            <p>테이블 시험</p>
-                        </td>
-                    </tr>
-
-                </table>
             </section>
         </div>
     </div>

@@ -64,7 +64,7 @@
                 <p class="nickname">사용자 닉네임</p>
                 <p class="profile-intro">짧은 프로필 소개글</p>
 
-                <a th:href="@{/mypage/infoForm}">개인정보</a>
+                <a th:href="@{/mypage/info}">개인정보</a>
                 <a th:href="@{/mypage/profile}">프로필</a>
                 <a th:href="@{/mypage/follow}">친구</a>
                 <a th:href="@{/mypage/message}">채팅</a>
@@ -80,8 +80,9 @@
         <div class="profile-container">
             <h2>프로필</h2>
             <p>프로필 이미지와 소개글을 변경할 수 있습니다.</p>
+            <p>사용자 ID: <span th:text="${memberId}"></span></p>
             <!-- 프로필 이미지 -->
-            <form action="profileUpdate" method="post" id="profileUpdate" enctype="multipart/form-data">
+            <form id="profileUpdate" enctype="multipart/form-data" method="post" action="/mypage/profileUpdate">
                 <!-- 숨겨진 필드로 memberId 값을 전송 -->
                 <input type="hidden" name="memberId" value="${memberId}">
                 <table class="profile-info">
@@ -108,7 +109,7 @@
                 </table>
                 <br>
                 <div id="FormBtn">
-                    <button type="button" class="btn btn-primary" id="saveProfile">저장</button> <!-- 저장 버튼 수정 -->
+                    <button type="submit" class="btn btn-primary" id="saveProfile">저장</button> <!-- 저장 버튼 수정 -->
                     <button type="reset" class="btn btn-secondary">취소</button>
                 </div>
             </form>
@@ -123,6 +124,8 @@
 <!-- FontAwesome 아이콘 로드 -->
 <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 
+
+</body>
 <script>
     // 이미지 미리보기 기능 구현
     document.getElementById('imageUpload').addEventListener('change', function(event) {
@@ -141,23 +144,34 @@
     });
 
     // AJAX로 프로필 저장
-    document.getElementById('saveProfile').addEventListener('click', function() {
-        console.log("저장 버튼이 클릭되었습니다.");  // 이 부분이 출력되는지 확인
-        var formData = new FormData(document.getElementById('profileUpdate'));
+    document.getElementById('profileUpdate').addEventListener('submit', function(event) {
+        event.preventDefault();  // 기본 폼 제출 방지
 
-        console.log("폼 데이터를 전송합니다...");  // 요청 전에 로그를 추가하여 디버깅
+        console.log("저장 버튼이 클릭되었습니다.");  // 저장 버튼이 클릭되었는지 확인
+        var formData = new FormData(this);  // 폼 데이터를 가져오기
+
+        console.log("폼 데이터 확인: ", formData.get("memberId"));   // memberId가 폼에 포함되는지 확인
+
+        // document.getElementById('saveProfile').addEventListener('click', function() {
+        // console.log("저장 버튼이 클릭되었습니다.");  // 이 부분이 출력되는지 확인
+        // var formData = new FormData(document.getElementById('profileUpdate'));
+        //
+        // console.log("폼 데이터를 전송합니다...");  // 요청 전에 로그를 추가하여 디버깅
 
         fetch('/mypage/profileUpdate', {
             method: 'POST',
-            body: formData
+            body: formData,
+            headers: {
+                'Accept': 'application/json'
+            }
         })
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Network response was not ok.');
                 }
-                return response.json();
+                return response.json();         //오류확인하려고 json()을 text로 바꿔둠
             })
-            .then(data => {
+            .then(data => {             // console.log(data);//응답내용을확인
                 // 수정된 이미지와 소개글을 화면에 즉시 반영
                 document.getElementById('profileImage').src = data.profilePicture;
                 document.querySelector('textarea[name="ment"]').value = data.ment;
@@ -170,5 +184,4 @@
     });
 
 </script>
-</body>
 </html>
