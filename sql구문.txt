@@ -103,7 +103,6 @@ CREATE TABLE `personal_note` (
    FOREIGN KEY (`personal_diary_num`) REFERENCES `personal_diary`(`personal_diary_num`),
    FOREIGN KEY (`profile_num`) REFERENCES `profile`(`profile_num`),
    FOREIGN KEY (`member_id`) REFERENCES `member`(`member_id`),
-   FOREIGN KEY (`hashtag_num`) REFERENCES `hashtag`(`hashtag_num`),
    FOREIGN KEY (`granted_num`) REFERENCES `granted`(`granted_num`)
 );
 -- 10. hashtag 테이블 생성
@@ -287,6 +286,14 @@ CREATE TABLE `reply` (
    PRIMARY KEY (`reply_num`),
    FOREIGN KEY (`share_note_num`) REFERENCES `share_note`(`share_note_num`),
    FOREIGN KEY (`member_id`) REFERENCES `member`(`member_id`)
+);
+-- 27. 개인노트 테이블과 해시태그 중간 테이블 생성
+CREATE TABLE `personal_note_hashtag` (
+    `personal_note_num` INT NOT NULL COMMENT '노트 번호 (FK)',
+    `hashtag_num` INT NOT NULL COMMENT '해쉬태그 번호 (FK)',
+    PRIMARY KEY (`personal_note_num`, `hashtag_num`),  -- 복합 기본키 설정
+    FOREIGN KEY (`personal_note_num`) REFERENCES `personal_note`(`personal_note_num`) ON DELETE CASCADE,
+    FOREIGN KEY (`hashtag_num`) REFERENCES `hashtag`(`hashtag_num`) ON DELETE CASCADE
 );
 
 
