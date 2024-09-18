@@ -3,30 +3,172 @@
 <head>
     <meta charset="UTF-8">
     <title>채팅 시작하기</title>
-</head>
-<body>
-<h2>채팅 시작하기</h2>
-<p>팔로잉 중인 사용자와 대화를 시작하세요! </p>
-<table>
-    <thead>
-    <tr>
-        <th>사용자 ID</th>
-        <th>대화 시작</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="user : ${following}">
-        <td th:text="${user.followingId}"></td>
-        <td>
-            <form th:action="@{/chat/room}" method="get">
-                <input type="hidden" name="participant1Id" th:value="${#authentication.name}" />
-                <input type="hidden" name="participant2Id" th:value="${user.followingId}" />
-                <button type="submit">대화 시작</button>
-            </form>
-        </td>
-    </tr>
-    </tbody>
-</table>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 20px;
+        }
 
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .chat-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            background-color: #ddd;
+            border-radius: 5px 5px 0 0;
+            margin-right: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .tab:hover {
+            background-color: #bbb;
+        }
+
+        .tab.active {
+            background-color: #5dade2;
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+            color: #333;
+        }
+
+        th {
+            background-color: #5dade2;
+            color: white;
+        }
+
+        button {
+            background-color: #5dade2;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #3498db;
+        }
+    </style>
+    <script>
+        function openTab(tabName) {
+            // 모든 탭 콘텐츠를 숨기고 모든 탭을 비활성화 상태로 만듭니다.
+            var i, tabContent, tablinks;
+            tabContent = document.getElementsByClassName("tab-content");
+            for (i = 0; i < tabContent.length; i++) {
+                tabContent[i].style.display = "none";
+            }
+
+            tablinks = document.getElementsByClassName("tab");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].classList.remove("active");
+            }
+
+            // 클릭한 탭을 활성화 상태로 만들고 해당 콘텐츠를 표시합니다.
+            document.getElementById(tabName).style.display = "block";
+            document.getElementById(tabName + "-tab").classList.add("active");
+        }
+    </script>
+</head>
+<body onload="openTab('following')"> <!-- 페이지 로드 시 기본적으로 '팔로잉' 탭이 열리도록 설정 -->
+<div class="chat-container">
+    <h2>[ Shary Talk ]</h2>
+
+    <div class="tabs">
+        <div id="following-tab" class="tab active" onclick="openTab('following')">팔로잉</div>
+        <div id="followers-tab" class="tab" onclick="openTab('followers')">팔로워</div>
+    </div>
+
+    <!-- 팔로잉 탭 콘텐츠 -->
+    <div id="following" class="tab-content active">
+        <p>팔로잉 중인 사용자와 대화를 시작하세요!</p>
+        <table>
+            <thead>
+            <tr>
+                <th>사용자 ID</th>
+                <th>대화 시작</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="user : ${following}">
+                <td th:text="${user.followingId}"></td>
+                <td>
+                    <form th:action="@{/chat/room}" method="get">
+                        <input type="hidden" name="participant1Id" th:value="${#authentication.name}" />
+                        <input type="hidden" name="participant2Id" th:value="${user.followingId}" />
+                        <button type="submit">대화 시작</button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- 팔로워 탭 콘텐츠 -->
+    <div id="followers" class="tab-content">
+        <p>나를 팔로우하는 사용자와 대화를 시작하세요!</p>
+        <table>
+            <thead>
+            <tr>
+                <th>사용자 ID</th>
+                <th>대화 시작</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="user : ${followers}">
+                <td th:text="${user.followerId}"></td>
+                <td>
+                    <form th:action="@{/chat/room}" method="get">
+                        <input type="hidden" name="participant1Id" th:value="${#authentication.name}" />
+                        <input type="hidden" name="participant2Id" th:value="${user.followerId}" />
+                        <button type="submit">대화 시작</button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
 </body>
 </html>
