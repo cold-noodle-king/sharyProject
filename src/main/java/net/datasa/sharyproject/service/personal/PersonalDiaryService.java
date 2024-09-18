@@ -2,10 +2,10 @@ package net.datasa.sharyproject.service.personal;
 
 import lombok.RequiredArgsConstructor;
 import net.datasa.sharyproject.domain.dto.personal.PersonalDiaryDTO;
-import net.datasa.sharyproject.domain.entity.personal.CategoryEntity;
+import net.datasa.sharyproject.domain.entity.CategoryEntity;
 import net.datasa.sharyproject.domain.entity.personal.CoverTemplateEntity;
 import net.datasa.sharyproject.domain.entity.personal.PersonalDiaryEntity;
-import net.datasa.sharyproject.repository.personal.CategoryRepository;
+import net.datasa.sharyproject.repository.CategoryRepository;
 import net.datasa.sharyproject.repository.personal.CoverTemplateRepository;
 import net.datasa.sharyproject.repository.personal.NoteTemplateRepository;
 import net.datasa.sharyproject.repository.personal.PersonalDiaryRepository;
@@ -23,14 +23,16 @@ public class PersonalDiaryService {
     private final PersonalDiaryRepository personalDiaryRepository; // 다이어리 저장소
     private final CoverTemplateRepository coverTemplateRepository; // 커버 템플릿 저장소
     private final MemberRepository memberRepository; // 회원 저장소
-    private final CategoryRepository categoryRepository; // 카테고리 저장소 추가
-    private final NoteTemplateRepository noteTemplateRepository; // 노트 템플릿 저장소 추가
+    private final CategoryRepository categoryRepository; // 카테고리 저장소
+    private final NoteTemplateRepository noteTemplateRepository; // 노트 템플릿 저장소
 
     /**
      * 다이어리 제목, 카테고리, 커버를 저장하는 메서드
+     * 저장 후 다이어리 번호를 반환합니다.
      * @param diaryDTO 다이어리 정보가 포함된 DTO
+     * @return 저장된 다이어리 번호
      */
-    public void saveDiary(PersonalDiaryDTO diaryDTO) {
+    public Integer saveDiary(PersonalDiaryDTO diaryDTO) {
         // 로그인된 사용자의 ID를 가져옴 (Spring Security 사용)
         String currentMemberId = SecurityContextHolder.getContext().getAuthentication().getName();
 
@@ -55,7 +57,10 @@ public class PersonalDiaryService {
                 .build();
 
         // 다이어리 저장
-        personalDiaryRepository.save(personalDiary);
+        PersonalDiaryEntity savedDiary = personalDiaryRepository.save(personalDiary);
+
+        // 저장된 다이어리 번호 반환
+        return savedDiary.getPersonalDiaryNum();
     }
 
     /**
@@ -76,6 +81,20 @@ public class PersonalDiaryService {
     }
 
     /**
+     * 다이어리 ID로 특정 다이어리를 조회하는 메서드
+     * @param diaryNum 다이어리 번호
+     * @return 다이어리 DTO
+     */
+    public PersonalDiaryDTO getDiaryById(Integer diaryNum) {
+        // 다이어리 조회
+        PersonalDiaryEntity diaryEntity = personalDiaryRepository.findById(diaryNum)
+                .orElseThrow(() -> new RuntimeException("해당 다이어리를 찾을 수 없습니다."));
+
+        // 조회된 엔티티를 DTO로 변환
+        return convertEntityToDTO(diaryEntity);
+    }
+
+    /**
      * PersonalDiaryEntity를 PersonalDiaryDTO로 변환하는 메서드
      * @param diary PersonalDiaryEntity
      * @return PersonalDiaryDTO
@@ -93,6 +112,4 @@ public class PersonalDiaryService {
                 .memberId(diary.getMember().getMemberId())        // 회원 ID
                 .build();
     }
-
-
 }

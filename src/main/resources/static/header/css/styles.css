@@ -4056,6 +4056,8 @@ textarea.form-control-lg {
   padding-left: 0;
   margin-bottom: 0;
   list-style: none;
+  justify-content: space-between; /* 공간을 자동으로 배분 */
+  align-items: center; /* 항목을 세로로 가운데 정렬 */
 }
 .navbar-nav .show > .nav-link,
 .navbar-nav .nav-link.active {

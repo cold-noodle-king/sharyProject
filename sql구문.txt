@@ -1,4 +1,6 @@
--- 1. `member` 테이블 생성
+-- create 구문
+
+-- 1. member 테이블 생성
 CREATE TABLE `member` (
    `member_id` VARCHAR(50) NOT NULL COMMENT '사용자 ID',
    `password` VARCHAR(100) NOT NULL COMMENT '사용자 비밀번호',
@@ -11,38 +13,33 @@ CREATE TABLE `member` (
    `created_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
    `updated_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
    `role_name` VARCHAR(50) NOT NULL DEFAULT 'ROLE_USER' CHECK (role_name IN ('ROLE_USER','ROLE_ADMIN')),
+   `enabled` TINYINT(1) DEFAULT 1 CHECK (enabled IN (0, 1)), -- 추가된 컬럼
    PRIMARY KEY (`member_id`)
 );
-
-select * from member;
-
--- 2. `category` 테이블 생성
+-- 2. category 테이블 생성
 CREATE TABLE `category` (
    `category_num` INT NOT NULL AUTO_INCREMENT COMMENT '카테고리 아이디',
    `category_name` VARCHAR(30) NULL COMMENT '카테고리 이름',
    PRIMARY KEY (`category_num`)
 );
-
-select * from category;
-
--- 3. `cover_template` 테이블 생성
+-- 3. cover_template 테이블 생성 (컬럼 추가 반영)
 CREATE TABLE `cover_template` (
    `cover_num` INT NOT NULL AUTO_INCREMENT,
    `cover_name` VARCHAR(100) NOT NULL,
+   `cover_image` VARCHAR(255) NOT NULL, -- 추가된 컬럼
    PRIMARY KEY (`cover_num`)
 );
-
--- 4. `profile` 테이블 생성
+-- 4. profile 테이블 생성 (컬럼 수정 반영)
 CREATE TABLE `profile` (
    `profile_num` INT NOT NULL AUTO_INCREMENT COMMENT '프로필 번호',
-   `profile_picture` VARCHAR(50) NOT NULL COMMENT '디폴트 프로필 사진',
+   `profile_picture` VARCHAR(100) NOT NULL COMMENT '프로필 사진 경로', -- 컬럼 길이 수정
+   `profile_original_name` VARCHAR(255) NULL COMMENT '원래 프로필 사진 이름', -- 추가된 컬럼
    `ment` VARCHAR(300) NULL,
    `member_id` VARCHAR(50) NOT NULL COMMENT '사용자 ID',
    PRIMARY KEY (`profile_num`),
    FOREIGN KEY (`member_id`) REFERENCES `member`(`member_id`)
 );
-
--- 5. `user_category` 테이블 생성
+-- 5. user_category 테이블 생성
 CREATE TABLE `user_category` (
    `user_category_num` INT NOT NULL AUTO_INCREMENT COMMENT '회원 카테고리 아이디',
    `member_id` VARCHAR(50) NOT NULL COMMENT '사용자 ID',
@@ -51,17 +48,13 @@ CREATE TABLE `user_category` (
    FOREIGN KEY (`member_id`) REFERENCES `member`(`member_id`),
    FOREIGN KEY (`category_num`) REFERENCES `category`(`category_num`)
 );
-
--- 6. `emotion` 테이블 생성
-CREATE TABLE `emotion` (
-   `emotion_num` INT NOT NULL AUTO_INCREMENT,
-   `emotion_name` VARCHAR(30) NOT NULL,
-   `member_id` VARCHAR(50) NOT NULL COMMENT '사용자 ID',
-   PRIMARY KEY (`emotion_num`),
-   FOREIGN KEY (`member_id`) REFERENCES `member`(`member_id`)
+-- 6. emotion 테이블 생성
+CREATE TABLE emotion (
+   emotion_num INT NOT NULL AUTO_INCREMENT,
+   emotion_name VARCHAR(30) NOT NULL,
+   PRIMARY KEY (emotion_num)
 );
-
--- 7. `personal_diary` 테이블 생성
+-- 7. personal_diary 테이블 생성 (컬럼 추가 반영)
 CREATE TABLE `personal_diary` (
    `personal_diary_num` INT NOT NULL AUTO_INCREMENT,
    `diary_name` VARCHAR(100) NOT NULL,
@@ -70,26 +63,27 @@ CREATE TABLE `personal_diary` (
    `category_num` INT NOT NULL COMMENT '카테고리 아이디',
    `cover_num` INT NOT NULL,
    `member_id` VARCHAR(50) NOT NULL COMMENT '사용자 ID',
+   `diary_bio` VARCHAR(255) NULL COMMENT '다이어리 설명', -- 추가된 컬럼
    PRIMARY KEY (`personal_diary_num`),
    FOREIGN KEY (`category_num`) REFERENCES `category`(`category_num`),
    FOREIGN KEY (`cover_num`) REFERENCES `cover_template`(`cover_num`),
    FOREIGN KEY (`member_id`) REFERENCES `member`(`member_id`)
 );
-
--- 8. `note_template` 테이블 생성
+-- 8. note_template 테이블 생성 (컬럼 추가 반영)
 CREATE TABLE `note_template` (
    `note_num` INT NOT NULL AUTO_INCREMENT,
    `note_name` VARCHAR(50) NOT NULL,
+   `note_image` VARCHAR(255) NOT NULL, -- 추가된 컬럼
    PRIMARY KEY (`note_num`)
 );
-
+-- 9. personal_note 테이블 생성
 CREATE TABLE `personal_note` (
    `personal_note_num` INT NOT NULL AUTO_INCREMENT,
    `note_title` VARCHAR(100) NOT NULL,
    `weather` VARCHAR(100) NOT NULL,
    `original_name` VARCHAR(500) NULL,
    `file_name` VARCHAR(500) NULL,
-   `location` VARCHAR(500) NULL COMMENT '위치 api 사용',
+   `location` VARCHAR(500) NULL COMMENT '위치 API 사용',
    `note_num` INT NOT NULL,
    `emotion_num` INT NOT NULL,
    `personal_diary_num` INT NOT NULL,
@@ -109,11 +103,9 @@ CREATE TABLE `personal_note` (
    FOREIGN KEY (`personal_diary_num`) REFERENCES `personal_diary`(`personal_diary_num`),
    FOREIGN KEY (`profile_num`) REFERENCES `profile`(`profile_num`),
    FOREIGN KEY (`member_id`) REFERENCES `member`(`member_id`),
-   FOREIGN KEY (`hashtag_num`) REFERENCES `hashtag`(`hashtag_num`),
    FOREIGN KEY (`granted_num`) REFERENCES `granted`(`granted_num`)
 );
-
--- 10. `hashtag` 테이블 생성
+-- 10. hashtag 테이블 생성
 CREATE TABLE `hashtag` (
    `hashtag_num` INT NOT NULL AUTO_INCREMENT COMMENT '해쉬태그 아이디',
    `hashtag_name` VARCHAR(50) NULL,
@@ -121,25 +113,169 @@ CREATE TABLE `hashtag` (
    PRIMARY KEY (`hashtag_num`),
    FOREIGN KEY (`category_num`) REFERENCES `category`(`category_num`)
 );
-
--- 11. `granted` 테이블 생성
+-- 11. granted 테이블 생성
 CREATE TABLE `granted` (
    `granted_num` INT NOT NULL AUTO_INCREMENT,
    `granted_name` VARCHAR(30) NOT NULL,
    PRIMARY KEY (`granted_num`)
 );
-
--- 12. `follow` 테이블 생성
+-- 12. follow 테이블 생성 (재생성 반영)
 CREATE TABLE `follow` (
-   `follow_num` INT NOT NULL AUTO_INCREMENT,
-   `follower_id` VARCHAR(100) NOT NULL,
-   `following_id` VARCHAR(100) NULL,
+   `follower_id` VARCHAR(255) NOT NULL,
+   `following_id` VARCHAR(255) NOT NULL,
+   `follow_date` TIMESTAMP NOT NULL,
+   PRIMARY KEY (`follower_id`, `following_id`)
+);
+-- 13. chat 테이블 생성 (재생성 반영)
+CREATE TABLE `chat` (
+   `chat_id` INT NOT NULL AUTO_INCREMENT,
+   `created_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+   `updated_date` TIMESTAMP NULL,
+   `follower_id` VARCHAR(255) NOT NULL,
+   `following_id` VARCHAR(255) NOT NULL,
+   PRIMARY KEY (`chat_id`),
+   FOREIGN KEY (`follower_id`, `following_id`) REFERENCES `follow` (`follower_id`, `following_id`)
+);
+-- 14. chat_message 테이블 생성 (재생성 반영)
+CREATE TABLE `chat_message` (
+   `message_id` INT NOT NULL AUTO_INCREMENT,
+   `chat_id` INT NOT NULL,
+   `message_content` TEXT NOT NULL,
+   `created_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
    `member_id` VARCHAR(50) NOT NULL COMMENT '사용자 ID',
-   PRIMARY KEY (`follow_num`),
+   PRIMARY KEY (`message_id`),
+   FOREIGN KEY (`chat_id`) REFERENCES `chat`(`chat_id`),
    FOREIGN KEY (`member_id`) REFERENCES `member`(`member_id`)
 );
-
--- 13. `reply` 테이블 생성
+-- 15. notice 테이블 생성
+CREATE TABLE `notice` (
+   `notice_num` INT NOT NULL AUTO_INCREMENT,
+   `notice_type` VARCHAR(100) NULL,
+   `notice_message` VARCHAR(1000) NULL,
+   `is_read` BOOLEAN NOT NULL,
+   `created_date` TIMESTAMP NOT NULL,
+   `member_id` VARCHAR(50) NOT NULL COMMENT '사용자 ID',
+   PRIMARY KEY (`notice_num`),
+   FOREIGN KEY (`member_id`) REFERENCES `member`(`member_id`)
+);
+-- 16. share_note 테이블 생성 (컬럼 삭제 반영)
+CREATE TABLE `share_note` (
+   `share_note_num` INT NOT NULL AUTO_INCREMENT,
+   `share_note_title` VARCHAR(100) NOT NULL,
+   `weather` VARCHAR(100) NOT NULL,
+   `original_name` VARCHAR(500) NULL,
+   `file_name` VARCHAR(500) NULL,
+   `location` VARCHAR(500) NULL COMMENT '위치 API 사용',
+   `note_num` INT NOT NULL,
+   `emotion_num` INT NOT NULL,
+   `profile_num` INT NOT NULL COMMENT '프로필 번호',
+   `member_id` VARCHAR(50) NOT NULL COMMENT '사용자 ID',
+   `contents` TEXT NULL,
+   `diary_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '작성할 노트의 날짜',
+   `created_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+   `updated_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+   `hashtag_num` INT NOT NULL COMMENT '해쉬태그 아이디',
+   `like_count` INT NULL DEFAULT 0 COMMENT '추천수 전체 카운트',
+   `share_diary_num` INT NOT NULL,
+   PRIMARY KEY (`share_note_num`),
+   FOREIGN KEY (`note_num`) REFERENCES `note_template`(`note_num`),
+   FOREIGN KEY (`emotion_num`) REFERENCES `emotion`(`emotion_num`),
+   FOREIGN KEY (`profile_num`) REFERENCES `profile`(`profile_num`),
+   FOREIGN KEY (`member_id`) REFERENCES `member`(`member_id`),
+   FOREIGN KEY (`hashtag_num`) REFERENCES `hashtag`(`hashtag_num`),
+   FOREIGN KEY (`share_diary_num`) REFERENCES `share_diary`(`share_diary_num`)
+);
+-- 17. share_diary 테이블 생성 (컬럼 추가 반영)
+CREATE TABLE `share_diary` (
+   `share_diary_num` INT NOT NULL AUTO_INCREMENT,
+   `share_diary_name` VARCHAR(100) NOT NULL,
+   `created_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+   `updated_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+   `category_num` INT NOT NULL COMMENT '카테고리 아이디',
+   `cover_num` INT NOT NULL,
+   `member_id` VARCHAR(50) NOT NULL COMMENT '사용자 ID',
+   `diary_bio` VARCHAR(255) NULL COMMENT '다이어리 설명', -- 추가된 컬럼
+   PRIMARY KEY (`share_diary_num`),
+   FOREIGN KEY (`category_num`) REFERENCES `category`(`category_num`),
+   FOREIGN KEY (`cover_num`) REFERENCES `cover_template`(`cover_num`),
+   FOREIGN KEY (`member_id`) REFERENCES `member`(`member_id`)
+);
+-- 18. share_member 테이블 생성
+CREATE TABLE `share_member` (
+   `share_member_num` INT NOT NULL AUTO_INCREMENT,
+   `member_id` VARCHAR(50) NOT NULL COMMENT '사용자 ID',
+   `share_diary_num` INT NOT NULL,
+   `manager_id` VARCHAR(50) NOT NULL COMMENT '매니저 ID',
+   PRIMARY KEY (`share_member_num`),
+   FOREIGN KEY (`member_id`) REFERENCES `member`(`member_id`),
+   FOREIGN KEY (`share_diary_num`) REFERENCES `share_diary`(`share_diary_num`),
+   FOREIGN KEY (`manager_id`) REFERENCES `share_diary`(`member_id`)
+);
+-- 19. notice_setting 테이블 생성
+CREATE TABLE `notice_setting` (
+   `setting_id` INT NOT NULL AUTO_INCREMENT,
+   `is_enabled` BOOLEAN NULL,
+   `member_id` VARCHAR(50) NOT NULL COMMENT '사용자 ID',
+   `notice_num` INT NOT NULL,
+   PRIMARY KEY (`setting_id`),
+   FOREIGN KEY (`member_id`) REFERENCES `member`(`member_id`),
+   FOREIGN KEY (`notice_num`) REFERENCES `notice`(`notice_num`)
+);
+-- 20. music 테이블 생성
+CREATE TABLE `music` (
+   `music_num` INT NOT NULL AUTO_INCREMENT,
+   `music_name` VARCHAR(100) NOT NULL,
+   `emotion_num` INT NOT NULL,
+   `music_url` VARCHAR(255) NOT NULL,
+   `artist` VARCHAR(100) NOT NULL,
+   PRIMARY KEY (`music_num`),
+   FOREIGN KEY (`emotion_num`) REFERENCES `emotion`(`emotion_num`)
+);
+-- 21. personal_play 테이블 생성
+CREATE TABLE `personal_play` (
+   `personal_play_num` INT NOT NULL AUTO_INCREMENT,
+   `personal_note_num` INT NOT NULL,
+   `music_num` INT NOT NULL,
+   `playing` BOOLEAN NOT NULL COMMENT '음악 재생 중 여부',
+   PRIMARY KEY (`personal_play_num`),
+   FOREIGN KEY (`personal_note_num`) REFERENCES `personal_note`(`personal_note_num`),
+   FOREIGN KEY (`music_num`) REFERENCES `music`(`music_num`)
+);
+-- 22. personal_like 테이블 생성
+CREATE TABLE `personal_like` (
+   `personal_note_num` INT NOT NULL,
+   `liked_num` INT NOT NULL,
+   PRIMARY KEY (`personal_note_num`, `liked_num`),
+   FOREIGN KEY (`personal_note_num`) REFERENCES `personal_note`(`personal_note_num`),
+   FOREIGN KEY (`liked_num`) REFERENCES `emotion_clicked`(`liked_num`)
+);
+-- 23. share_like 테이블 생성
+CREATE TABLE `share_like` (
+   `share_note_num` INT NOT NULL,
+   `liked_num` INT NOT NULL,
+   PRIMARY KEY (`share_note_num`, `liked_num`),
+   FOREIGN KEY (`share_note_num`) REFERENCES `share_note`(`share_note_num`),
+   FOREIGN KEY (`liked_num`) REFERENCES `emotion_clicked`(`liked_num`)
+);
+-- 24. share_play 테이블 생성
+CREATE TABLE `share_play` (
+   `share_play_num` INT NOT NULL AUTO_INCREMENT,
+   `music_num` INT NOT NULL,
+   `share_note_num` INT NOT NULL,
+   `playing` BOOLEAN NOT NULL COMMENT '음악 재생 중 여부',
+   PRIMARY KEY (`share_play_num`),
+   FOREIGN KEY (`music_num`) REFERENCES `music`(`music_num`),
+   FOREIGN KEY (`share_note_num`) REFERENCES `share_note`(`share_note_num`)
+);
+-- 25. emotion_clicked 테이블 생성
+CREATE TABLE `emotion_clicked` (
+   `liked_num` INT NOT NULL AUTO_INCREMENT,
+   `like_emotions` INT NULL COMMENT '기쁨, 슬픔, 화남, 당황, 좋음, 부러움',
+   `member_id` VARCHAR(50) NOT NULL COMMENT '사용자 ID',
+   PRIMARY KEY (`liked_num`),
+   FOREIGN KEY (`member_id`) REFERENCES `member`(`member_id`)
+);
+-- 26. reply 테이블 생성
 CREATE TABLE `reply` (
    `reply_num` INT NOT NULL AUTO_INCREMENT,
    `contents` VARCHAR(2000) NOT NULL,
@@ -151,205 +287,19 @@ CREATE TABLE `reply` (
    FOREIGN KEY (`share_note_num`) REFERENCES `share_note`(`share_note_num`),
    FOREIGN KEY (`member_id`) REFERENCES `member`(`member_id`)
 );
-
--- 14. `emotion_clicked` 테이블 생성
-CREATE TABLE `emotion_clicked` (
-   `liked_num` INT NOT NULL AUTO_INCREMENT,
-   `like_emotions` INT NULL COMMENT '기쁨, 슬픔, 화남, 당황, 좋음, 부러움',
-   `member_id` VARCHAR(50) NOT NULL COMMENT '사용자 ID',
-   PRIMARY KEY (`liked_num`),
-   FOREIGN KEY (`member_id`) REFERENCES `member`(`member_id`)
+-- 27. 개인노트 테이블과 해시태그 중간 테이블 생성
+CREATE TABLE `personal_note_hashtag` (
+    `personal_note_num` INT NOT NULL COMMENT '노트 번호 (FK)',
+    `hashtag_num` INT NOT NULL COMMENT '해쉬태그 번호 (FK)',
+    PRIMARY KEY (`personal_note_num`, `hashtag_num`),  -- 복합 기본키 설정
+    FOREIGN KEY (`personal_note_num`) REFERENCES `personal_note`(`personal_note_num`) ON DELETE CASCADE,
+    FOREIGN KEY (`hashtag_num`) REFERENCES `hashtag`(`hashtag_num`) ON DELETE CASCADE
 );
 
--- 15. `share_diary` 테이블 생성
-CREATE TABLE `share_diary` (
-   `share_diary_num` INT NOT NULL AUTO_INCREMENT,
-   `share_diary_name` VARCHAR(100) NOT NULL,
-   `created_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-   `updated_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-   `category_num` INT NOT NULL COMMENT '카테고리 아이디',
-   `cover_num` INT NOT NULL,
-   `member_id` VARCHAR(50) NOT NULL COMMENT '사용자 ID',
-   PRIMARY KEY (`share_diary_num`),
-   FOREIGN KEY (`category_num`) REFERENCES `category`(`category_num`),
-   FOREIGN KEY (`cover_num`) REFERENCES `cover_template`(`cover_num`),
-   FOREIGN KEY (`member_id`) REFERENCES `member`(`member_id`)
-);
 
-drop table share_diary;
+-- ---------------------------------------------------------------------
 
--- 16. `share_note` 테이블 생성
-CREATE TABLE `share_note` (
-   `share_note_num` INT NOT NULL AUTO_INCREMENT,
-   `share_note_title` VARCHAR(100) NOT NULL,
-   `weather` VARCHAR(100) NOT NULL,
-   `original_name` VARCHAR(500) NULL,
-   `file_name` VARCHAR(500) NULL,
-   `location` VARCHAR(500) NULL COMMENT '위치 api 사용',
-   `note_num` INT NOT NULL,
-   `emotion_num` INT NOT NULL,
-   `personal_diary_num` INT NOT NULL,
-   `profile_num` INT NOT NULL COMMENT '프로필 번호',
-   `member_id` VARCHAR(50) NOT NULL COMMENT '사용자 ID',
-   `contents` TEXT NULL,
-   `diary_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '작성할 노트의 날짜',
-   `created_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-   `updated_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-   `hashtag_num` INT NOT NULL COMMENT '해쉬태그 아이디',
-   `granted_num` INT NOT NULL,
-   `like_count` INT NULL DEFAULT 0 COMMENT '추천수 전체 카운트',
-   `share_diary_num` INT NOT NULL,
-   PRIMARY KEY (`share_note_num`),
-   FOREIGN KEY (`note_num`) REFERENCES `note_template`(`note_num`),
-   FOREIGN KEY (`emotion_num`) REFERENCES `emotion`(`emotion_num`),
-   FOREIGN KEY (`personal_diary_num`) REFERENCES `personal_diary`(`personal_diary_num`),
-   FOREIGN KEY (`profile_num`) REFERENCES `profile`(`profile_num`),
-   FOREIGN KEY (`member_id`) REFERENCES `member`(`member_id`),
-   FOREIGN KEY (`hashtag_num`) REFERENCES `hashtag`(`hashtag_num`),
-   FOREIGN KEY (`granted_num`) REFERENCES `granted`(`granted_num`),
-   FOREIGN KEY (`share_diary_num`) REFERENCES `share_diary`(`share_diary_num`)
-);
-
--- 기존 외래 키 제약 조건 삭제 (제약 조건 이름은 실제 이름과 다를 수 있음)
-ALTER TABLE `share_note`
-DROP FOREIGN KEY `share_note_ibfk_3`;
-
--- 컬럼 삭제
-ALTER TABLE `share_note`
-DROP COLUMN `personal_diary_num`;
-
--- granted_num 외래키 제약 조건 삭제
-ALTER TABLE `share_note`
-DROP FOREIGN KEY `share_note_ibfk_7`;
--- 컬럼 삭제
-alter table `share_note`
-drop column `granted_num`;
-
-select * from share_note;
-
-drop reply;
-drop table share_note;
-
--- 17. `notice` 테이블 생성
-CREATE TABLE `notice` (
-   `notice_num` INT NOT NULL AUTO_INCREMENT,
-   `notice_type` VARCHAR(100) NULL,
-   `notice_message` VARCHAR(1000) NULL,
-   `is_read` BOOLEAN NOT NULL,
-   `created_date` TIMESTAMP NOT NULL,
-   `member_id` VARCHAR(50) NOT NULL COMMENT '사용자 ID',
-   PRIMARY KEY (`notice_num`),
-   FOREIGN KEY (`member_id`) REFERENCES `member`(`member_id`)
-);
-
-drop table share_member;
--- 18. `share_member` 테이블 생성
-CREATE TABLE `share_member` (
-   `share_member_num` INT NOT NULL AUTO_INCREMENT,
-   `member_id` VARCHAR(50) NOT NULL COMMENT '사용자 ID',
-   `share_diary_num` INT NOT NULL,
-   `manager_id` VARCHAR(50) not null,
-   PRIMARY KEY (`share_member_num`),
-   FOREIGN KEY (`member_id`) REFERENCES `member`(`member_id`),
-   FOREIGN KEY (`share_diary_num`) REFERENCES `share_diary`(`share_diary_num`),
-   foreign key (`manager_id`) references `share_diary`(`member_id`)
-);
-
-select * from share_member;
-
-
--- 19. `notice_setting` 테이블 생성
-CREATE TABLE `notice_setting` (
-   `setting_id` INT NOT NULL AUTO_INCREMENT,
-   `is_enabled` BOOLEAN NULL,
-   `member_id` VARCHAR(50) NOT NULL COMMENT '사용자 ID',
-   `notice_num` INT NOT NULL,
-   PRIMARY KEY (`setting_id`),
-   FOREIGN KEY (`member_id`) REFERENCES `member`(`member_id`),
-   FOREIGN KEY (`notice_num`) REFERENCES `notice`(`notice_num`)
-);
-
--- 20. `chat` 테이블 생성
-CREATE TABLE `chat` (
-   `chat_id` INT NOT NULL AUTO_INCREMENT,
-   `created_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-   `updated_date` TIMESTAMP NULL,
-   `follow_num` INT NOT NULL,
-   PRIMARY KEY (`chat_id`),
-   FOREIGN KEY (`follow_num`) REFERENCES `follow`(`follow_num`)
-);
-
--- 21. `music` 테이블 생성
-CREATE TABLE `music` (
-   `music_num` INT NOT NULL AUTO_INCREMENT,
-   `music_name` VARCHAR(100) NOT NULL,
-   `emotion_num` INT NOT NULL,
-   `music_url` VARCHAR(255) NOT NULL,
-   `artist` VARCHAR(100) NOT NULL,
-   PRIMARY KEY (`music_num`),
-   FOREIGN KEY (`emotion_num`) REFERENCES `emotion`(`emotion_num`)
-);
-
--- 22. `personal_play` 테이블 생성
-CREATE TABLE `personal_play` (
-   `personal_play_num` INT NOT NULL AUTO_INCREMENT,
-   `personal_note_num` INT NOT NULL,
-   `music_num` INT NOT NULL,
-   `playing` BOOLEAN NOT NULL COMMENT '음악 재생 중 여부',
-   PRIMARY KEY (`personal_play_num`),
-   FOREIGN KEY (`personal_note_num`) REFERENCES `personal_note`(`personal_note_num`),
-   FOREIGN KEY (`music_num`) REFERENCES `music`(`music_num`)
-);
-
--- 23. `chat_message` 테이블 생성
-CREATE TABLE `chat_message` (
-   `message_id` INT NOT NULL AUTO_INCREMENT,
-   `chat_id` INT NOT NULL,
-   `message_content` TEXT NOT NULL,
-   `created_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-   `member_id` VARCHAR(50) NOT NULL COMMENT '사용자 ID',
-   PRIMARY KEY (`message_id`),
-   FOREIGN KEY (`chat_id`) REFERENCES `chat`(`chat_id`),
-   FOREIGN KEY (`member_id`) REFERENCES `member`(`member_id`)
-);
-
--- 24. `personal_like` 테이블 생성
-CREATE TABLE `personal_like` (
-   `personal_note_num` INT NOT NULL,
-   `liked_num` INT NOT NULL,
-   PRIMARY KEY (`personal_note_num`, `liked_num`),
-   FOREIGN KEY (`personal_note_num`) REFERENCES `personal_note`(`personal_note_num`),
-   FOREIGN KEY (`liked_num`) REFERENCES `emotion_clicked`(`liked_num`)
-);
-
--- 25. `share_like` 테이블 생성
-CREATE TABLE `share_like` (
-   `share_note_num` INT NOT NULL,
-   `liked_num` INT NOT NULL,
-   PRIMARY KEY (`share_note_num`, `liked_num`),
-   FOREIGN KEY (`share_note_num`) REFERENCES `share_note`(`share_note_num`),
-   FOREIGN KEY (`liked_num`) REFERENCES `emotion_clicked`(`liked_num`)
-);
-
--- 26. `share_play` 테이블 생성
-CREATE TABLE `share_play` (
-   `share_play_num` INT NOT NULL AUTO_INCREMENT,
-   `music_num` INT NOT NULL,
-   `share_note_num` INT NOT NULL,
-   `playing` BOOLEAN NOT NULL COMMENT '음악 재생 중 여부',
-   PRIMARY KEY (`share_play_num`),
-   FOREIGN KEY (`music_num`) REFERENCES `music`(`music_num`),
-   FOREIGN KEY (`share_note_num`) REFERENCES `share_note`(`share_note_num`)
-);
-
--- 1. `member` 테이블에 데이터 삽입
-INSERT INTO `member` (`member_id`, `password`, `email`, `phone_number`, `full_name`, `nickname`, `gender`, `birthdate`, `role_name`)
-VALUES ('test', 'test', 'test@example.com', '010-0000-0000', '테스트 사용자', 'tester', '남성', '1990-01-01', 'ROLE_USER');
-
-select * from member;
-delete from member where full_name = '춘식';
-commit;
-
+-- insert 구문
 -- 2. `profile` 테이블에 데이터 삽입
 INSERT INTO `profile` (`profile_picture`, `ment`, `member_id`)
 VALUES ('default.jpg', '안녕하세요, 반갑습니다.', 'test');
@@ -358,113 +308,8 @@ VALUES ('default.jpg', '안녕하세요, 반갑습니다.', 'test');
 INSERT INTO `category` (`category_name`)
 VALUES ('일상'), ('여행'), ('육아'), ('연애'), ('취미'), ('운동');
 
-show tables;
 
--- follow 테이블 삭제
-drop table follow;
-select * from follow;
-
--- chat 테이블 삭제
-drop table chat;
-
--- chat_message 테이블 삭제
-drop table chat_message;
-
-
--- follow 테이블 생성
-
-CREATE TABLE follow (
-    follower_id VARCHAR(255) NOT NULL,
-    following_id VARCHAR(255) NOT NULL,
-    follow_date TIMESTAMP NOT NULL,
-    PRIMARY KEY (follower_id, following_id)
-);
-
--- 20. `chat` 테이블 생성
-
-CREATE TABLE `chat` (
-   `chat_id` INT NOT NULL AUTO_INCREMENT,
-   `created_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-   `updated_date` TIMESTAMP NULL,
-   `follower_id` VARCHAR(255) NOT NULL,
-   `following_id` VARCHAR(255) NOT NULL,
-   PRIMARY KEY (`chat_id`),
-   FOREIGN KEY (`follower_id`, `following_id`) REFERENCES `follow` (`follower_id`, `following_id`)
-);
-
--- 23. `chat_message` 테이블 생성
-CREATE TABLE `chat_message` (
-   `message_id` INT NOT NULL AUTO_INCREMENT,
-   `chat_id` INT NOT NULL,
-   `message_content` TEXT NOT NULL,
-   `created_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-   `member_id` VARCHAR(50) NOT NULL COMMENT '사용자 ID',
-   PRIMARY KEY (`message_id`),
-   FOREIGN KEY (`chat_id`) REFERENCES `chat`(`chat_id`),
-   FOREIGN KEY (`member_id`) REFERENCES `member`(`member_id`)
-);
-
-select * from follow;
-
--- template 테이블에 이미지 저장할 컬럼 추가
-ALTER TABLE `cover_template`
-ADD COLUMN `cover_image` LONGBLOB;
-
-
--- Beige Green Simple 이미지 추가
-INSERT INTO `cover_template` (cover_name, cover_image)
-VALUES ('Beige Green Simple', LOAD_FILE('D:/user/바탕화면/sharyProject/src/main/resources/static/images/Beige Green Simple.png'));
-
--- Brown Yellow Aesthetic 이미지 추가
-INSERT INTO `cover_template` (cover_name, cover_image)
-VALUES ('Brown Yellow Aesthetic', LOAD_FILE('D:/user/바탕화면/sharyProject/src/main/resources/static/images/Brown Yellow Aesthetic.png'));
-
--- Colorful Blue Cute 이미지 추가
-INSERT INTO `cover_template` (cover_name, cover_image)
-VALUES ('Colorful Blue Cute', LOAD_FILE('D:/user/바탕화면/sharyProject/src/main/resources/static/images/Colorful Blue Cute.png'));
-
--- Green White Cute Torn 이미지 추가
-INSERT INTO `cover_template` (cover_name, cover_image)
-VALUES ('Green White Cute Torn', LOAD_FILE('D:/user/바탕화면/sharyProject/src/main/resources/static/images/Green White Cute Torn.png'));
-
--- Purple Cute Stationary 이미지 추가
-INSERT INTO `cover_template` (cover_name, cover_image)
-VALUES ('Purple Cute Stationary', LOAD_FILE('D:/user/바탕화면/sharyProject/src/main/resources/static/images/Purple Cute Stationary.png'));
-
-desc cover_template;
-select * from cover_template;
-drop table cover_template;
-delete  from cover_template;
-
-ALTER TABLE `cover_template`
-DROP COLUMN `cover_image`;
-
-ALTER TABLE `cover_template`
-ADD COLUMN `cover_image` VARCHAR(255) NOT NULL;
-
--- Beige Green Simple 이미지 경로 추가
-INSERT INTO `cover_template` (cover_name, cover_image)
-VALUES ('Beige Green Simple', 'D:/user/Desktop/sharyProject/src/main/resources/static/images/Beige Green Simple.png');
-
--- Brown Yellow Aesthetic 이미지 경로 추가
-INSERT INTO `cover_template` (cover_name, cover_image)
-VALUES ('Brown Yellow Aesthetic', 'D:/user/Desktop/sharyProject/src/main/resources/static/images/Brown Yellow Aesthetic.png');
-
--- Colorful Blue Cute 이미지 경로 추가
-INSERT INTO `cover_template` (cover_name, cover_image)
-VALUES ('Colorful Blue Cute', 'D:/user/Desktop/sharyProject/src/main/resources/static/images/Colorful Blue Cute.png');
-
--- Green White Cute Torn 이미지 경로 추가
-INSERT INTO `cover_template` (cover_name, cover_image)
-VALUES ('Green White Cute Torn', 'D:/user/Desktop/sharyProject/src/main/resources/static/images/Green White Cute Torn.png');
-
--- Purple Cute Stationary 이미지 경로 추가
-INSERT INTO `cover_template` (cover_name, cover_image)
-VALUES ('Purple Cute Stationary', 'D:/user/Desktop/sharyProject/src/main/resources/static/images/Purple Cute Stationary.png');
-
-
-DELETE FROM `cover_template`;
-
+-- 커버템플릿 insert
 -- Beige Green Simple 이미지 경로 추가
 INSERT INTO `cover_template` (cover_name, cover_image)
 VALUES ('Beige Green Simple', 'C:/Java/workspace/sharyProject/src/main/resources/static/images/Beige Green Simple.png');
@@ -485,6 +330,8 @@ VALUES ('Green White Cute Torn', 'C:/Java/workspace/sharyProject/src/main/resour
 INSERT INTO `cover_template` (cover_name, cover_image)
 VALUES ('Purple Cute Stationary', 'C:/Java/workspace/sharyProject/src/main/resources/static/images/Purple Cute Stationary.png');
 
+
+-- 속지 템플릿 추가
 -- note template에 note_image 컬럼 추가
 ALTER TABLE `note_template`
 ADD COLUMN `note_image` VARCHAR(255) NOT NULL;
@@ -509,10 +356,149 @@ VALUES ('Notebook Page 2', 'C:/Java/workspace/sharyProject/src/main/resources/st
 INSERT INTO `note_template` (note_name, note_image)
 VALUES ('Brown and Gray Vintage', 'C:/Java/workspace/sharyProject/src/main/resources/static/images/Brown and Gray Vintage.png');
 
-select * from note_template;
 
-ALTER TABLE member
-ADD COLUMN enabled TINYINT(1) DEFAULT 1 CHECK (enabled IN (0, 1));
+-- 감정 테이블 insert 데이터 삽입
+INSERT INTO emotion (emotion_name) VALUES ('기쁨');
+INSERT INTO emotion (emotion_name) VALUES ('슬픔');
+INSERT INTO emotion (emotion_name) VALUES ('화남');
+INSERT INTO emotion (emotion_name) VALUES ('놀람');
+INSERT INTO emotion (emotion_name) VALUES ('두려움');
+INSERT INTO emotion (emotion_name) VALUES ('사랑');
 
-select * from member;
+-- 공개권한 테이블 insert 데이터 삽입
+INSERT INTO granted (granted_name) VALUES ('비공개');
+INSERT INTO granted (granted_name) VALUES ('친구공개');
+INSERT INTO granted (granted_name) VALUES ('전체공개');
 
+-- 해쉬태그 테이블 insert 데이터 삽입(카테고리별)
+-- 일상 카테고리 해시태그 (category_num = 1)
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#데일리', 1);
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#일상기록', 1);
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#소확행', 1);
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#오늘하루', 1);
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#좋은하루', 1);
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#행복한순간', 1);
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#나의하루', 1);
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#일상브이로그', 1);
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#소소한행복', 1);
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#오늘의기록', 1);
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#일상스타그램', 1);
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#감성일상', 1);
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#편안한하루', 1);
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#매일매일', 1);
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#집콕일상', 1);
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#평범한일상', 1);
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#나만의시간', 1);
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#일상소통', 1);
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#일상사진', 1);
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#일상스타일', 1);
+
+-- 여행 카테고리 해시태그 (category_num = 2)
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#여행스타그램', 2);
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#여행에미치다', 2);
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#여행사진', 2);
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#떠나자', 2);
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#여행중독', 2);
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#여행일기', 2);
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#여행기록', 2);
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#세계여행', 2);
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#여행은힐링', 2);
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#여행하는삶', 2);
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#감성여행', 2);
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#국내여행', 2);
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#해외여행', 2);
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#여행준비', 2);
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#휴가스타그램', 2);
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#여행다녀왔어요', 2);
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#여행갈까', 2);
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#여행코디', 2);
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#자유여행', 2);
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#여행스타그램✈️', 2);
+
+-- 육아 카테고리 해시태그 (category_num = 3)
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#육아맘', 3);
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#육아일기', 3);
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#아기성장기', 3);
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#육아소통', 3);
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#아기옷', 3);
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#초보엄마', 3);
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#육아스타그램', 3);
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#아기용품', 3);
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#아빠일상', 3);
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#아이와함께', 3);
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#엄마랑아기랑', 3);
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#육아소통해요', 3);
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#육아공유', 3);
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#아빠육아', 3);
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#육아정보', 3);
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#아기사진', 3);
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#행복한육아', 3);
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#우리아기', 3);
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#아이키우기', 3);
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#육아그램', 3);
+
+-- 연애 카테고리 해시태그 (category_num = 4)
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#럽스타그램', 4);
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#데이트', 4);
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#사랑해', 4);
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#커플스타그램', 4);
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#연애중', 4);
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#오늘의데이트', 4);
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#커플사진', 4);
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#럽스타그램💑', 4);
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#데이트코스', 4);
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#사랑꾼', 4);
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#커플룩', 4);
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#럽스타', 4);
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#우리사랑', 4);
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#사랑스타그램', 4);
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#연애스타그램', 4);
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#데이트중', 4);
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#연애의기록', 4);
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#커플데이트', 4);
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#행복한연애', 4);
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#러브스토리', 4);
+
+-- 취미 카테고리 해시태그 (category_num = 5)
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#취미생활', 5);
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#취미스타그램', 5);
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#취미공유', 5);
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#취미일상', 5);
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#취미찾기', 5);
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#새로운취미', 5);
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#취미생활추천', 5);
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#취미부자', 5);
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#취미활동', 5);
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#취미모임', 5);
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#취미공작소', 5);
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#취미생활그램', 5);
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#취미생활스타그램', 5);
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#취미시간', 5);
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#취미로그', 5);
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#취미도전', 5);
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#취미추천', 5);
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#취미생활러', 5);
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#나만의취미', 5);
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#취미스타', 5);
+
+-- 운동 카테고리 해시태그 (category_num = 6)
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#운동', 6);
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#헬스', 6);
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#홈트', 6);
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#운동스타그램', 6);
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#피트니스', 6);
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#운동일기', 6);
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#오늘의운동', 6);
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#다이어트', 6);
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#운동소통', 6);
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#유산소', 6);
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#웨이트트레이닝', 6);
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#근력운동', 6);
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#러닝', 6);
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#헬스장', 6);
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#운동하는여자', 6);
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#운동하는남자', 6);
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#건강관리', 6);
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#운동기록', 6);
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#운동부스터', 6);
+INSERT INTO hashtag (hashtag_name, category_num) VALUES ('#운동열정', 6);
