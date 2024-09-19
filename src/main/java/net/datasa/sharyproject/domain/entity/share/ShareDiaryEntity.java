@@ -14,6 +14,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  *공유 다이어리(표지) 엔티티
@@ -64,5 +65,8 @@ public class ShareDiaryEntity {
 
     @Column(name = "diary_bio")
     private String diaryBio;
+
+    @OneToMany(mappedBy = "shareDiary", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ShareMemberEntity> shareMemberList;
 
 }

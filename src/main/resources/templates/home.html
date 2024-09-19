@@ -46,10 +46,17 @@
         <h1>Welcome to the Main Page</h1>
         <p>This is the main content of the page.</p>
 
-        <!-- 헤더나 원하는 위치에 음악 아이콘 버튼 추가 -->
-        <button id="musicButton" class="btn btn-primary">
-            <i class="fas fa-music"></i>
-        </button>
+
+        <!-- 팝업 창 구조 -->
+        <div id="popup" class="popup-window">
+            <div class="popup-content">
+                <!-- 음악 아이콘 버튼 추가 -->
+                <button id="musicButton" class="btn btn-primary">
+                    <i class="fas fa-music"></i>
+                </button>
+            </div>
+        </div>
+
 
 
         <div th:replace="fragments/home_emotions :: home-emotions"></div>

@@ -7,53 +7,64 @@
 // Scripts
 //
 
+// DOMContentLoaded 이벤트가 발생하면, 즉 페이지의 DOM 요소가 모두 로드된 후에 실행될 코드를 설정
 window.addEventListener('DOMContentLoaded', event => {
 
-    // Navbar shrink function
+    // 네비게이션 바의 크기를 줄이고 배경 색상을 변경하는 함수 정의
     var navbarShrink = function () {
+        // 페이지에서 id가 'mainNav'인 네비게이션 요소를 가져옴
         const navbarCollapsible = document.body.querySelector('#mainNav');
+
+        // 만약 'mainNav' 요소가 없으면, 함수를 종료 (보호 코드)
         if (!navbarCollapsible) {
             return;
         }
+
+        // 페이지 스크롤 위치가 맨 위에 있을 경우, 'navbar-shrink' 클래스를 제거하여 기본 크기와 배경색을 유지
+        // 스크롤이 내려가면 'navbar-shrink' 클래스를 추가하여 네비게이션 바를 작게 만들고 배경색을 다른색으로 변경
         if (window.scrollY === 0) {
-            navbarCollapsible.classList.remove('navbar-shrink')
+            navbarCollapsible.classList.remove('navbar-shrink');
+            navbarCollapsible.style.backgroundColor = '#ce8ece';  // 배경색을 연보라색으로 설정
         } else {
-            navbarCollapsible.classList.add('navbar-shrink')
+            navbarCollapsible.classList.add('navbar-shrink');
+            navbarCollapsible.style.backgroundColor = '#ce8ece';  // 배경색을 연보라색으로 설정
         }
-
-
     };
 
-    // Shrink the navbar
+    // 페이지 로드 후 바로 네비게이션 바 크기 및 배경 색상을 조정
     navbarShrink();
 
-    // Shrink the navbar when page is scrolled
+    // 페이지 스크롤이 발생할 때마다 'navbarShrink' 함수를 실행하여 네비게이션 바 크기 및 배경 색상을 조정
     document.addEventListener('scroll', navbarShrink);
 
-    //  Activate Bootstrap scrollspy on the main nav element
+    // 부트스트랩의 ScrollSpy 활성화: 사용자가 스크롤할 때 내비게이션 바에서 해당 위치의 항목이 자동으로 활성화됨
     const mainNav = document.body.querySelector('#mainNav');
     if (mainNav) {
         new bootstrap.ScrollSpy(document.body, {
-            target: '#mainNav',
-            rootMargin: '0px 0px -40%',
+            target: '#mainNav',  // 스크롤 스파이의 타겟이 될 네비게이션 바 요소
+            rootMargin: '0px 0px -40%',  // 스크롤이 트리거되는 여백 설정
         });
-    };
+    }
 
-    // Collapse responsive navbar when toggler is visible
-    const navbarToggler = document.body.querySelector('.navbar-toggler');
+    // 반응형 네비게이션 바에서 메뉴 항목 클릭 시, 네비게이션 바를 자동으로 닫음
+    const navbarToggler = document.body.querySelector('.navbar-toggler');  // 토글 버튼(햄버거 메뉴) 요소 가져오기
     const responsiveNavItems = [].slice.call(
-        document.querySelectorAll('#navbarResponsive .nav-link')
+        document.querySelectorAll('#navbarResponsive .nav-link')  // 모든 네비게이션 링크 가져오기
     );
+
+    // 각 네비게이션 링크 클릭 시 실행할 이벤트 설정
     responsiveNavItems.map(function (responsiveNavItem) {
         responsiveNavItem.addEventListener('click', () => {
+            // 토글 버튼이 보이는 경우 (반응형 디자인에서만 작동)
             if (window.getComputedStyle(navbarToggler).display !== 'none') {
-                navbarToggler.click();
+                navbarToggler.click();  // 클릭하여 네비게이션 바를 닫음
             }
         });
     });
 
-
 });
+
+
 
 document.addEventListener("DOMContentLoaded", function() {
     var navbar = document.querySelector('.navbar'); // 헤더를 선택합니다.

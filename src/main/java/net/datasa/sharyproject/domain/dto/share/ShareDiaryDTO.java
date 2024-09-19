@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Builder
 @Data
@@ -32,4 +33,7 @@ public class ShareDiaryDTO {
 
     // 다이어리 소개글
     private String diaryBio;
+
+    // 공유다이어리 멤버
+    private List<ShareMemberDTO> shareMemberList;
 }
