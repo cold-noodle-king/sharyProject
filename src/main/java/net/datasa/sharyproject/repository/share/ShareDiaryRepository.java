@@ -22,4 +22,5 @@ public interface ShareDiaryRepository extends JpaRepository<ShareDiaryEntity, In
     Optional<ShareDiaryEntity> findByIdWithMembers(@Param("diaryNum") Integer diaryNum);
 
 
+
 }

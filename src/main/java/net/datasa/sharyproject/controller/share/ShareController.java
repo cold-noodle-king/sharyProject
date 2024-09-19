@@ -214,12 +214,20 @@ public class ShareController {
     //공유 다이어리 가입 요청 리스트 출력
     @GetMapping("registerRequest")
     public String registerRequest(@RequestParam("diaryNum") Integer diaryNum
-                                  ,@AuthenticationPrincipal AuthenticatedUser user, Model model) {
+                                , @AuthenticationPrincipal AuthenticatedUser user
+                                , Model model
+                                , RedirectAttributes redirectAttributes){
 
-        ShareDiaryDTO dto = shareDiaryService.getDiary(diaryNum, user.getUsername());
-        List<ShareMemberDTO> dtoList = shareDiaryService.getPendingMembers(diaryNum);
-        model.addAttribute("requestList", dtoList);
-        model.addAttribute("diary", dto);
+        try {
+            ShareDiaryDTO dto = shareDiaryService.getDiary(diaryNum, user.getUsername());
+            List<ShareMemberDTO> dtoList = shareDiaryService.getPendingMembers(diaryNum);
+            model.addAttribute("requestList", dtoList);
+            model.addAttribute("diary", dto);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            e.getMessage();
+        }
 
         return "share/RegisterRequest";
     }
@@ -231,6 +239,7 @@ public class ShareController {
 
         log.debug("다이어리넘버:{}, 요청한사용자:{}", diaryNum, memberId);
 
+        shareDiaryService.acceptRegister(diaryNum, memberId);
 
 
         return "redirect:/";

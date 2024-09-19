@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -154,29 +155,41 @@ public class ShareDiaryService {
     }
 
     /**
-     * 가입 요청한 사용자를 저장하는 메서드
+     * 가입 요청한 사용자를 공유 멤버 테이블에 저장하는 메서드
      * @param diaryNum
      * @param memberId
      */
-    public void join(Integer diaryNum, String memberId){
+    public void join(Integer diaryNum, String memberId) {
+        // 다이어리 정보 조회
         ShareDiaryEntity shareDiaryEntity = shareDiaryRepository.findById(diaryNum)
                 .orElseThrow(() -> new EntityNotFoundException("다이어리 정보를 찾을 수 없습니다."));
 
+        // 사용자 정보 조회
         MemberEntity memberEntity = memberRepository.findById(memberId)
                 .orElseThrow(() -> new EntityNotFoundException("사용자 정보를 찾을 수 없습니다."));
 
-        ShareMemberEntity shareMemberEntity = new ShareMemberEntity();
+        // 해당 다이어리와 멤버가 이미 가입 요청을 했는지 확인
+        Optional<ShareMemberEntity> existingRequest = shareMemberRepository
+                .findByShareDiary_ShareDiaryNumAndMember_MemberId(diaryNum, memberId);
 
+        if (existingRequest.isPresent()) {
+            // 이미 가입 요청을 한 경우 예외를 던짐
+            throw new IllegalStateException("이미 가입 요청을 하셨습니다.");
+        }
+
+        // 새로운 가입 요청 생성
+        ShareMemberEntity shareMemberEntity = new ShareMemberEntity();
         shareMemberEntity.setMember(memberEntity);
         shareMemberEntity.setManager(shareDiaryEntity.getMember());
         shareMemberEntity.setShareDiary(shareDiaryEntity);
-        shareMemberEntity.setStatus("PENDING");
+        shareMemberEntity.setStatus("PENDING"); // 가입 요청 시 기본 상태를 보류로 설정
 
         log.debug("저장되는 엔티티: {}", shareMemberEntity);
 
+        // 새로운 요청 저장
         shareMemberRepository.save(shareMemberEntity);
-
     }
+
 
     /**
      * 상태가 'PENDING'인 공유 멤버 리스트를 가져오는 메서드
@@ -200,6 +213,20 @@ public class ShareDiaryService {
         return pendingMemberDTOs;
     }
 
+    /**
+     * 공유 다이어리 가입 요청을 수락하는 메서드
+     * @param diaryNum
+     * @param memberId
+     */
+    public void acceptRegister(Integer diaryNum, String memberId){
+        // 공유 멤버 엔티티 조회
+        ShareMemberEntity entity = shareMemberRepository.ShareDiary_shareDiaryNumAndMember_memberId(diaryNum, memberId);
+
+        log.debug("가져온 회원 정보:{}", entity);
+        entity.setStatus("ACCEPTED");
+
+    }
+    
     // ShareMemberEntity를 ShareMemberDTO로 변환하는 헬퍼 메서드
     private ShareMemberDTO convertShareMemberEntityToDTO(ShareMemberEntity member) {
         return ShareMemberDTO.builder()
