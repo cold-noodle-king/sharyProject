@@ -22,7 +22,13 @@
     <script>
         $(document).ready(function() {
             $('#goBack').click(function() {
-                window.location.href = '/share/viewMember';
+                window.location.href = '/share/viewMember?diaryNum=' + [[${diary.shareDiaryNum}]];
+            });
+            $('.okBtn').on('click', function (){
+                let diaryNum = $(this).data('diary-num');
+                let member = $(this).data('member');
+                console.log(diaryNum, member);
+                window.location.href = '/share/acceptRequest?diaryNum=' + diaryNum + '&member=' + member;
             });
         });
     </script>
@@ -37,7 +43,16 @@
     <br>
     <div class="diary-container">
         <div>
-
+            <table>
+                <tr th:each="list, i : ${requestList}">
+                    <td><p th:text="${i.count}"></p></td>
+                    <td><p th:text="${list.shareDiaryNum}"></p></td>
+                    <td><p th:text="${list.memberId}"></p></td>
+                    <td><p th:text="${list.nickname}"></p></td>
+                    <td><button class="okBtn" th:data-diary-num="${list.shareDiaryNum}" th:data-member="${list.memberId}">수락</button></td>
+                    <td><button class="noBtn" th:data-diary-num="${list.shareDiaryNum}" th:data-member="${list.memberId}">거절</button></td>
+                </tr>
+            </table>
         </div>
     </div>
 
