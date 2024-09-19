@@ -22,7 +22,7 @@
     <script>
         $(document).ready(function() {
             $('#goBack').click(function() {
-                window.location.href = '/share/manageDiary';
+                window.location.href = '/share/manageDiary?diaryNum=' + [[${diary.shareDiaryNum}]];
             });
         });
     </script>
@@ -37,8 +37,8 @@
     <br>
     <div class="diary-container">
         <div>
-            <p><a th:href="@{/share/memberList}">전체 멤버 보기</a></p>
-            <p><a th:href="@{/share/registerRequest}">가입 요청 관리</a></p>
+            <p><a th:href="@{/share/memberList(diaryNum=${diary.shareDiaryNum})}">전체 멤버 보기</a></p>
+            <p><a th:href="@{/share/registerRequest(diaryNum=${diary.shareDiaryNum})}">가입 요청 관리</a></p>
         </div>
     </div>
 
