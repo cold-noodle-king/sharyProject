@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import net.datasa.sharyproject.domain.dto.member.MemberDTO;
 import net.datasa.sharyproject.domain.dto.mypage.ProfileDTO;
 import net.datasa.sharyproject.domain.entity.member.MemberEntity;
+import net.datasa.sharyproject.domain.entity.mypage.ProfileEntity;
 import net.datasa.sharyproject.security.AuthenticatedUser;
 import net.datasa.sharyproject.service.member.MemberService;
 import net.datasa.sharyproject.service.mypage.ProfileService;
@@ -57,12 +58,13 @@ public class MypageController {
 
     @PostMapping("info")
     public String info(@AuthenticationPrincipal AuthenticatedUser user
-            , @ModelAttribute MemberDTO memberDTO) {
+            , @ModelAttribute MemberDTO memberDTO, Model model) {
 
         log.debug("수정폼에서 전달된 값 : {}", memberDTO);
         memberDTO.setMemberId(user.getUsername());
         //서비스로 전달하여 DB수정
-        memberService.InfoUpdate(memberDTO);
+        memberService.infoUpdate(memberDTO);
+        model.addAttribute("member", memberDTO);
         return "mypage/mypageView";
     }
 
@@ -82,14 +84,21 @@ public class MypageController {
      * @return profile HTML로 이동
      */
     @GetMapping("profile")
-    public String profile(Model model,@AuthenticationPrincipal AuthenticatedUser user) {
+    public String profile(Model model, @AuthenticationPrincipal AuthenticatedUser user) {
+        if (user == null) {
+            log.error("인증된 사용자가 없습니다.");
+            throw new RuntimeException("인증된 사용자가 없습니다.");
+        }
+
         String username = user.getUsername();
         MemberEntity member = memberService.findById(username)
                 .orElseThrow(() -> new RuntimeException("사용자 (" + username + ")를 찾을 수 없습니다."));
 
-        System.out.println("로그인된 사용자: " + username);
+        log.info("로그인된 사용자: {}", username);
+        log.info("멤버 정보: {}", member);
 
-        model.addAttribute("memberId", member.getMemberId());
+//        model.addAttribute("profile", profile);
+        model.addAttribute("member", member);
         return "mypage/profile";
     }
 
@@ -110,16 +119,31 @@ public class MypageController {
             throw new RuntimeException("사용자 (" + memberId + ")를 찾을 수 없습니다.");
         }
         MemberEntity member = memberOpt.get();
-        // 프로필 업데이트 서비스 호출
-        ProfileDTO updatedProfile = profileService.updateProfile(profileImage, ment, member);
+
+        // 프로필 조회
+        ProfileEntity profile = profileService.findByMember(member);
+
+        // 프로필이 없을 경우 생성
+        if (profile == null) {
+            profile = ProfileEntity.builder()
+                    .member(member)
+                    .profilePicture("/images/default.png")  // 기본 이미지 설정
+                    .ment("")  // 기본 소개글
+                    .build();
+            profileService.saveProfile(profile);  // 새 프로필 저장
+        }
+
+        // 이미지 및 소개글 업데이트
+        ProfileDTO updatedProfile = profileService.updateProfile(profileImage, ment, profile);
 
         // 응답 데이터 생성
         Map<String, Object> response = new HashMap<>();
-        response.put("profilePicture", "/images/" + updatedProfile.getProfilePicture()); // 이미지 경로
+        response.put("profilePicture", updatedProfile.getProfilePicture()); // 이미지 경로
         response.put("ment", updatedProfile.getMent());
 
         log.info("프로필 업데이트가 성공적으로 처리되었습니다.");  // 응답을 보내기 전에 로그 출력
 
         return ResponseEntity.ok(response);
+
     }
 }

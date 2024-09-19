@@ -83,22 +83,22 @@ public class MemberService {
         return memberDTO;
     }
 
-    public void InfoUpdate(MemberDTO memberDTO) {
+    public void infoUpdate(MemberDTO memberDTO) {
         //MemberEntity DB와 연동되어 있는 객체, entity에는 테이블 내용이 그대로 들어있음
-        MemberEntity entity = memberRepository.findById(memberDTO.getMemberId()) //프라이머리키 기준으로 작업
+        MemberEntity memberEntity = memberRepository.findById(memberDTO.getMemberId()) //프라이머리키 기준으로 작업
                 .orElseThrow(() -> new EntityNotFoundException(memberDTO + ":"));
 
         //엔티티 값을 건드리지 않으면 그냥 유지함
         //memberDTO의 비밀번호가 비어있지 않으면 비번도 수정
         if (!memberDTO.getMemberPw().isEmpty()) {
-            entity.setMemberPw(passwordEncoder.encode(memberDTO.getMemberPw()));
+            memberEntity.setMemberPw(passwordEncoder.encode(memberDTO.getMemberPw()));
         }
         //나머지 이름, 이메일, 전화, 주소는 무조건 대입
         //바꿀 부분만 써주면 됨. 바꾸지 않을 값들은 알아서 채워짐
-        entity.setFullName(memberDTO.getFullName());
-        entity.setEmail(memberDTO.getEmail());
-        entity.setPhoneNumber(memberDTO.getPhoneNumber());
-        entity.setNickname(memberDTO.getNickname());
+        memberEntity.setFullName(memberDTO.getFullName());
+        memberEntity.setEmail(memberDTO.getEmail());
+        memberEntity.setPhoneNumber(memberDTO.getPhoneNumber());
+        memberEntity.setNickname(memberDTO.getNickname());
 
     }
 }

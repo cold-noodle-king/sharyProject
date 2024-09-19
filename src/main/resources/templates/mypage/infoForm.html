@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="en" xmlns:th="http://thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>개인정보</title>
@@ -94,7 +93,10 @@
                     <table>
                         <tr>
                             <th>ID</th>
-                            <td th:text="${member.memberId}"></td>
+                            <td>
+                                <span th:text="${member.memberId}"></span>
+                                <input type="hidden" name="memberId" th:value="${member.memberId}" />
+                            </td>
                         </tr>
                         <tr>
                             <th>비밀번호</th>
