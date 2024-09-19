@@ -140,7 +140,7 @@ document.addEventListener('DOMContentLoaded', function () {
         ],
         "사랑": [
             "spotify:track:6cxbaStUOFS9Ssz3bHVVDJ?si=5a294cebf2594738", // "사랑은 은하수 다방에서" - 10CM
-            "spotify:track:6gBFPUFcJLzWGx4lenP6h2", // "Thinking Out Loud" - Ed Sheeran
+            "spotify:track:1qosh64U6CR5ki1g1Rf2dZ?si=4fcbf310d0ca45db", // "Love Lee" - 악동뮤지션
             "spotify:track:3U4isOIWM3VvDubwSI3y7a"  // "All of Me" - John Legend
         ]
     };
