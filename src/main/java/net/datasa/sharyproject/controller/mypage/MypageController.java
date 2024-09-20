@@ -97,7 +97,16 @@ public class MypageController {
 
         // 프로필 정보를 데이터베이스에서 가져옴
         ProfileEntity profile = profileService.findByMember(member)
-                .orElseThrow(() -> new RuntimeException("프로필 정보를 찾을 수 없습니다."));
+                .orElseGet(() -> {
+                    // 프로필 정보가 없으면 기본 프로필을 생성하여 반환
+                    ProfileEntity defaultProfile = ProfileEntity.builder()
+                            .member(member)
+                            .profilePicture("/images/profile.png")  // 기본 이미지 설정
+                            .ment("")  // 기본 소개글 설정
+                            .build();
+                    profileService.saveProfile(defaultProfile);  // 생성한 기본 프로필을 저장
+                    return defaultProfile;
+                });
 
         log.info("로그인된 사용자: {}", username);
         log.info("멤버 정보: {}", member);
