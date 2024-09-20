@@ -10,6 +10,9 @@
 // DOMContentLoaded 이벤트가 발생하면, 즉 페이지의 DOM 요소가 모두 로드된 후에 실행될 코드를 설정
 window.addEventListener('DOMContentLoaded', event => {
 
+
+
+
     // 네비게이션 바의 크기를 줄이는 함수 정의
     var navbarShrink = function () {
         // 페이지에서 id가 'mainNav'인 네비게이션 요소를 가져옴
@@ -186,3 +189,6 @@ document.addEventListener('DOMContentLoaded', function() {
         wave.style.transform = 'translateY(-75%)'; // 파도의 수직 위치를 Shary 텍스트 중심에 맞춤
     });
 });
+
+
+
