@@ -28,7 +28,7 @@ public class MypageController {
 
     private final MemberService memberService;
     private final ProfileService profileService;
-    private MemberEntity member;
+    private MemberEntity memberEntity;
     private Object profile;
 
     @GetMapping("mypageView")
@@ -54,6 +54,9 @@ public class MypageController {
         model.addAttribute("member", memberDTO);
 
         log.info("개인정보 내용 : {}", memberDTO);
+        ProfileEntity profile = profileService.findByMember(memberEntity)
+                .orElse(null);  // Optional에서 프로필 정보를 가져옴, 없으면 null
+        model.addAttribute("profile", profile);
         return "mypage/infoForm";
     }
 

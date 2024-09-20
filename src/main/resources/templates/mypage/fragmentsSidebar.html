@@ -1,0 +1,47 @@
+<div th:fragment="sidebar">
+    <div class="sidebar">
+        <div class="sidebar-content">
+            <img id="sidebarProfileImage"
+                 th:src="${profile?.profilePicture != null} ? ${profile.profilePicture} : '/images/profile.png'"
+                 alt="프로필 사진" class="profile-img">
+            <p th:text="${member.nickname}"></p>
+
+            <a th:href="@{/mypage/info}">개인정보</a>
+            <a th:href="@{/mypage/profile}">프로필</a>
+            <a th:href="@{/mypage/follow}">친구</a>
+            <a th:href="@{/mypage/message}">채팅</a>
+        </div>
+
+        <div class="logout">
+            <a th:href="@{/member/logout}">회원탈퇴</a>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('profileUpdate').addEventListener('submit', function(event) {
+        event.preventDefault();  // 기본 폼 제출 방지
+
+        var formData = new FormData(this);  // 폼 데이터를 가져오기
+
+        fetch('/mypage/profileUpdate', {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'Accept': 'application/json'
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.profilePicture) {
+                    // 사이드바의 프로필 이미지도 업데이트
+                    document.getElementById('sidebarProfileImage').src = data.profilePicture;
+                }
+                alert('프로필이 성공적으로 업데이트되었습니다.');
+            })
+            .catch(error => {
+                console.error('프로필 업데이트 실패:', error);
+                alert('프로필 업데이트 중 오류가 발생했습니다.');
+            });
+    });
+</script>

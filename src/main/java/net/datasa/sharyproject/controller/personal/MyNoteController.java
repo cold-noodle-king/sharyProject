@@ -9,6 +9,8 @@ import net.datasa.sharyproject.service.EmotionService;
 import net.datasa.sharyproject.service.HashtagService;
 import net.datasa.sharyproject.service.personal.*;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +24,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
+@RestController
 @Controller
 @RequestMapping("personal")
 @RequiredArgsConstructor
@@ -177,5 +180,24 @@ public class MyNoteController {
             // 오류 발생 시 다이어리 작성 페이지로 이동
             return createDiary(noteNum, diaryNum, noteName, model);
         }
+    }
+
+    /**
+     * 노트 정보를 가져오는 메서드 (Ajax 호출)
+     * @param noteNum 노트 번호
+     * @return PersonalNoteDTO
+     */
+    @GetMapping("/viewNote/{noteNum}")
+    @ResponseBody
+    public ResponseEntity<PersonalNoteDTO> viewNote(@PathVariable("noteNum") Integer noteNum) {
+        PersonalNoteDTO note = personalNoteService.getNoteByNum(noteNum);
+        List<String> hashtags = personalNoteService.getHashtagsByNoteNum(noteNum);  // 해시태그 불러오기
+        note.setHashtags(hashtags);  // DTO에 해시태그 추가
+
+        if (note == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<>(note, HttpStatus.OK);
     }
 }
