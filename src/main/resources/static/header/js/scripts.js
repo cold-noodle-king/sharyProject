@@ -10,7 +10,7 @@
 // DOMContentLoaded 이벤트가 발생하면, 즉 페이지의 DOM 요소가 모두 로드된 후에 실행될 코드를 설정
 window.addEventListener('DOMContentLoaded', event => {
 
-    // 네비게이션 바의 크기를 줄이고 배경 색상을 변경하는 함수 정의
+    // 네비게이션 바의 크기를 줄이는 함수 정의
     var navbarShrink = function () {
         // 페이지에서 id가 'mainNav'인 네비게이션 요소를 가져옴
         const navbarCollapsible = document.body.querySelector('#mainNav');
@@ -20,22 +20,21 @@ window.addEventListener('DOMContentLoaded', event => {
             return;
         }
 
-        // 페이지 스크롤 위치가 맨 위에 있을 경우, 'navbar-shrink' 클래스를 제거하여 기본 크기와 배경색을 유지
-        // 스크롤이 내려가면 'navbar-shrink' 클래스를 추가하여 네비게이션 바를 작게 만들고 배경색을 다른색으로 변경
+        // 페이지 스크롤 위치가 맨 위에 있을 경우, 배경색을 연보라색으로 고정
         if (window.scrollY === 0) {
             navbarCollapsible.classList.remove('navbar-shrink');
-            navbarCollapsible.style.backgroundColor = '#ce8ece';  // 배경색을 연보라색으로 설정
+            navbarCollapsible.style.backgroundColor = '#ce8ece';  // 연보라색 배경색 설정
         } else {
             navbarCollapsible.classList.add('navbar-shrink');
-            navbarCollapsible.style.backgroundColor = '#ce8ece';  // 배경색을 연보라색으로 설정
+            navbarCollapsible.style.backgroundColor = '#ce8ece';  // 스크롤이 내려가도 연보라색 유지
         }
     };
 
     // 페이지 로드 후 바로 네비게이션 바 크기 및 배경 색상을 조정
     navbarShrink();
 
-    // 페이지 스크롤이 발생할 때마다 'navbarShrink' 함수를 실행하여 네비게이션 바 크기 및 배경 색상을 조정
-    document.addEventListener('scroll', navbarShrink);
+    // 스크롤 이벤트에서 배경색 변경을 제거함으로써 배경색 고정
+    document.removeEventListener('scroll', navbarShrink);
 
     // 부트스트랩의 ScrollSpy 활성화: 사용자가 스크롤할 때 내비게이션 바에서 해당 위치의 항목이 자동으로 활성화됨
     const mainNav = document.body.querySelector('#mainNav');
@@ -64,18 +63,12 @@ window.addEventListener('DOMContentLoaded', event => {
 
 });
 
-
-
+// 기본 헤더 색상을 연보라색으로 고정하는 함수 추가
 document.addEventListener("DOMContentLoaded", function() {
     var navbar = document.querySelector('.navbar'); // 헤더를 선택합니다.
 
-    window.addEventListener('scroll', function() {
-        if (window.scrollY > 50) { // 스크롤이 50px 이상일 때
-            navbar.style.backgroundColor = '#b7b7d8'; // 연보라색으로 변경
-        } else {
-            navbar.style.backgroundColor = '#9982a1'; // 기본 진청색으로 복원
-        }
-    });
+    // 기본 배경색을 연보라색으로 고정
+    navbar.style.backgroundColor = '#ce8ece'; // 연보라색으로 고정
 });
 
 // 이미지 슬라이더 부분
@@ -99,7 +92,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
     track.style.transform = 'translateX(-100%)'; // 초기 슬라이드 시작
 });
-
 
 // 둘러보기 섹션 슬라이더 기능
 document.addEventListener('DOMContentLoaded', function () {
@@ -145,8 +137,6 @@ document.addEventListener('DOMContentLoaded', function () {
     updateSliderPosition(); // 초기 슬라이드 위치 설정
 });
 
-
-
 // 메인페이지 wave 부분
 document.addEventListener('DOMContentLoaded', function() {
     const waveContainer = document.getElementById('waveContainer');
@@ -177,7 +167,6 @@ document.addEventListener('DOMContentLoaded', function() {
             M0,220L48,218.7C96,213,192,171,288,154.7C384,139,480,149,576,160C672,171,768,245,864,272C960,299,1056,277,1152,245.3C1248,213,1344,171,1392,149.3L1440,128L1440,320L0,320Z;
             M0,224L48,197.3C96,171,192,117,288,128C384,139,480,213,576,229.3C672,245,768,203,864,202.7C960,203,1056,245,1152,245.3C1248,245,1344,203,1392,181.3L1440,160L1440,320L0,320Z;
             M0,224L48,197.3C96,171,192,117,288,128C384,139,480,213,576,229.3C672,245,768,203,864,202.7C960,203,1056,245,1152,245.3C1248,245,1344,203,1392,181.3L1440,160L1440,320L0,320Z
-
         `);
 
         path.appendChild(animate);
@@ -197,14 +186,3 @@ document.addEventListener('DOMContentLoaded', function() {
         wave.style.transform = 'translateY(-75%)'; // 파도의 수직 위치를 Shary 텍스트 중심에 맞춤
     });
 });
-
-
-
-
-
-
-
-
-
-
-
