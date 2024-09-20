@@ -38,4 +38,6 @@ public class ProfileEntity {
     @OneToOne
     @JoinColumn(name = "member_id", referencedColumnName = "member_id")
     private MemberEntity member;
+
+
 }

@@ -80,7 +80,7 @@
         <div class="profile-container">
             <h2>프로필</h2>
             <p>프로필 이미지와 소개글을 변경할 수 있습니다.</p>
-            <p>사용자 ID: <span th:text="${member.memberId}"></span></p>
+            <p>닉네임: <span th:text="${member.nickname}"></span></p>
             <!-- 프로필 이미지 -->
             <form id="profileUpdate" enctype="multipart/form-data" method="post" action="/mypage/profileUpdate">
                 <!-- 숨겨진 필드로 memberId 값을 전송 -->
@@ -104,7 +104,7 @@
                     </tr>
                     <tr>
                         <td colspan="2">
-                            <textarea name="ment" rows="3" placeholder="여기를 클릭해 간단한 소개글을 작성해보세요." style="width:100%; border: 0; resize: none;"></textarea>
+                            <textarea name="ment" rows="3" placeholder="여기를 클릭해 간단한 소개글을 작성해보세요." style="width:100%; border: 0; resize: none;" th:text="${profile.ment}"></textarea>
 
                         </td>
                     </tr>
@@ -142,7 +142,7 @@
     // 이미지 삭제 기능
     document.getElementById('resetImage').addEventListener('click', function() {
         document.getElementById('profileImage').src = '/images/profile.png';
-        document.getElementById('imageUpload').value = '';
+        document.getElementById('imageUpload').value = ''; // 파일 선택 필드 초기화
     });
 
     // AJAX로 프로필 저장
@@ -171,11 +171,17 @@
                 if (!response.ok) {
                     throw new Error('Network response was not ok.');
                 }
-                return response.json();         //오류확인하려고 json()을 text로 바꿔둠
+                return response.json();
             })
             .then(data => {             // console.log(data);//응답내용을확인
-                // 수정된 이미지와 소개글을 화면에 즉시 반영
-                document.getElementById('profileImage').src = data.profilePicture;
+                // 서버에서 새로운 프로필 이미지 경로를 올바르게 반환하면, 이를 이미지 요소에 반영
+                if (data.profilePicture) {
+                    document.getElementById('profileImage').src = data.profilePicture;
+                } else {
+                    alert('이미지 경로가 반환되지 않았습니다.');
+                }
+
+                // 소개글도 업데이트
                 document.querySelector('textarea[name="ment"]').value = data.ment;
                 alert('프로필이 성공적으로 업데이트되었습니다.');
             })
