@@ -13,6 +13,7 @@ window.addEventListener('DOMContentLoaded', event => {
 
 
 
+
     // 네비게이션 바의 크기를 줄이는 함수 정의
     var navbarShrink = function () {
         // 페이지에서 id가 'mainNav'인 네비게이션 요소를 가져옴
