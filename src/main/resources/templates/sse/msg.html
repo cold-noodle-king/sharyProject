@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>test_sse</title>
+    <script src="/js/jquery-3.7.1.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            //이 시점에서 서버와 연결
+            const eventSource = new EventSource("/subscribe");
+
+            //서버로부터 메시지를 받을 때 실행되는 함수
+            eventSource.onmessage = getMessage;
+
+        });
+
+        function getMessage(event) {
+            //서버로부터 전달받은 메시지
+            let msg = event.data;
+
+            let html = `<p>${msg}</p>`;
+            $('#msgView').append(html);
+
+        }
+
+    </script>
+</head>
+<body>
+<h1>[ SSE 받기 테스트 ]</h1>
+
+<p>* 아래 영역에 메시지가 표시됩니다.</p>
+<div id="msgView"></div>
+
+</body>
+</html>

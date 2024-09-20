@@ -8,7 +8,7 @@
     <script>
         $(document).ready(function() {
             $('#loginForm').submit(function() {
-                if ($('#id').val() === '' || $('#password').val() === '') {
+                if ($('#memberId').val() === '' || $('#memberPw').val() === '') {
                     alert('ID와 비밀번호를 입력하세요.');
                     return false;
                 }
@@ -23,11 +23,11 @@
         <table>
             <tr>
                 <td>ID</td> <!-- 여기서 name이 콘피그에서 유저네임파라미터 이름과 동일해야함  -->
-                <td><input type="text" name="memberId" id="id" /></td>
+                <td><input type="text" name="memberId" id="memberId" /></td>
             </tr>
             <tr>
                 <td>Password</td>  <!-- 여기서 name이 콘피그에서 패스워드파라미터 이름과 동일해야함  -->
-                <td><input type="password" name="memberPw" id="password"/></td>
+                <td><input type="password" name="memberPw" id="memberPw"/></td>
             </tr>
             <tr>
                 <td>

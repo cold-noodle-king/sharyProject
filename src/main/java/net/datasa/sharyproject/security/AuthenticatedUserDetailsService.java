@@ -29,7 +29,7 @@ public class AuthenticatedUserDetailsService implements UserDetailsService {
 		log.debug("isEnabled : {}", memberEntity.getEnabled());
 
 		AuthenticatedUser user = AuthenticatedUser.builder()
-				.memberId(username)
+				.memberId(memberEntity.getMemberId())
 				.memberPw(memberEntity.getMemberPw())
 				.nickname(memberEntity.getNickname()) //선택적 필드
 				.roleName(memberEntity.getRoleName())// 권한 설정

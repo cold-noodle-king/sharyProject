@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/springsecurity6">
+<head>
+    <meta charset="UTF-8">
+    <title>test_sse2</title>
+    <style>
+        #sendDiv {
+            border: 1px solid black;
+            margin: 10px;
+            padding: 10px;
+            width : 300px;
+        }
+    </style>
+
+    <script src="/js/jquery-3.7.1.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+
+            //보내기 버튼 클릭하면 전송
+            $('#sendButton').click(sendTest);
+
+            //메시지 입력하다 엔터치는 경우에도 전송
+            $('#msg').keydown(function(event) {
+                if (event.key === 'Enter' || event.keyCode === 13) {
+                    sendTest();
+                }
+            });
+        });
+
+        function sendTest() {
+            let id = $('#id').val();
+            let msg = $('#msg').val();
+
+            if (id == '' || msg == '') {
+                alert('수신인 아이디와 메시지 내용을 입력하세요.');
+                return;
+            }
+
+            $.ajax({
+                url : '/send',
+                type: 'post',
+                data : {memberId : id, message : msg},
+                success : function () {
+                    $('#msg').val('');
+                    console.log('전송완료');
+                },
+                error : function (err) {
+                    console.log(JSON.stringify(err));
+                }
+            });
+        }
+    </script>
+</head>
+<body>
+<h1>[ SSE 테스트 ]</h1>
+
+<p sec:authorize="not isAuthenticated()"><a href="/loginForm">로그인</a></p>
+<p sec:authorize="isAuthenticated()"><a href="/logout">로그아웃</a></p>
+
+<br>
+<p>* 로그인 후 아래 링크를 각각 다른 웹브라우저에서 클릭하여 접속한다.</p>
+<p sec:authorize="isAuthenticated()"><a href="/msgTest">메시지 받는 페이지로 이동</a></p>
+
+<br>
+<p>* 이곳에서 아이디와 내용을 입력하여 로그인된 사용자에게 메시지를 보낸다.</p>
+<div id="sendDiv">
+    <p>수신자 아이디 : 	<input type="text" id="id"></p>
+    <p>메세지 내용 : 		<input type="text" id="msg"></p>
+    <p><button id="sendButton">보내기</button></p>
+</div>
+
+
+<pre>
+	- 예제 내의 text 파일의 SQL로 테이블과 테스트용 계정 정보 DB에 저장하고 실행
+	- 아이디 aaa와 bbb 생성됨 (비밀번호 모두 111)
+
+	- HTTP를 이용한 단방향 통신 (서버 -> 클라이언트)
+	- 자동 재연결
+	- 브라우저의 기본 기능으로 별도의 라이브러리 사용
+</pre>
+
+</body>
+</html>
