@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Optional;
 import java.util.UUID;
 
 @Slf4j
@@ -81,11 +82,12 @@ public class ProfileService {
                 .build();
     }
 
-    public ProfileEntity findByMember(MemberEntity member) {
-        return profileRepository.findByMember(member).orElse(null);
+    public Optional<ProfileEntity> findByMember(MemberEntity member) {
+        return profileRepository.findByMember(member);
     }
 
     public void saveProfile(ProfileEntity profile) {
         profileRepository.save(profile);
     }
+
 }
