@@ -14,13 +14,16 @@ import net.datasa.sharyproject.security.AuthenticatedUser;
 import net.datasa.sharyproject.service.personal.CoverTemplateService;
 import net.datasa.sharyproject.service.personal.NoteTemplateService;
 import net.datasa.sharyproject.service.share.ShareDiaryService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @AllArgsConstructor
@@ -44,7 +47,7 @@ public class ShareController {
         log.debug("불러온 다이어리들 정보:{}",createdDiaries);
         model.addAttribute("diaryList", createdDiaries);
 
-        return "share/main";
+        return "share/Main";
     }
 
     //내가 생성한 공유 다이어리로 이동
@@ -62,14 +65,24 @@ public class ShareController {
 
     //내가 가입한 공유 다이어리 리스트 페이지 출력
     @GetMapping("joinedList")
-    public String joined() {
+    public String joined(@AuthenticationPrincipal AuthenticatedUser user, Model model) {
+
+        List<ShareDiaryDTO> joinedDiaries = shareDiaryService.getJoinedList(user.getUsername());
+        log.debug("가입한 다이어리 리스트:{}", joinedDiaries);
+        model.addAttribute("diaryList", joinedDiaries);
 
         return "share/joinedList";
     }
 
     //내가 가입한 공유 다이어리로 이동
     @GetMapping("joinedDiary")
-    public String joinedDiary() {
+    public String joinedDiary(@RequestParam("diaryNum") Integer diaryNum
+                            , @AuthenticationPrincipal AuthenticatedUser user
+                            , Model model) {
+
+        ShareDiaryDTO dto = shareDiaryService.getJoinedDiary(diaryNum, user.getUsername());
+        log.debug("가져온 다이어리 정보:{}", dto);
+
         return "share/JoinedDiary";
     }
 
@@ -196,19 +209,30 @@ public class ShareController {
                             ,@AuthenticationPrincipal AuthenticatedUser user
                             ,Model model) {
 
+        ShareDiaryDTO dto = shareDiaryService.getDiary(diaryNum, user.getUsername());
+        model.addAttribute("diary", dto);
+        List<ShareMemberDTO> dtoList = shareDiaryService.getMemberList(diaryNum, user.getUsername());
+        model.addAttribute("list", dtoList);
 
         return "share/MemberList";
     }
 
-    // 공유 다이어리 가입 요청 메서드
     @GetMapping("join")
-    public String join(@RequestParam("diaryNum") Integer diaryNum
-            , @AuthenticationPrincipal AuthenticatedUser user) {
+    @ResponseBody
+    public String join(@RequestParam("diaryNum") Integer diaryNum,
+                                    @AuthenticationPrincipal AuthenticatedUser user) {
+        String result;
 
-        shareDiaryService.join(diaryNum, user.getUsername());
+        try {
+            shareDiaryService.join(diaryNum, user.getUsername());
+            result = "가입 요청이 완료되었습니다.";
 
-        log.debug("가져온 다이어리 정보:{}", diaryNum);
-        return "redirect:/share/listAll";
+        } catch (Exception e) {
+            e.printStackTrace();
+            result = e.getMessage();
+        }
+
+        return result; // JSON 형태로 응답
     }
 
     //공유 다이어리 가입 요청 리스트 출력
@@ -218,32 +242,25 @@ public class ShareController {
                                 , Model model
                                 , RedirectAttributes redirectAttributes){
 
-        try {
             ShareDiaryDTO dto = shareDiaryService.getDiary(diaryNum, user.getUsername());
             List<ShareMemberDTO> dtoList = shareDiaryService.getPendingMembers(diaryNum);
             model.addAttribute("requestList", dtoList);
             model.addAttribute("diary", dto);
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-            e.getMessage();
-        }
 
         return "share/RegisterRequest";
     }
 
-    @GetMapping("acceptRequest")
-    public String acceptRequest(@RequestParam("diaryNum") Integer diaryNum
-                               ,@RequestParam("member") String memberId
-                               ,Model model){
+    @ResponseBody
+    @PostMapping("/acceptRequest")
+    public ResponseEntity<String> acceptRequest(@RequestBody Map<String, Object> requestData) {
+        Integer diaryNum = (Integer) requestData.get("diaryNum");
+        String memberId = (String) requestData.get("member");
 
-        log.debug("다이어리넘버:{}, 요청한사용자:{}", diaryNum, memberId);
+        log.debug("다이어리넘버: {}, 요청한사용자: {}", diaryNum, memberId);
 
         shareDiaryService.acceptRegister(diaryNum, memberId);
 
-
-        return "redirect:/";
-
+        return ResponseEntity.ok("요청이 성공적으로 처리되었습니다.");
     }
 
     @GetMapping("getCoverTemplates")
@@ -254,9 +271,9 @@ public class ShareController {
 
     // 노트 선택 페이지로 이동하는 메서드 추가
     @GetMapping("note")
-    public String note(@RequestParam("shareDiaryNum") Integer shareDiaryNum, Model model) {
+    public String note(@RequestParam("diaryNum") Integer diaryNum, Model model) {
 
-        model.addAttribute("shareDiaryNum", shareDiaryNum);
+        model.addAttribute("shareDiaryNum", diaryNum);
         return "share/NoteSelect";  // 노트 템플릿 선택 페이지로 이동
     }
 
@@ -293,7 +310,7 @@ public class ShareController {
 
     //전체 공유 다이어리 리스트를 출력하는 메서드
     @GetMapping("listAll")
-    public String listAll(Model model) {
+    public String listAll(@AuthenticationPrincipal AuthenticatedUser user, Model model) {
 
         List<ShareDiaryDTO> diaryList = shareDiaryService.getDiaryList();
         model.addAttribute("diaryList", diaryList);
@@ -302,7 +319,6 @@ public class ShareController {
 
         return "share/shareMemberTest";
     }
-
 
 
 }
