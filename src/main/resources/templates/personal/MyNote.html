@@ -54,8 +54,8 @@
                 <div class="col-md-3 mb-4">
                     <div class="my-note-add-btn">
                         <!-- diaryNum을 모델에서 직접 사용 -->
-                        <a href="#" th:href="'/personal/note?diaryNum=' + ${diaryNum}">
-                            <div class="my-note-icon-add">+</div> <!-- 신규 노트 추가 아이콘 -->
+                        <a th:href="@{/personal/note(diaryNum=${diaryNum})}">
+                            <div class="my-note-icon-add">+</div>
                         </a>
                     </div>
                 </div>
@@ -67,7 +67,8 @@
                         <img th:src="@{'/images/' + ${note.noteTemplate.noteName} + '.png'}" alt="노트 이미지" class="card-img-top">
                         <div class="card-body">
                             <h5 class="card-title" th:text="${note.noteTitle}">노트 제목</h5>
-                            <a href="#" th:href="@{'/personal/viewNote/' + ${note.personalNoteNum}}" class="btn btn-primary">노트 보기</a>
+                            <!-- 노트 보기 버튼 (모달 열기) -->
+                            <button class="btn btn-primary btn-view-note" th:attr="data-note-num=${note.personalNoteNum}">노트 보기</button>
                         </div>
                     </div>
                 </div>
@@ -81,29 +82,42 @@
     </div>
 </div>
 
-<!-- 메뉴 모달 -->
-<div class="modal fade" id="menuModal" tabindex="-1" aria-labelledby="menuLabel" aria-hidden="true">
-    <div class="modal-dialog">
+<!-- 노트 보기 모달 -->
+<div class="modal fade" id="noteModal" tabindex="-1" aria-labelledby="noteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <!-- 모달 헤더 -->
             <div class="modal-header">
-                <h5 class="modal-title" id="menuLabel">다이어리 관리</h5>
+                <h5 class="modal-title" id="noteModalLabel">노트 제목</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
-            <!-- 모달 본문 -->
-            <div class="modal-body">
-                <div class="my-note-menu-list">
-                    <a href="#" th:href="@{/personal/categorySelect}" class="my-note-menu-item">신규 다이어리</a>
-                    <a href="#" th:href="@{/personal/editDiary}" class="my-note-menu-item">다이어리 수정</a>
-                    <a href="#" th:href="@{/personal/deleteDiary}" class="my-note-menu-item">다이어리 삭제</a>
-                    <a href="#" th:href="@{/personal/addDiarySheet}" class="my-note-menu-item">다이어리 속지 추가</a>
+            <!-- 노트 템플릿 이미지를 배경으로 설정 -->
+            <div class="modal-body" id="noteContentModal" style="background-size: cover; background-repeat: no-repeat;">
+                <!-- 프로필 및 위치 태그 섹션 -->
+                <div class="d-flex align-items-center mb-4">
+                    <div class="profile-image me-3">
+                        <img src="/images/profile.png" class="rounded-circle" width="50" height="50" alt="프로필">
+                    </div>
+                    <div class="location-tag w-100">
+                        <p><strong>위치:</strong> <span id="noteLocation"></span></p>
+                    </div>
                 </div>
-            </div>
 
-            <!-- 모달 푸터 -->
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                <!-- 날짜, 감정 선택 섹션 -->
+                <div class="d-flex justify-content-between mb-4">
+                    <p><strong>작성일:</strong> <span id="noteDate"></span></p>
+                    <p><strong>감정:</strong> <span id="noteEmotion"></span></p>
+                </div>
+
+                <!-- 일기 내용 -->
+                <div class="mb-4 note-content">
+                    <p><strong>내용:</strong> <span id="noteContents"></span></p>
+                </div>
+
+                <!-- 해시태그 표시 -->
+                <div class="mb-4">
+                    <p><strong>해시태그:</strong> <span id="noteHashtags"></span></p>
+                </div>
             </div>
         </div>
     </div>
@@ -114,5 +128,7 @@
 
 <!-- 부트스트랩 JS 로드 -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<!-- 노트 보기 JS -->
+<script th:src="@{/js/personal/viewNote.js}"></script>
 </body>
 </html>

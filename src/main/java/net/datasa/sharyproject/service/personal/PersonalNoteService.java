@@ -34,6 +34,7 @@ public class PersonalNoteService {
     private final NoteTemplateRepository noteTemplateRepository;
     private final MemberRepository memberRepository;
     private final ProfileRepository profileRepository;
+    private final PersonalNoteHashtagRepository personalNoteHashtagRepository;
 
     /**
      * 다이어리 번호로 PersonalNote 목록을 가져오는 메서드
@@ -178,4 +179,30 @@ public class PersonalNoteService {
             throw e; // 예외를 다시 던져 상위에서 처리
         }
     }
+
+    /**
+     * 노트 번호로 노트를 조회하는 메서드
+     * @param noteNum 노트 번호
+     * @return PersonalNoteDTO
+     */
+    public PersonalNoteDTO getNoteByNum(Integer noteNum) {
+        // 노트 번호로 노트 엔티티를 찾음
+        PersonalNoteEntity noteEntity = personalNoteRepository.findById(noteNum)
+                .orElseThrow(() -> new RuntimeException("해당 노트 정보를 찾을 수 없습니다."));
+
+        // 노트 엔티티를 DTO로 변환하여 반환
+        return convertEntityToDTO(noteEntity);
+    }
+
+    /**
+     * 특정 노트에 연결된 해시태그를 불러오는 메서드
+     */
+    public List<String> getHashtagsByNoteNum(Integer noteNum) {
+        List<PersonalNoteHashtagEntity> noteHashtags = personalNoteHashtagRepository.findByPersonalNote_PersonalNoteNum(noteNum);
+        return noteHashtags.stream()
+                .map(noteHashtag -> noteHashtag.getHashtag().getHashtagName())
+                .collect(Collectors.toList());
+    }
+
+
 }
