@@ -7,18 +7,35 @@
     <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
     <script th:inline="javascript">
         $(document).ready(function (){
-           $('.joinBtn').on('click', function (){
-               let diaryNum = $(this).data('diary-num');
-               console.log(diaryNum);
+            $('.joinBtn').on('click', function (){
+                let diaryNum = $(this).data('diary-num');
+                console.log(diaryNum);
 
-               if (!confirm('가입 요청하시겠습니까?')){
-                   return false;
-               } else {
-                   location.href = "/share/join?diaryNum=" + diaryNum;
-               }
-           });
+                if (!confirm('가입 요청하시겠습니까?')){
+                    return false;
+                } else {
+                    // AJAX 요청 보내기
+                    $.ajax({
+                        type: 'GET',
+                        url: '/share/join',
+                        data: { diaryNum: diaryNum },
+                        success: function(response) {
+                            // 서버로부터 받은 msg 값으로 alert 창 띄우기
+                            if (response) {
+                                alert(response);
+                            }
+                        },
+                        error: function(error) {
+                            console.log("에러 발생:", error);
+                        }
+                    });
+                }
+
+            });
+
         });
     </script>
+
 </head>
 <body>
     <div>

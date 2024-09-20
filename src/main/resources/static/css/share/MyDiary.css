@@ -1,147 +1,118 @@
-/* 컨테이너 설정 */
-#main {
-    padding: 40px 20px;
+/* 전체 페이지 배경 설정 */
+body {
+    background-color: #f9f9f9; /* 밝은 배경 색상 */
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+}
+
+/* 컨테이너 스타일 */
+.container {
+    width: 100%;
     max-width: 1200px;
-    margin: 80px auto 0 auto; /* 상단에 80px 마진 추가 */
+    margin: 0 auto;
+    padding: 40px 20px;
     text-align: center;
 }
 
-/* 다이어리 리스트 스타일 */
+/* My Diary 제목 스타일 */
+h2 {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-bottom: 50px;
+    color: #333;
+}
+
+/* 다이어리 목록 컨테이너 */
 .diary-list {
     display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-wrap: wrap;  /* 화면 크기에 따라 줄바꿈을 하도록 설정 */
-    margin-bottom: 30px;
+    justify-content: flex-start; /* 다이어리 목록을 왼쪽 정렬 */
+    gap: 20px; /* 카드들 사이의 간격 */
+    flex-wrap: wrap; /* 화면 크기에 따라 카드들이 줄바꿈 되도록 설정 */
+    padding: 20px;
 }
 
-/* 신규 다이어리 추가 버튼 스타일 */
-.diary-add {
-    border: 2px dashed #007bff;
-    width: 200px;
-    height: 250px;
+/* 다이어리 카드 스타일 */
+.my-diary-card {
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* 부드러운 그림자 효과 */
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+    width: 220px; /* 다이어리 카드의 너비 */
+    height: 340px; /* 다이어리 카드의 높이 */
+}
+
+/* 다이어리 카드에 마우스 오버 시 확대 효과 */
+.my-diary-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2); /* 그림자 강조 */
+}
+
+/* 다이어리 카드 이미지 */
+.my-diary-card img {
+    width: 100%;
+    height: 80%; /* 카드 높이의 80%를 이미지로 채움 */
+    object-fit: cover; /* 이미지 비율을 유지하면서 채움 */
+}
+
+/* 다이어리 카드 이름 표시 */
+.my-diary-card .card-footer {
+    padding: 10px;
+    text-align: center;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #333;
+}
+
+/* 신규 다이어리 추가 버튼 */
+.my-diary-add-btn {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: 15px;
-    background-color: #f8f9fa;
-    transition: transform 0.3s;
-    text-decoration: none; /* 밑줄 제거 */
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    width: 220px; /* 다이어리 카드와 동일한 크기 */
+    height: 340px;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* a 태그의 밑줄 제거 */
-.diary-add a {
-    text-decoration: none;
+.my-diary-add-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
 }
 
-/* 다이어리 추가 버튼 호버 효과 */
-.diary-add:hover {
-    transform: scale(1.05); /* 마우스를 올렸을 때 살짝 확대 */
-}
-
-/* 신규 다이어리 추가 아이콘 스타일 */
-.icon-add {
-    font-size: 60px;
+/* 플러스 아이콘 */
+.my-diary-add-btn .my-icon-add {
+    font-size: 3rem;
     color: #007bff;
-    text-decoration: none; /* 밑줄 제거 */
-}
-
-/* 다이어리 표지 스타일 */
-.cover {
-    border: 2px solid #007bff;
-    width: 200px;
-    height: 250px;
-    margin: 15px;
-    background-image: linear-gradient(135deg, #6a89cc 0%, #b8e994 100%); /* 그라데이션 배경 */
-    color: white;
+    background-color: white;
+    border-radius: 50%;
+    width: 80px;
+    height: 80px;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 20px;
-    font-family: 'Georgia', serif;
-    transition: transform 0.3s, box-shadow 0.3s;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 기본 그림자 효과 */
-    text-decoration: none; /* 밑줄 제거 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* 다이어리 표지 호버 효과 */
-.cover:hover {
-    transform: scale(1.05); /* 마우스를 올렸을 때 살짝 확대 */
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* 그림자 강조 */
-}
-
-/* 액션 버튼 컨테이너 */
-.actions {
-    display: flex;
-    justify-content: center;
-    margin-top: 30px;
-    flex-wrap: wrap; /* 화면 크기에 따라 버튼이 줄바꿈 되도록 설정 */
-}
-
-/* 액션 버튼 스타일 */
-.action-btn {
-    margin: 10px;
-    padding: 15px 30px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    cursor: pointer;
-    border-radius: 5px;
-    transition: background-color 0.3s, transform 0.3s;
-    text-decoration: none; /* 밑줄 제거 */
-}
-
-/* 액션 버튼 호버 효과 */
-.action-btn:hover {
-    background-color: #0056b3; /* 호버 시 더 어두운 파란색 */
-    transform: translateY(-2px); /* 마우스를 올렸을 때 살짝 위로 이동 */
-}
-
-/* 모달 크기 조정 */
-.modal-dialog {
-    max-width: 600px; /* 모달의 최대 너비를 600px로 설정 */
-    width: 100%; /* 모달 너비가 화면 크기에 맞추어 유연하게 확장되도록 설정 */
-}
-
-/* 메뉴 항목들을 한 줄에 나타나게 설정 */
-.menu-list {
-    display: flex;
-    flex-wrap: wrap; /* 화면 크기에 따라 버튼들이 줄바꿈 되도록 설정 */
-    justify-content: space-around; /* 버튼 간의 간격을 일정하게 유지 */
-}
-
-/* 모달 내부의 a 태그에 대한 스타일 */
-.modal .menu-item {
-    margin: 10px;
-    padding: 10px 20px; /* 버튼 패딩을 줄여서 크기를 조정 */
-    background-color: #007bff;
-    color: white;
-    border: none;
-    cursor: pointer;
-    border-radius: 5px;
-    transition: background-color 0.3s, transform 0.3s;
-    text-decoration: none; /* 밑줄 제거 */
-    flex: 1 0 40%; /* 각 버튼이 줄바꿈을 고려하여 유연하게 크기를 설정 */
-}
-
-/* 모달 내부의 a 태그 호버 효과 */
-.modal .menu-item:hover {
+.my-diary-add-btn .my-icon-add:hover {
     background-color: #0056b3;
-    transform: translateY(-2px); /* 마우스를 올렸을 때 살짝 위로 이동 */
-}
-
-/* 모달 내부의 닫기 버튼에 대한 스타일 */
-.modal .btn-secondary {
-    background-color: #007bff;
     color: white;
-    border-radius: 5px;
-    padding: 10px 20px;
-    border: none;
-    transition: background-color 0.3s, transform 0.3s;
 }
 
-/* 모달 내부의 닫기 버튼 호버 효과 */
-.modal .btn-secondary:hover {
-    background-color: #0056b3;
-    transform: translateY(-2px);
+/* 알림 아이콘 스타일 */
+.notification-icon {
+    font-size: 1.5rem;
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    cursor: pointer;
+}
+
+.notification-icon:hover {
+    color: #007bff;
 }

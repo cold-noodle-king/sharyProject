@@ -3,6 +3,7 @@ package net.datasa.sharyproject.repository.share;
 import net.datasa.sharyproject.domain.entity.share.ShareDiaryEntity;
 import net.datasa.sharyproject.domain.entity.share.ShareMemberEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -18,8 +19,20 @@ public interface ShareMemberRepository extends JpaRepository<ShareMemberEntity, 
 
     //공유 다이어리와 멤버 아이디로 가입 요청한 회원을 조회
     ShareMemberEntity ShareDiary_shareDiaryNumAndMember_memberId(Integer diaryNum, String memberId);
-    
-    //이미 가입한 회원을 조회하는 메서드
+
+    //이미 가입요청을 한 회원을 조회하는 메서드
     Optional<ShareMemberEntity> findByShareDiary_ShareDiaryNumAndMember_MemberId(Integer shareDiaryNum, String memberId);
+
+    // 특정 memberId에 해당하며, status가 ACCEPTED인 ShareDiaryEntity 목록을 가져오는 쿼리
+    @Query("SELECT sm.shareDiary FROM ShareMemberEntity sm WHERE sm.member.memberId = :memberId AND sm.status = 'ACCEPTED'")
+    List<ShareDiaryEntity> findAcceptedShareDiariesByMemberId(String memberId);
+
+    // 특정 memberId와 shareDiaryNum에 해당하며, status가 ACCEPTED인 ShareDiaryEntity 목록을 가져오는 쿼리
+    @Query("SELECT sm.shareDiary FROM ShareMemberEntity sm WHERE sm.shareDiary.shareDiaryNum = :diaryNum AND sm.member.memberId = :memberId AND sm.status = 'ACCEPTED'")
+    Optional<ShareDiaryEntity> findAcceptedShareDiaryByDiaryNumAndMemberId(Integer diaryNum, String memberId);
+
+    // 특정 memberId와 shareDiaryNum에 해당하며, status가 ACCEPTED인 ShareDiaryEntity 목록을 가져오는 쿼리
+    @Query("SELECT sm.shareDiary FROM ShareMemberEntity sm WHERE sm.shareDiary.shareDiaryNum = :diaryNum AND sm.member.memberId = :memberId AND sm.status = 'PENDING'")
+    Optional<ShareDiaryEntity> findPendingShareDiaryByDiaryNumAndMemberId(Integer diaryNum, String memberId);
 
 }

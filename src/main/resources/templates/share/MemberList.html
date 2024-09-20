@@ -22,7 +22,7 @@
     <script>
         $(document).ready(function() {
             $('#goBack').click(function() {
-                window.location.href = '/share/viewMember';
+                window.location.href = '/share/viewMember?diaryNum=' + [[${diary.shareDiaryNum}]];
             });
         });
     </script>
@@ -37,7 +37,23 @@
     <br>
     <div class="diary-container">
         <div>
-            <p>방장: </p>
+            <p>방장: <span th:text="${diary.nickname}"></span>(<span th:text="${diary.memberId}"></span>)</p>
+        </div>
+        <div>
+            <table>
+                <tr>
+                    <td>번호</td>
+                    <td>닉네임</td>
+                    <td>ID</td>
+                    <td>가입일</td>
+                </tr>
+                <tr th:each="list, i : ${list}">
+                    <td th:text="${i.count}"></td>
+                    <td th:text="${list.nickname}"></td>
+                    <td th:text="${list.memberId}"></td>
+                    <td th:text="${#temporals.format(list.joinDate, 'yyyy-MM-dd')}"></td>
+                </tr>
+            </table>
         </div>
     </div>
 

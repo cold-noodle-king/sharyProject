@@ -6,6 +6,8 @@ import lombok.extern.slf4j.Slf4j;
 import net.datasa.sharyproject.domain.entity.member.MemberEntity;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.time.LocalDateTime;
+
 @Slf4j
 @AllArgsConstructor
 @NoArgsConstructor
@@ -40,4 +42,6 @@ public class ShareMemberEntity {
     @Column(name = "status", nullable = false, columnDefinition = "varchar(20) default 'PENDING' CHECK (status IN ('PENDING', 'ACCEPTED', 'REJECTED'))")
     private String status;
 
+    @Column(name="join_date", columnDefinition = "TIMESTAMP")
+    private LocalDateTime joinDate;
 }
