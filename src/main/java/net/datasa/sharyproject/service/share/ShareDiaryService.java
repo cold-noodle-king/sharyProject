@@ -21,6 +21,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -88,7 +89,7 @@ public class ShareDiaryService {
     /**
      * 사용자가 생성한 다이어리 리스트를 가져오는 메서드
      * @param memberId 현재 로그인한 사용자의 ID
-     * @return
+     * @return 다이어리 리스트 반환
      */
     public List<ShareDiaryDTO> getCreatedList(String memberId){
 
@@ -101,7 +102,38 @@ public class ShareDiaryService {
     }
 
     /**
-     * 다이어리를 가져오는 메서드
+     * 사용자가 가입한 다이어리 리스트를 가져오는 메서드
+     * @param memberId 현재 로그인한 사용자 ID
+     * @return
+     */
+    public List<ShareDiaryDTO> getJoinedList(String memberId){
+        // 특정 memberId에 해당하며, status가 ACCEPTED인 다이어리 리스트 조회
+        List<ShareDiaryEntity> acceptedShareDiaries = shareMemberRepository.findAcceptedShareDiariesByMemberId(memberId);
+
+        // 조회한 엔티티를 DTO로 변환하여 반환
+        return acceptedShareDiaries.stream()
+                .map(this::convertEntityToDTO) // 엔티티를 DTO로 변환하는 메서드 호출
+                .collect(Collectors.toList());
+
+    }
+
+    /**
+     * 사용자가 가입한 특정 다이어리를 가져오는 메서드
+     * @param diaryNum 해당 다이어리 넘버
+     * @param memberId 사용자 ID
+     * @return
+     */
+    public ShareDiaryDTO getJoinedDiary(Integer diaryNum, String memberId){
+        // 특정 다이어리 번호와 사용자 ID로 상태가 ACCEPTED인 다이어리 조회
+        ShareDiaryEntity shareDiaryEntity = shareMemberRepository.findAcceptedShareDiaryByDiaryNumAndMemberId(diaryNum, memberId)
+                .orElseThrow(() -> new EntityNotFoundException("해당 다이어리나 사용자가 없거나, 가입 요청이 승인되지 않았습니다."));
+
+        // 조회한 엔티티를 DTO로 변환하여 반환
+        return convertEntityToDTO(shareDiaryEntity);
+    }
+
+    /**
+     * 특정 다이어리 하나를 가져오는 메서드
      * @param diaryNum
      * @param memberId
      * @return
@@ -110,11 +142,7 @@ public class ShareDiaryService {
         ShareDiaryEntity shareDiaryEntity = shareDiaryRepository.findById(diaryNum)
                 .orElseThrow(() -> new EntityNotFoundException("다이어리 정보를 찾을 수 없습니다."));
 
-       /* MemberEntity memberEntity = memberRepository.findById(memberId)
-                .orElseThrow(() -> new EntityNotFoundException("사용자 정보를 찾을 수 없습니다."));*/
-
         return convertEntityToDTO(shareDiaryEntity);
-
     }
 
     /**
@@ -169,12 +197,24 @@ public class ShareDiaryService {
                 .orElseThrow(() -> new EntityNotFoundException("사용자 정보를 찾을 수 없습니다."));
 
         // 해당 다이어리와 멤버가 이미 가입 요청을 했는지 확인
-        Optional<ShareMemberEntity> existingRequest = shareMemberRepository
-                .findByShareDiary_ShareDiaryNumAndMember_MemberId(diaryNum, memberId);
+       /* Optional<ShareMemberEntity> existingRequest = shareMemberRepository
+                .findByShareDiary_ShareDiaryNumAndMember_MemberId(diaryNum, memberId);*/
+
+        Optional<ShareDiaryEntity> existingRequest = shareMemberRepository
+                .findPendingShareDiaryByDiaryNumAndMemberId(diaryNum, memberId);
+
+        // 해당 다이어리와 멤버가 이미 가입되어 있는지 확인
+        Optional<ShareDiaryEntity> existingMember = shareMemberRepository
+                .findAcceptedShareDiaryByDiaryNumAndMemberId(diaryNum, memberId);
 
         if (existingRequest.isPresent()) {
             // 이미 가입 요청을 한 경우 예외를 던짐
-            throw new IllegalStateException("이미 가입 요청을 하셨습니다.");
+            throw new IllegalStateException("이미 가입 요청을 보낸 다이어리입니다.");
+        }
+
+        if (existingMember.isPresent()) {
+            // 이미 가입을 한 경우 예외를 던짐
+            throw new IllegalStateException("이미 가입이 완료된 다이어리입니다.");
         }
 
         // 새로운 가입 요청 생성
@@ -224,7 +264,25 @@ public class ShareDiaryService {
 
         log.debug("가져온 회원 정보:{}", entity);
         entity.setStatus("ACCEPTED");
+        entity.setJoinDate(LocalDateTime.now());
 
+    }
+
+    public List<ShareMemberDTO> getMemberList(Integer diaryNum, String memberId){
+        // 공유 다이어리 엔티티 조회
+        ShareDiaryEntity shareDiaryEntity = shareDiaryRepository.findById(diaryNum)
+                .orElseThrow(() -> new EntityNotFoundException("다이어리를 찾을 수 없습니다."));
+
+        // 상태가 'PENDING'인 공유 멤버 엔티티 리스트 조회
+        List<ShareMemberEntity> memberList = shareMemberRepository.findByShareDiaryAndStatus(shareDiaryEntity, "ACCEPTED");
+
+        // 엔티티를 DTO로 변환
+        List<ShareMemberDTO> memberDTOs = memberList.stream()
+                .map(this::convertShareMemberEntityToDTO)
+                .collect(Collectors.toList());
+
+        log.debug("가입 요청 리스트:{}", memberDTOs);
+        return memberDTOs;
     }
     
     // ShareMemberEntity를 ShareMemberDTO로 변환하는 헬퍼 메서드
@@ -237,9 +295,11 @@ public class ShareDiaryService {
                 .managerId(member.getManager() != null ? member.getManager().getMemberId() : null)
                 .managerName(member.getManager() != null ? member.getManager().getNickname() : null)
                 .status(member.getStatus())
+                .joinDate(member.getJoinDate())
                 .build();
     }
 
+    // ShareDiaryEntity를 ShareDiaryDTO로 변환하는 헬퍼 메서드
     private ShareDiaryDTO convertEntityToDTO(ShareDiaryEntity diary) {
         // 공유 멤버 리스트를 DTO로 변환
         List<ShareMemberDTO> shareMemberDTOList = new ArrayList<>();
@@ -255,6 +315,7 @@ public class ShareDiaryService {
                             .managerId(member.getManager() != null ? member.getManager().getMemberId() : null) // 매니저 ID
                             .managerName(member.getManager() != null ? member.getManager().getNickname() : null) // 매니저 닉네임
                             .status(member.getStatus()) // 요청 상태
+                            .joinDate(member.getJoinDate())
                             .build())
                     .collect(Collectors.toList());
         }

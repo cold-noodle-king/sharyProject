@@ -40,13 +40,20 @@
             </a>
         </div>
 
-        <!-- 다이어리 표지 목록 (반복 가능) -->
-        <div class="cover">
-            <a th:href="@{/share/joinedDiary}"><span>표지</span></a> <!-- 다이어리 표지 텍스트 -->
+        <!-- 다이어리 목록 반복 출력 -->
+        <div class="col-md-3 mb-4" th:each="diary : ${diaryList}">
+            <div class="my-diary-card h-100">
+                <!-- 커버 이름을 사용해 절대경로에서 이미지를 불러오는 코드 -->
+                <a th:href="@{/share/joinedDiary(diaryNum=${diary.shareDiaryNum})}"><img th:src="@{'/images/' + ${diary.coverTemplateName} + '.png'}"
+                                                                                         alt="커버 이미지" class="card-img-top"></a>
+
+                <!-- 다이어리 이름을 이미지 하단에 표시 -->
+                <div class="card-footer text-center">
+                    <p th:text="${diary.shareDiaryName} != null ? ${diary.shareDiaryName} : '이름 없음'"></p> <!-- 다이어리 이름 -->
+                </div>
+            </div>
         </div>
-        <div class="cover">
-            <span>표지</span> <!-- 다이어리 표지 텍스트 -->
-        </div>
+
     </div>
 
     <!-- 메뉴 버튼 (햄버거 아이콘) -->

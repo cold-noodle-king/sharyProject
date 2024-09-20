@@ -60,8 +60,9 @@
             <!-- 사이드바 내용 -->
             <div class="sidebar-content">
                 <!-- 프로필 정보 추가 -->
-                <img src="/images/emotions/happy.png" alt="프로필사진" class="profile-img">
-                <p class="nickname">사용자 닉네임</p>
+                <img th:src="${profile?.profilePicture != null} ? ${profile.profilePicture} : '/images/profile.png'"
+                     alt="프로필 사진" class="profile-img">
+                <p th:text="${member.nickname}"></p>
                 <p class="profile-intro">짧은 프로필 소개글</p>
 
                 <a th:href="@{/mypage/info}">개인정보</a>
