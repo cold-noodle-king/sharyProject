@@ -15,7 +15,7 @@
     <script>
         $(document).ready(function() {
             $('#goBack').click(function() {
-                window.location.href = '/share/viewMember?diaryNum=' + [[${diary.shareDiaryNum}]];
+                window.location.href = '/sharemember/viewMember?diaryNum=' + [[${diary.shareDiaryNum}]];
             });
             $('.okBtn').on('click', function () {
                 let diaryNum = $(this).data('diary-num');
@@ -27,7 +27,7 @@
                  } else {
                 $.ajax({
                     type: 'POST',
-                    url: '/share/acceptRequest',
+                    url: '/sharemember/acceptRequest',
                     data: JSON.stringify({ diaryNum: diaryNum, member: member }),
                     contentType: 'application/json; charset=utf-8',
                     success: function (response) {

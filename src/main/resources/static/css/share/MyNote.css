@@ -1,0 +1,149 @@
+/* 메인 컨테이너 스타일 */
+#my-note-main {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    margin-top: 100px;
+}
+
+/* 선택한 다이어리 카드 스타일 */
+.selected-diary-card {
+    width: 100%;
+    max-width: 250px;
+    margin-left: 0;
+    margin-bottom: 20px;
+}
+
+/* 세로 경계선 스타일 */
+.vertical-line {
+    border-left: 2px solid #ccc;
+    height: auto;
+    margin: 0 auto;
+}
+
+/* 신규 다이어리 추가 버튼의 링크 밑줄 제거 */
+.my-note-add-btn a {
+    text-decoration: none;
+}
+
+/* 노트 목록 - 카드 스타일 */
+.my-note-list .my-note-card {
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* 노트 카드 호버 시 효과 */
+.my-note-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+/* 노트 이미지 */
+.my-note-card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-bottom: 2px solid #eee;
+    margin-bottom: 10px;
+}
+
+/* 노트 카드 제목 */
+.my-note-card h5 {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+}
+
+/* 노트 목록이 한 줄에 4개의 카드가 나오도록 설정 */
+.my-note-list .col-md-3 {
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+/* 신규 노트 추가 버튼 스타일 */
+.my-note-add-btn {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+/* 신규 노트 추가 버튼 아이콘 스타일 */
+.my-note-icon-add {
+    font-size: 3rem;
+    color: #007bff;
+    background-color: white;
+    width: 80px;
+    height: 80px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* 신규 노트 추가 버튼 호버 시 색상 변경 */
+.my-note-icon-add:hover {
+    background-color: #0056b3;
+    color: white;
+}
+
+/* 모달 관련 스타일 추가 */
+
+#noteContentModal {
+    background-image: url('http://localhost:8888/images/your_image.png') !important;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    min-height: 400px;
+}
+
+/* 모달 헤더 스타일 */
+.modal-header {
+    border-bottom: 1px solid #dee2e6;
+}
+
+/* 모달 닫기 버튼 스타일 */
+.btn-close {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    line-height: 1;
+    color: #000;
+}
+
+/* 모달 내용 텍스트 스타일 */
+#noteContents {
+    font-size: 1rem;
+    line-height: 1.6;
+}
+
+/* 감정과 날짜 섹션 스타일 */
+#noteEmotion, #noteDate {
+    font-weight: bold;
+}
+
+/* 해시태그 섹션 스타일 */
+#noteHashtags {
+    font-size: 0.9rem;
+    color: #555;
+}
+
+/* 프로필 이미지 스타일 */
+.profile-image img {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+}
+
+/* 위치 태그 섹션 스타일 */
+.location-tag {
+    font-size: 1rem;
+    color: #333;
+}

@@ -37,8 +37,8 @@
     <br>
     <div class="diary-container">
         <div>
-            <p><a th:href="@{/share/memberList(diaryNum=${diary.shareDiaryNum})}">전체 멤버 보기</a></p>
-            <p><a th:href="@{/share/registerRequest(diaryNum=${diary.shareDiaryNum})}">가입 요청 관리</a></p>
+            <p><a th:href="@{/sharemember/memberList(diaryNum=${diary.shareDiaryNum})}">전체 멤버 보기</a></p>
+            <p><a th:href="@{/sharemember/registerRequest(diaryNum=${diary.shareDiaryNum})}">가입 요청 관리</a></p>
         </div>
     </div>
 
@@ -49,7 +49,6 @@
         </button>
     </div>
 </div>
-
 
 <!-- 푸터 부분 불러오기 -->
 <div th:replace="~{fragments/footer :: footer}"></div>
