@@ -63,7 +63,7 @@
                 <img th:src="${profile?.profilePicture != null} ? ${profile.profilePicture} : '/images/profile.png'"
                      alt="프로필 사진" class="profile-img">
                 <p th:text="${member.nickname}"></p>
-                <p class="profile-intro">짧은 프로필 소개글</p>
+                <p th:text="${profile.ment}"></p>
 
                 <a th:href="@{/mypage/info}">개인정보</a>
                 <a th:href="@{/mypage/profile}">프로필</a>
@@ -86,6 +86,8 @@
             <form id="profileUpdate" enctype="multipart/form-data" method="post" action="/mypage/profileUpdate">
                 <!-- 숨겨진 필드로 memberId 값을 전송 -->
                 <input type="hidden" name="memberId" th:value="${member.memberId}">
+                <!-- 이미지 리셋 여부를 서버로 전달하기 위한 숨겨진 필드 -->
+                <input type="hidden" name="resetImage" value="false" id="resetImageInput">
                 <table class="profile-info">
                     <tr>
                         <td>
@@ -144,7 +146,9 @@
     document.getElementById('resetImage').addEventListener('click', function() {
         document.getElementById('profileImage').src = '/images/profile.png';
         document.getElementById('imageUpload').value = ''; // 파일 선택 필드 초기화
+        document.getElementById('resetImageInput').value = 'true';  // 이미지 리셋 여부를 true로 설정
     });
+
 
     // AJAX로 프로필 저장
     document.getElementById('profileUpdate').addEventListener('submit', function(event) {
@@ -178,19 +182,27 @@
                 // 서버에서 새로운 프로필 이미지 경로를 올바르게 반환하면, 이를 이미지 요소에 반영
                 if (data.profilePicture) {
                     document.getElementById('profileImage').src = data.profilePicture;
+
                 } else {
                     alert('이미지 경로가 반환되지 않았습니다.');
                 }
 
+
                 // 소개글도 업데이트
                 document.querySelector('textarea[name="ment"]').value = data.ment;
                 alert('프로필이 성공적으로 업데이트되었습니다.');
+                // 페이지를 새로고침
+                window.location.reload();  // AJAX 완료 후 새로고침
+
             })
             .catch(error => {
                 console.error('프로필 업데이트 실패:', error);
                 alert('프로필 업데이트 중 오류가 발생했습니다.');
             });
+
+
     });
+
 
 </script>
 </html>
