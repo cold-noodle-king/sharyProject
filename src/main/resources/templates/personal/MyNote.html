@@ -52,10 +52,9 @@
             <div class="my-note-list row">
                 <!-- 신규 노트 추가 버튼 -->
                 <div class="col-md-3 mb-4">
-                    <div class="my-note-add-btn">
-                        <!-- diaryNum을 모델에서 직접 사용 -->
+                    <div class="add-note-card">
                         <a th:href="@{/personal/note(diaryNum=${diaryNum})}">
-                            <div class="my-note-icon-add">+</div>
+                            <div class="add-note-icon">+</div>
                         </a>
                     </div>
                 </div>
@@ -102,10 +101,10 @@
                             <img src="/images/profile.png" class="rounded-circle" width="50" height="50" alt="프로필">
                         </div>
                         <div class="w-100">
-                            <p id="noteLocation"></p>
+                            <p id="noteLocation">[위치]</p> <!-- 위치 텍스트 (추후 수정 가능) -->
                             <div class="date-emotion-section">
-                                <span id="noteDate"></span>
-                                <span id="noteEmotion" class="ms-3"></span>
+                                <span id="noteDate">[작성일]</span> <!-- 작성일 텍스트 -->
+                                <span id="noteEmotion" class="ms-3">[감정]</span> <!-- 감정 텍스트 -->
                             </div>
                         </div>
                     </div>
@@ -117,12 +116,12 @@
 
                     <!-- 내용 섹션 -->
                     <div class="content-section">
-                        <p id="noteContents">내용</p>
+                        <p id="noteContents">[내용]</p> <!-- 노트 내용 텍스트 -->
                     </div>
 
                     <!-- 해시태그 섹션 -->
                     <div class="hashtag-section">
-                        <p id="noteHashtags">해시태그</p>
+                        <p id="noteHashtags">[해시태그]</p> <!-- 해시태그 텍스트 -->
                     </div>
 
                 </div> <!-- content-wrapper 끝 -->
