@@ -260,7 +260,7 @@ public class ShareController {
 
         shareDiaryService.acceptRegister(diaryNum, memberId);
 
-        return ResponseEntity.ok("요청이 성공적으로 처리되었습니다.");
+        return ResponseEntity.ok("가입 요청을 수락하였습니다.");
     }
 
     @GetMapping("getCoverTemplates")
@@ -319,6 +319,5 @@ public class ShareController {
 
         return "share/shareMemberTest";
     }
-
 
 }
