@@ -94,45 +94,56 @@
     color: white;
 }
 
-/* 콘텐츠 전체를 감싸는 wrapper */
-.content-wrapper {
-    padding: 20px; /* 여백을 추가하여 테두리와 콘텐츠 간 간격을 줌 */
-    background-color: rgba(255, 255, 255, 0.8); /* 배경에 약간의 불투명도를 줌 */
-    border-radius: 12px; /* 테두리를 둥글게 처리 */
-    max-width: 100%; /* 모달 안에서 꽉 차도록 조정 */
-    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1); /* 부드러운 그림자 추가 */
-}
+/* 모달 관련 스타일 추가 */
 
 #noteContentModal {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 40px; /* 배경 이미지와 콘텐츠 간 간격을 충분히 둠 */
-    background-position: center; /* 배경 이미지가 가운데 정렬되도록 설정 */
+    background-image: url('http://localhost:8888/images/your_image.png') !important;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    min-height: 400px;
 }
 
-.image-section img {
-    width: 100%; /* 이미지가 모달의 너비에 맞게 조정 */
-    border-radius: 12px; /* 이미지 모서리를 둥글게 처리 */
+/* 모달 헤더 스타일 */
+.modal-header {
+    border-bottom: 1px solid #dee2e6;
 }
 
-.content-section p, .hashtag-section p {
-    margin-top: 20px; /* 섹션 간 간격을 늘림 */
+/* 모달 닫기 버튼 스타일 */
+.btn-close {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    line-height: 1;
+    color: #000;
 }
 
-.date-emotion-section {
-    display: flex;
-    justify-content: space-between; /* 날짜와 감정이 서로 떨어지도록 배치 */
+/* 모달 내용 텍스트 스타일 */
+#noteContents {
+    font-size: 1rem;
+    line-height: 1.6;
+}
+
+/* 감정과 날짜 섹션 스타일 */
+#noteEmotion, #noteDate {
+    font-weight: bold;
+}
+
+/* 해시태그 섹션 스타일 */
+#noteHashtags {
     font-size: 0.9rem;
     color: #555;
 }
 
-.hashtag-section p {
-    display: inline-block;
-    padding: 5px 10px;
-    background-color: #f0f0f0;
-    border-radius: 20px;
-    margin-right: 5px;
-    font-size: 0.8rem;
-    color: #666;
+/* 프로필 이미지 스타일 */
+.profile-image img {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+}
+
+/* 위치 태그 섹션 스타일 */
+.location-tag {
+    font-size: 1rem;
+    color: #333;
 }

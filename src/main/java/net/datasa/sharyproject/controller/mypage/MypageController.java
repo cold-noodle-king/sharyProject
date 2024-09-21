@@ -54,8 +54,22 @@ public class MypageController {
         model.addAttribute("member", memberDTO);
 
         log.info("개인정보 내용 : {}", memberDTO);
-        ProfileEntity profile = profileService.findByMember(memberEntity)
-                .orElse(null);  // Optional에서 프로필 정보를 가져옴, 없으면 null
+
+        MemberEntity member = memberService.findById(user.getMemberId())
+                .orElseThrow(() -> new RuntimeException("사용자 (" + user + ")를 찾을 수 없습니다."));
+        // 프로필 정보를 데이터베이스에서 가져옴
+        ProfileEntity profile = profileService.findByMember(member)
+                .orElseGet(() -> {
+                    // 프로필 정보가 없으면 기본 프로필을 생성하여 반환
+                    ProfileEntity defaultProfile = ProfileEntity.builder()
+                            .member(member)
+                            .profilePicture("/images/profile.png")  // 기본 이미지 설정
+                            .ment("")  // 기본 소개글 설정
+                            .build();
+                    profileService.saveProfile(defaultProfile);  // 생성한 기본 프로필을 저장
+                    return defaultProfile;
+                });
+
         model.addAttribute("profile", profile);
         return "mypage/infoForm";
     }
@@ -124,7 +138,10 @@ public class MypageController {
     public ResponseEntity<Map<String, Object>> updateProfile(
             @RequestParam("profileImage") MultipartFile profileImage,
             @RequestParam("ment") String ment,
-            @RequestParam("memberId") String memberId) {
+            @RequestParam("memberId") String memberId,
+            @RequestParam(value = "resetImage", required = false, defaultValue = "false") String resetImage) {
+
+
 
         log.info("memberId: {}", memberId);  // memberId가 잘 전달되는지 확인
         // 디버깅을 위한 로그 출력
@@ -161,19 +178,16 @@ public class MypageController {
         if (profileImage != null && !profileImage.isEmpty()) {
             updatedProfile = profileService.updateProfile(profileImage, ment, profile);
         } else {
-            // 이미지가 없으면 기본 이미지로 설정
-            profile.setProfilePicture("/images/profile.png");
-            profile.setMent(ment);
-            profileService.saveProfile(profile);  // 업데이트된 프로필 저장
-
-            // 기본 이미지일 때도 updatedProfile에 값을 할당
+            // 이미지가 없으면 기존 프로필 이미지를 유지
             updatedProfile = ProfileDTO.builder()
                     .profileNum(profile.getProfileNum())
-                    .profilePicture(profile.getProfilePicture())
+                    .profilePicture(profile.getProfilePicture()) // 기존 이미지 유지
                     .profileOriginalName(profile.getProfileOriginalName())
-                    .ment(profile.getMent())
+                    .ment(ment) // 소개글만 업데이트
                     .member(profile.getMember())
                     .build();
+            profileService.saveProfile(profile);  // 업데이트된 프로필 저장
+
         }
 
 
