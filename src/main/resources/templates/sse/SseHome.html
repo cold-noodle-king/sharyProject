@@ -40,7 +40,7 @@
             }
 
             $.ajax({
-                url : '/send',
+                url : 'send',
                 type: 'post',
                 data : {memberId : id, message : msg},
                 success : function () {
@@ -57,12 +57,7 @@
 <body>
 <h1>[ SSE 테스트 ]</h1>
 
-<p sec:authorize="not isAuthenticated()"><a href="/loginForm">로그인</a></p>
-<p sec:authorize="isAuthenticated()"><a href="/logout">로그아웃</a></p>
-
-<br>
-<p>* 로그인 후 아래 링크를 각각 다른 웹브라우저에서 클릭하여 접속한다.</p>
-<p sec:authorize="isAuthenticated()"><a href="/msgTest">메시지 받는 페이지로 이동</a></p>
+<p sec:authorize="isAuthenticated()"><a href="/msgTest">알림함</a></p>
 
 <br>
 <p>* 이곳에서 아이디와 내용을 입력하여 로그인된 사용자에게 메시지를 보낸다.</p>

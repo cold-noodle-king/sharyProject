@@ -35,7 +35,9 @@ public class WebSecurityConfig {
                                                         //권한별로 접근 가능한 경로를 제어 가능
                 .anyRequest().authenticated()               //그 외의 모든 요청은 인증 필요
             )*/
-        http
+        
+
+         http
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
                                 .requestMatchers(PUBLIC_URLS).permitAll()  // 공개 URL 설정
@@ -43,7 +45,8 @@ public class WebSecurityConfig {
                                 .anyRequest().authenticated()
                 )
 
-            //HTTP Basic 인증을 사용하도록 설정
+
+                //HTTP Basic 인증을 사용하도록 설정
             /*.httpBasic(Customizer.withDefaults())*/
             //폼 로그인 설정
 /*            .formLogin(formLogin -> formLogin
