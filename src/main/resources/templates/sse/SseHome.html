@@ -40,7 +40,7 @@
             }
 
             $.ajax({
-                url : '/send',
+                url : 'send',
                 type: 'post',
                 data : {memberId : id, message : msg},
                 success : function () {
@@ -57,12 +57,7 @@
 <body>
 <h1>[ SSE 테스트 ]</h1>
 
-<p sec:authorize="not isAuthenticated()"><a href="/loginForm">로그인</a></p>
-<p sec:authorize="isAuthenticated()"><a href="/logout">로그아웃</a></p>
-
-<br>
-<p>* 로그인 후 아래 링크를 각각 다른 웹브라우저에서 클릭하여 접속한다.</p>
-<p sec:authorize="isAuthenticated()"><a href="/msgTest">메시지 받는 페이지로 이동</a></p>
+<p sec:authorize="isAuthenticated()"><a href="/msgTest">알림함</a></p>
 
 <br>
 <p>* 이곳에서 아이디와 내용을 입력하여 로그인된 사용자에게 메시지를 보낸다.</p>
@@ -74,12 +69,14 @@
 
 
 <pre>
-	- 예제 내의 text 파일의 SQL로 테이블과 테스트용 계정 정보 DB에 저장하고 실행
-	- 아이디 aaa와 bbb 생성됨 (비밀번호 모두 111)
-
-	- HTTP를 이용한 단방향 통신 (서버 -> 클라이언트)
+    - HTTP를 이용한 단방향 통신 (서버 -> 클라이언트)
 	- 자동 재연결
 	- 브라우저의 기본 기능으로 별도의 라이브러리 사용
+    - 기존 메세지 내용 직접 입력해서 보내기
+    - 추가1 누군가 나를 follow 추가
+    - 추가2 누군가 나에게 채팅 메세지 보냈을때(카카오톡)
+    - 추가3 누군가 나에게 공유 다이어리 요청 보냄
+    - 추가4 공유 다이어리 요청 수락했을때
 </pre>
 
 </body>

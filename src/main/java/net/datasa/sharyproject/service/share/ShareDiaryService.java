@@ -135,10 +135,9 @@ public class ShareDiaryService {
     /**
      * 특정 다이어리 하나를 가져오는 메서드
      * @param diaryNum
-     * @param memberId
      * @return
      */
-    public ShareDiaryDTO getDiary(Integer diaryNum, String memberId){
+    public ShareDiaryDTO getDiary(Integer diaryNum){
         ShareDiaryEntity shareDiaryEntity = shareDiaryRepository.findById(diaryNum)
                 .orElseThrow(() -> new EntityNotFoundException("다이어리 정보를 찾을 수 없습니다."));
 

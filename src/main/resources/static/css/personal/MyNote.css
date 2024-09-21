@@ -1,149 +1,167 @@
-/* 메인 컨테이너 스타일 */
+/* 메인 컨테이너 스타일링 */
 #my-note-main {
-    background-color: #f9f9f9;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-    margin-top: 100px;
+    background-color: #f9f9f9; /* 배경 색상 설정 */
+    padding: 20px; /* 내부 여백 */
+    border-radius: 8px; /* 모서리 둥글게 */
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
+    margin-top: 50px; /* 상단 여백 설정 */
 }
 
 /* 선택한 다이어리 카드 스타일 */
 .selected-diary-card {
-    width: 100%;
-    max-width: 250px;
+    width: 100%; /* 카드 너비 100% */
+    max-width: 300px; /* 최대 너비를 300px로 제한 */
     margin-left: 0;
-    margin-bottom: 20px;
+    margin-bottom: 20px; /* 카드 간 하단 여백 */
 }
 
 /* 세로 경계선 스타일 */
 .vertical-line {
-    border-left: 2px solid #ccc;
+    border-left: 2px solid #ccc; /* 세로 경계선 설정 */
     height: auto;
-    margin: 0 auto;
-}
-
-/* 신규 다이어리 추가 버튼의 링크 밑줄 제거 */
-.my-note-add-btn a {
-    text-decoration: none;
+    margin: 0 auto; /* 중앙 정렬 */
 }
 
 /* 노트 목록 - 카드 스타일 */
 .my-note-list .my-note-card {
-    background-color: white;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-    padding: 20px;
-    overflow: hidden;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    background-color: white; /* 카드 배경 색상 */
+    border: 1px solid #ddd; /* 테두리 설정 */
+    border-radius: 8px; /* 모서리 둥글게 */
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
+    overflow: hidden; /* 넘치는 콘텐츠 숨기기 */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* 호버 시 애니메이션 효과 */
 }
 
-/* 노트 카드 호버 시 효과 */
+/* 노트 카드에 마우스 호버 시 효과 */
 .my-note-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+    transform: translateY(-5px); /* 위로 살짝 이동 */
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2); /* 그림자 강화 */
 }
 
-/* 노트 이미지 */
+/* 노트 이미지 설정 */
 .my-note-card img {
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
-    border-bottom: 2px solid #eee;
-    margin-bottom: 10px;
+    width: 100%; /* 이미지 너비를 100%로 설정 */
+    height: 200px; /* 고정 높이 설정 */
+    object-fit: cover; /* 이미지 비율을 유지하면서 카드에 맞춤 */
+    border-bottom: 2px solid #eee; /* 하단 테두리 */
+    margin-bottom: 10px; /* 하단 여백 */
 }
 
-/* 노트 카드 제목 */
+/* 노트 카드 제목 스타일 */
 .my-note-card h5 {
-    font-size: 1.2rem;
-    margin-bottom: 10px;
+    font-size: 1.2rem; /* 제목 폰트 크기 설정 */
+    margin-bottom: 10px; /* 제목 하단 여백 */
 }
 
 /* 노트 목록이 한 줄에 4개의 카드가 나오도록 설정 */
 .my-note-list .col-md-3 {
-    margin-bottom: 20px;
+    margin-bottom: 30px; /* 카드 간 하단 여백 */
     display: flex;
-    justify-content: center;
+    justify-content: center; /* 카드 중앙 정렬 */
 }
 
 /* 신규 노트 추가 버튼 스타일 */
-.my-note-add-btn {
+.add-note-card {
+    background-color: white; /* 배경 색상 */
+    border: 1px solid #ddd; /* 테두리 설정 */
+    border-radius: 8px; /* 모서리 둥글게 */
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
+    width: 100%; /* 카드 너비 100% */
+    height: 200px; /* 다른 노트 카드와 동일한 높이 */
     display: flex;
-    justify-content: center;
-    margin-top: 20px;
+    justify-content: center; /* 중앙 정렬 */
+    align-items: center; /* 수직 중앙 정렬 */
+    transition: background-color 0.3s ease, color 0.3s ease; /* 호버 시 애니메이션 */
 }
 
-/* 신규 노트 추가 버튼 아이콘 스타일 */
-.my-note-icon-add {
-    font-size: 3rem;
-    color: #007bff;
-    background-color: white;
-    width: 80px;
-    height: 80px;
-    border-radius: 8px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-    transition: background-color 0.3s ease, color 0.3s ease;
+/* 신규 노트 추가 버튼 호버 시 효과 */
+.add-note-card:hover {
+    background-color: #0056b3; /* 배경색 변경 */
+    color: white; /* 아이콘 색상 변경 */
 }
 
-/* 신규 노트 추가 버튼 호버 시 색상 변경 */
-.my-note-icon-add:hover {
-    background-color: #0056b3;
-    color: white;
+/* 추가 버튼 아이콘 스타일 */
+.add-note-icon {
+    font-size: 3rem; /* 아이콘 크기 */
+    color: #007bff; /* 기본 아이콘 색상 */
 }
 
-/* 모달 관련 스타일 추가 */
-
-#noteContentModal {
-    background-image: url('http://localhost:8888/images/your_image.png') !important;
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
-    min-height: 400px;
+/* 밑줄 제거 코드 */
+.add-note-card a{
+    text-decoration-line: none;
 }
 
-/* 모달 헤더 스타일 */
-.modal-header {
-    border-bottom: 1px solid #dee2e6;
+
+/* 모달 내 콘텐츠 전체를 감싸는 wrapper */
+.content-wrapper {
+    padding: 20px; /* 내부 여백 */
+    background-color: rgba(255, 255, 255, 0.8); /* 배경 투명도 */
+    border-radius: 12px; /* 모서리 둥글게 */
+    max-width: 90%; /* 너비 조정 */
+    margin: 0 auto; /* 중앙 정렬 */
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
 }
 
-/* 모달 닫기 버튼 스타일 */
-.btn-close {
-    background: none;
-    border: none;
-    font-size: 1.5rem;
-    line-height: 1;
-    color: #000;
+/* 프로필 섹션 */
+.profile-section {
+    display: flex; /* 프로필 이미지와 텍스트를 수평으로 정렬 */
+    align-items: center; /* 수직 중앙 정렬 */
+    margin-bottom: 10px; /* 하단 여백 */
 }
 
-/* 모달 내용 텍스트 스타일 */
-#noteContents {
-    font-size: 1rem;
-    line-height: 1.6;
+/* 프로필 이미지 설정 */
+.profile-image {
+    margin-right: 10px; /* 이미지와 텍스트 사이 여백 */
+    border-radius: 50%; /* 프로필 이미지를 원형으로 설정 */
 }
 
-/* 감정과 날짜 섹션 스타일 */
-#noteEmotion, #noteDate {
-    font-weight: bold;
+/* 날짜 및 감정 섹션 */
+.date-emotion-section {
+    display: flex; /* 날짜와 감정을 나란히 배치 */
+    justify-content: space-between; /* 좌우 배치 */
+    font-size: 0.9rem; /* 텍스트 크기 */
+    color: #555; /* 텍스트 색상 */
+}
+
+/* 이미지 섹션 */
+.image-section img {
+    max-width: 100%; /* 이미지가 모달 너비를 넘지 않도록 설정 */
+    height: auto; /* 이미지 비율 유지 */
+    border-radius: 12px; /* 이미지 모서리 둥글게 */
+    margin-bottom: 20px; /* 이미지 하단 여백 */
+}
+
+/* 내용 및 해시태그 섹션 */
+.content-section p, .hashtag-section p {
+    margin-top: 20px; /* 섹션 간 간격 */
 }
 
 /* 해시태그 섹션 스타일 */
-#noteHashtags {
-    font-size: 0.9rem;
-    color: #555;
+.hashtag-section p {
+    font-size: 0.75rem; /* 해시태그 폰트 크기 */
+    display: inline-block; /* 해시태그를 인라인 블록으로 설정 */
+    padding: 5px 10px; /* 내부 여백 */
+    background-color: #f0f0f0; /* 해시태그 배경 색상 */
+    border-radius: 20px; /* 모서리를 둥글게 */
+    margin-right: 5px; /* 해시태그 간 간격 */
+    color: #666; /* 텍스트 색상 */
 }
 
-/* 프로필 이미지 스타일 */
-.profile-image img {
-    width: 50px;
-    height: 50px;
-    object-fit: cover;
+/* 모달 타이틀 크기 및 정렬 */
+.modal-title {
+    font-size: 1.25rem; /* 제목 폰트 크기 */
+    text-align: center; /* 중앙 정렬 */
 }
 
-/* 위치 태그 섹션 스타일 */
-.location-tag {
-    font-size: 1rem;
-    color: #333;
+/* 모달 크기 및 비율 조정 */
+.modal-dialog {
+    max-width: 800px; /* 모달 최대 너비 */
+    margin: auto; /* 중앙 정렬 */
+}
+
+/* 모달 본문 패딩 */
+.modal-body {
+    padding: 20px; /* 내부 패딩 */
+    background-size: cover; /* 배경 이미지를 꽉 채움 */
+    background-repeat: no-repeat; /* 배경 이미지 반복 방지 */
 }
