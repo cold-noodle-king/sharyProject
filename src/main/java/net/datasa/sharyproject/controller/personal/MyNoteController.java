@@ -24,7 +24,6 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
-@RestController
 @Controller
 @RequestMapping("personal")
 @RequiredArgsConstructor
@@ -184,20 +183,25 @@ public class MyNoteController {
 
     /**
      * 노트 정보를 가져오는 메서드 (Ajax 호출)
+     *
      * @param noteNum 노트 번호
      * @return PersonalNoteDTO
      */
     @GetMapping("/viewNote/{noteNum}")
     @ResponseBody
     public ResponseEntity<PersonalNoteDTO> viewNote(@PathVariable("noteNum") Integer noteNum) {
+        // 노트 정보를 가져옴
         PersonalNoteDTO note = personalNoteService.getNoteByNum(noteNum);
-        List<String> hashtags = personalNoteService.getHashtagsByNoteNum(noteNum);  // 해시태그 불러오기
-        note.setHashtags(hashtags);  // DTO에 해시태그 추가
+
+        // 해시태그 정보를 추가로 가져옴
+        List<String> hashtags = personalNoteService.getHashtagsByNoteNum(noteNum);
+        note.setHashtags(hashtags);  // DTO에 해시태그 리스트를 추가
 
         if (note == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
+        // 노트 정보 반환
         return new ResponseEntity<>(note, HttpStatus.OK);
     }
 }
