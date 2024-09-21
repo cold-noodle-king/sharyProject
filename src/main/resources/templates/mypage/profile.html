@@ -81,7 +81,8 @@
         <div class="profile-container">
             <h2>프로필</h2>
             <p>프로필 이미지와 소개글을 변경할 수 있습니다.</p>
-            <p>닉네임: <span th:text="${member.nickname}"></span></p>
+            <br>
+<!--/*            <p>닉네임: <span th:text="${member.nickname}"></span></p> */-->
             <!-- 프로필 이미지 -->
             <form id="profileUpdate" enctype="multipart/form-data" method="post" action="/mypage/profileUpdate">
                 <!-- 숨겨진 필드로 memberId 값을 전송 -->
@@ -102,20 +103,20 @@
                                 이미지변경
                             </label>
                             <input type="file" id="imageUpload" name="profileImage" accept="image/*"/>
-                            <button type="button" id="resetImage">삭제</button>
+                            <button type="button" id="resetImage" class="btn btn-secondary">삭제</button>
                         </td>
                     </tr>
                     <tr>
                         <td colspan="2">
-                            <textarea name="ment" rows="3" placeholder="여기를 클릭해 간단한 소개글을 작성해보세요." style="width:100%; border: 0; resize: none;" th:text="${profile.ment}"></textarea>
-
+                            <textarea name="ment" id= "ment" rows="3" placeholder="여기를 클릭해 간단한 소개글을 작성해보세요."
+                                      style="width:100%; border: 0; resize: none;" maxlength="70"
+                                      th:text="${profile.ment}"></textarea>
                         </td>
                     </tr>
                 </table>
                 <br>
                 <div id="FormBtn">
                     <button type="submit" class="btn btn-primary" id="saveProfile">저장</button> <!-- 저장 버튼 수정 -->
-                    <button type="reset" class="btn btn-secondary">취소</button>
                 </div>
             </form>
         </div>
@@ -149,7 +150,6 @@
         document.getElementById('resetImageInput').value = 'true';  // 이미지 리셋 여부를 true로 설정
     });
 
-
     // AJAX로 프로필 저장
     document.getElementById('profileUpdate').addEventListener('submit', function(event) {
         event.preventDefault();  // 기본 폼 제출 방지
@@ -158,12 +158,6 @@
         var formData = new FormData(this);  // 폼 데이터를 가져오기
 
         console.log("폼 데이터 확인: ", formData.get("memberId"));   // memberId가 폼에 포함되는지 확인
-
-        // document.getElementById('saveProfile').addEventListener('click', function() {
-        // console.log("저장 버튼이 클릭되었습니다.");  // 이 부분이 출력되는지 확인
-        // var formData = new FormData(document.getElementById('profileUpdate'));
-        //
-        // console.log("폼 데이터를 전송합니다...");  // 요청 전에 로그를 추가하여 디버깅
 
         fetch('/mypage/profileUpdate', {
             method: 'POST',
