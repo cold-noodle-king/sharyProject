@@ -12,6 +12,29 @@
             padding: 10px;
             width : 300px;
         }
+
+        /* 알림 스타일 추가 */
+        .notification {
+            border-bottom: 1px solid #e0e0e0;
+            padding: 10px 0;
+        }
+
+        .notification .content {
+            background-color: #f9f9f9;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .notification .text {
+            font-size: 14px;
+            color: #333;
+        }
+
+        .notification .time {
+            font-size: 12px;
+            color: #888;
+            text-align: right;
+        }
     </style>
 
     <script src="/js/jquery-3.7.1.min.js"></script>
@@ -19,15 +42,51 @@
     <script>
         $(document).ready(function() {
 
-            //보내기 버튼 클릭하면 전송
+            // 보내기 버튼 클릭하면 전송
             $('#sendButton').click(sendTest);
 
-            //메시지 입력하다 엔터치는 경우에도 전송
+            // 메시지 입력하다 엔터치는 경우에도 전송
             $('#msg').keydown(function(event) {
                 if (event.key === 'Enter' || event.keyCode === 13) {
                     sendTest();
                 }
             });
+
+            // 알림 데이터를 담을 배열
+            let notifications = [];
+
+            // SSE 연결 설정
+            const eventSource = new EventSource("/subscribe");
+
+            // SSE 이벤트 처리
+            eventSource.addEventListener('notification', function(event) {
+                let data = JSON.parse(event.data);
+                addNotificationItem(data);
+            });
+
+            function addNotificationItem(item) {
+                notifications.push(item);
+
+                // 알림 표시
+                displayNotifications();
+            }
+
+            function displayNotifications() {
+                let notificationDiv = $('#notificationDiv');
+                notificationDiv.empty();
+
+                notifications.forEach(item => {
+                    let formattedDate = new Date(item.createdAt).toLocaleString();
+                    let html = `
+                    <div class="notification">
+                        <div class="content">
+                            <div class="text">${item.content}</div>
+                            <div class="time">${formattedDate}</div>
+                        </div>
+                    </div>`;
+                    notificationDiv.append(html);
+                });
+            }
         });
 
         function sendTest() {
@@ -60,24 +119,53 @@
 <p sec:authorize="isAuthenticated()"><a href="/msgTest">알림함</a></p>
 
 <br>
+<h2>* 메시지 알림</h2>
 <p>* 이곳에서 아이디와 내용을 입력하여 로그인된 사용자에게 메시지를 보낸다.</p>
 <div id="sendDiv">
     <p>수신자 아이디 : 	<input type="text" id="id"></p>
     <p>메세지 내용 : 		<input type="text" id="msg"></p>
     <p><button id="sendButton">보내기</button></p>
 </div>
-
-
 <pre>
     - HTTP를 이용한 단방향 통신 (서버 -> 클라이언트)
-	- 자동 재연결
-	- 브라우저의 기본 기능으로 별도의 라이브러리 사용
-    - 기존 메세지 내용 직접 입력해서 보내기
-    - 추가1 누군가 나를 follow 추가
-    - 추가2 누군가 나에게 채팅 메세지 보냈을때(카카오톡)
-    - 추가3 누군가 나에게 공유 다이어리 요청 보냄
-    - 추가4 공유 다이어리 요청 수락했을때
 </pre>
+<br>
 
+<!-- 팔로우 요청 알림 표시 영역 -->
+<h2>* 팔로우 요청 알림 테스트</h2>
+<!-- 전체 사용자 목록으로 이동하는 링크 -->
+<!-- sec:authorize 속성을 올바르게 수정 -->
+<p sec:authorize="isAuthenticated()"><a href="/allUsers">전체 사용자 목록</a></p>
+
+
+<br>
+
+<!-- 영역 -->
+<p>* 다른 user가 나에게 채팅 메세지 보냈을 때(카카오톡) </p>
+<div>
+    dd
+</div>
+<br>
+
+<!-- 영역 -->
+<p>* 다른 user가 나에게 공유 다이어리 요청을 보냈을 때 </p>
+<div>
+    dd
+</div>
+<br>
+
+<!-- 영역 -->
+<p>* 다른 user가 내가 보낸 공유 다이어리 요청을 수락했을 때</p>
+<div>
+    dd
+</div>
+<br>
+<p>
+
+
+
+
+
+</p>
 </body>
 </html>
