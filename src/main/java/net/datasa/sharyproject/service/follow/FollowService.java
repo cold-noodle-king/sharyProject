@@ -7,8 +7,11 @@ import net.datasa.sharyproject.domain.dto.member.MemberDTO;
 import net.datasa.sharyproject.domain.entity.follow.FollowEntity;
 import net.datasa.sharyproject.domain.entity.follow.FollowId;
 import net.datasa.sharyproject.domain.entity.member.MemberEntity;  // MemberEntity 임포트 추가
+import net.datasa.sharyproject.domain.entity.sse.NotificationEntity;
 import net.datasa.sharyproject.repository.follow.FollowRepository;
 import net.datasa.sharyproject.repository.member.MemberRepository;
+import net.datasa.sharyproject.repository.sse.NotificationRepository;
+import net.datasa.sharyproject.service.sse.SseService;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -24,7 +27,10 @@ import java.util.stream.Collectors;
 public class FollowService {
 
     private final FollowRepository followRepository;
+    private final SseService sseService;  // 알림 전송 서비스 추가
     private final MemberRepository memberRepository;
+    private final NotificationRepository notificationRepository; // 알림 리포지토리 추가
+
 
     public String getCurrentUserId() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -59,6 +65,7 @@ public class FollowService {
                 .collect(Collectors.toList());
     }
 
+    // 팔로우 기능 수정
     public void follow(String followerId, String followingId) {
         FollowId followId = new FollowId(followerId, followingId);
 
@@ -76,7 +83,34 @@ public class FollowService {
                 .followDate(LocalDateTime.now())
                 .build();
         followRepository.save(followEntity);
+
+        // 팔로우 알림을 db에 저장하고 수신자에게 전송
+        sendFollowNotification(followerId, followingId);
     }
+
+
+    private void sendFollowNotification(String followerId, String followingId) {
+        MemberEntity followingMember = memberRepository.findById(followingId)
+                .orElseThrow(() -> new IllegalArgumentException("팔로우 대상 사용자를 찾을 수 없습니다."));
+
+        // 알림 메시지 생성
+        String message = followerId + "님이 당신을 팔로우했습니다.";
+
+        // 1. DB에 알림 저장
+        NotificationEntity notification = NotificationEntity.builder()
+                .receiver(followingMember)
+                .content(message)
+                .createdAt(LocalDateTime.now())
+                .isRead(false)
+                .build();
+        notificationRepository.save(notification);
+
+        // 2. 실시간으로 SSE 알림 전송
+        sseService.sendNotification(followingId, message);
+    }
+
+
+
 
     public void unfollow(String followingId) {
         String followerId = getCurrentUserId();

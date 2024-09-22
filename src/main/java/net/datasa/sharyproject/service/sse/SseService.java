@@ -2,31 +2,22 @@ package net.datasa.sharyproject.service.sse;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import net.datasa.sharyproject.repository.member.MemberRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.concurrent.ConcurrentHashMap;
 
-/**
- * SSE 테스트 서비스 클래스
- */
 @Slf4j
 @RequiredArgsConstructor
 @Service
 public class SseService {
-    /**
-     * SSE 연결 관리 맵 (thread-safe Map 사용)
-     * 사용자 아이디를 Key로 지정
-     */
+
+    // SSE 연결 관리 맵
     private final ConcurrentHashMap<String , SseEmitter> emitterMap = new ConcurrentHashMap<>();
 
-    /**
-     * SSE 연결. 클라이언트가 SSE 연결 요청을 보낼 때 이루어진다.
-     * @param memberId 사용자 아이디
-     * @return 생성된 Emitter
-     */
+    // SSE 구독
     public SseEmitter subscribe(String memberId) {
         SseEmitter emitter = new SseEmitter(Long.MAX_VALUE);
         emitterMap.put(memberId, emitter);
@@ -39,19 +30,14 @@ public class SseService {
         return emitter;
     }
 
-
-    /**
-     * 메시지 보내기
-     * @param memberId 수신인 아이디
-     * @param content 메시지 내용
-     */
+    // 메시지 전송
     public void sendMessage(String memberId, String fromId, String content) {
         SseEmitter emitter = emitterMap.get(memberId);
 
         if (emitter != null) {
             try {
-                // JSON 형식의 메시지 전송
-                String jsonMessage = String.format("{\"sender\":\"%s\", \"message\":\"%s\"}", fromId, content);
+                String jsonMessage = String.format("{\"type\":\"message\", \"sender\":\"%s\", \"content\":\"%s\", \"createdAt\":\"%s\"}",
+                        fromId, content, LocalDateTime.now().toString());
                 emitter.send(SseEmitter.event().name("message").data(jsonMessage));
             } catch (IOException e) {
                 emitterMap.remove(memberId);
@@ -60,5 +46,19 @@ public class SseService {
         }
     }
 
+    // 알림 전송
+    public void sendNotification(String memberId, String content) {
+        SseEmitter emitter = emitterMap.get(memberId);
 
+        if (emitter != null) {
+            try {
+                String jsonNotification = String.format("{\"type\":\"notification\", \"content\":\"%s\", \"createdAt\":\"%s\"}",
+                        content, LocalDateTime.now().toString());
+                emitter.send(SseEmitter.event().name("notification").data(jsonNotification));
+            } catch (IOException e) {
+                emitterMap.remove(memberId);
+                log.error("알림 전송 실패: {}", e.getMessage());
+            }
+        }
+    }
 }

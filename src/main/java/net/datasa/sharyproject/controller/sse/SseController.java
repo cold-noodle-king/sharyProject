@@ -2,6 +2,9 @@ package net.datasa.sharyproject.controller.sse;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.datasa.sharyproject.domain.dto.sse.MessageDTO;
+import net.datasa.sharyproject.domain.dto.sse.NotificationDTO;
+import net.datasa.sharyproject.domain.dto.sse.UnifiedNotificationDTO;
 import net.datasa.sharyproject.security.AuthenticatedUser;
 import net.datasa.sharyproject.service.sse.SseMessageService;
 import net.datasa.sharyproject.service.sse.SseService;
@@ -10,7 +13,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
+import java.util.ArrayList;
 import java.util.List;
+
 
 /**
  * 메인
@@ -22,23 +27,6 @@ public class SseController {
 
     private final SseService sseService;
     private final SseMessageService sseMessageService; // MessageService 주입
-/*
-    *//**
-     * 메인화면으로 이동
-     *//*
-    @GetMapping({"", "/"})
-    public String home() {
-        return "home";
-    }
-
-    *//**
-     * 로그인 페이지로 이동
-     *//*
-    @GetMapping("loginForm")
-    public String loginForm() {
-        return "member/loginForm";
-    }*/
-
 
     /**
      * SSE 홈 페이지로 이동
@@ -69,9 +57,7 @@ public class SseController {
     }
 
     /**
-     * 메시지 보내기 페이지
-     * 메시지 내용을 전달받아 수신인에게 보낸다.
-     * 메시지를 DB에 저장하고 수신인에게 전송 (기존)
+     * 메시지 보내기
      */
     @ResponseBody
     @PostMapping("send")
@@ -87,16 +73,48 @@ public class SseController {
         sseMessageService.saveMessage(fromId, toId, message);  // 메시지 저장
     }
 
-    // 클라이언트가 다시 접속할 때 로그인한 사용자의 메시지를 가져오는 API
+
+    /**
+     * 모든 알림 불러오기
+     */
     @ResponseBody
-    @GetMapping("messages")
-    public List<String> getMessages(@AuthenticationPrincipal AuthenticatedUser user) {
-        log.debug("메시지 조회 - 수신자: {}", user.getUsername());
-        // 로그인한 사용자에게 보낸 메시지만 조회
-        return sseMessageService.getMessages(user.getUsername());
+    @GetMapping("/allNotifications")
+    public List<UnifiedNotificationDTO> getAllNotifications(@AuthenticationPrincipal AuthenticatedUser user) {
+        String username = user.getUsername();
+        log.debug("모든 알림 조회 - 사용자: {}", username);
+
+        // 메시지 알림 가져오기
+        List<MessageDTO> messages = sseMessageService.getMessages(username);
+
+        // 일반 알림 가져오기
+        List<NotificationDTO> notifications = sseMessageService.getNotifications(username);
+
+        // 메시지와 알림을 통합된 DTO로 변환
+        List<UnifiedNotificationDTO> unifiedNotifications = new ArrayList<>();
+
+        for (MessageDTO message : messages) {
+            unifiedNotifications.add(UnifiedNotificationDTO.builder()
+                    .type("message")
+                    .sender(message.getSender())
+                    .content(message.getContent())
+                    .createdAt(message.getCreatedAt())
+                    .build());
+        }
+
+        for (NotificationDTO notification : notifications) {
+            unifiedNotifications.add(UnifiedNotificationDTO.builder()
+                    .type("notification")
+                    .sender(null)
+                    .content(notification.getContent())
+                    .createdAt(notification.getCreatedAt())
+                    .build());
+        }
+
+        // createdAt 기준으로 정렬 (최신 순)
+        unifiedNotifications.sort((n1, n2) -> n2.getCreatedAt().compareTo(n1.getCreatedAt()));
+
+        return unifiedNotifications;
     }
-
-
-
-
 }
+
+
