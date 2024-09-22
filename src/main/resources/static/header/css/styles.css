@@ -11805,7 +11805,7 @@ section#contact form#contactForm :-ms-input-placeholder {
   left: 50%;
   transform: translate(-50%, -50%);
   font-size: 8vw;
-  color: #ffd7c3;
+  color: #ffffff;
   text-shadow: 2px 2px 4px rgba(118, 129, 205, 0.79);
   animation: floatText 3s ease-in-out infinite;
 }
