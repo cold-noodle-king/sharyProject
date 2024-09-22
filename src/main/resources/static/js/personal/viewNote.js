@@ -1,7 +1,7 @@
 $(document).ready(function() {
     // "노트 보기" 버튼 클릭 시 이벤트 처리
     $('.btn-view-note').on('click', function(e) {
-        e.preventDefault();
+        e.preventDefault(); // 기본 동작 방지
 
         var noteNum = $(this).data('note-num'); // 클릭된 노트의 번호 가져오기
         var modal = $('#noteModal'); // 노트 모달 객체
@@ -24,7 +24,31 @@ $(document).ready(function() {
                 $('#noteDate').text(formattedDate);
 
                 // 감정 정보 설정
-                $('#noteEmotion').text(response.emotionName);
+                var emotionIcon;
+                switch(response.emotionName) {
+                    case '기쁨':
+                        emotionIcon = '😊'; // 기쁨 아이콘
+                        break;
+                    case '슬픔':
+                        emotionIcon = '😢'; // 슬픔 아이콘
+                        break;
+                    case '화남':
+                        emotionIcon = '😠'; // 화남 아이콘
+                        break;
+                    case '놀람':
+                        emotionIcon = '😮'; // 놀람 아이콘
+                        break;
+                    case '두려움':
+                        emotionIcon = '😱'; // 두려움 아이콘
+                        break;
+                    case '사랑':
+                        emotionIcon = '❤️'; // 사랑 아이콘
+                        break;
+                    default:
+                        emotionIcon = '😐'; // 기본 아이콘
+                        break;
+                }
+                $('#noteEmotion').html(emotionIcon); // 감정 아이콘 삽입
 
                 // 노트 내용 설정
                 $('#noteContents').text(response.contents);
