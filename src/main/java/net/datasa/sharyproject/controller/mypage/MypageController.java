@@ -31,6 +31,12 @@ public class MypageController {
     private MemberEntity memberEntity;
     private Object profile;
 
+    /**
+     * 메인페이지 첫 화면
+     * @param user 현재 로그인 중이 유저
+     * @param model 멤버 정보
+     * @return 메인페이지 뷰 html로 이동
+     */
     @GetMapping("mypageView")
     public String mypage(@AuthenticationPrincipal AuthenticatedUser user, Model model) {
         MemberDTO memberDTO = memberService.getMember(user.getUsername());
@@ -62,8 +68,8 @@ public class MypageController {
     /**
      * 개인정보 조회
      * @param user 현재 로그인 된 사용자
-     * @param model
-     * @return
+     * @param model 멤버 정보
+     * @return 개인정보 html로 이동
      */
     @GetMapping("info")
     public String info(@AuthenticationPrincipal AuthenticatedUser user, Model model) {
@@ -104,19 +110,10 @@ public class MypageController {
         return "mypage/mypageView";
     }
 
-
-    @GetMapping("follow")
-    public String follow() {
-        return "mypage/follow";
-    }
-
-    @GetMapping("message")
-    public String message() {
-        return "mypage/message";
-    }
-
     /**
      * 프로필 페이지
+     * @param model
+     * @param user 현재 로그인 중인 유저
      * @return profile HTML로 이동
      */
     @GetMapping("profile")
@@ -220,5 +217,15 @@ public class MypageController {
 
         return ResponseEntity.ok(response);
 
+    }
+
+    @GetMapping("follow")
+    public String follow() {
+        return "mypage/follow";
+    }
+
+    @GetMapping("message")
+    public String message() {
+        return "mypage/message";
     }
 }
