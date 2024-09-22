@@ -32,4 +32,5 @@ public class PersonalNoteDTO {
     private String memberId; // 회원 ID
     private List<String> hashtags; // 해시태그 이름 리스트 추가
     private String profilePicture; // 프로필 이미지 경로
+    private String coverImage; // 다이어리 커버 이미지 필드 추가
 }
