@@ -15,9 +15,9 @@
     <link th:href="@{/css/mypage/sideBar.css}" rel="stylesheet">
 
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
             $('#nickCheck').click(nickOpen); // 아이디 중복버튼 클릭시 이벤트 처리
-            $('#updateInfo').submit(function() {
+            $('#updateInfo').submit(function () {
                 let pw = $('#memberPw').val();
                 let pw2 = $('#memberPw2').val();
                 let name = $('#fullName').val();
@@ -54,6 +54,7 @@
             });
 
         });
+
         function nickOpen() {
             window.open('/member/nickCheck', 'idWin', 'left=500, top=100, width=400, height=300, location=no, titlebar=no');
         }
@@ -75,12 +76,14 @@
                      alt="프로필 사진" class="profile-img">
                 <p th:text="${member.nickname}"></p>
                 <p th:text="${profile.ment}"></p>
-            <a th:href="@{/mypage/info}">개인정보</a>
-            <a th:href="@{/mypage/profile}">프로필</a>
-            <a th:href="@{/mypage/follow}">친구</a>
-            <a th:href="@{/mypage/message}">채팅</a>
+                <a th:href="@{/mypage/info}">개인정보</a>
+                <a th:href="@{/mypage/profile}">프로필</a>
+                <a th:href="@{/mypage/follow}">친구</a>
+                <a th:href="@{/mypage/message}">채팅</a>
+                <a th:href="@{/mypage/stats}">상연님 기깔나게 지어주세요</a>
 
-        </div>
+            </div>
+            <br>
             <!-- 회원탈퇴 항목 -->
             <div class="logout">
                 <a th:href="@{/member/logout}">회원탈퇴</a>
@@ -89,45 +92,50 @@
         <!-- 메인 콘텐츠 -->
         <div class="main-content">
             <section class="page-content">
-                <form id="updateInfo" th:action="@{/mypage/info}"  method="post">
+                <form id="updateInfo" th:action="@{/mypage/info}" method="post">
                     <table>
                         <tr>
                             <th>ID</th>
                             <td>
                                 <span th:text="${member.memberId}"></span>
-                                <input type="hidden" name="memberId" th:value="${member.memberId}" />
+                                <input type="hidden" name="memberId" th:value="${member.memberId}"/>
                             </td>
                         </tr>
                         <tr>
                             <th>비밀번호</th>
-                            <td><input type="password" name="memberPw" id="memberPw" placeholder="비밀번호를 변경하려면 입력하세요."><br>
+                            <td><input type="password" name="memberPw" id="memberPw"
+                                       placeholder="비밀번호를 변경하려면 입력하세요."><br>
                                 <input type="password" id="memberPw2" placeholder="비밀번호 다시 입력"></td>
                         </tr>
                         <tr>
                             <th>이름</th>
-                            <td><input type="text" name="fullName" id="fullName" th:value="${member.fullName}" placeholder="이름 입력"></td>
+                            <td><input type="text" name="fullName" id="fullName" th:value="${member.fullName}"
+                                       placeholder="이름 입력"></td>
                         </tr>
                         <tr>
                             <th>닉네임</th>
                             <td>
-                                <input type="text" name="nickname" id="nickname" th:value="${member.nickname}" readonly="readonly">
+                                <input type="text" name="nickname" id="nickname" th:value="${member.nickname}"
+                                       readonly="readonly">
                                 <input type="button" id="nickCheck" value="중복">
                             </td>
                         </tr>
                         <tr>
                             <th>이메일</th>
-                            <td><input type="text" name="email" id="email" th:value="${member.email}" placeholder="이메일 입력"></td>
+                            <td><input type="text" name="email" id="email" th:value="${member.email}"
+                                       placeholder="이메일 입력"></td>
                         </tr>
                         <tr>
                             <th>전화번호</th>
-                            <td><input type="text" name="phoneNumber" th:value="${member.phoneNumber}" placeholder="'-' 포함 전화번호 입력"></td>
+                            <td><input type="text" name="phoneNumber" th:value="${member.phoneNumber}"
+                                       placeholder="'-' 포함 전화번호 입력"></td>
                         </tr>
 
                     </table>
                     <br>
 
-                    <input type="submit" value="수정" />
-                    <input type="reset" value="취소" />
+                    <input type="submit" value="수정"/>
+                    <input type="reset" value="취소"/>
 
                 </form>
 
