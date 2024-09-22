@@ -1,28 +1,25 @@
 package net.datasa.sharyproject.domain.entity.share;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import net.datasa.sharyproject.domain.entity.EmotionEntity;
+import net.datasa.sharyproject.domain.entity.HashtagEntity;
+import net.datasa.sharyproject.domain.entity.member.MemberEntity;
+import net.datasa.sharyproject.domain.entity.mypage.ProfileEntity;
+import net.datasa.sharyproject.domain.entity.personal.NoteTemplateEntity;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
-@Slf4j
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 @Entity
 @Builder
 @Table(name = "share_note")
-@EntityListeners(AuditingEntityListener.class)
 public class ShareNoteEntity {
 
     @Id
@@ -45,17 +42,24 @@ public class ShareNoteEntity {
     @Column(name = "location", length = 500)
     private String location;
 
-    @Column(name = "note_num", nullable = false)
-    private Integer noteNum;
+    // NoteTemplateEntity와 다대일 관계
+    @ManyToOne
+    @JoinColumn(name = "note_num", nullable = false)
+    private NoteTemplateEntity noteTemplate;
 
-    @Column(name = "emotion_num", nullable = false)
-    private Integer emotionNum;
+    // EmotionEntity와 다대일 관계
+    @ManyToOne
+    @JoinColumn(name = "emotion_num", nullable = false)
+    private EmotionEntity emotion;
 
-    @Column(name = "profile_num", nullable = false)
-    private Integer profileNum;
+    // ProfileEntity와 다대일 관계
+    @ManyToOne
+    @JoinColumn(name = "profile_num", nullable = false)
+    private ProfileEntity profile;
 
-    @Column(name = "member_id", nullable = false, length = 50)
-    private String memberId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id", nullable = false)
+    private MemberEntity member;
 
     @Column(name = "contents", columnDefinition = "TEXT")
     private String contents;
@@ -63,20 +67,23 @@ public class ShareNoteEntity {
     @Column(name = "diary_date", nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime diaryDate;
 
-    @CreatedDate
-    @Column(name = "created_date", nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-    private LocalDateTime createdDate;
-
-    @LastModifiedDate
-    @Column(name = "updated_date", nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-    private LocalDateTime updatedDate;
-
-    @Column(name = "hashtag_num", nullable = false)
-    private Integer hashtagNum;
-
     @Column(name = "like_count", columnDefinition = "INT DEFAULT 0")
     private Integer likeCount = 0;
 
-    @Column(name = "share_diary_num", nullable = false)
-    private Integer shareDiaryNum;
+    // ShareDiaryEntity와 다대일 관계
+    @ManyToOne
+    @JoinColumn(name = "share_diary_num", nullable = false)
+    private ShareDiaryEntity shareDiary;
+
+    // HashtagEntity와 다대다 관계
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "share_note_hashtag",
+            joinColumns = @JoinColumn(name = "share_note_num"),
+            inverseJoinColumns = @JoinColumn(name = "hashtag_num")
+    )
+    private List<HashtagEntity> hashtags;
+
+    @OneToMany(mappedBy = "shareNote", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ReplyEntity> reply;
 }

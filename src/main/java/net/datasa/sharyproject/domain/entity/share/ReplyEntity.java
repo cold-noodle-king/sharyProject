@@ -1,11 +1,11 @@
 package net.datasa.sharyproject.domain.entity.share;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.extern.slf4j.Slf4j;
+import net.datasa.sharyproject.domain.entity.member.MemberEntity;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
@@ -17,6 +17,8 @@ import java.time.LocalDateTime;
 @Entity
 @Builder
 @Table(name = "reply")
+//BoardEntity와 ReplyEntity의 순환참조 문제로 toString() 호출시 오류일때 해당 필드를 제외
+@ToString(exclude = "shareNote")
 @EntityListeners(AuditingEntityListener.class)
 public class ReplyEntity {
 
@@ -28,16 +30,20 @@ public class ReplyEntity {
     @Column(name = "contents", nullable = false, length = 2000)
     private String contents;
 
+    @CreatedDate
     @Column(name = "created_date", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime createdDate;
 
+    @LastModifiedDate
     @Column(name = "updated_date", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
     private LocalDateTime updatedDate;
 
-    @Column(name = "share_note_num", nullable = false)
-    private Integer shareNoteNum;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "share_note_num", referencedColumnName = "share_note_num")
+    private ShareNoteEntity shareNote;
 
-    @Column(name = "member_id", nullable = false, length = 50)
-    private String memberId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id", referencedColumnName = "member_id")
+    private MemberEntity member;
 
 }

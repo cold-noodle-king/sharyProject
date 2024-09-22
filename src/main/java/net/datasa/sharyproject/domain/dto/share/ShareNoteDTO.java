@@ -1,25 +1,36 @@
 package net.datasa.sharyproject.domain.dto.share;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import net.datasa.sharyproject.domain.dto.mypage.ProfileDTO;
+import net.datasa.sharyproject.domain.dto.personal.NoteTemplateDTO;
+
 import java.time.LocalDateTime;
+import java.util.List;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class ShareNoteDTO {
-
-    private Integer shareNoteNum;    // 공유 노트 번호
-    private String shareNoteTitle;   // 공유 노트 제목
-    private String weather;          // 날씨 정보
-    private String originalName;     // 원본 파일 이름
-    private String fileName;         // 파일 이름
-    private String location;         // 위치 정보
-    private Integer noteNum;         // 노트 번호
-    private Integer emotionNum;      // 감정 번호
-    private Integer profileNum;      // 프로필 번호
-    private String memberId;         // 작성자 ID
-    private String contents;         // 노트 내용
-    private LocalDateTime diaryDate; // 다이어리 작성 날짜
-    private LocalDateTime createdDate; // 생성 날짜
-    private LocalDateTime updatedDate; // 수정 날짜
-    private Integer hashtagNum;      // 해시태그 번호
-    private Integer likeCount;       // 좋아요 수
-    private Integer shareDiaryNum;   // 공유 다이어리 번호
+    private Integer shareNoteNum; // 노트 번호
+    private String shareNoteTitle; // 노트 제목
+    private String weather; // 날씨
+    private String contents; // 내용
+    private LocalDateTime diaryDate; // 작성 날짜
+    private Integer likeCount; // 추천 수
+    private List<Integer> hashtagNums; // 해시태그 번호 리스트
+    private String emotionName; // 감정 이름
+    private Integer emotionNum; // 감정 번호
+    private String location; // 위치 정보
+    private String fileName; // 이미지 파일 이름
+    private Integer shareDiaryNum; // 다이어리 번호
+    private NoteTemplateDTO noteTemplate; // 노트 템플릿 정보 추가 (노트 이미지 및 기타 정보 포함)
+    private String memberId; // 회원 ID
+    private List<String> hashtags; // 해시태그 이름 리스트 추가
+    private ProfileDTO profile; // Profile 정보를 위한 필드 추가
+    private List<ReplyDTO> replyList;
 
 }

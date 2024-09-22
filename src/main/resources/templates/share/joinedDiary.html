@@ -35,7 +35,7 @@
     <div class="diary-list">
         <!-- 신규 다이어리 추가 버튼 -->
         <div class="diary-add">
-            <a href="#" th:href="@{/share/newNote}">
+            <a href="#" th:href="@{/share/note}">
                 <div class="icon-add">+</div> <!-- 신규 다이어리 추가 아이콘 -->
             </a>
         </div>
@@ -70,7 +70,7 @@
             <!-- 모달 본문 -->
             <div class="modal-body">
                 <div class="menu-list">
-                    <a th:href="@{/share/note(diaryNum=${diary.shareDiaryNum})}" class="menu-item action-btn">새로운 노트 추가</a>
+                    <a th:href="@{/share/note}" class="menu-item action-btn">새로운 노트 추가</a>
                     <a th:href="@{/share/viewMyNotes}" class="menu-item action-btn">내가 작성한 노트</a>
                     <a th:href="@{/share/viewMyreply}" class="menu-item action-btn">내가 작성한 댓글</a>
                     <a th:href="@{/share/withdrawal}" class="menu-item action-btn">다이어리 탈퇴</a>

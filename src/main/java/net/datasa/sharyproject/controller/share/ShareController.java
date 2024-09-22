@@ -1,41 +1,56 @@
 package net.datasa.sharyproject.controller.share;
 
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.datasa.sharyproject.domain.dto.EmotionDTO;
 import net.datasa.sharyproject.domain.dto.HashtagDTO;
-import net.datasa.sharyproject.domain.dto.personal.CoverTemplateDTO;
-import net.datasa.sharyproject.domain.dto.personal.GrantedDTO;
-import net.datasa.sharyproject.domain.dto.personal.NoteTemplateDTO;
-import net.datasa.sharyproject.domain.dto.personal.PersonalDiaryDTO;
+import net.datasa.sharyproject.domain.dto.mypage.ProfileDTO;
+import net.datasa.sharyproject.domain.dto.personal.*;
 import net.datasa.sharyproject.domain.dto.share.SelectedNoteDTO;
 import net.datasa.sharyproject.domain.dto.share.ShareDiaryDTO;
 import net.datasa.sharyproject.domain.dto.share.ShareMemberDTO;
 import net.datasa.sharyproject.domain.dto.share.ShareNoteDTO;
+import net.datasa.sharyproject.domain.entity.member.MemberEntity;
+import net.datasa.sharyproject.domain.entity.mypage.ProfileEntity;
+import net.datasa.sharyproject.domain.entity.personal.NoteTemplateEntity;
 import net.datasa.sharyproject.domain.entity.share.ShareDiaryEntity;
+import net.datasa.sharyproject.repository.member.MemberRepository;
+import net.datasa.sharyproject.repository.mypage.ProfileRepository;
+import net.datasa.sharyproject.repository.personal.NoteTemplateRepository;
 import net.datasa.sharyproject.repository.share.ShareDiaryRepository;
 import net.datasa.sharyproject.security.AuthenticatedUser;
 import net.datasa.sharyproject.service.EmotionService;
 import net.datasa.sharyproject.service.HashtagService;
+import net.datasa.sharyproject.service.mypage.ProfileService;
 import net.datasa.sharyproject.service.personal.CoverTemplateService;
 import net.datasa.sharyproject.service.personal.NoteTemplateService;
 import net.datasa.sharyproject.service.share.ShareDiaryService;
+import net.datasa.sharyproject.service.share.ShareNoteService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.File;
+import java.io.IOException;
+import java.security.Principal;
+import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @Slf4j
-@AllArgsConstructor
 @Controller
 @RequestMapping("share")
+@RequiredArgsConstructor
 public class ShareController {
 
     private final CoverTemplateService coverTemplateService;
@@ -44,13 +59,19 @@ public class ShareController {
     private final ShareDiaryRepository shareDiaryRepository;
     private final HashtagService hashtagService;
     private final EmotionService emotionService;
+    private final ShareNoteService shareNoteService;
+    private final ProfileService profileService;
+    private final NoteTemplateRepository noteTemplateRepository;
+    private final MemberRepository memberRepository;
+    private final ProfileRepository profileRepository;
 
-   /* // 파일 업로드 디렉토리 설정 (application.properties에서 주입)
+    // 파일 업로드 디렉토리 설정 (application.properties에서 주입)
     @Value("${file.upload-dir}")
-    private String uploadDir;*/
+    private String uploadDir;
 
     /**
      * 공유 다이어리 메인 페이지로 이동
+     *
      * @param user
      * @param model
      * @return
@@ -61,7 +82,7 @@ public class ShareController {
         //내가 생성한 다이어리 리스트를 불러오는 메서드
         List<ShareDiaryDTO> createdDiaries = shareDiaryService.getCreatedList(user.getUsername());
 
-        log.debug("불러온 다이어리들 정보:{}",createdDiaries);
+        log.debug("불러온 다이어리들 정보:{}", createdDiaries);
         model.addAttribute("diaryList", createdDiaries);
 
         return "share/Main";
@@ -69,6 +90,7 @@ public class ShareController {
 
     /**
      * 내가 생성한 공유 다이어리로 이동
+     *
      * @param diaryNum
      * @param user
      * @param model
@@ -76,18 +98,23 @@ public class ShareController {
      */
     @GetMapping("createdDiary")
     public String viewCreatedDiary(@RequestParam("diaryNum") Integer diaryNum
-                                 , @AuthenticationPrincipal AuthenticatedUser user
-                                 , Model model) {
+            , @AuthenticationPrincipal AuthenticatedUser user
+            , Model model) {
 
         ShareDiaryDTO dto = shareDiaryService.getDiary(diaryNum);
         log.debug("가져온 다이어리 정보:{}", dto);
+        List<ShareNoteDTO> dtoList = shareNoteService.getNotesByDiaryNum(diaryNum);
+        log.debug("리스트를 제대로 갖고왔니?{}", dtoList);
+
         model.addAttribute("diary", dto);
+        model.addAttribute("noteList", dtoList);
 
         return "share/createdDiary";
     }
 
     /**
      * 내가 가입한 공유 다이어리 리스트 페이지 출력
+     *
      * @param user
      * @param model
      * @return
@@ -104,6 +131,7 @@ public class ShareController {
 
     /**
      * 내가 가입한 공유 다이어리로 이동
+     *
      * @param diaryNum
      * @param user
      * @param model
@@ -111,17 +139,22 @@ public class ShareController {
      */
     @GetMapping("joinedDiary")
     public String joinedDiary(@RequestParam("diaryNum") Integer diaryNum
-                            , @AuthenticationPrincipal AuthenticatedUser user
-                            , Model model) {
+            , @AuthenticationPrincipal AuthenticatedUser user
+            , Model model) {
 
         ShareDiaryDTO dto = shareDiaryService.getJoinedDiary(diaryNum, user.getUsername());
+        List<ShareNoteDTO> dtoList = shareNoteService.getNotesByDiaryNum(diaryNum);
         log.debug("가져온 다이어리 정보:{}", dto);
+        model.addAttribute("diary", dto);
+        model.addAttribute("noteList", dtoList);
 
         return "share/JoinedDiary";
     }
 
+
     /**
      * 다이어리 카테고리 선택 페이지로 이동
+     *
      * @return
      */
     @GetMapping("categorySelect")
@@ -140,6 +173,7 @@ public class ShareController {
 
     /**
      * 다이어리 커버를 선택하는 메서드
+     *
      * @param categories
      * @param model
      * @return
@@ -158,6 +192,7 @@ public class ShareController {
 
     /**
      * 다이어리 카테고리 수정 페이지로 이동하는 메서드
+     *
      * @return
      */
     @GetMapping("categoryUpdate")
@@ -167,6 +202,7 @@ public class ShareController {
 
     /**
      * 다이어리를 DB에 저장하는 메서드
+     *
      * @param shareDiaryDTO
      * @param user
      * @param redirectAttributes
@@ -174,8 +210,8 @@ public class ShareController {
      */
     @PostMapping("saveDiary")
     public String saveDiary(@ModelAttribute ShareDiaryDTO shareDiaryDTO
-                          , @AuthenticationPrincipal AuthenticatedUser user
-                          , RedirectAttributes redirectAttributes){
+            , @AuthenticationPrincipal AuthenticatedUser user
+            , RedirectAttributes redirectAttributes) {
 
         log.debug("컨틀롤러로 갔는지 확인:{}", shareDiaryDTO);
         ShareDiaryEntity entity = shareDiaryService.saveDiary(shareDiaryDTO, user);
@@ -189,6 +225,7 @@ public class ShareController {
 
     /**
      * 다이어리 관리 페이지로 이동
+     *
      * @param diaryNum
      * @param user
      * @param model
@@ -196,8 +233,8 @@ public class ShareController {
      */
     @GetMapping("manageDiary")
     public String manageDiary(@RequestParam("diaryNum") Integer diaryNum
-                            , @AuthenticationPrincipal AuthenticatedUser user
-                            , Model model) {
+            , @AuthenticationPrincipal AuthenticatedUser user
+            , Model model) {
 
         ShareDiaryDTO dto = shareDiaryService.getDiary(diaryNum);
         model.addAttribute("diary", dto);
@@ -207,6 +244,7 @@ public class ShareController {
 
     /**
      * 내가 생성한 공유다이어리를 삭제하는 메서드
+     *
      * @return
      */
     @GetMapping("deleteDiary")
@@ -217,16 +255,18 @@ public class ShareController {
 
     /**
      * 가입한 공유다이어리를 탈퇴하는 메서드
+     *
      * @return
      */
     @PostMapping("withdrawal")
     public String withdrawal() {
-        
+
         return "share/main";
     }
 
     /**
      * 공유다이어리 정보 수정 페이지 출력
+     *
      * @param diaryNum
      * @param user
      * @param model
@@ -234,8 +274,8 @@ public class ShareController {
      */
     @GetMapping("infoUpdate")
     public String infoUpdate(@RequestParam("diaryNum") Integer diaryNum
-                           , @AuthenticationPrincipal AuthenticatedUser user
-                           , Model model) {
+            , @AuthenticationPrincipal AuthenticatedUser user
+            , Model model) {
 
         ShareDiaryDTO dto = shareDiaryService.getDiary(diaryNum);
         model.addAttribute("diary", dto);
@@ -245,6 +285,7 @@ public class ShareController {
 
     /**
      * 공유 다이어리 소개 멘트를 수정하는 메서드
+     *
      * @param diaryNum
      * @param diaryBio
      * @param user
@@ -253,9 +294,9 @@ public class ShareController {
      */
     @PostMapping("bio")
     public String bio(@RequestParam("diaryNum") Integer diaryNum
-                    , @RequestParam("diaryBio") String diaryBio
-                    , @AuthenticationPrincipal AuthenticatedUser user
-                    , Model model){
+            , @RequestParam("diaryBio") String diaryBio
+            , @AuthenticationPrincipal AuthenticatedUser user
+            , Model model) {
 
         shareDiaryService.updateBio(diaryNum, diaryBio, user.getUsername());
 
@@ -270,6 +311,7 @@ public class ShareController {
 
     /**
      * 노트 선택 페이지로 이동하는 메서드
+     *
      * @return 노트 선택 페이지
      */
     @GetMapping("note")
@@ -289,24 +331,29 @@ public class ShareController {
     }
 
     /**
-     * 노트 템플릿을 기반으로 다이어리 작성 페이지로 이동하는 메서드
+     * 노트 템플릿을 기반으로 다이어리 작성 페이지로 이동
      *
-     * @param noteNum  노트 번호
-     * @param diaryNum 다이어리 번호
-     * @param noteName 노트 이름
-     * @param model    모델 객체
-     * @return 다이어리 작성 페이지 뷰 이름
+     * @param noteNum   노트 번호
+     * @param diaryNum  다이어리 번호
+     * @param noteName  노트 이름
+     * @param model     모델 객체
+     * @param principal 현재 로그인한 사용자 정보
+     * @return 다이어리 작성 페이지 뷰
      */
     @GetMapping("noteForm")
     public String createDiary(@RequestParam("noteNum") Integer noteNum,
                               @RequestParam("diaryNum") Integer diaryNum,
                               @RequestParam("noteName") String noteName,
-                              Model model) {
+                              Model model, Principal principal) {
+
+        // 필요한 파라미터가 제대로 전달되었는지 로그로 확인
+        log.info("Received noteNum: {}, diaryNum: {}, noteName: {}", noteNum, diaryNum, noteName);
+
+
         // 노트 템플릿 정보 가져오기
         NoteTemplateDTO noteTemplate = noteTemplateService.getNoteTemplateById(noteNum);
-
         if (noteTemplate == null || noteTemplate.getNoteImage() == null) {
-            throw new RuntimeException("NoteTemplate 또는 이미지 경로가 존재하지 않습니다.");
+            throw new RuntimeException("노트 템플릿 또는 이미지 경로가 존재하지 않습니다.");
         }
 
         // 다이어리 정보 가져오기
@@ -319,29 +366,116 @@ public class ShareController {
         Integer categoryNum = diary.getCategoryNum();
         List<HashtagDTO> hashtags = hashtagService.getHashtagsByCategory(categoryNum);
 
+        // 현재 로그인한 사용자의 프로필 정보 가져오기
+        String memberId = principal.getName();
+        ProfileDTO profile = profileService.getProfileByMemberId(memberId); // 프로필 정보 가져오기
+
         // 모델에 데이터 추가
         model.addAttribute("noteTemplate", noteTemplate);
         model.addAttribute("diaryNum", diaryNum);
         model.addAttribute("noteName", noteName);
         model.addAttribute("emotions", emotions);
         model.addAttribute("hashtags", hashtags);
+        model.addAttribute("profile", profile); // 프로필 정보 추가
 
         return "share/NoteForm";
     }
 
+    /**
+     * 노트 저장을 위한 POST 메서드
+     *
+     * @param diaryNum        다이어리 번호
+     * @param noteNum         노트 번호
+     * @param noteName        노트 이름
+     * @param diaryDate       작성 날짜
+     * @param diaryEmotion    감정 선택
+     * @param locationTag     위치 정보
+     * @param diaryContent    일기 내용
+     * @param hashtags        해시태그 선택
+     * @param model           모델 객체
+     * @param principal       인증된 사용자 정보
+     * @return 저장 결과에 따른 뷰 이름
+     */
+    @PostMapping("/saveNote")
+    public String saveNote(@RequestParam("diaryNum") Integer diaryNum,
+                           @RequestParam("noteNum") Integer noteNum,
+                           @RequestParam("noteName") String noteName,
+                           @RequestParam("diaryDate") String diaryDate,
+                           @RequestParam("diaryEmotion") Integer diaryEmotion,
+                           @RequestParam("locationTag") String locationTag,
+                           @RequestParam("diaryContent") String diaryContent,
+                           @RequestParam(value = "hashtags", required = false) List<Integer> hashtags,
+                           @RequestParam(value = "diaryImage", required = false) MultipartFile diaryImage,
+                           Model model, Principal principal) {
 
-    @PostMapping("saveNote")
-    public String saveNote(@ModelAttribute ShareNoteDTO shareNoteDTO
-                         , @AuthenticationPrincipal AuthenticatedUser user
-                         , RedirectAttributes redirectAttributes) {
+        try {
+            // NoteTemplateDTO 생성
+            NoteTemplateDTO noteTemplateDTO = NoteTemplateDTO.builder()
+                    .noteNum(noteNum)
+                    .build();
 
+            // 현재 로그인된 사용자 ID
+            String memberId = principal.getName();
 
+            // diaryDate를 LocalDate로 처리
+            LocalDate diaryDateParsed = LocalDate.parse(diaryDate);
 
-        return "share/main";
+            // ShareNoteDTO 생성
+            ShareNoteDTO noteDTO = ShareNoteDTO.builder()
+                    .shareDiaryNum(diaryNum)
+                    .noteTemplate(noteTemplateDTO)
+                    .shareNoteTitle(noteName)
+                    .diaryDate(diaryDateParsed.atStartOfDay())
+                    .emotionNum(diaryEmotion) // Emotion 번호를 전달
+                    .location(locationTag)
+                    .contents(diaryContent)
+                    .memberId(memberId)
+                    .likeCount(0)
+                    .weather("Sunny")
+                    .build();
+
+            // 이미지 파일 처리
+            if (diaryImage != null && !diaryImage.isEmpty()) {
+                // 업로드된 파일 정보 로그 출력
+                log.info("업로드된 파일 이름: {}", diaryImage.getOriginalFilename());
+                log.info("파일 크기: {}", diaryImage.getSize());
+
+                // 고유한 파일 이름 생성
+                String fileName = UUID.randomUUID().toString() + "_" + diaryImage.getOriginalFilename();
+
+                // 업로드 디렉토리 경로 설정 및 생성
+                File uploadDir = new File(this.uploadDir);
+                if (!uploadDir.exists()) {
+                    boolean dirCreated = uploadDir.mkdirs(); // 디렉토리 생성
+                    log.info("업로드 디렉토리 생성 여부: {}", dirCreated);
+                }
+
+                // 파일 저장 경로 설정
+                File saveFile = new File(uploadDir, fileName);
+                log.info("저장될 파일 경로: {}", saveFile.getAbsolutePath());
+
+                // 파일 저장
+                diaryImage.transferTo(saveFile);
+                noteDTO.setFileName(fileName); // 파일 이름 설정
+            }
+
+            // 서비스 호출
+            shareNoteService.saveNote(noteDTO, hashtags);
+
+            return "redirect:/share/main";
+
+        } catch (Exception e) {
+            log.error("노트 저장 중 오류 발생", e);
+            model.addAttribute("errorMessage", "노트 저장에 실패했습니다.");
+            return createDiary(noteNum, diaryNum, noteName, model, principal);
+        }
     }
+
+
 
     /**
      * 전체 공유 다이어리 리스트를 출력하는 메서드
+     *
      * @param user
      * @param model
      * @return

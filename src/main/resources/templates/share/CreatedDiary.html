@@ -4,7 +4,7 @@
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
-    <title>나의 공유 다이어리</title>
+    <title>My Note</title>
 
     <!-- jQuery 로드 -->
     <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
@@ -13,78 +13,118 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- 헤더와 푸터용 스타일 -->
-    <link href="../header/css/styles.css" rel="stylesheet">
-    <link rel="stylesheet" href="../footer/css/styles.css">
+    <link th:href="@{/header/css/styles.css}" rel="stylesheet">
+    <link th:href="@{/footer/css/styles.css}" rel="stylesheet">
 
-    <!-- MyDiary 페이지 전용 CSS 파일 -->
-    <link href="/css/share/MyDiary.css" rel="stylesheet">
+    <!-- MyNote 페이지 전용 CSS 파일 -->
+    <link href="/css/personal/MyNote.css" rel="stylesheet">
 </head>
 <body>
 <!-- 헤더 부분 불러오기 -->
 <div th:replace="~{fragments/header :: header}"></div>
+<br>
+<br>
 
 <!-- 메인 컨테이너 -->
-<div id="main" class="container mt-5">
-    <h2><p th:text="${diary.shareDiaryName}"></p></h2>
-    <div>
-        <p>카테고리: <span th:text="${diary.categoryName}"></span> 방장: <span th:text="${diary.nickname}"></span>
-            개설일: <span th:text="${#temporals.format(diary.createdDate, 'yyyy-MM-dd')}"></span>
-            멤버수: 1</p>
-    </div>
-    <div>
-        <a th:href="@{/share/main}"><span>생성 다이어리</span></a>
-        <a th:href="@{/share/joinedList}"><span>가입 다이어리</span></a>
-    </div>
+<div id="my-note-main" class="container mt-5">
+    <h2>My Note</h2>
+    <br>
 
-    <!-- 다이어리 목록 컨테이너 -->
-    <div class="diary-list">
-        <!-- 신규 다이어리 추가 버튼 -->
-        <div class="diary-add">
-            <a href="#" th:href="@{/share/note(diaryNum=${diary.shareDiaryNum})}">
-                <div class="icon-add">+</div> <!-- 신규 다이어리 추가 아이콘 -->
-            </a>
+    <div class="row">
+        <!-- 선택한 다이어리 카드 -->
+        <div class="col-md-3">
+            <div class="card selected-diary-card">
+                <img th:src="@{'/images/' + ${diary.noteTemplate.coverName} + '.png'}" alt="커버 이미지" class="card-img-top">
+                <div class="card-body">
+                    <h5 class="card-title" th:text="${diary.shareDiaryName}">다이어리 이름</h5>
+                </div>
+            </div>
         </div>
 
-        <!-- 다이어리 표지 목록 (반복 가능) -->
-        <div class="cover">
-            <a th:href="@{/share/newNote}"><span>속지</span></a> <!-- 다이어리 표지 텍스트 -->
+        <!-- 세로 경계선 -->
+        <div class="col-md-1 d-flex justify-content-center">
+            <div class="vertical-line"></div>
         </div>
-        <div class="cover">
-            <span>속지</span> <!-- 다이어리 표지 텍스트 -->
+
+        <!-- 노트 목록과 추가 버튼 -->
+        <div class="col-md-8">
+            <h3>Note List</h3>
+            <div class="my-note-list row">
+                <!-- 신규 노트 추가 버튼 -->
+                <div class="col-md-3 mb-4">
+                    <div class="add-note-card">
+                        <a th:href="@{/share/note(diaryNum=${diary.shareDiaryNum})}">
+                            <div class="add-note-icon">+</div>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- 노트 목록 -->
+                <div class="col-md-3 mb-4" th:each="note : ${noteList}">
+                    <div class="my-note-card h-100">
+                        <!-- noteTemplate.noteImage를 이용해 노트 템플릿 이미지를 표시 -->
+                        <img th:src="@{'/images/' + ${note.noteTemplate.noteName} + '.png'}" alt="노트 이미지" class="card-img-top">
+                        <div class="card-body">
+                            <h5 class="card-title" th:text="${note.shareNoteTitle}">노트 제목</h5>
+                            <!-- 노트 보기 버튼 (모달 열기) -->
+                            <button class="btn btn-primary btn-view-note" th:attr="data-note-num=${note.shareNoteNum}">노트 보기</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
-    <!-- 메뉴 버튼 (햄버거 아이콘) -->
+    <!-- 메뉴 버튼 -->
     <div class="text-center mt-4">
-        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#menuModal">
-            <i class="fas fa-bars"></i> 메뉴 <!-- 햄버거 아이콘과 함께 메뉴 텍스트 -->
-        </button>
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#menuModal">메뉴</button>
     </div>
 </div>
 
-<!-- 메뉴 모달 -->
-<div class="modal fade" id="menuModal" tabindex="-1" aria-labelledby="menuLabel" aria-hidden="true">
-    <div class="modal-dialog">
+<!-- 노트 보기 모달 -->
+<div class="modal fade" id="noteModal" tabindex="-1" aria-labelledby="noteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xxl">
         <div class="modal-content">
-            <!-- 모달 헤더 -->
             <div class="modal-header">
-                <h5 class="modal-title" id="menuLabel">다이어리 관리</h5>
+                <h5 class="modal-title" id="noteModalLabel">노트 제목</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
-            <!-- 모달 본문 -->
-            <div class="modal-body">
-                <div class="menu-list">
-                    <a th:href="@{/share/note}" class="menu-item action-btn">새로운 노트 추가</a>
-                    <a th:href="@{/share/viewMyNotes}" class="menu-item action-btn">내가 작성한 노트</a>
-                    <a th:href="@{/share/viewMyReply}" class="menu-item action-btn">내가 작성한 댓글</a>
-                    <a th:href="@{/share/manageDiary(diaryNum=${diary.shareDiaryNum})}" class="menu-item action-btn">다이어리 관리</a>
-                </div>
-            </div>
+            <!-- 노트 템플릿 이미지 배경으로 설정 -->
+            <div class="modal-body" id="noteContentModal" style="background-size: cover; background-repeat: no-repeat;">
+                <!-- 콘텐츠 전체를 묶는 div -->
+                <div class="content-wrapper">
 
-            <!-- 모달 푸터 -->
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary action-btn" data-bs-dismiss="modal">닫기</button>
+                    <!-- 프로필 이미지 및 위치/날짜/감정 섹션 -->
+                    <div class="d-flex align-items-center mb-4">
+                        <div class="profile-image me-3">
+                            <img src="/images/profile.png" class="rounded-circle" width="50" height="50" alt="프로필">
+                        </div>
+                        <div class="w-100">
+                            <p id="noteLocation">[위치]</p> <!-- 위치 텍스트 (추후 수정 가능) -->
+                            <div class="date-emotion-section">
+                                <span id="noteDate">[작성일]</span> <!-- 작성일 텍스트 -->
+                                <span id="noteEmotion" class="ms-3">[감정]</span> <!-- 감정 텍스트 -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 이미지 섹션 -->
+                    <div class="image-section">
+                        <img src="" alt="노트 내용 이미지" id="personalNoteImage" style="display: none;"> <!-- 처음에는 숨긴 상태 -->
+                    </div>
+
+                    <!-- 내용 섹션 -->
+                    <div class="content-section">
+                        <p id="noteContents">[내용]</p> <!-- 노트 내용 텍스트 -->
+                    </div>
+
+                    <!-- 해시태그 섹션 -->
+                    <div class="hashtag-section">
+                        <p id="noteHashtags">[해시태그]</p> <!-- 해시태그 텍스트 -->
+                    </div>
+
+                </div> <!-- content-wrapper 끝 -->
             </div>
         </div>
     </div>
@@ -95,146 +135,8 @@
 
 <!-- 부트스트랩 JS 로드 -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-<!-- FontAwesome 아이콘 로드 -->
-<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
-</body>
-</html>
 
-<!--
-
-<!DOCTYPE html>
-<html lang="ko"
-      xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<head>
-    <meta charset="UTF-8">
-    <title>My Note</title>
-
-    &lt;!&ndash; jQuery 로드 &ndash;&gt;
-    <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
-
-    &lt;!&ndash; 부트스트랩 CSS 로드 &ndash;&gt;
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    &lt;!&ndash; 헤더와 푸터용 스타일 &ndash;&gt;
-    <link th:href="@{/header/css/styles.css}" rel="stylesheet">
-    <link th:href="@{/footer/css/styles.css}" rel="stylesheet">
-
-    &lt;!&ndash; MyNote 페이지 전용 CSS 파일 &ndash;&gt;
-    <link href="/css/personal/MyNote.css" rel="stylesheet">
-</head>
-<body>
-&lt;!&ndash; 헤더 부분 불러오기 &ndash;&gt;
-<div th:replace="~{fragments/header :: header}"></div>
-<br>
-<br>
-
-&lt;!&ndash; 메인 컨테이너 &ndash;&gt;
-<div id="my-note-main" class="container mt-5">
-    <h2>My Note</h2>
-    <br>
-
-    <div class="row">
-        &lt;!&ndash; 선택한 다이어리 카드 &ndash;&gt;
-        <div class="col-md-3">
-            <div class="card selected-diary-card">
-                <img th:src="@{'/images/' + ${diary.coverName} + '.png'}" alt="커버 이미지" class="card-img-top">
-                <div class="card-body">
-                    <h5 class="card-title" th:text="${diary.diaryName}">다이어리 이름</h5>
-                </div>
-            </div>
-        </div>
-
-        &lt;!&ndash; 세로 경계선 &ndash;&gt;
-        <div class="col-md-1 d-flex justify-content-center">
-            <div class="vertical-line"></div>
-        </div>
-
-        &lt;!&ndash; 노트 목록과 추가 버튼 &ndash;&gt;
-        <div class="col-md-8">
-            <h3>Note List</h3>
-            <div class="my-note-list row">
-                &lt;!&ndash; 신규 노트 추가 버튼 &ndash;&gt;
-                <div class="col-md-3 mb-4">
-                    <div class="my-note-add-btn">
-                        &lt;!&ndash; diaryNum을 모델에서 직접 사용 &ndash;&gt;
-                        <a th:href="@{/personal/note(diaryNum=${diaryNum})}">
-                            <div class="my-note-icon-add">+</div>
-                        </a>
-                    </div>
-                </div>
-
-                &lt;!&ndash; 노트 목록 &ndash;&gt;
-                <div class="col-md-3 mb-4" th:each="note : ${noteList}">
-                    <div class="my-note-card h-100">
-                        &lt;!&ndash; noteTemplate.noteImage를 이용해 노트 템플릿 이미지를 표시 &ndash;&gt;
-                        <img th:src="@{'/images/' + ${note.noteTemplate.noteName} + '.png'}" alt="노트 이미지" class="card-img-top">
-                        <div class="card-body">
-                            <h5 class="card-title" th:text="${note.noteTitle}">노트 제목</h5>
-                            &lt;!&ndash; 노트 보기 버튼 (모달 열기) &ndash;&gt;
-                            <button class="btn btn-primary btn-view-note" th:attr="data-note-num=${note.personalNoteNum}">노트 보기</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    &lt;!&ndash; 메뉴 버튼 &ndash;&gt;
-    <div class="text-center mt-4">
-        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#menuModal">메뉴</button>
-    </div>
-</div>
-
-&lt;!&ndash; 노트 보기 모달 &ndash;&gt;
-<div class="modal fade" id="noteModal" tabindex="-1" aria-labelledby="noteModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="noteModalLabel">노트 제목</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-
-            &lt;!&ndash; 노트 템플릿 이미지를 배경으로 설정 &ndash;&gt;
-            <div class="modal-body" id="noteContentModal" style="background-size: cover; background-repeat: no-repeat;">
-                &lt;!&ndash; 프로필 및 위치 태그 섹션 &ndash;&gt;
-                <div class="d-flex align-items-center mb-4">
-                    <div class="profile-image me-3">
-                        <img src="/images/profile.png" class="rounded-circle" width="50" height="50" alt="프로필">
-                    </div>
-                    <div class="location-tag w-100">
-                        <p><strong>위치:</strong> <span id="noteLocation"></span></p>
-                    </div>
-                </div>
-
-                &lt;!&ndash; 날짜, 감정 선택 섹션 &ndash;&gt;
-                <div class="d-flex justify-content-between mb-4">
-                    <p><strong>작성일:</strong> <span id="noteDate"></span></p>
-                    <p><strong>감정:</strong> <span id="noteEmotion"></span></p>
-                </div>
-
-                &lt;!&ndash; 일기 내용 &ndash;&gt;
-                <div class="mb-4 note-content">
-                    <p><strong>내용:</strong> <span id="noteContents"></span></p>
-                </div>
-
-                &lt;!&ndash; 해시태그 표시 &ndash;&gt;
-                <div class="mb-4">
-                    <p><strong>해시태그:</strong> <span id="noteHashtags"></span></p>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-&lt;!&ndash; 푸터 부분 불러오기 &ndash;&gt;
-<div th:replace="~{fragments/footer :: footer}"></div>
-
-&lt;!&ndash; 부트스트랩 JS 로드 &ndash;&gt;
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-&lt;!&ndash; 노트 보기 JS &ndash;&gt;
+<!-- 노트 보기 JS -->
 <script th:src="@{/js/personal/viewNote.js}"></script>
 </body>
 </html>
-
--->
