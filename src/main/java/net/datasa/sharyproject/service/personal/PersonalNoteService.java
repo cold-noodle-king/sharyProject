@@ -43,10 +43,7 @@ public class PersonalNoteService {
      * @return PersonalNoteDTO 리스트
      */
     public List<PersonalNoteDTO> getNotesByDiaryNum(Integer diaryNum) {
-        // 다이어리 번호로 PersonalNote 목록 조회
         List<PersonalNoteEntity> noteEntities = personalNoteRepository.findByPersonalDiary_PersonalDiaryNum(diaryNum);
-
-        // PersonalNoteEntity를 PersonalNoteDTO로 변환하여 반환
         return noteEntities.stream()
                 .map(this::convertEntityToDTO)
                 .collect(Collectors.toList());
@@ -59,22 +56,27 @@ public class PersonalNoteService {
      * @return PersonalNoteDTO
      */
     private PersonalNoteDTO convertEntityToDTO(PersonalNoteEntity note) {
-        // 해시태그 번호 리스트로 변환
         List<Integer> hashtagNums = note.getHashtags().stream()
                 .map(HashtagEntity::getHashtagNum)
                 .collect(Collectors.toList());
 
-        // NoteTemplate 정보 추가
         NoteTemplateDTO noteTemplateDTO = null;
         if (note.getNoteTemplate() != null) {
             noteTemplateDTO = NoteTemplateDTO.builder()
                     .noteNum(note.getNoteTemplate().getNoteNum())
                     .noteName(note.getNoteTemplate().getNoteName())
-                    .noteImage(note.getNoteTemplate().getNoteImage()) // 템플릿 이미지 추가
+                    .noteImage(note.getNoteTemplate().getNoteImage())
                     .build();
         }
 
-        // PersonalNoteEntity에서 필요한 값들을 PersonalNoteDTO로 변환
+        // 프로필 정보 가져오기
+        ProfileEntity profileEntity = profileRepository.findByMember(note.getMember())
+                .orElse(null);
+        String profilePicture = "/images/default_profile.png";  // 기본 프로필 이미지
+        if (profileEntity != null && profileEntity.getProfilePicture() != null) {
+            profilePicture = profileEntity.getProfilePicture();  // 프로필 이미지 설정
+        }
+
         return PersonalNoteDTO.builder()
                 .personalNoteNum(note.getPersonalNoteNum())
                 .noteTitle(note.getNoteTitle())
@@ -89,8 +91,21 @@ public class PersonalNoteService {
                 .location(note.getLocation())
                 .fileName(note.getFileName())
                 .diaryNum(note.getPersonalDiary().getPersonalDiaryNum())
-                .noteTemplate(noteTemplateDTO) // 노트 템플릿 정보 추가
+                .noteTemplate(noteTemplateDTO)
+                .profilePicture(profilePicture)  // 프로필 이미지 추가
                 .build();
+    }
+
+    /**
+     * 노트 번호로 노트를 조회하는 메서드
+     * @param noteNum 노트 번호
+     * @return PersonalNoteDTO
+     */
+    public PersonalNoteDTO getNoteByNum(Integer noteNum) {
+        PersonalNoteEntity noteEntity = personalNoteRepository.findById(noteNum)
+                .orElseThrow(() -> new RuntimeException("해당 노트 정보를 찾을 수 없습니다."));
+
+        return convertEntityToDTO(noteEntity);  // DTO 변환 후 반환
     }
 
     /**
@@ -103,23 +118,16 @@ public class PersonalNoteService {
     @Transactional
     public Integer saveNote(PersonalNoteDTO noteDTO, List<Integer> hashtagIds) {
         try {
-            // PersonalNoteDTO를 PersonalNoteEntity로 변환
             PersonalNoteEntity noteEntity = convertToEntity(noteDTO);
-
-            // 해시태그가 있는 경우 해시태그를 엔티티에 설정
             if (hashtagIds != null && !hashtagIds.isEmpty()) {
                 List<HashtagEntity> hashtags = hashtagRepository.findAllById(hashtagIds);
                 noteEntity.setHashtags(hashtags);
             }
-
-            // 노트 저장
             PersonalNoteEntity savedNote = personalNoteRepository.save(noteEntity);
             return savedNote.getPersonalNoteNum();
-
         } catch (Exception e) {
-            // 저장 중 예외 발생 시 로그 출력
             log.error("노트 저장 중 예외 발생", e);
-            throw e; // 예외를 다시 던져서 상위에서 처리하게 함
+            throw e;
         }
     }
 
@@ -130,68 +138,35 @@ public class PersonalNoteService {
      * @return PersonalNoteEntity
      */
     private PersonalNoteEntity convertToEntity(PersonalNoteDTO noteDTO) {
-        try {
-            // 관련 엔티티 조회
-            // 감정 정보 조회
-            EmotionEntity emotion = emotionRepository.findById(noteDTO.getEmotionNum())
-                    .orElseThrow(() -> new RuntimeException("감정 정보가 없습니다."));
+        EmotionEntity emotion = emotionRepository.findById(noteDTO.getEmotionNum())
+                .orElseThrow(() -> new RuntimeException("감정 정보가 없습니다."));
+        GrantedEntity granted = grantedRepository.findById(noteDTO.getGrantedNum())
+                .orElseThrow(() -> new RuntimeException("공개 권한 정보가 없습니다."));
+        PersonalDiaryEntity diary = personalDiaryRepository.findById(noteDTO.getDiaryNum())
+                .orElseThrow(() -> new RuntimeException("다이어리 정보가 없습니다."));
+        NoteTemplateEntity noteTemplate = noteTemplateRepository.findById(noteDTO.getPersonalNoteNum())
+                .orElseThrow(() -> new RuntimeException("노트 템플릿 정보가 없습니다."));
+        MemberEntity member = memberRepository.findById(noteDTO.getMemberId())
+                .orElseThrow(() -> new RuntimeException("회원 정보가 없습니다."));
+        ProfileEntity profile = profileRepository.findByMember(member)
+                .orElseThrow(() -> new RuntimeException("프로필 정보가 없습니다."));
 
-            // 공개 권한 정보 조회
-            GrantedEntity granted = grantedRepository.findById(noteDTO.getGrantedNum())
-                    .orElseThrow(() -> new RuntimeException("공개 권한 정보가 없습니다."));
-
-            // 다이어리 정보 조회
-            PersonalDiaryEntity diary = personalDiaryRepository.findById(noteDTO.getDiaryNum())
-                    .orElseThrow(() -> new RuntimeException("다이어리 정보가 없습니다."));
-
-            // 노트 템플릿 정보 조회 (올바른 템플릿 번호로 변경)
-            NoteTemplateEntity noteTemplate = noteTemplateRepository.findById(noteDTO.getPersonalNoteNum())
-                    .orElseThrow(() -> new RuntimeException("노트 템플릿 정보가 없습니다."));
-
-            // 회원 정보 조회
-            MemberEntity member = memberRepository.findById(noteDTO.getMemberId())
-                    .orElseThrow(() -> new RuntimeException("회원 정보가 없습니다."));
-
-            // 프로필 정보 조회
-            ProfileEntity profile = profileRepository.findByMember(member)
-                    .orElseThrow(() -> new RuntimeException("프로필 정보가 없습니다."));
-
-            // PersonalNoteEntity 생성 및 값 설정
-            return PersonalNoteEntity.builder()
-                    .noteTitle(noteDTO.getNoteTitle() != null ? noteDTO.getNoteTitle() : "제목 없음")
-                    .contents(noteDTO.getContents())
-                    .diaryDate(noteDTO.getDiaryDate() != null ? noteDTO.getDiaryDate() : new Timestamp(System.currentTimeMillis()))
-                    .likeCount(noteDTO.getLikeCount() != null ? noteDTO.getLikeCount() : 0)
-                    .viewCount(noteDTO.getViewCount() != null ? noteDTO.getViewCount() : 0)
-                    .weather(noteDTO.getWeather() != null ? noteDTO.getWeather() : "Unknown")
-                    .emotion(emotion)
-                    .granted(granted)
-                    .location(noteDTO.getLocation())
-                    .fileName(noteDTO.getFileName())
-                    .personalDiary(diary)
-                    .noteTemplate(noteTemplate) // 노트 템플릿 설정
-                    .member(member) // 회원 설정
-                    .profile(profile) // 프로필 설정
-                    .build();
-
-        } catch (Exception e) {
-            log.error("엔티티 변환 중 예외 발생", e);
-            throw e; // 예외를 다시 던져 상위에서 처리
-        }
-    }
-
-    /**
-     * 노트 번호로 노트를 조회하는 메서드
-     * @param noteNum 노트 번호
-     * @return PersonalNoteDTO
-     */
-    public PersonalNoteDTO getNoteByNum(Integer noteNum) {
-        // 노트 번호로 노트 엔티티를 찾음
-        PersonalNoteEntity noteEntity = personalNoteRepository.findById(noteNum)
-                .orElseThrow(() -> new RuntimeException("해당 노트 정보를 찾을 수 없습니다."));
-
-        // 노트 엔티티를 DTO로 변환하여 반환
-        return convertEntityToDTO(noteEntity);
+        return PersonalNoteEntity.builder()
+                .noteTitle(noteDTO.getNoteTitle())
+                .contents(noteDTO.getContents())
+                .diaryDate(noteDTO.getDiaryDate())
+                .likeCount(noteDTO.getLikeCount())
+                .viewCount(noteDTO.getViewCount())
+                .weather(noteDTO.getWeather())
+                .emotion(emotion)
+                .granted(granted)
+                .location(noteDTO.getLocation())
+                .fileName(noteDTO.getFileName())
+                .personalDiary(diary)
+                .noteTemplate(noteTemplate)
+                .member(member)
+                .profile(profile)
+                .build();
     }
 
     /**
@@ -203,6 +178,4 @@ public class PersonalNoteService {
                 .map(noteHashtag -> noteHashtag.getHashtag().getHashtagName())
                 .collect(Collectors.toList());
     }
-
-
 }

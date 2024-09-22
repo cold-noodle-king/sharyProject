@@ -38,8 +38,9 @@
             <div class="diary-form-content">
                 <!-- 프로필 및 위치 태그 섹션 -->
                 <div class="d-flex align-items-center mb-4">
+                    <!-- 수정된 HTML 템플릿: 경로를 다시 추가하지 않고 profilePicture 그대로 사용 -->
                     <div class="profile-image me-3">
-                        <img src="/images/profile_default.png" class="rounded-circle" width="50" height="50" alt="프로필">
+                        <img th:src="@{${profile.profilePicture}}" class="rounded-circle" width="50" height="50" alt="프로필">
                     </div>
                     <div class="location-tag w-100">
                         <!-- 위치 표시 -->
@@ -96,7 +97,6 @@
                 <!-- 저장 및 취소 버튼 -->
                 <div class="submit-buttons text-end">
                     <button type="submit" class="btn btn-primary">저장</button>
-                    <!-- 취소 버튼에 기능 추가 -->
                     <button type="button" class="btn btn-outline-secondary" onclick="window.history.back();">취소</button>
                 </div>
             </div>

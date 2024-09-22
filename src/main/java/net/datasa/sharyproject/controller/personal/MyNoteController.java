@@ -4,9 +4,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.datasa.sharyproject.domain.dto.EmotionDTO;
 import net.datasa.sharyproject.domain.dto.HashtagDTO;
+import net.datasa.sharyproject.domain.dto.mypage.ProfileDTO;
 import net.datasa.sharyproject.domain.dto.personal.*;
 import net.datasa.sharyproject.service.EmotionService;
 import net.datasa.sharyproject.service.HashtagService;
+import net.datasa.sharyproject.service.mypage.ProfileService;
 import net.datasa.sharyproject.service.personal.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -36,30 +38,36 @@ public class MyNoteController {
     private final EmotionService emotionService;
     private final GrantedService grantedService;
     private final HashtagService hashtagService;
+    private final ProfileService profileService; // 프로필 서비스 추가
 
-    // 파일 업로드 디렉토리 설정 (application.properties에서 주입)
+    // 파일 업로드 경로 설정
     @Value("${file.upload-dir}")
     private String uploadDir;
 
     /**
-     * 노트 템플릿을 기반으로 다이어리 작성 페이지로 이동하는 메서드
+     * 노트 템플릿을 기반으로 다이어리 작성 페이지로 이동
      *
      * @param noteNum  노트 번호
      * @param diaryNum 다이어리 번호
      * @param noteName 노트 이름
      * @param model    모델 객체
-     * @return 다이어리 작성 페이지 뷰 이름
+     * @param principal 현재 로그인한 사용자 정보
+     * @return 다이어리 작성 페이지 뷰
      */
     @GetMapping("noteForm")
     public String createDiary(@RequestParam("noteNum") Integer noteNum,
                               @RequestParam("diaryNum") Integer diaryNum,
                               @RequestParam("noteName") String noteName,
-                              Model model) {
+                              Model model, Principal principal) {
+
+        // 필요한 파라미터가 제대로 전달되었는지 로그로 확인
+        log.info("Received noteNum: {}, diaryNum: {}, noteName: {}", noteNum, diaryNum, noteName);
+
+
         // 노트 템플릿 정보 가져오기
         NoteTemplateDTO noteTemplate = noteTemplateService.getNoteTemplateById(noteNum);
-
         if (noteTemplate == null || noteTemplate.getNoteImage() == null) {
-            throw new RuntimeException("NoteTemplate 또는 이미지 경로가 존재하지 않습니다.");
+            throw new RuntimeException("노트 템플릿 또는 이미지 경로가 존재하지 않습니다.");
         }
 
         // 다이어리 정보 가져오기
@@ -75,6 +83,10 @@ public class MyNoteController {
         Integer categoryNum = diary.getCategoryNum();
         List<HashtagDTO> hashtags = hashtagService.getHashtagsByCategory(categoryNum);
 
+        // 현재 로그인한 사용자의 프로필 정보 가져오기
+        String memberId = principal.getName();
+        ProfileDTO profile = profileService.getProfileByMemberId(memberId); // 프로필 정보 가져오기
+
         // 모델에 데이터 추가
         model.addAttribute("noteTemplate", noteTemplate);
         model.addAttribute("diaryNum", diaryNum);
@@ -82,6 +94,7 @@ public class MyNoteController {
         model.addAttribute("emotions", emotions);
         model.addAttribute("permissions", permissions);
         model.addAttribute("hashtags", hashtags);
+        model.addAttribute("profile", profile); // 프로필 정보 추가
 
         return "personal/NoteForm";
     }
@@ -172,12 +185,12 @@ public class MyNoteController {
             log.error("파일 저장 실패 - 경로: {}, 파일 이름: {}", this.uploadDir, diaryImage != null ? diaryImage.getOriginalFilename() : "null", e);
             model.addAttribute("errorMessage", "파일 저장에 실패했습니다. 다시 시도해주세요.");
             // 오류 발생 시 다이어리 작성 페이지로 이동
-            return createDiary(noteNum, diaryNum, noteName, model);
+            return createDiary(noteNum, diaryNum, noteName, model, principal);
         } catch (Exception e) {
             log.error("노트 저장 실패", e);
             model.addAttribute("errorMessage", "노트 저장에 실패했습니다. 다시 시도해주세요.");
             // 오류 발생 시 다이어리 작성 페이지로 이동
-            return createDiary(noteNum, diaryNum, noteName, model);
+            return createDiary(noteNum, diaryNum, noteName, model, principal);
         }
     }
 

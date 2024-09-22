@@ -31,4 +31,5 @@ public class PersonalNoteDTO {
     private NoteTemplateDTO noteTemplate; // 노트 템플릿 정보 추가 (노트 이미지 및 기타 정보 포함)
     private String memberId; // 회원 ID
     private List<String> hashtags; // 해시태그 이름 리스트 추가
+    private String profilePicture; // 프로필 이미지 경로
 }

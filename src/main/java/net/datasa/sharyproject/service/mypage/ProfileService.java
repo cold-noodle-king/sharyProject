@@ -90,4 +90,28 @@ public class ProfileService {
         profileRepository.save(profile);
     }
 
+    // 추가된 코드: 사용자 ID를 기반으로 프로필 정보를 반환하는 메서드
+    public ProfileDTO getProfileByMemberId(String memberId) {
+        // 멤버 정보로 프로필을 조회
+        Optional<ProfileEntity> profileOptional = profileRepository.findByMember_MemberId(memberId);
+
+        if (profileOptional.isPresent()) {
+            ProfileEntity profile = profileOptional.get();
+            // 프로필 정보를 DTO로 변환하여 반환
+            return ProfileDTO.builder()
+                    .profileNum(profile.getProfileNum())
+                    .profilePicture(profile.getProfilePicture())
+                    .profileOriginalName(profile.getProfileOriginalName())
+                    .ment(profile.getMent())
+                    .member(profile.getMember())
+                    .build();
+        } else {
+            // 프로필이 존재하지 않을 경우 기본 프로필 이미지와 멘트를 반환
+            return ProfileDTO.builder()
+                    .profilePicture("/uploads/profile/default.png")  // 기본 이미지 경로
+                    .ment("기본 소개글")
+                    .build();
+        }
+    }
+
 }
