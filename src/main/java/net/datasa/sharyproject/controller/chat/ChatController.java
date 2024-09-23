@@ -7,12 +7,10 @@ import net.datasa.sharyproject.domain.dto.chat.ChatMessageDTO;
 import net.datasa.sharyproject.domain.dto.follow.FollowDTO;
 import net.datasa.sharyproject.service.chat.ChatService;
 import net.datasa.sharyproject.service.follow.FollowService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -70,7 +68,7 @@ public class ChatController {
         return "chat/chatForm";
     }
 
-    @PostMapping("/send")
+    /*@PostMapping("/send")
     public String sendMessage(@RequestParam("chatId") int chatId,
                               @RequestParam("messageContent") String content, Model model) {
         String currentUserId = followService.getCurrentUserId();
@@ -79,5 +77,18 @@ public class ChatController {
         // 메시지 전송 후 해당 채팅방으로 다시 이동
         ChatDTO chat = chatService.getChatById(chatId);
         return "redirect:/chat/room?participant1Id=" + chat.getParticipant1Id() + "&participant2Id=" + chat.getParticipant2Id();
+    }*/
+
+    @PostMapping("/send")
+    @ResponseBody
+    public ResponseEntity<ChatMessageDTO> sendMessage(@RequestParam("chatId") int chatId,
+                                                      @RequestParam("messageContent") String content) {
+        String currentUserId = followService.getCurrentUserId();
+        ChatMessageDTO messageDTO = chatService.sendMessage(chatId, currentUserId, content);
+
+        // 메시지 DTO 반환
+        return ResponseEntity.ok(messageDTO);
     }
+
+
 }

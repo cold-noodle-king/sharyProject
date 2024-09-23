@@ -117,6 +117,73 @@
             margin-top: 20px;
         }
     </style>
+    <script src="/js/jquery-3.7.1.min.js"></script>
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        $(document).ready(function() {
+            // SSE 연결 설정
+            const eventSource = new EventSource('/subscribe');
+
+            // 'chat' 이벤트 수신
+            eventSource.addEventListener('chat', function(event) {
+                const data = JSON.parse(event.data);
+                console.log('SSE 이벤트 수신:', data);
+
+                // 현재 채팅방의 메시지만 처리
+                if (data.chatId === /*[[${chat.chatId}]]*/) {
+                    addMessage(data);
+                }
+            });
+
+            // 메시지를 채팅 창에 추가하는 함수
+            function addMessage(message) {
+                const messageItem = $('<li>').addClass('message-item');
+                const messageContent = $('<div>').addClass('message-content').text(message.content);
+                const senderName = $('<span>').addClass('sender-name').text(message.sender + ': ');
+                const timestamp = $('<span>').addClass('timestamp').text(new Date(message.createdAt).toLocaleString());
+
+                messageContent.prepend(senderName);
+                messageContent.append(timestamp);
+                messageItem.append(messageContent);
+
+                // 메시지 방향 설정
+                if (message.sender === /*[[${#authentication.name}]]*/) {
+                    messageItem.addClass('message-right');
+                } else {
+                    messageItem.addClass('message-left');
+                }
+
+                $('.messages').append(messageItem);
+                // 스크롤을 최신 메시지로 이동
+                $('.messages').scrollTop($('.messages')[0].scrollHeight);
+            }
+
+            // 메시지 전송 처리
+            $('#chatForm').submit(function(event) {
+                event.preventDefault(); // 기본 동작 막기
+
+                const form = $(this);
+                const url = form.attr('action');
+                const formData = form.serialize();
+
+                $.post(url, formData, function(message) {
+                    // 입력 필드 초기화
+                    $('textarea[name="messageContent"]').val('');
+
+                    // 메시지 추가
+                    addMessage({
+                        sender: message.senderId,
+                        content: message.messageContent,
+                        chatId: message.chatId,
+                        createdAt: message.createdDate
+                    });
+                });
+
+                return false;
+            });
+        });
+        /*]]>*/
+    </script>
 </head>
 <body>
 <div class="chat-container">
@@ -140,9 +207,16 @@
         </ul>
     </div>
 
+<!--
     <form th:action="@{/chat/send}" method="post">
         <input type="hidden" name="chatId" th:value="${chat.chatId}" />
         <input type="hidden" name="senderId" th:value="${#authentication.name}" />
+        <textarea name="messageContent" placeholder="메시지를 입력하세요"></textarea>
+        <button type="submit">보내기</button>
+    </form>
+-->
+    <form th:action="@{/chat/send}" method="post" id="chatForm">
+        <input type="hidden" name="chatId" th:value="${chat.chatId}" />
         <textarea name="messageContent" placeholder="메시지를 입력하세요"></textarea>
         <button type="submit">보내기</button>
     </form>
