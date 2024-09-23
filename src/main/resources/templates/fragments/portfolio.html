@@ -14,11 +14,11 @@
                 <!-- 포트폴리오 아이템 반복 -->
                 <div class="col-lg-4 col-sm-6 mb-4 portfolio-item" th:each="note : ${publicNotes}">
                     <div class="portfolio-item-content">
-                        <a class="portfolio-link" data-bs-toggle="modal" th:attr="data-bs-target='#portfolioModal' + ${note.personalNoteNum}">
+                        <!-- 클릭 시 모달을 띄우고, 노트 데이터를 가져오도록 설정 -->
+                        <a class="portfolio-link" href="#" th:data-note-num="${note.personalNoteNum}">
                             <div class="portfolio-hover">
                                 <div class="portfolio-hover-content"><i class="fas fa-plus fa-3x"></i></div>
                             </div>
-                            <!-- 커버 이미지 -->
                             <img class="img-fluid" th:src="${note.coverImage}" alt="커버 이미지" />
                         </a>
                         <div class="portfolio-caption">
@@ -30,51 +30,4 @@
             </div>
         </div>
     </section>
-
-    <!-- 포트폴리오 모달 반복 생성 -->
-    <div th:each="note : ${publicNotes}">
-        <div class="modal fade" th:id="'portfolioModal' + ${note.personalNoteNum}" tabindex="-1" aria-labelledby="'portfolioModalLabel' + ${note.personalNoteNum}" aria-hidden="true">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content" style="border-radius: 10px;">
-                    <div class="modal-header">
-                        <h5 class="modal-title" th:id="'portfolioModalLabel' + ${note.personalNoteNum}" style="text-align: center; font-size: 1.5rem;" th:text="${note.noteTitle}"></h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body" style="padding: 20px;">                        <!-- 콘텐츠 전체를 묶는 div -->
-                        <div class="content-wrapper" style="padding: 20px; background-color: rgba(255, 255, 255, 0.8); border-radius: 12px; max-width: 80%; margin: 0 auto; box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);">
-
-                            <!-- 프로필 및 감정 정보 -->
-                            <div class="d-flex align-items-center mb-4">
-                                <div class="profile-image me-3">
-                                    <img th:src="${note.profilePicture}" width="50" height="50" alt="프로필" style="border-radius: 50%;">
-                                </div>
-                                <div class="w-100">
-                                    <p th:text="${note.location}">[위치]</p>
-                                    <div class="date-emotion-section">
-                                        <span th:text="${note.diaryDate}">[작성일]</span>
-                                        <span id="noteEmotion" th:text="${note.emotionNum}">[감정]</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- 노트 이미지 -->
-                            <div class="image-section" style="display: flex; justify-content: center; margin-bottom: 20px;">
-                                <img th:src="${note.fileName}" alt="노트 이미지" style="max-width: 80%; height: auto; border-radius: 12px;" th:if="${note.fileName}">
-                            </div>
-
-                            <!-- 노트 내용 -->
-                            <div class="content-section">
-                                <p th:text="${note.contents}" style="text-align: center;">[노트 내용]</p>
-                            </div>
-
-                            <!-- 해시태그 섹션 -->
-                            <div class="hashtag-section">
-                                <p th:each="tag : ${note.hashtags}" th:text="${tag}" style="font-size: 0.75rem; display: inline-block; padding: 5px 10px; background-color: #f0f0f0; border-radius: 20px; margin-right: 5px; color: #666; text-align: center;">[해시태그]</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 </div>
