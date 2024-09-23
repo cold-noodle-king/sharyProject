@@ -27,9 +27,11 @@
                 <!-- 오른쪽에 위치할 링크 -->
                 <ul class="navbar-nav ms-auto text-uppercase py-4 py-lg-0"> <!-- ms-auto 클래스로 오른쪽 정렬 -->
 
-
                     <div>
-                    <li class="nav-item"><a class="nav-link" th:href="@{/profile.html}">프로필</a></li>
+                        <li>프로필</li>
+<!--                    <li class="nav-item">-->
+<!--                        <img th:src="${profile?.profilePicture != null} ? ${profile.profilePicture} : '/images/profile.png'"-->
+<!--                                              alt="프로필 사진" class="profile-img"></li>-->
                     </div>
 
                     <!-- 알림 이미지 삽입 -->
