@@ -1,0 +1,41 @@
+
+
+.wave-section {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    background-color: #f2d7d2; /* 상단 배경색 */
+    overflow: hidden;
+}
+
+canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+/* 텍스트 출렁임 애니메이션 */
+.main-title {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #f5e8d8; /* 텍스트 색상 */
+    font-size: 10vw;
+    letter-spacing: 0.5rem;
+    font-weight: bold;
+    z-index: 10;
+    animation: textWave 3s ease-in-out infinite;
+}
+
+/* 텍스트의 출렁거리는 효과 */
+@keyframes textWave {
+    0%, 100% {
+        transform: translate(-50%, -50%) scale(1);
+    }
+    50% {
+        transform: translate(-50%, -50%) scale(1.05);
+    }
+}
