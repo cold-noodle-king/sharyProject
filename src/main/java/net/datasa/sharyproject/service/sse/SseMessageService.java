@@ -64,6 +64,7 @@ public class SseMessageService {
                         .content(notification.getContent())
                         .createdAt(notification.getCreatedAt())
                         .isRead(notification.isRead())
+                        .notificationType(notification.getNotificationType()) // 추가
                         .build())
                 .collect(Collectors.toList());
     }

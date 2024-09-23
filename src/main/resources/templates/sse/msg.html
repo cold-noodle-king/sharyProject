@@ -30,6 +30,8 @@
                 });
             });
 
+
+
             // SSE 연결
             const eventSource = new EventSource("/subscribe");
 
@@ -39,11 +41,15 @@
                 addNotificationItem(data);
             });
 
+
+
+            // SSE 이벤트 처리
             eventSource.addEventListener('notification', function(event) {
                 let data = JSON.parse(event.data);
                 addNotificationItem(data);
             });
 
+            // 알림 이벤트 추가 함수
             function addNotificationItem(item) {
                 notifications.push(item);
 

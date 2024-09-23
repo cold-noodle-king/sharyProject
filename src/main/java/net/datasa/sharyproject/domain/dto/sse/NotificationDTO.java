@@ -17,4 +17,5 @@ public class NotificationDTO {
     private String content;
     private LocalDateTime createdAt;
     private boolean isRead;
+    private String notificationType;
 }

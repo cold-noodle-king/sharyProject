@@ -2,6 +2,7 @@ package net.datasa.sharyproject.service.sse;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.datasa.sharyproject.domain.dto.chat.ChatMessageDTO;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
@@ -23,6 +24,7 @@ public class SseService {
         emitterMap.put(memberId, emitter);
         log.debug("구독 성공 - 로그인 아이디 : {}", memberId);
 
+        // 연결이 완료되면 발생하는 이벤트 처리
         emitter.onCompletion(() -> emitterMap.remove(memberId));
         emitter.onTimeout(() -> emitterMap.remove(memberId));
         emitter.onError(e -> emitterMap.remove(memberId));
@@ -30,7 +32,7 @@ public class SseService {
         return emitter;
     }
 
-    // 메시지 전송
+    // 메시지(쪽지) 전송
     public void sendMessage(String memberId, String fromId, String content) {
         SseEmitter emitter = emitterMap.get(memberId);
 
@@ -59,6 +61,30 @@ public class SseService {
                 emitterMap.remove(memberId);
                 log.error("알림 전송 실패: {}", e.getMessage());
             }
+        }
+    }
+
+    // 새로운 채팅 메시지를 수신자에게 전송하는 메서드 추가
+    public void sendChatMessage(String recipientId, String senderId, ChatMessageDTO messageDTO) {
+        SseEmitter emitter = emitterMap.get(recipientId);
+
+        if (emitter != null) {
+            try {
+                String jsonMessage = String.format(
+                        "{\"type\":\"chat\", \"sender\":\"%s\", \"content\":\"%s\", \"chatId\":%d, \"createdAt\":\"%s\"}",
+                        senderId,
+                        messageDTO.getMessageContent(),
+                        messageDTO.getChatId(),
+                        messageDTO.getCreatedDate().toString()
+                );
+                emitter.send(SseEmitter.event().name("chat").data(jsonMessage));
+                log.debug("채팅 메시지 전송 성공 - 수신자: {}, 메시지: {}", recipientId, jsonMessage);
+            } catch (IOException e) {
+                emitterMap.remove(recipientId);
+                log.error("채팅 메시지 전송 실패: {}", e.getMessage());
+            }
+        } else {
+            log.warn("수신자의 SSE Emitter를 찾을 수 없음 - 수신자 ID: {}", recipientId);
         }
     }
 }
