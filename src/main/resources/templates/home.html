@@ -12,7 +12,7 @@
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <!-- Google폰트 사용 링크 -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@700&display=swap">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:wght@700&display=swap">
 
 
 
@@ -117,15 +117,21 @@
 
 
 <!-- 개인 다이어리 섹션 -->
-<section id="about" data-aos="fade-left">
-    <h2>개인 다이어리</h2>
-    <p>개인 다이어리 섹션 내용</p>
-    <!-- 개인 다이어리 섹션 -->
-    <div th:replace="~{fragments/diary_slider :: diarySlider}"></div>
+<section id="about" data-aos="fade-up" data-aos-duration="1000">
+    <h1 data-aos="fade-up" data-aos-duration="1000" data-aos-delay="200">당신을 기다리는 다이어리</h1>
+    <h2 data-aos="fade-up" data-aos-duration="1000" data-aos-delay="300">20여가지의 노트 템플릿과 속지</h2>
 
+    <!-- 개인 다이어리 섹션 슬라이더 -->
+    <div th:replace="~{fragments/diary_slider :: diarySlider}" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="400"></div>
 </section>
 
 
+
+<!-- 따라다니는 버튼 -->
+<div class="floating-buttons">
+    <a href="링크1" class="floating-button">첫 번째 링크</a>
+    <a href="링크2" class="floating-button">두 번째 링크</a>
+</div>
 
 
 

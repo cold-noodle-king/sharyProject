@@ -119,6 +119,19 @@
   animation: slide-right 30s linear infinite; /* 오른쪽 방향으로 슬라이드 */
 }
 
+/* 세 번째 슬라이더 트랙 스타일 (왼쪽으로 슬라이드) */
+.image-slider3 {
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+.image-slider3 .image-track {
+  display: flex;
+  width: calc(300%); /* 트랙의 너비를 두 배로 설정 */
+  animation: slide-left 30s linear infinite; /* 왼쪽 방향으로 슬라이드 */
+}
+
 /* 이미지 스타일 */
 .image-track img {
   width: auto;
@@ -11846,7 +11859,7 @@ section#contact form#contactForm :-ms-input-placeholder {
 
 /* 애니메이션 효과 추가 */
 
-h1,
+h1, h2, h3,
 .section-heading,
 .section-subheading {
   animation: fadeIn 2s ease-in-out; /* 2초 동안 서서히 나타나도록 설정 */
@@ -11959,6 +11972,8 @@ h1,
 
 .reason-card:hover {
   transform: translateY(-15px); /* 마우스 오버 시 카드가 살짝 올라감 */
+  z-index: 2;
+  transition-delay: 1s; /* 약간의 딜레이 추가 */
 }
 
 .reason-card .icon {
@@ -11969,7 +11984,7 @@ h1,
 .reason-card h4 {
   font-family: 'Lato', sans-serif;
   font-size: 20px;
-  font-weight: bold;
+  font-weight: 700;
   margin-bottom: 10px;
 }
 
@@ -11989,7 +12004,8 @@ h1,
 
 /* 배경 및 텍스트 정렬 */
 .reason-section {
-  background-color: #ffd56e;
+  font-family: 'Lato', sans-serif;
+  background-color: #fff9c4;
   padding: 60px 20px;
   text-align: center;
 }
@@ -12001,3 +12017,78 @@ h1,
 }
 
 
+.reason-footer {
+  text-align: center;
+  margin-top: 50px;
+  padding: 10px 30px;
+  background-color: #fff56e; /* 밀리의 서재와 유사한 밝은 색상 */
+  font-size: 0.9rem;
+  color: #7d7da6; /* 글자색은 검은색 */
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1); /* 살짝 그림자 효과 */
+  border-radius: 10px; /* 모서리를 둥글게 */
+  max-width: 60%;
+  margin-left: auto;
+  margin-right: auto; /* 중앙 정렬 */
+}
+
+.reason-footer p {
+  margin: 5px 0;
+  font-weight: 400; /* 글자 두께 조정 */
+}
+
+
+/* 섹션 제목과 본문 글씨 둥글게 만들기 */
+#about h2, #about p {
+  font-family: 'Lato', sans-serif; /* 둥근 폰트인 Lato 사용 */
+  font-weight: bold; /* 글자 두께를 더 두껍게 */
+  text-align: center; /* 글자 가운데 정렬 */
+  border-radius: 10px; /* 둥근 모서리 (필요 시 조정 가능) */
+  padding: 10px; /* 글자 주변에 여백 추가 */
+}
+
+/* 섹션의 텍스트가 중앙에 배치되도록 설정 */
+#about {
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  text-align: center;
+}
+
+/* h2와 p에 백그라운드 컬러 추가 (옵션) */
+#about h2, #about p {
+  background-color: #f0f0f0; /* 배경 색을 원하는 색으로 변경 */
+}
+
+
+/* 따라다니는 버튼 스타일 */
+.floating-buttons {
+  position: fixed;
+  bottom: 20px; /* 페이지 하단에서 20px 위 */
+  left: 50%; /* 화면의 좌우 중앙에 배치 */
+  transform: translateX(-50%); /* 버튼들이 중앙에 정렬되도록 조정 */
+  display: flex;
+  flex-direction: row; /* 가로로 버튼 정렬 */
+  gap: 20px; /* 버튼들 간의 간격 */
+  z-index: 1000; /* 다른 요소들 위에 위치하도록 설정 */
+}
+
+.floating-button {
+  display: inline-block;
+  background-color: #fcbf49; /* 버튼 배경색 */
+  color: white;
+  text-align: center;
+  padding: 10px 20px;
+  border-radius: 50px; /* 둥근 모서리 */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 그림자 */
+  font-family: 'Lato', sans-serif; /* 폰트 */
+  font-size: 16px;
+  font-weight: bold;
+  text-decoration: none;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.floating-button:hover {
+  background-color: #f77f00; /* 호버 시 버튼 배경색 변화 */
+  transform: translateY(-3px); /* 호버 시 살짝 위로 올라가는 효과 */
+}
