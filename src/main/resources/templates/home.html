@@ -13,6 +13,8 @@
     <!-- Google폰트 사용 링크 -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@700&display=swap">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:wght@700&display=swap">
+    <!-- CDN 사용 링크 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/spoqa/spoqa-han-sans/css/SpoqaHanSansNeo.css">
 
 
 
@@ -44,8 +46,12 @@
 <!-- header.html의 헤더 부분 불러오기 -->
 <div th:replace="~{fragments/header :: header}"></div>
 
+
+
 <!-- wave_animation.html의 파도 애니메이션 섹션 불러오기 -->
-<div th:replace="~{fragments/wave_animation :: wave_animation}"></div>
+<div class="animated-header" th:replace="~{fragments/wave_animation :: wave_animation}"></div>
+
+
 
 <!-- Emotion 섹션 -->
 <div id="page-top"></div>
@@ -119,7 +125,7 @@
 <!-- 개인 다이어리 섹션 -->
 <section id="about" data-aos="fade-up" data-aos-duration="1000">
     <h1 data-aos="fade-up" data-aos-duration="1000" data-aos-delay="200">당신을 기다리는 다이어리</h1>
-    <h2 data-aos="fade-up" data-aos-duration="1000" data-aos-delay="300">20여가지의 노트 템플릿과 속지</h2>
+    <h3 data-aos="fade-up" data-aos-duration="1000" data-aos-delay="300">20여가지의 노트 템플릿과 속지</h3>
 
     <!-- 개인 다이어리 섹션 슬라이더 -->
     <div th:replace="~{fragments/diary_slider :: diarySlider}" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="400"></div>

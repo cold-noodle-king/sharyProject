@@ -377,6 +377,7 @@ body {
   background-color: var(--bs-body-bg);
   -webkit-text-size-adjust: 100%;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+
 }
 
 hr {
@@ -390,7 +391,8 @@ hr {
 h6, .h6, h5, .h5, h4, .h4, h3, .h3, h2, .h2, h1, .h1 {
   margin-top: 0;
   margin-bottom: 0.5rem;
-  font-family: "Montserrat", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  font-family: 'SpoqaHanSansNeo', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif; /* 변경된 글씨체 */
+  /*  font-family: "Montserrat", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"; */
   font-weight: 700;
   line-height: 1.2;
 }
@@ -3902,6 +3904,7 @@ textarea.form-control-lg {
   color: var(--bs-nav-link-color);
   text-decoration: none;
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out;
+
 }
 @media (prefers-reduced-motion: reduce) {
   .nav-link {
@@ -4043,6 +4046,7 @@ textarea.form-control-lg {
   flex-wrap: inherit;
   align-items: center;
   justify-content: space-between;
+  font-family: 'SpoqaHanSansNeo', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif; /* 변경된 글씨체 */
 }
 .navbar-brand {
   padding-top: var(--bs-navbar-brand-padding-y);
@@ -11179,7 +11183,8 @@ p {
   width: auto !important;
 }
 #mainNav .navbar-nav .nav-item .nav-link {
-  font-family: "Montserrat", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  /* font-family: "Montserrat", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"; */
+  font-family: 'SpoqaHanSansNeo', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif; /* 변경된 글씨체 */
   font-size: 0.95rem;
   color: #dd43c0;
   letter-spacing: 0.0625em;
@@ -11802,6 +11807,8 @@ section#contact form#contactForm :-ms-input-placeholder {
   overflow-x: hidden; /* 불필요한 넘침 방지 */
 }
 
+
+
 .wave {
   width: 100%;
   height: 100%;
@@ -11865,6 +11872,7 @@ h1, h2, h3,
   animation: fadeIn 2s ease-in-out; /* 2초 동안 서서히 나타나도록 설정 */
   opacity: 0; /* 초기 상태는 투명 */
   animation-fill-mode: forwards; /* 애니메이션 종료 후 최종 상태 유지 */
+  font-family: 'SpoqaHanSansNeo', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif; /* 변경된 글씨체 */
 }
 
 
@@ -12055,9 +12063,10 @@ h1, h2, h3,
   text-align: center;
 }
 
-/* h2와 p에 백그라운드 컬러 추가 (옵션) */
-#about h2, #about p {
+/* h3와 p에 백그라운드 컬러 추가 (옵션) */
+#about h3, #about p {
   background-color: #f0f0f0; /* 배경 색을 원하는 색으로 변경 */
+  color: #959596;
 }
 
 
@@ -12078,11 +12087,11 @@ h1, h2, h3,
   background-color: #072153; /* 버튼 배경색 */
   color: white;
   text-align: center;
-  padding: 18px 40px;
+  padding: 16px 30px;
   border-radius: 50px; /* 둥근 모서리 */
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 그림자 */
-  font-family: 'Lato', sans-serif; /* 폰트 */
-  font-size: 20px;
+  font-family: 'SpoqaHanSansNeo', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif; /* 폰트 */
+  font-size: 18px;
   font-weight: bold;
   text-decoration: none;
   transition: background-color 0.3s ease, transform 0.3s ease;
@@ -12091,4 +12100,21 @@ h1, h2, h3,
 .floating-button:hover {
   background-color: #ce8ece; /* 호버 시 버튼 배경색 변화 */
   transform: translateY(-3px); /* 호버 시 살짝 위로 올라가는 효과 */
+}
+
+
+
+@keyframes backgroundAnimation {
+  0% { background-color: #ffdee9; }
+  20% { background-color: #ffd9dc; }
+  40% { background-color: #ffd7c3; }
+  60% { background-color: #fbe6b0; }
+
+}
+
+.animated-header {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  animation: backgroundAnimation 6s infinite alternate; /* 애니메이션 추가 */
 }

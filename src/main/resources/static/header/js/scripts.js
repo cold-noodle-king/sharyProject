@@ -146,7 +146,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const waveContainer = document.getElementById('waveContainer');
 
     // 파도 색상 배열에서 첫 번째 색상을 보라색이나 진청색으로 변경
-    const colors = ['#dd43c0', '#ffffff', '#072153', '#f33f50', '#9982a1']; // 파도 색상 배열
+    const colors = ['#ce8ece', '#ffffff', '#072153', '#f33f50', '#9982a1']; // 파도 색상 배열
     const durations = [5, 8, 6, 3, 13]; // 각 파도 애니메이션 지속 시간
 
     // SVG 파도 생성 함수
