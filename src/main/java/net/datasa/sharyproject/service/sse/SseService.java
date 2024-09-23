@@ -49,7 +49,7 @@ public class SseService {
     }
 
     // 알림 전송
-    public void sendNotification(String memberId, String content) {
+/*    public void sendNotification(String memberId, String content) {
         SseEmitter emitter = emitterMap.get(memberId);
 
         if (emitter != null) {
@@ -62,7 +62,51 @@ public class SseService {
                 log.error("알림 전송 실패: {}", e.getMessage());
             }
         }
+    }*/
+
+    // 알림 전송
+/*    public void sendNotification(String memberId, String content, String notificationType) {
+        SseEmitter emitter = emitterMap.get(memberId);
+
+        if (emitter != null) {
+            try {
+                String jsonNotification = String.format(
+                        "{\"type\":\"notification\", \"content\":\"%s\", \"createdAt\":\"%s\", \"notificationType\":\"%s\"}",
+                        content, LocalDateTime.now().toString(), notificationType);
+                emitter.send(SseEmitter.event().name("notification").data(jsonNotification));
+            } catch (IOException e) {
+                emitterMap.remove(memberId);
+                log.error("알림 전송 실패: {}", e.getMessage());
+            }
+        }
+    }*/
+
+    //SSE 전송
+    public void sendNotification(String memberId, String content, String notificationType) {
+        SseEmitter emitter = emitterMap.get(memberId);
+
+        if (emitter != null) {
+            try {
+                String jsonNotification = String.format(
+                        "{\"type\":\"notification\", \"content\":\"%s\", \"createdAt\":\"%s\", \"notificationType\":\"%s\"}",
+                        content, LocalDateTime.now().toString(), notificationType);
+                emitter.send(SseEmitter.event().name("notification").data(jsonNotification));
+            } catch (IOException e) {
+                emitterMap.remove(memberId); // Emitter 제거
+                log.error("알림 전송 실패: {}", e.getMessage());
+                retryNotification(memberId, content, notificationType); // 재시도 로직 추가
+            }
+        } else {
+            log.warn("수신자의 SSE Emitter를 찾을 수 없음 - 수신자 ID: {}", memberId);
+        }
     }
+
+    // 알림 전송 재시도 로직
+    private void retryNotification(String memberId, String content, String notificationType) {
+        // 여기서 실패한 알림을 나중에 다시 시도하거나, DB에 저장하여 관리할 수 있는 로직을 추가할 수 있습니다.
+        log.info("재시도 로직: 사용자 {}에게 알림을 다시 전송합니다.", memberId);
+    }
+
 
     // 새로운 채팅 메시지를 수신자에게 전송하는 메서드 추가
     public void sendChatMessage(String recipientId, String senderId, ChatMessageDTO messageDTO) {

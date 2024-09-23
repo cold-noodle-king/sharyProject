@@ -157,7 +157,7 @@ public ChatDTO getChatById(int chatId) {
         notificationRepository.save(notification);
 
         // SSE를 통해 알림 전송
-        sseService.sendNotification(recipientId, notificationContent);
+        sseService.sendNotification(recipientId, notificationContent, "chat");
     }
 
     // 사용자의 모든 메시지 가져오기

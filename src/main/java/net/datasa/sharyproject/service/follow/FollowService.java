@@ -108,7 +108,7 @@ public class FollowService {
         notificationRepository.save(notification);
 
         // 2. 실시간으로 SSE 알림 전송
-        sseService.sendNotification(followingId, message);
+        sseService.sendNotification(followingId, message, "follow");
     }
 
 
