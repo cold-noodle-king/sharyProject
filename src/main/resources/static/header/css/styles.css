@@ -12075,20 +12075,20 @@ h1, h2, h3,
 
 .floating-button {
   display: inline-block;
-  background-color: #fcbf49; /* 버튼 배경색 */
+  background-color: #072153; /* 버튼 배경색 */
   color: white;
   text-align: center;
-  padding: 10px 20px;
+  padding: 18px 40px;
   border-radius: 50px; /* 둥근 모서리 */
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 그림자 */
   font-family: 'Lato', sans-serif; /* 폰트 */
-  font-size: 16px;
+  font-size: 20px;
   font-weight: bold;
   text-decoration: none;
   transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
 .floating-button:hover {
-  background-color: #f77f00; /* 호버 시 버튼 배경색 변화 */
+  background-color: #ce8ece; /* 호버 시 버튼 배경색 변화 */
   transform: translateY(-3px); /* 호버 시 살짝 위로 올라가는 효과 */
 }
