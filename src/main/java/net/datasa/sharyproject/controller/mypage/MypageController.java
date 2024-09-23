@@ -28,8 +28,8 @@ public class MypageController {
 
     private final MemberService memberService;
     private final ProfileService profileService;
-    private MemberEntity memberEntity;
-    private Object profile;
+    //private MemberEntity memberEntity;
+    //private Object profile;
 
     /**
      * 메인페이지 첫 화면
