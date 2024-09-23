@@ -89,6 +89,7 @@ public class FollowService {
     }
 
 
+    //
     private void sendFollowNotification(String followerId, String followingId) {
         MemberEntity followingMember = memberRepository.findById(followingId)
                 .orElseThrow(() -> new IllegalArgumentException("팔로우 대상 사용자를 찾을 수 없습니다."));
@@ -102,6 +103,7 @@ public class FollowService {
                 .content(message)
                 .createdAt(LocalDateTime.now())
                 .isRead(false)
+                .notificationType("follow") // 알림 타입 설정 추가
                 .build();
         notificationRepository.save(notification);
 
