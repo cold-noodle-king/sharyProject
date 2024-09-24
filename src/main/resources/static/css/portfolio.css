@@ -1,93 +1,99 @@
-/* 모달의 배경 이미지 투명도 조정 */
-#noteContentModal {
-    background-size: cover; /* 배경 이미지를 모달 크기에 맞게 설정 */
-    background-position: center; /* 배경 이미지 가운데 배치 */
+/* 모달의 배경 이미지 조정 */
+#customNoteContentModal {
+    background-size: cover; /* 배경 이미지가 모달 크기에 맞춰지도록 설정 */
+    background-position: center; /* 배경 이미지 중앙 정렬 */
     background-repeat: no-repeat; /* 배경 이미지 반복 방지 */
     width: 100%;
     height: auto;
-    min-height: 60vh; /* 최소 높이 설정 */
-    border-radius: 10px; /* 모달 모서리 둥글게 */
+    min-height: 60vh; /* 최소 높이를 설정하여 모달이 너무 작아지지 않도록 설정 */
+    border-radius: 10px; /* 모서리 둥글게 */
 }
 
-/* 모달 크기 설정 */
-.modal-xxl {
-    max-width: 80%; /* 모달 창의 너비를 80%로 설정 */
-    max-height: 80vh; /* 최대 높이를 화면의 80%로 제한 */
+/* 모달 크기 조정 */
+.custom-modal-xxl {
+    max-width: 80%; /* 모달 창 너비 설정 */
+    max-height: 80vh; /* 화면 높이에 비례하여 최대 높이 설정 */
     margin: 0 auto; /* 가운데 정렬 */
 }
 
 /* 모달 내 콘텐츠 전체를 감싸는 wrapper */
-.content-wrapper {
+.custom-content-wrapper {
     padding: 20px; /* 내부 여백 */
-    background-color: rgba(255, 255, 255, 0.8); /* 콘텐츠 배경 투명도 설정 */
+    background-color: rgba(255, 255, 255, 0.8); /* 흰 배경의 투명도 */
     border-radius: 12px; /* 모서리 둥글게 */
-    max-width: 80%; /* 콘텐츠의 최대 너비 설정 */
-    margin: 0 auto; /* 가운데 정렬 */
+    max-width: 80%; /* 너비 조정 - 좌우 줄임 */
+    margin: 0 auto; /* 중앙 정렬 */
     box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
 }
 
 /* 이미지 섹션 중앙 정렬 */
-.image-section {
+.custom-image-section {
     display: flex;
     justify-content: center; /* 중앙 정렬 */
     margin-bottom: 20px; /* 이미지와 아래 내용 간의 여백 */
 }
 
 /* 모달 내 이미지 크기 조정 */
-.image-section img {
-    max-width: 80%; /* 이미지 크기를 모달 안에 맞춰 조정 */
+.custom-image-section img {
+    max-width: 80%; /* 이미지가 너무 커지지 않도록 최대 너비 설정 */
     height: auto; /* 이미지 비율 유지 */
     border-radius: 12px; /* 이미지 모서리 둥글게 */
 }
 
 /* 모달 타이틀 크기 및 정렬 */
-.modal-title {
-    font-size: 1.25rem; /* 제목의 폰트 크기 설정 */
-    text-align: center; /* 제목을 중앙 정렬 */
+.custom-modal-title {
+    font-size: 1.25rem; /* 제목 폰트 크기 */
+    text-align: center; /* 중앙 정렬 */
 }
 
-/* 모달 본문 패딩 및 배경 설정 */
-.modal-body {
-    padding: 20px; /* 모달 본문 여백 */
+/* 모달 크기 및 비율 조정 */
+.custom-modal-dialog {
+    max-width: 800px; /* 모달 최대 너비 */
+    margin: auto; /* 중앙 정렬 */
+}
+
+/* 모달 본문 패딩 */
+.custom-modal-body {
+    padding: 20px; /* 내부 패딩 */
     background-size: cover; /* 배경 이미지를 꽉 채움 */
     background-repeat: no-repeat; /* 배경 이미지 반복 방지 */
 }
 
 /* 감정 아이콘 스타일 */
-.emotion-icon {
-    font-size: 1.5rem; /* 감정 이모티콘 크기 */
-    margin-left: 10px; /* 감정 이모티콘의 좌측 여백 */
+.custom-emotion-icon {
+    font-size: 1.5rem;
+    margin-left: 10px;
 }
 
-/* 프로필 이미지 및 감정 정렬 */
-.profile-section {
+/* 프로필 및 감정 섹션 정렬 */
+.custom-profile-section {
     display: flex;
     align-items: center;
-    margin-bottom: 15px; /* 섹션 간의 간격 */
+    margin-bottom: 15px;
 }
 
 /* 프로필 이미지 스타일 */
-.profile-image img {
-    border-radius: 50%; /* 프로필 이미지를 둥글게 */
-    width: 60px; /* 프로필 이미지 너비 */
-    height: 60px; /* 프로필 이미지 높이 */
-    margin-right: 10px; /* 프로필 이미지의 우측 여백 */
+.custom-profile-image img {
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    margin-right: 10px;
 }
 
 /* 내용 및 해시태그 섹션 */
-.content-section, .hashtag-section {
-    padding: 20px; /* 섹션 내부 여백 */
-    text-align: left; /* 왼쪽 정렬 */
+.custom-content-section, .custom-hashtag-section {
+    padding: 20px;
+    text-align: left;
 }
 
-/* 해시태그 스타일링 */
-.hashtag-section p {
+/* 해시태그 섹션 스타일 */
+.custom-hashtag-section p {
     font-size: 0.75rem; /* 해시태그 폰트 크기 */
-    display: inline-block; /* 인라인 블록으로 해시태그 표시 */
-    padding: 5px 10px; /* 내부 여백 설정 */
+    display: inline-block; /* 해시태그를 인라인 블록으로 설정 */
+    padding: 5px 10px; /* 내부 여백 */
     background-color: #f0f0f0; /* 해시태그 배경 색상 */
-    border-radius: 20px; /* 해시태그 모서리 둥글게 */
-    margin-right: 5px; /* 해시태그 간격 */
+    border-radius: 20px; /* 모서리를 둥글게 */
+    margin-right: 5px; /* 해시태그 간 간격 */
     color: #666; /* 텍스트 색상 */
-    text-align: center; /* 해시태그를 중앙 정렬 */
+    text-align: center; /* 해시태그 중앙 정렬 */
 }

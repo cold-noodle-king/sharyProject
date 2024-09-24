@@ -13,13 +13,13 @@ $(document).ready(function() {
                 console.log('템플릿 이미지:', response.noteTemplate ? response.noteTemplate.noteImage : '없음'); // 템플릿 이미지 확인 로그
 
                 // 노트 제목을 모달에 삽입
-                $('#modalNoteTitle').text(response.noteTitle);
+                $('#customModalNoteTitle').text(response.noteTitle);
 
                 // 위치 및 날짜 출력
-                $('#modalLocation').text(response.location);
+                $('#customModalLocation').text(response.location);
                 var date = new Date(response.diaryDate);
                 var formattedDate = date.getFullYear() + '년 ' + (date.getMonth() + 1) + '월 ' + date.getDate() + '일';
-                $('#modalDiaryDate').text(formattedDate);
+                $('#customModalDiaryDate').text(formattedDate);
 
                 // 감정 데이터를 이모티콘으로 변환 후 삽입
                 var emotionEmojiMap = {
@@ -30,21 +30,21 @@ $(document).ready(function() {
                     5: "😨",  // 두려움
                     6: "❤️"   // 사랑
                 };
-                $('#modalEmotion').text(emotionEmojiMap[response.emotionNum] || "🙂"); // 기본 감정은 '🙂'
+                $('#customModalEmotion').text(emotionEmojiMap[response.emotionNum] || "🙂"); // 기본 감정은 '🙂'
 
                 // 프로필 이미지가 있을 경우 파일명만 사용하여 경로 설정
                 if (response.profilePicture) {
                     var profilePicture = response.profilePicture.replace('/uploads/profile/', ''); // 중복된 경로 제거
-                    $('#modalProfilePicture').attr('src', '/uploads/profile/' + profilePicture).show();
+                    $('#customModalProfilePicture').attr('src', '/uploads/profile/' + profilePicture).show();
                 } else {
-                    $('#modalProfilePicture').hide();
+                    $('#customModalProfilePicture').hide();
                 }
 
                 // 노트 이미지 삽입
                 if (response.fileName && response.fileName.trim() !== "") {
-                    $('#modalNoteImage').attr('src', '/uploads/' + encodeURIComponent(response.fileName)).show();
+                    $('#customModalNoteImage').attr('src', '/uploads/' + encodeURIComponent(response.fileName)).show();
                 } else {
-                    $('#modalNoteImage').hide();
+                    $('#customModalNoteImage').hide();
                 }
 
                 // 백엔드에서 noteImage가 파일명으로만 전달되었을 때 경로 설정
@@ -53,22 +53,22 @@ $(document).ready(function() {
                     var noteImagePath = response.noteTemplate.noteImage;
                     noteImagePath = noteImagePath.substring(noteImagePath.lastIndexOf("/") + 1);
 
-                    $('#noteContentModal').css('background-image', 'url(/images/' + noteImagePath + ')');
+                    $('#customNoteContentModal').css('background-image', 'url(/images/' + noteImagePath + ')');
                 } else {
                     console.error('배경 이미지 파일 이름이 없습니다.');
                 }
 
                 // 노트 내용 삽입
-                $('#modalContents').text(response.contents);
+                $('#customModalContents').text(response.contents);
 
                 // 해시태그 추가
-                $('#modalHashtags').empty();
+                $('#customModalHashtags').empty();
                 response.hashtags.forEach(function(tag) {
-                    $('#modalHashtags').append('<span class="badge bg-secondary me-1">' + tag + '</span>');
+                    $('#customModalHashtags').append('<span class="badge bg-secondary me-1">' + tag + '</span>');
                 });
 
                 // 모달 열기
-                $('#portfolioModal').modal('show');
+                $('#customPortfolioModal').modal('show');
             },
             // 요청 중 에러 발생 시 처리
             error: function(jqXHR, textStatus, errorThrown) {

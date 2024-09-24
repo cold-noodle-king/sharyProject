@@ -1,41 +1,41 @@
 <!-- 노트 보기 모달 -->
 <div th:fragment="modals">
-    <div class="modal fade" id="portfolioModal" tabindex="-1" aria-labelledby="modalNoteTitle" aria-hidden="true">
-        <div class="modal-dialog modal-xxl"> <!-- 모달 크기 설정을 modal-xxl로 조정 -->
+    <div class="modal fade" id="customPortfolioModal" tabindex="-1" aria-labelledby="customModalNoteTitle" aria-hidden="true">
+        <div class="modal-dialog custom-modal-xxl"> <!-- 모달 크기 설정을 custom-modal-xxl로 조정 -->
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="modalNoteTitle">노트 제목</h5>
+                    <h5 class="modal-title" id="customModalNoteTitle">노트 제목</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body" id="noteContentModal">
-                    <div class="content-wrapper">
+                <div class="modal-body" id="customNoteContentModal">
+                    <div class="custom-content-wrapper">
                         <!-- 프로필 이미지 및 위치/날짜/감정 섹션 -->
-                        <div class="d-flex align-items-center mb-4 profile-section">
-                            <div class="profile-image me-3">
-                                <img id="modalProfilePicture" src="/images/default_profile.png" class="rounded-circle" width="60" height="60" alt="프로필">
+                        <div class="d-flex align-items-center mb-4 custom-profile-section">
+                            <div class="custom-profile-image me-3">
+                                <img id="customModalProfilePicture" src="/images/default_profile.png" class="rounded-circle" width="60" height="60" alt="프로필">
                             </div>
                             <div class="w-100">
-                                <p id="modalLocation">[위치]</p>
-                                <div class="date-emotion-section">
-                                    <span id="modalDiaryDate">[작성일]</span>
-                                    <span id="modalEmotion" class="ms-3 emotion-icon">[감정]</span>
+                                <p id="customModalLocation">[위치]</p>
+                                <div class="custom-date-emotion-section">
+                                    <span id="customModalDiaryDate">[작성일]</span>
+                                    <span id="customModalEmotion" class="ms-3 custom-emotion-icon">[감정]</span>
                                 </div>
                             </div>
                         </div>
 
                         <!-- 노트 이미지 섹션 -->
-                        <div class="image-section">
-                            <img src="" alt="노트 내용 이미지" id="modalNoteImage" style="display: none;">
+                        <div class="custom-image-section">
+                            <img src="" alt="노트 내용 이미지" id="customModalNoteImage" style="display: none;">
                         </div>
 
                         <!-- 내용 섹션 -->
-                        <div class="content-section">
-                            <p id="modalContents">[내용]</p>
+                        <div class="custom-content-section">
+                            <p id="customModalContents">[내용]</p>
                         </div>
 
                         <!-- 해시태그 섹션 -->
-                        <div class="hashtag-section">
-                            <div id="modalHashtags"></div> <!-- 해시태그들을 위한 공간 -->
+                        <div class="custom-hashtag-section">
+                            <div id="customModalHashtags"></div> <!-- 해시태그들을 위한 공간 -->
                         </div>
                     </div>
                 </div>
