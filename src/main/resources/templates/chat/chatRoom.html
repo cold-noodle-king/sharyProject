@@ -207,14 +207,14 @@
         </ul>
     </div>
 
-<!--
-    <form th:action="@{/chat/send}" method="post">
-        <input type="hidden" name="chatId" th:value="${chat.chatId}" />
-        <input type="hidden" name="senderId" th:value="${#authentication.name}" />
-        <textarea name="messageContent" placeholder="메시지를 입력하세요"></textarea>
-        <button type="submit">보내기</button>
-    </form>
--->
+    <!--
+        <form th:action="@{/chat/send}" method="post">
+            <input type="hidden" name="chatId" th:value="${chat.chatId}" />
+            <input type="hidden" name="senderId" th:value="${#authentication.name}" />
+            <textarea name="messageContent" placeholder="메시지를 입력하세요"></textarea>
+            <button type="submit">보내기</button>
+        </form>
+    -->
     <form th:action="@{/chat/send}" method="post" id="chatForm">
         <input type="hidden" name="chatId" th:value="${chat.chatId}" />
         <textarea name="messageContent" placeholder="메시지를 입력하세요"></textarea>

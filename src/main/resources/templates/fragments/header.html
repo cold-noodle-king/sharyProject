@@ -34,12 +34,25 @@
 <!--                                              alt="프로필 사진" class="profile-img"></li>-->
                     </div>
 
+
                     <!-- 알림 이미지 삽입 -->
+<!--<div>
                     <li class="nav-item">
                         <a class="nav-link" th:href="@{/notifications.html}">
                             <img src="/images/notification.png" alt="알림" style="width: 24px; height: 24px;"/>
                         </a>
                     </li>
+</div>-->
+
+
+                    <!-- 알림 로고 클릭 시 알림함으로 이동 -->
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/notifications}">
+                            <img src="/images/notification.png" alt="알림" style="width: 24px; height: 24px;" />
+                        </a>
+                    </li>
+
+
 
                     <li class="nav-item"><a class="nav-link" th:href="@{/mypage/mypageView}">마이페이지</a></li>
 

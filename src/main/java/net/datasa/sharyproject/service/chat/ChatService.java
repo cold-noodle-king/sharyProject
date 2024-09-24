@@ -125,17 +125,17 @@ public class ChatService {
 */
 
 
-// 특정 채팅 ID로 채팅을 가져오는 메서드
-public ChatDTO getChatById(int chatId) {
-    Optional<ChatEntity> chatOpt = chatRepository.findById(chatId);
-    if (chatOpt.isPresent()) {
-        ChatEntity chat = chatOpt.get();
-        return new ChatDTO(chat.getChatId(), chat.getParticipant1Id(), chat.getParticipant2Id(), chat.getCreatedDate());
-    } else {
-        log.error("Chat not found for ID: {}", chatId);
-        throw new IllegalArgumentException("Chat not found for ID: " + chatId);
+    // 특정 채팅 ID로 채팅을 가져오는 메서드
+    public ChatDTO getChatById(int chatId) {
+        Optional<ChatEntity> chatOpt = chatRepository.findById(chatId);
+        if (chatOpt.isPresent()) {
+            ChatEntity chat = chatOpt.get();
+            return new ChatDTO(chat.getChatId(), chat.getParticipant1Id(), chat.getParticipant2Id(), chat.getCreatedDate());
+        } else {
+            log.error("Chat not found for ID: {}", chatId);
+            throw new IllegalArgumentException("Chat not found for ID: " + chatId);
+        }
     }
-}
 
     // 채팅 알림 생성 메서드
     private void createChatNotification(String senderId, String recipientId, String content) {

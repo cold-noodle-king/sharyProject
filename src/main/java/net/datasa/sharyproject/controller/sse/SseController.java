@@ -115,6 +115,24 @@ public class SseController {
 
         return unifiedNotifications;
     }
+
+/*    @ResponseBody
+    @PostMapping("/sendFollowNotification")
+    public void sendFollowNotification(
+            @AuthenticationPrincipal AuthenticatedUser sender,
+            @RequestParam("memberId") String memberId,
+            @RequestParam("message") String message) {
+
+        String fromId = sender.getUsername();
+        sseService.sendNotification(memberId, message, "follow");  // 새로운 알림 유형 "follow"
+    }*/
+
+    @GetMapping("/notifications")
+    public String notificationsPage() {
+        return "sse/msg";  // 알림함 페이지 템플릿 파일 경로
+    }
+
+
 }
 
 

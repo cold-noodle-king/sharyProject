@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>알림함</title>
-    <script src="/js/jquery-3.7.1.min.js"></script>
+    <script th:src="@{/js/jquery-3.7.1.min.js}"></script> <!-- 경로를 thymeleaf로 변경 -->
     <style>
         body { font-family: Arial, sans-serif; background-color: #f7f7f7; }
         h1 { background-color: #6c63ff; color: white; padding: 10px; text-align: center; }
@@ -16,35 +16,50 @@
         .content .sender { font-weight: bold; color: #333; }
         .content .text { color: #555; }
         #msgView { max-height: 400px; overflow-y: auto; }
+        /* 메인 페이지로 돌아가기 버튼 스타일 */
+        .main-btn {
+            display: block;
+            width: 150px;
+            margin: 20px auto;
+            padding: 10px 15px;
+            background-color: #6c63ff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            text-align: center;
+            text-decoration: none;
+            font-size: 16px;
+        }
+        .main-btn:hover {
+            background-color: #584dff;
+        }
     </style>
 
-    <script>
-        $(document).ready(function() {
+    <script th:inline="javascript">
+        $(document).ready(function () {
             // 알림 데이터를 담을 배열
             let notifications = [];
 
             // 모든 알림 불러오기
-            $.get("/allNotifications", function(data) {
+            $.get("/allNotifications", function (data) {
                 data.forEach(item => {
                     addNotificationItem(item);
                 });
             });
 
 
-
             // SSE 연결
             const eventSource = new EventSource("/subscribe");
 
             // SSE 이벤트 처리
-            eventSource.addEventListener('message', function(event) {
+            eventSource.addEventListener('message', function (event) {
                 let data = JSON.parse(event.data);
                 addNotificationItem(data);
             });
 
 
-
             // SSE 이벤트 처리
-            eventSource.addEventListener('notification', function(event) {
+            eventSource.addEventListener('notification', function (event) {
                 let data = JSON.parse(event.data);
                 addNotificationItem(data);
             });
@@ -92,11 +107,16 @@
         });
     </script>
 
+
+
 </head>
 <body>
 <h1>알림함</h1>
 <div class="notification-box">
     <div id="msgView"></div>
 </div>
+
+<!-- 메인 페이지로 돌아가기 버튼 추가 -->
+<a class="main-btn" th:href="@{/}">홈페이지로 돌아가기</a>
 </body>
 </html>
