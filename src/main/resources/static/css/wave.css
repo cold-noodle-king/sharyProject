@@ -28,6 +28,7 @@ canvas {
     font-weight: bold;
     z-index: 10;
     animation: textWave 3s ease-in-out infinite;
+    text-shadow: 2px 2px 4px rgba(118, 129, 205, 0.79);
 }
 
 /* 텍스트의 출렁거리는 효과 */
