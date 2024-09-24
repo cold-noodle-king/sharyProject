@@ -1,11 +1,10 @@
 package net.datasa.sharyproject.domain.entity.share;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.extern.slf4j.Slf4j;
+import net.datasa.sharyproject.domain.entity.member.MemberEntity;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Slf4j
 @AllArgsConstructor
@@ -14,14 +13,24 @@ import lombok.extern.slf4j.Slf4j;
 @Entity
 @Builder
 @Table(name = "share_like")
-@IdClass(ShareLikes.class)    //복합키 정의 클래스
+//BoardEntity와 ReplyEntity의 순환참조 문제로 toString() 호출시 오류일때 해당 필드를 제외
+@ToString(exclude = "shareNote")
+@EntityListeners(AuditingEntityListener.class)
 public class ShareLikeEntity {
 
     @Id
-    @Column(name = "share_note_num")
-    private Integer shareNoteNum;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "like_num")
+    private Integer likeNum;
 
-    @Id
-    @Column(name = "liked_num")
-    private Integer likedNum;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "share_note_num", nullable = false)
+    private ShareNoteEntity shareNote;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id", nullable = false)
+    private MemberEntity member;
+
+    @Column(name = "like_clicked", columnDefinition = "tinyint(1) default 0 check(like_clicked in(1, 0))")
+    private Boolean likeClicked;
 }

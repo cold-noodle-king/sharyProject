@@ -70,13 +70,14 @@ $(document).ready(function() {
                 // 모달 열기
                 modal.modal('show');
 
-                // 댓글 리스트 출력
-                commentList(noteNum);
+
             },
             error: function() {
                 alert('노트 정보를 가져오는 중 오류가 발생했습니다.');
             }
         });
+        // 댓글 리스트 출력
+        commentList(noteNum);
     });
 
     // 댓글 작성 처리 로직
@@ -98,7 +99,7 @@ $(document).ready(function() {
             data: inputData,
             success: function() {
                 $('#contents').val(''); // 입력창 초기화
-                commentList(inputData.noteNum); // 댓글 목록 갱신
+                commentList(inputData.shareNoteNum); // 댓글 목록 갱신
             },
             error: function() {
                 alert('댓글을 저장하는 중 오류가 발생했습니다.');
@@ -106,39 +107,34 @@ $(document).ready(function() {
         });
     });
 
-
 });
     // 댓글 목록 출력 함수
     function commentList(noteNum) {
-
         $.ajax({
             url: '/reply/commentList',
             type: 'post',
-            data: { shareNoteNum: noteNum },
+            data: { noteNum: noteNum },
             dataType: 'json',
             success: function(list) {
-                $('#commentTbody').empty();
+                console.log(list);
+                $('.commentTbody').empty();
                 $(list).each(function(i, com) {
-                    let shouldShowEditButton = (authenticatedUser === com.memberId);
-                    let shouldShowDeleteButton = (authenticatedUser === com.memberId);
+                    /*let shouldShowEditButton = (authenticatedUser === com.memberId);
+                    let shouldShowDeleteButton = (authenticatedUser === com.memberId);*/
+                    console.log($('.commentTbody')); // DOM에서 선택된 요소가 있는지 확인
+                    console.log(com); // 각 댓글 데이터 확인
+                    console.log(com.createdDate);
+                    console.log(com.nickname);
+                    console.log(com.memberId);
                     let html = `
                         <tr>
-                            <td>${com.memberName}(${com.memberId})</td>
-                            <td style="width: 400px">${com.contents}</td>
-                            <td>${moment(com.createdDate).format('YYYY-MM-DD')}</td>
-                            <td style="width: 70px">
-                                <span>
-                                    <button class="replyUpBtn ${shouldShowEditButton ? '' : 'hide'}" data-con="${com.contents}"
-                                            data-bnum="${com.shareNoteNum}" data-rnum="${com.replyNum}">수정</button>
-                                </span>
-                                <span>
-                                    <button class="replyDelBtn ${shouldShowDeleteButton ? '' : 'hide'}"
-                                            data-bnum="${com.shareNoteNum}" data-rnum="${com.replyNum}">삭제</button>
-                                </span>
-                            </td>
+                            <td>${com.nickname}(${com.memberId})</td>
+                            <td style="width: 200px">${com.contents}</td>
+                            <td>${moment(com.createdDate).format('YY.MM.DD')}</td>
+                            
                         </tr>
                     `;
-                    $('#commentTbody').append(html);
+                    $('.commentTbody').append(html);
                 });
                 /* $('.replyUpBtn').on('click', upBtnClicked);
                  $('.replyDelBtn').on('click', delBtnClicked);*/

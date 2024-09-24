@@ -25,7 +25,9 @@ public class ReplyController {
     @PostMapping("commentList")
     public List<ReplyDTO> getList(@RequestParam("noteNum") Integer noteNum) {
 
-        return replyService.getList(noteNum);
+        List<ReplyDTO> list = replyService.getList(noteNum);
+        log.debug("댓글 리스트 확인:{}", list);
+        return list;
     }
 
     @ResponseBody
