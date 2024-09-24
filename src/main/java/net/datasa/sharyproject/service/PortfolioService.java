@@ -2,6 +2,7 @@ package net.datasa.sharyproject.service;
 
 import lombok.RequiredArgsConstructor;
 import net.datasa.sharyproject.domain.dto.personal.PersonalNoteDTO;
+import net.datasa.sharyproject.domain.dto.personal.NoteTemplateDTO;
 import net.datasa.sharyproject.domain.entity.HashtagEntity;
 import net.datasa.sharyproject.domain.entity.personal.PersonalNoteEntity;
 import net.datasa.sharyproject.repository.personal.PersonalNoteRepository;
@@ -9,9 +10,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 
 @Service
 @RequiredArgsConstructor
@@ -37,10 +35,24 @@ public class PortfolioService {
     private PersonalNoteDTO convertToDTO(PersonalNoteEntity entity) {
         String coverImagePath = entity.getPersonalDiary().getCoverTemplate().getCoverImage();
 
-        // 기존 이미지 경로 처리 방식 유지
+        // 커버 이미지 경로에서 로컬 경로 제거
         if (coverImagePath.contains("static/images/")) {
             coverImagePath = coverImagePath.substring(coverImagePath.indexOf("static/images/") + "static/images/".length());
         }
+
+        // NoteTemplateDTO 설정
+        NoteTemplateDTO noteTemplate = new NoteTemplateDTO();
+        noteTemplate.setNoteNum(entity.getNoteTemplate().getNoteNum());  // 템플릿 번호 설정
+        noteTemplate.setNoteName(entity.getNoteTemplate().getNoteName());  // 템플릿 이름 설정
+
+        // 로컬 경로에서 파일명만 추출
+        String imagePath = entity.getNoteTemplate().getNoteImage();
+        if (imagePath.contains("static/images/")) {
+            // 경로에서 마지막 슬래시(/) 이후의 파일명만 추출
+            imagePath = imagePath.substring(imagePath.lastIndexOf("/") + 1);
+        }
+
+        noteTemplate.setNoteImage(imagePath);  // 파일명만 설정
 
         return PersonalNoteDTO.builder()
                 .personalNoteNum(entity.getPersonalNoteNum())
@@ -56,6 +68,7 @@ public class PortfolioService {
                 .hashtags(entity.getHashtags().stream()
                         .map(HashtagEntity::getHashtagName) // 해시태그 이름만 추출
                         .collect(Collectors.toList())) // 해시태그 이름 리스트로 변환
+                .noteTemplate(noteTemplate)  // NoteTemplateDTO 설정
                 .build();
     }
 }

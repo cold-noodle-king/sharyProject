@@ -1,16 +1,16 @@
 <!-- 노트 보기 모달 -->
 <div th:fragment="modals">
     <div class="modal fade" id="portfolioModal" tabindex="-1" aria-labelledby="modalNoteTitle" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
+        <div class="modal-dialog modal-xxl"> <!-- 모달 크기 설정을 modal-xxl로 조정 -->
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="modalNoteTitle">노트 제목</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body" id="noteContentModal" style="background-size: cover; background-repeat: no-repeat;">
+                <div class="modal-body" id="noteContentModal">
                     <div class="content-wrapper">
                         <!-- 프로필 이미지 및 위치/날짜/감정 섹션 -->
-                        <div class="d-flex align-items-center mb-4">
+                        <div class="d-flex align-items-center mb-4 profile-section">
                             <div class="profile-image me-3">
                                 <img id="modalProfilePicture" src="/images/default_profile.png" class="rounded-circle" width="60" height="60" alt="프로필">
                             </div>
@@ -18,7 +18,7 @@
                                 <p id="modalLocation">[위치]</p>
                                 <div class="date-emotion-section">
                                     <span id="modalDiaryDate">[작성일]</span>
-                                    <span id="modalEmotion" class="ms-3">[감정]</span>
+                                    <span id="modalEmotion" class="ms-3 emotion-icon">[감정]</span>
                                 </div>
                             </div>
                         </div>
@@ -35,7 +35,7 @@
 
                         <!-- 해시태그 섹션 -->
                         <div class="hashtag-section">
-                            <div id="modalHashtags"></div>
+                            <div id="modalHashtags"></div> <!-- 해시태그들을 위한 공간 -->
                         </div>
                     </div>
                 </div>

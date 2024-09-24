@@ -10,7 +10,7 @@ $(document).ready(function() {
             url: '/personal/viewNote/' + noteNum, // 해당 노트 데이터를 요청할 URL
             type: 'GET',
             success: function(response) {
-                console.log(response); // 서버에서 받아온 데이터를 콘솔에 출력하여 확인합니다.
+                console.log('템플릿 이미지:', response.noteTemplate ? response.noteTemplate.noteImage : '없음'); // 템플릿 이미지 확인 로그
 
                 // 노트 제목을 모달에 삽입
                 $('#modalNoteTitle').text(response.noteTitle);
@@ -21,15 +21,23 @@ $(document).ready(function() {
                 var formattedDate = date.getFullYear() + '년 ' + (date.getMonth() + 1) + '월 ' + date.getDate() + '일';
                 $('#modalDiaryDate').text(formattedDate);
 
-                // 감정 데이터 삽입
-                $('#modalEmotion').text(response.emotionNum);
+                // 감정 데이터를 이모티콘으로 변환 후 삽입
+                var emotionEmojiMap = {
+                    1: "😊",  // 기쁨
+                    2: "😢",  // 슬픔
+                    3: "😡",  // 화남
+                    4: "😲",  // 놀람
+                    5: "😨",  // 두려움
+                    6: "❤️"   // 사랑
+                };
+                $('#modalEmotion').text(emotionEmojiMap[response.emotionNum] || "🙂"); // 기본 감정은 '🙂'
 
-                // 이미지 경로 확인
-                if (response.fileName && response.fileName.trim() !== "") {
-                    console.log("이미지 파일 이름:", response.fileName); // 콘솔에서 파일 이름 확인
-                    $('#modalNoteImage').attr('src', '/uploads/' + encodeURIComponent(response.fileName)).show();
+                // 프로필 이미지가 있을 경우 파일명만 사용하여 경로 설정
+                if (response.profilePicture) {
+                    var profilePicture = response.profilePicture.replace('/uploads/profile/', ''); // 중복된 경로 제거
+                    $('#modalProfilePicture').attr('src', '/uploads/profile/' + profilePicture).show();
                 } else {
-                    $('#modalNoteImage').hide(); // 이미지가 없으면 숨깁니다.
+                    $('#modalProfilePicture').hide();
                 }
 
                 // 노트 이미지 삽입
@@ -38,6 +46,20 @@ $(document).ready(function() {
                 } else {
                     $('#modalNoteImage').hide();
                 }
+
+                // 백엔드에서 noteImage가 파일명으로만 전달되었을 때 경로 설정
+                if (response.noteTemplate && response.noteTemplate.noteImage) {
+                    // 경로가 로컬 경로일 경우 마지막 슬래시 이후의 파일명만 추출
+                    var noteImagePath = response.noteTemplate.noteImage;
+                    noteImagePath = noteImagePath.substring(noteImagePath.lastIndexOf("/") + 1);
+
+                    $('#noteContentModal').css('background-image', 'url(/images/' + noteImagePath + ')');
+                } else {
+                    console.error('배경 이미지 파일 이름이 없습니다.');
+                }
+
+                // 노트 내용 삽입
+                $('#modalContents').text(response.contents);
 
                 // 해시태그 추가
                 $('#modalHashtags').empty();
