@@ -5,12 +5,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.datasa.sharyproject.domain.dto.mypage.ProfileDTO;
 import net.datasa.sharyproject.domain.dto.personal.NoteTemplateDTO;
+import net.datasa.sharyproject.domain.dto.personal.PersonalNoteDTO;
 import net.datasa.sharyproject.domain.dto.share.ShareNoteDTO;
 import net.datasa.sharyproject.domain.entity.EmotionEntity;
 import net.datasa.sharyproject.domain.entity.HashtagEntity;
 import net.datasa.sharyproject.domain.entity.member.MemberEntity;
 import net.datasa.sharyproject.domain.entity.mypage.ProfileEntity;
-import net.datasa.sharyproject.domain.entity.personal.GrantedEntity;
 import net.datasa.sharyproject.domain.entity.personal.NoteTemplateEntity;
 import net.datasa.sharyproject.domain.entity.personal.PersonalNoteEntity;
 import net.datasa.sharyproject.domain.entity.share.ShareDiaryEntity;
@@ -28,7 +28,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -40,7 +39,6 @@ public class ShareNoteService {
     private final ShareNoteRepository shareNoteRepository;
     private final HashtagRepository hashtagRepository;
     private final EmotionRepository emotionRepository;
-    private final GrantedRepository grantedRepository;
     private final ShareDiaryRepository shareDiaryRepository;
     private final NoteTemplateRepository noteTemplateRepository;
     private final MemberRepository memberRepository;
@@ -58,9 +56,22 @@ public class ShareNoteService {
     public List<ShareNoteDTO> getNotesByDiaryNum(Integer diaryNum) {
         log.info("다이어리 번호 {}로 ShareNote 목록 조회 중", diaryNum);
         List<ShareNoteEntity> noteEntities = shareNoteRepository.findByShareDiary_ShareDiaryNum(diaryNum);
+        log.debug("다이어리 번호로 조회한 노트:{}", noteEntities);
         return noteEntities.stream()
                 .map(this::convertEntityToDTO)
                 .collect(Collectors.toList());
+    }
+
+    /**
+     * 노트 번호로 노트를 조회하는 메서드
+     * @param noteNum 노트 번호
+     * @return ShareNoteDTO
+     */
+    public ShareNoteDTO getNoteByNum(Integer noteNum) {
+        ShareNoteEntity noteEntity = shareNoteRepository.findById(noteNum)
+                .orElseThrow(() -> new RuntimeException("해당 노트 정보를 찾을 수 없습니다."));
+
+        return convertEntityToDTO(noteEntity);  // DTO 변환 후 반환
     }
 
     /**
@@ -83,11 +94,13 @@ public class ShareNoteService {
                     .build();
         }
 
-        ProfileDTO profileDTO = ProfileDTO.builder()
-                .profileNum(note.getProfile().getProfileNum())
-                .profilePicture(note.getProfile().getProfilePicture())
-                .ment(note.getProfile().getMent())
-                .build();
+        // 프로필 정보 가져오기
+        ProfileEntity profileEntity = profileRepository.findByMember(note.getMember())
+                .orElse(null);
+        String profilePicture = "/images/default_profile.png";  // 기본 프로필 이미지
+        if (profileEntity != null && profileEntity.getProfilePicture() != null) {
+            profilePicture = profileEntity.getProfilePicture();  // 프로필 이미지 설정
+        }
 
         return ShareNoteDTO.builder()
                 .shareNoteNum(note.getShareNoteNum())
@@ -102,7 +115,7 @@ public class ShareNoteService {
                 .fileName(note.getFileName())
                 .shareDiaryNum(note.getShareDiary().getShareDiaryNum())
                 .noteTemplate(noteTemplateDTO)
-                .profile(profileDTO) // Profile 정보 추가
+                .profilePicture(profilePicture) // Profile 정보 추가
                 .build();
     }
 
@@ -110,7 +123,7 @@ public class ShareNoteService {
      * 노트 번호로 노트를 조회하는 메서드
      * @return ShareNoteDTO
      */
-    @Transactional
+    /*@Transactional
     public void saveNote(ShareNoteDTO noteDTO, List<Integer> hashtags) {
         // 1. MemberEntity 조회
         MemberEntity member = memberRepository.findById(noteDTO.getMemberId())
@@ -154,6 +167,22 @@ public class ShareNoteService {
 
         // 8. 엔티티 저장
         shareNoteRepository.save(shareNoteEntity);
+    }*/
+
+    @org.springframework.transaction.annotation.Transactional
+    public Integer saveNote(ShareNoteDTO noteDTO, List<Integer> hashtagIds) {
+        try {
+            ShareNoteEntity noteEntity = convertToEntity(noteDTO);
+            if (hashtagIds != null && !hashtagIds.isEmpty()) {
+                List<HashtagEntity> hashtags = hashtagRepository.findAllById(hashtagIds);
+                noteEntity.setHashtags(hashtags);
+            }
+            ShareNoteEntity savedNote = shareNoteRepository.save(noteEntity);
+            return savedNote.getShareNoteNum();
+        } catch (Exception e) {
+            log.error("노트 저장 중 예외 발생", e);
+            throw e;
+        }
     }
 
     /**
@@ -176,6 +205,9 @@ public class ShareNoteService {
         MemberEntity member = memberRepository.findById(noteDTO.getMemberId())
                 .orElseThrow(() -> new RuntimeException("회원 정보를 찾을 수 없습니다."));
 
+        ProfileEntity profile = profileRepository.findByMember(member)
+                .orElseThrow(() -> new RuntimeException("프로필 정보가 없습니다."));
+
         return ShareNoteEntity.builder()
                 .shareNoteTitle(noteDTO.getShareNoteTitle())
                 .contents(noteDTO.getContents())
@@ -188,6 +220,7 @@ public class ShareNoteService {
                 .shareDiary(diary)
                 .noteTemplate(noteTemplate)  // noteTemplate 설정
                 .member(member)
+                .profile(profile)
                 .build();
     }
 

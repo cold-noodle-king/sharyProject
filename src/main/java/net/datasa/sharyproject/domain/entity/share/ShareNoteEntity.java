@@ -11,6 +11,7 @@ import net.datasa.sharyproject.domain.entity.member.MemberEntity;
 import net.datasa.sharyproject.domain.entity.mypage.ProfileEntity;
 import net.datasa.sharyproject.domain.entity.personal.NoteTemplateEntity;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -65,7 +66,7 @@ public class ShareNoteEntity {
     private String contents;
 
     @Column(name = "diary_date", nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-    private LocalDateTime diaryDate;
+    private Timestamp diaryDate;
 
     @Column(name = "like_count", columnDefinition = "INT DEFAULT 0")
     private Integer likeCount = 0;
@@ -85,5 +86,5 @@ public class ShareNoteEntity {
     private List<HashtagEntity> hashtags;
 
     @OneToMany(mappedBy = "shareNote", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ReplyEntity> reply;
+    private List<ReplyEntity> replyList;
 }

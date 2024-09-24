@@ -17,7 +17,7 @@
     <link th:href="@{/footer/css/styles.css}" rel="stylesheet">
 
     <!-- MyNote 페이지 전용 CSS 파일 -->
-    <link href="/css/personal/MyNote.css" rel="stylesheet">
+    <link href="/css/share/MyNote.css" rel="stylesheet">
 </head>
 <body>
 <!-- 헤더 부분 불러오기 -->
@@ -27,14 +27,14 @@
 
 <!-- 메인 컨테이너 -->
 <div id="my-note-main" class="container mt-5">
-    <h2>My Note</h2>
+    <h2><p th:text="${diary.shareDiaryName}"></p></h2>
     <br>
 
     <div class="row">
         <!-- 선택한 다이어리 카드 -->
         <div class="col-md-3">
             <div class="card selected-diary-card">
-                <img th:src="@{'/images/' + ${diary.noteTemplate.coverName} + '.png'}" alt="커버 이미지" class="card-img-top">
+                <img th:src="@{'/images/' + ${diary.coverTemplateName} + '.png'}" alt="커버 이미지" class="card-img-top">
                 <div class="card-body">
                     <h5 class="card-title" th:text="${diary.shareDiaryName}">다이어리 이름</h5>
                 </div>
@@ -124,6 +124,31 @@
                         <p id="noteHashtags">[해시태그]</p> <!-- 해시태그 텍스트 -->
                     </div>
 
+                    <!-- 좋아요 버튼 섹션 -->
+                    <div id="likeBox">
+                        <button id="like">좋아요</button>
+                    </div>
+
+                    <!-- 댓글 섹션 -->
+                    <div class="comment-section">
+                        <form>
+                            <input type="hidden" id="noteNum" name="noteNum">
+                            <div style="text-align: center">
+                                <p><h5>댓글입력</h5> <input id="contents" type="text" name="contents" required="required" style="width: 300px">
+                                <b><input class="replyBtn" type="button" th:value="확인"></b></p>
+                            </div>
+                        </form>
+                        <table class="comment-table">
+                            <thead>
+                            <h6>댓글</h6>
+                            </thead>
+                            <tbody id="commentTbody">
+
+                            </tbody>
+                        </table>
+
+                    </div>
+
                 </div> <!-- content-wrapper 끝 -->
             </div>
         </div>
@@ -137,6 +162,8 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 
 <!-- 노트 보기 JS -->
-<script th:src="@{/js/personal/viewNote.js}"></script>
+
+
+<script th:src="@{/js/share/viewNote.js}"></script>
 </body>
 </html>

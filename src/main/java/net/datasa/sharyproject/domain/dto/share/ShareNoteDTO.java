@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import net.datasa.sharyproject.domain.dto.mypage.ProfileDTO;
 import net.datasa.sharyproject.domain.dto.personal.NoteTemplateDTO;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -19,7 +20,7 @@ public class ShareNoteDTO {
     private String shareNoteTitle; // 노트 제목
     private String weather; // 날씨
     private String contents; // 내용
-    private LocalDateTime diaryDate; // 작성 날짜
+    private Timestamp diaryDate; // 작성 날짜
     private Integer likeCount; // 추천 수
     private List<Integer> hashtagNums; // 해시태그 번호 리스트
     private String emotionName; // 감정 이름
@@ -31,6 +32,7 @@ public class ShareNoteDTO {
     private String memberId; // 회원 ID
     private List<String> hashtags; // 해시태그 이름 리스트 추가
     private ProfileDTO profile; // Profile 정보를 위한 필드 추가
+    private String profilePicture; // 프로필 이미지 경로
     private List<ReplyDTO> replyList;
 
 }

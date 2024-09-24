@@ -28,6 +28,7 @@ import net.datasa.sharyproject.service.personal.NoteTemplateService;
 import net.datasa.sharyproject.service.share.ShareDiaryService;
 import net.datasa.sharyproject.service.share.ShareNoteService;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -98,8 +99,8 @@ public class ShareController {
      */
     @GetMapping("createdDiary")
     public String viewCreatedDiary(@RequestParam("diaryNum") Integer diaryNum
-            , @AuthenticationPrincipal AuthenticatedUser user
-            , Model model) {
+                                 , @AuthenticationPrincipal AuthenticatedUser user
+                                 , Model model) {
 
         ShareDiaryDTO dto = shareDiaryService.getDiary(diaryNum);
         log.debug("가져온 다이어리 정보:{}", dto);
@@ -108,6 +109,7 @@ public class ShareController {
 
         model.addAttribute("diary", dto);
         model.addAttribute("noteList", dtoList);
+        model.addAttribute("user", user);
 
         return "share/createdDiary";
     }
@@ -382,6 +384,30 @@ public class ShareController {
     }
 
     /**
+     * 노트 정보를 가져오는 메서드 (Ajax 호출)
+     *
+     * @param noteNum 노트 번호
+     * @return ShareNoteDTO
+     */
+    @GetMapping("/viewNote/{noteNum}")
+    @ResponseBody
+    public ResponseEntity<ShareNoteDTO> viewNote(@PathVariable("noteNum") Integer noteNum) {
+        // 노트 정보를 가져옴
+        ShareNoteDTO note = shareNoteService.getNoteByNum(noteNum);
+
+        // 해시태그 정보를 추가로 가져옴
+        List<String> hashtags = shareNoteService.getHashtagsByNoteNum(noteNum);
+        note.setHashtags(hashtags);  // DTO에 해시태그 리스트를 추가
+
+        if (note == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        // 노트 정보 반환
+        return new ResponseEntity<>(note, HttpStatus.OK);
+    }
+
+    /**
      * 노트 저장을 위한 POST 메서드
      *
      * @param diaryNum        다이어리 번호
@@ -417,15 +443,13 @@ public class ShareController {
             // 현재 로그인된 사용자 ID
             String memberId = principal.getName();
 
-            // diaryDate를 LocalDate로 처리
-            LocalDate diaryDateParsed = LocalDate.parse(diaryDate);
 
             // ShareNoteDTO 생성
             ShareNoteDTO noteDTO = ShareNoteDTO.builder()
                     .shareDiaryNum(diaryNum)
                     .noteTemplate(noteTemplateDTO)
                     .shareNoteTitle(noteName)
-                    .diaryDate(diaryDateParsed.atStartOfDay())
+                    .diaryDate(Timestamp.valueOf(LocalDate.parse(diaryDate).atStartOfDay()))
                     .emotionNum(diaryEmotion) // Emotion 번호를 전달
                     .location(locationTag)
                     .contents(diaryContent)
