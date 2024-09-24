@@ -4,7 +4,7 @@
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
-    <title>My Note</title>
+    <title>My Share Note</title>
 
     <!-- jQuery 로드 -->
     <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
@@ -31,6 +31,9 @@
 <!-- 메인 컨테이너 -->
 <div id="my-note-main" class="container mt-5">
     <h2><p th:text="${diary.shareDiaryName}"></p></h2>
+    <div>
+        <p>방장: <span th:text="${diary.nickname}"></span> 카테고리: <span th:text="${diary.categoryName}"></span> </p>
+    </div>
     <br>
 
     <div class="row">
@@ -71,7 +74,7 @@
                         <div class="card-body">
                             <h5 class="card-title" th:text="${note.shareNoteTitle}">노트 제목</h5>
                             <!-- 노트 보기 버튼 (모달 열기) -->
-                            <button class="btn btn-primary btn-view-note" th:attr="data-note-num=${note.shareNoteNum}">
+                            <button class="btn btn-primary btn-view-note" th:attr="data-note-num=${note.shareNoteNum}, data-like-cnt=${note.likeCount}">
                                 노트 보기
                             </button>
                         </div>
@@ -129,15 +132,16 @@
                     <div class="hashtag-section">
                         <p id="noteHashtags">[해시태그]</p> <!-- 해시태그 텍스트 -->
                     </div>
+
+                    <!-- 좋아요 버튼 섹션 -->
+                    <div id="likeBox">
+                        <input type="hidden" id="cnt">
+                        <button class="likeBtn">좋아요</button><p id="likeCnt"></p>
+                    </div>
                 </div> <!-- content-wrapper 끝 -->
 
                 <br>
                 <div class="content-wrapper">
-                    <!-- 좋아요 버튼 섹션 -->
-                    <div id="likeBox">
-                        <button id="like">좋아요</button>
-                    </div>
-
                     <!-- 댓글 섹션 -->
                     <div class="comment-section">
                         <form>

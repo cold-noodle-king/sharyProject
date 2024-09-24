@@ -24,11 +24,11 @@ public class ShareLikeEntity {
     private Integer likeNum;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "share_note_num", nullable = false)
+    @JoinColumn(name = "share_note_num", referencedColumnName = "share_note_num", nullable = false)
     private ShareNoteEntity shareNote;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id", nullable = false)
+    @JoinColumn(name = "member_id", referencedColumnName = "member_id", nullable = false)
     private MemberEntity member;
 
     @Column(name = "like_clicked", columnDefinition = "tinyint(1) default 0 check(like_clicked in(1, 0))")

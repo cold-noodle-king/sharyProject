@@ -34,5 +34,6 @@ public class ShareNoteDTO {
     private ProfileDTO profile; // Profile 정보를 위한 필드 추가
     private String profilePicture; // 프로필 이미지 경로
     private List<ReplyDTO> replyList;
+    private List<ShareLikeDTO> likeList;
 
 }

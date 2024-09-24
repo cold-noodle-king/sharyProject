@@ -1,11 +1,14 @@
 package net.datasa.sharyproject.service.share;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.datasa.sharyproject.domain.dto.mypage.ProfileDTO;
 import net.datasa.sharyproject.domain.dto.personal.NoteTemplateDTO;
 import net.datasa.sharyproject.domain.dto.personal.PersonalNoteDTO;
+import net.datasa.sharyproject.domain.dto.share.LikeResponseDTO;
+import net.datasa.sharyproject.domain.dto.share.ShareLikeDTO;
 import net.datasa.sharyproject.domain.dto.share.ShareNoteDTO;
 import net.datasa.sharyproject.domain.entity.EmotionEntity;
 import net.datasa.sharyproject.domain.entity.HashtagEntity;
@@ -14,6 +17,7 @@ import net.datasa.sharyproject.domain.entity.mypage.ProfileEntity;
 import net.datasa.sharyproject.domain.entity.personal.NoteTemplateEntity;
 import net.datasa.sharyproject.domain.entity.personal.PersonalNoteEntity;
 import net.datasa.sharyproject.domain.entity.share.ShareDiaryEntity;
+import net.datasa.sharyproject.domain.entity.share.ShareLikeEntity;
 import net.datasa.sharyproject.domain.entity.share.ShareNoteEntity;
 import net.datasa.sharyproject.domain.entity.share.ShareNoteHashtagEntity;
 import net.datasa.sharyproject.repository.EmotionRepository;
@@ -22,6 +26,7 @@ import net.datasa.sharyproject.repository.member.MemberRepository;
 import net.datasa.sharyproject.repository.mypage.ProfileRepository;
 import net.datasa.sharyproject.repository.personal.*;
 import net.datasa.sharyproject.repository.share.ShareDiaryRepository;
+import net.datasa.sharyproject.repository.share.ShareLikeRepository;
 import net.datasa.sharyproject.repository.share.ShareNoteHashtagRepository;
 import net.datasa.sharyproject.repository.share.ShareNoteRepository;
 import org.slf4j.Logger;
@@ -44,6 +49,7 @@ public class ShareNoteService {
     private final MemberRepository memberRepository;
     private final ProfileRepository profileRepository;
     private final ShareNoteHashtagRepository shareNoteHashtagRepository;
+    private final ShareLikeRepository shareLikeRepository;
 
     private static final Logger log = LoggerFactory.getLogger(ShareNoteService.class);
 
@@ -102,6 +108,16 @@ public class ShareNoteService {
             profilePicture = profileEntity.getProfilePicture();  // 프로필 이미지 설정
         }
 
+        // 좋아요 정보 가져오기
+        List<ShareLikeDTO> likes = note.getLikeList().stream()
+                .map(like -> ShareLikeDTO.builder()
+                        .likeNum(like.getLikeNum())
+                        .shareNote(like.getShareNote())
+                        .member(like.getMember())
+                        .likeClicked(like.getLikeClicked())
+                        .build())
+                .collect(Collectors.toList());
+
         return ShareNoteDTO.builder()
                 .shareNoteNum(note.getShareNoteNum())
                 .shareNoteTitle(note.getShareNoteTitle())
@@ -116,58 +132,11 @@ public class ShareNoteService {
                 .shareDiaryNum(note.getShareDiary().getShareDiaryNum())
                 .noteTemplate(noteTemplateDTO)
                 .profilePicture(profilePicture) // Profile 정보 추가
+                .likeList(likes)  // Like 정보 추가
                 .build();
     }
 
-    /**
-     * 노트 번호로 노트를 조회하는 메서드
-     * @return ShareNoteDTO
-     */
-    /*@Transactional
-    public void saveNote(ShareNoteDTO noteDTO, List<Integer> hashtags) {
-        // 1. MemberEntity 조회
-        MemberEntity member = memberRepository.findById(noteDTO.getMemberId())
-                .orElseThrow(() -> new IllegalArgumentException("해당 memberId를 가진 멤버를 찾을 수 없습니다: " + noteDTO.getMemberId()));
 
-        // 2. ShareDiaryEntity 조회
-        ShareDiaryEntity shareDiary = shareDiaryRepository.findById(noteDTO.getShareDiaryNum())
-                .orElseThrow(() -> new IllegalArgumentException("해당 다이어리를 찾을 수 없습니다: " + noteDTO.getShareDiaryNum()));
-
-        // 3. NoteTemplateEntity 조회
-        NoteTemplateEntity noteTemplate = noteTemplateRepository.findById(noteDTO.getNoteTemplate().getNoteNum())
-                .orElseThrow(() -> new IllegalArgumentException("노트 템플릿을 찾을 수 없습니다: " + noteDTO.getNoteTemplate().getNoteNum()));
-
-        // 4. EmotionEntity 조회
-        EmotionEntity emotion = emotionRepository.findById(noteDTO.getEmotionNum())
-                .orElseThrow(() -> new IllegalArgumentException("Emotion을 찾을 수 없습니다: " + noteDTO.getEmotionNum()));
-
-        // 5. ProfileEntity 조회 (옵션)
-        ProfileEntity profile = profileRepository.findByMember(member).orElse(null);
-
-        // 6. ShareNoteEntity 생성 및 필드 설정
-        ShareNoteEntity shareNoteEntity = ShareNoteEntity.builder()
-                .shareDiary(shareDiary)
-                .noteTemplate(noteTemplate)
-                .shareNoteTitle(noteDTO.getShareNoteTitle())
-                .diaryDate(noteDTO.getDiaryDate())
-                .emotion(emotion) // EmotionEntity 설정
-                .location(noteDTO.getLocation())
-                .contents(noteDTO.getContents())
-                .likeCount(noteDTO.getLikeCount())
-                .weather(noteDTO.getWeather())
-                .member(member)
-                .profile(profile)
-                .build();
-
-        // 7. Hashtags 설정
-        if (hashtags != null && !hashtags.isEmpty()) {
-            List<HashtagEntity> hashtagEntities = hashtagRepository.findAllById(hashtags);
-            shareNoteEntity.setHashtags(hashtagEntities); // List<HashtagEntity> 설정
-        }
-
-        // 8. 엔티티 저장
-        shareNoteRepository.save(shareNoteEntity);
-    }*/
 
     @org.springframework.transaction.annotation.Transactional
     public Integer saveNote(ShareNoteDTO noteDTO, List<Integer> hashtagIds) {
@@ -208,7 +177,7 @@ public class ShareNoteService {
         ProfileEntity profile = profileRepository.findByMember(member)
                 .orElseThrow(() -> new RuntimeException("프로필 정보가 없습니다."));
 
-        return ShareNoteEntity.builder()
+        ShareNoteEntity shareNoteEntity = ShareNoteEntity.builder()
                 .shareNoteTitle(noteDTO.getShareNoteTitle())
                 .contents(noteDTO.getContents())
                 .diaryDate(noteDTO.getDiaryDate())
@@ -222,7 +191,25 @@ public class ShareNoteService {
                 .member(member)
                 .profile(profile)
                 .build();
+
+        // 좋아요 리스트 변환
+        if (noteDTO.getLikeList() != null && !noteDTO.getLikeList().isEmpty()) {
+            List<ShareLikeEntity> likeEntities = noteDTO.getLikeList().stream()
+                    .map(likeDTO -> ShareLikeEntity.builder()
+                            .likeNum(likeDTO.getLikeNum())
+                            .member(memberRepository.findById(likeDTO.getMember().getMemberId())
+                                    .orElseThrow(() -> new RuntimeException("회원 정보를 찾을 수 없습니다.")))
+                            .shareNote(shareNoteEntity)  // 연관된 ShareNoteEntity 설정
+                            .likeClicked(likeDTO.isLikeClicked())
+                            .build())
+                    .collect(Collectors.toList());
+
+            shareNoteEntity.setLikeList(likeEntities);  // Like 리스트 설정
+        }
+
+        return shareNoteEntity;
     }
+
 
     /**
      * 특정 노트에 연결된 해시태그를 불러오는 메서드
@@ -233,5 +220,40 @@ public class ShareNoteService {
         return noteHashtags.stream()
                 .map(noteHashtag -> noteHashtag.getHashtag().getHashtagName())
                 .collect(Collectors.toList());
+    }
+
+    public LikeResponseDTO like(Integer num, String userName){
+        ShareNoteEntity shareNoteEntity = shareNoteRepository.findById(num)
+                .orElseThrow(() -> new EntityNotFoundException("게시물이 존재하지 않습니다."));
+
+        MemberEntity memberEntity = memberRepository.findById(userName)
+                .orElseThrow(() -> new EntityNotFoundException("사용자를 찾을 수 없습니다."));
+
+        boolean isLiked = false;
+        for (ShareLikeEntity entity : shareNoteEntity.getLikeList()){
+            if (entity.getMember().getMemberId().equals(userName)){
+                isLiked = true;
+                break;
+            }
+        }
+
+        int cnt = 0;
+        if (isLiked){
+            cnt = shareNoteEntity.getLikeCount();
+        } else {
+            cnt = shareNoteEntity.getLikeCount() + 1;
+            shareNoteEntity.setLikeCount(cnt);
+
+            ShareLikeEntity likeEntity = ShareLikeEntity.builder()
+                    .member(memberEntity)
+                    .shareNote(shareNoteEntity)
+                    .likeClicked(true)
+                    .build();
+
+            shareLikeRepository.save(likeEntity);
+        }
+
+        // LikeReponseDTO 만들어서 cnt 랑 isLiked 셋팅해서 리턴하기
+        return LikeResponseDTO.builder().isLiked(isLiked).cnt(cnt).build();
     }
 }

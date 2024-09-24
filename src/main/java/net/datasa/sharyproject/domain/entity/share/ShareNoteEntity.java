@@ -1,5 +1,6 @@
 package net.datasa.sharyproject.domain.entity.share;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,6 +16,7 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
 
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
@@ -87,4 +89,7 @@ public class ShareNoteEntity {
 
     @OneToMany(mappedBy = "shareNote", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ReplyEntity> replyList;
+
+    @OneToMany(mappedBy = "shareNote", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ShareLikeEntity> likeList;
 }

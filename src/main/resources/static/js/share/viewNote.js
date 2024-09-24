@@ -5,7 +5,11 @@ $(document).ready(function() {
         e.preventDefault();
 
         let noteNum = $(this).data('note-num'); // 클릭된 노트의 번호 가져오기
-        $('#noteNum').val(noteNum); // 숨겨진 입력 필드에 noteNum 설정
+        $('#noteNum').val(noteNum); // 클릭된 노트의 번호 가져오기
+
+        let likeCnt = $(this).data('like-cnt'); // 좋아요 수 가져오기
+        $('#cnt').val(likeCnt);
+        $('#likeCnt').html(likeCnt);
 
         var modal = $('#noteModal'); // 노트 모달 객체
 
@@ -107,6 +111,26 @@ $(document).ready(function() {
         });
     });
 
+    // 좋아요 버튼 처리 로직
+    $('.likeBtn').click(function (){
+        let noteNum = $('#noteNum').val(); // 숨겨진 입력 필드에서 noteNum 가져오기
+        let likeCnt = $('#cnt').val();
+        $.ajax({
+            url: 'like',
+            type: 'post',
+            data: {num: noteNum},
+            dataType: 'json',
+            success: function (res) {
+                console.log(res.liked);
+                if (res.liked === true){
+                    alert('이미 추천한 게시물입니다.');
+                }
+                $('#likeCnt').html(res.cnt);
+            }
+        });
+
+    });
+
 });
     // 댓글 목록 출력 함수
     function commentList(noteNum) {
@@ -128,10 +152,10 @@ $(document).ready(function() {
                     console.log(com.memberId);
                     let html = `
                         <tr>
-                            <td>${com.nickname}(${com.memberId})</td>
-                            <td style="width: 200px">${com.contents}</td>
+                            <td style="width: 80px">${com.nickname}</td>
+                            <td style="width: 230px">${com.contents}</td>
                             <td>${moment(com.createdDate).format('YY.MM.DD')}</td>
-                            
+                            <td><a><img src="/images/xicon.png" style="width: 15px; height: 15px;" alt="삭제"></a></td>
                         </tr>
                     `;
                     $('.commentTbody').append(html);

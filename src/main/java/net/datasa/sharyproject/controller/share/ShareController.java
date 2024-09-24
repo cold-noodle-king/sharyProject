@@ -7,10 +7,7 @@ import net.datasa.sharyproject.domain.dto.EmotionDTO;
 import net.datasa.sharyproject.domain.dto.HashtagDTO;
 import net.datasa.sharyproject.domain.dto.mypage.ProfileDTO;
 import net.datasa.sharyproject.domain.dto.personal.*;
-import net.datasa.sharyproject.domain.dto.share.SelectedNoteDTO;
-import net.datasa.sharyproject.domain.dto.share.ShareDiaryDTO;
-import net.datasa.sharyproject.domain.dto.share.ShareMemberDTO;
-import net.datasa.sharyproject.domain.dto.share.ShareNoteDTO;
+import net.datasa.sharyproject.domain.dto.share.*;
 import net.datasa.sharyproject.domain.entity.member.MemberEntity;
 import net.datasa.sharyproject.domain.entity.mypage.ProfileEntity;
 import net.datasa.sharyproject.domain.entity.personal.NoteTemplateEntity;
@@ -494,9 +491,6 @@ public class ShareController {
             return createDiary(noteNum, diaryNum, noteName, model, principal);
         }
     }
-
-
-
     /**
      * 전체 공유 다이어리 리스트를 출력하는 메서드
      *
@@ -513,6 +507,21 @@ public class ShareController {
         log.debug("가져온 다이어리 리스트들 보여줘:{}", diaryList);
 
         return "share/shareMemberTest";
+    }
+
+    /**
+     * 좋아요 버튼 클릭 시 처리 메서드
+     * @param num
+     * @param user
+     * @return
+     */
+    @ResponseBody
+    @PostMapping("like")
+    public LikeResponseDTO like(@RequestParam("num") Integer num
+                              , @AuthenticationPrincipal AuthenticatedUser user){
+
+        // 리턴타입 LikeResponseDTO 로 바꾸기
+        return shareNoteService.like(num, user.getUsername());
     }
 
 }
