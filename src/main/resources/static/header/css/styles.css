@@ -11990,14 +11990,14 @@ h1, h2, h3,
 }
 
 .reason-card h4 {
-  font-family: 'Lato', sans-serif;
+  font-family: 'Roboto', sans-serif; /* Google Fonts에서 불러온 폰트 */
   font-size: 20px;
   font-weight: 700;
   margin-bottom: 10px;
 }
 
 .reason-card p {
-  font-family: 'Lato', sans-serif;
+  font-family: 'Roboto', sans-serif; /* Google Fonts에서 불러온 폰트 */
   font-size: 16px;
   line-height: 1.5;
 }
@@ -12012,7 +12012,7 @@ h1, h2, h3,
 
 /* 배경 및 텍스트 정렬 */
 .reason-section {
-  font-family: 'Lato', sans-serif;
+  font-family: 'Roboto', sans-serif; /* Google Fonts에서 불러온 폰트 */
   background-color: #fff9c4;
   padding: 60px 20px;
   text-align: center;
@@ -12053,7 +12053,7 @@ h1, h2, h3,
 
 /* 섹션 제목과 본문 글씨 둥글게 만들기 */
 #about h2, #about p {
-  font-family: 'Lato', sans-serif; /* 둥근 폰트인 Lato 사용 */
+  font-family: 'Roboto', sans-serif; /* Google Fonts에서 불러온 폰트 */
   font-weight: bold; /* 글자 두께를 더 두껍게 */
   text-align: center; /* 글자 가운데 정렬 */
   border-radius: 10px; /* 둥근 모서리 (필요 시 조정 가능) */
@@ -12096,7 +12096,7 @@ h1, h2, h3,
   padding: 16px 30px;
   border-radius: 50px; /* 둥근 모서리 */
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 그림자 */
-  font-family: 'SpoqaHanSansNeo', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif; /* 폰트 */
+  font-family: 'Roboto', sans-serif; /* Google Fonts에서 불러온 폰트 */
   font-size: 18px;
   font-weight: bold;
   text-decoration: none;

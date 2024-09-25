@@ -14,7 +14,7 @@ window.onload = function() {
     let waves = [];  // 파도 객체를 저장할 배열
     let waveCount = 6;  // 파도의 레이어(층) 수 설정
     // 밝은 계열의 따뜻한 색상 팔레트로 변경
-    let colors = ['#FFC3A0', '#FFDBAC', '#FFE7A8', '#FFD1A9', '#FFB6C1', '#FFEBCD'];
+    let colors = ['#df9b70', '#f4901b', '#FFE7A8', '#FFD1A9', '#FFB6C1', '#FFEBCD'];
 
     // Easing 함수 적용 (움직임을 부드럽게 하는 수학적 함수)
     function easeInOutSine(t) {
@@ -27,7 +27,7 @@ window.onload = function() {
         constructor(index) {
             this.index = index;  // 파도의 인덱스 값
             this.amplitude = 50 + (Math.random() * 50);  // 파도의 진폭을 랜덤으로 설정 (출렁임의 높이)
-            this.frequency = 0.002 + (Math.random() * 0.005);  // 파도의 주기 (파도의 너비 조정)
+            this.frequency = 0.004 + (Math.random() * 0.002);  // 파도의 주기 (파도의 너비 조정)
             this.phase = Math.random() * Math.PI * 2;  // 파도의 위상 (파도 시작점의 위치)
             this.speed = 0.01 + Math.random() * 0.02;  // 파도의 이동 속도
 
