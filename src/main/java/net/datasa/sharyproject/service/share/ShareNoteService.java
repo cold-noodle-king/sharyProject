@@ -112,8 +112,8 @@ public class ShareNoteService {
         List<ShareLikeDTO> likes = note.getLikeList().stream()
                 .map(like -> ShareLikeDTO.builder()
                         .likeNum(like.getLikeNum())
-                        .shareNote(like.getShareNote())
-                        .member(like.getMember())
+                        .shareNoteNum(like.getShareNote().getShareNoteNum())
+                        .memberId(like.getMember().getMemberId())
                         .likeClicked(like.getLikeClicked())
                         .build())
                 .collect(Collectors.toList());
@@ -197,7 +197,7 @@ public class ShareNoteService {
             List<ShareLikeEntity> likeEntities = noteDTO.getLikeList().stream()
                     .map(likeDTO -> ShareLikeEntity.builder()
                             .likeNum(likeDTO.getLikeNum())
-                            .member(memberRepository.findById(likeDTO.getMember().getMemberId())
+                            .member(memberRepository.findById(likeDTO.getMemberId())
                                     .orElseThrow(() -> new RuntimeException("회원 정보를 찾을 수 없습니다.")))
                             .shareNote(shareNoteEntity)  // 연관된 ShareNoteEntity 설정
                             .likeClicked(likeDTO.isLikeClicked())
@@ -210,7 +210,6 @@ public class ShareNoteService {
         return shareNoteEntity;
     }
 
-
     /**
      * 특정 노트에 연결된 해시태그를 불러오는 메서드
      */
@@ -222,6 +221,12 @@ public class ShareNoteService {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * 좋아요 버튼 클릭 시 중복을 체크하고 좋아요 수를 반환하는 메서드
+     * @param num
+     * @param userName
+     * @return
+     */
     public LikeResponseDTO like(Integer num, String userName){
         ShareNoteEntity shareNoteEntity = shareNoteRepository.findById(num)
                 .orElseThrow(() -> new EntityNotFoundException("게시물이 존재하지 않습니다."));

@@ -61,10 +61,16 @@
 
 <!-- 메인 컨테이너 -->
 <div id="main" class="container mt-5">
+    <br>
+    <br>
+    <br>
     <h2>가입 요청 현황</h2>
     <br>
     <div class="diary-container">
-        <div>
+        <div th:if="${#lists.isEmpty(requestList)}">
+           <p>가입 요청이 없습니다.</p>
+        </div>
+        <div th:if="${not #lists.isEmpty(requestList)}">
             <table>
                 <tr th:each="list, i : ${requestList}">
                     <td><p th:text="${i.count}"></p></td>

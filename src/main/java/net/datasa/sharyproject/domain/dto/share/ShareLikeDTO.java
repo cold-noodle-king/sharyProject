@@ -17,7 +17,7 @@ public class ShareLikeDTO {
     private Integer likeNum;
 
     @JsonIgnore
-    private ShareNoteEntity shareNote;
-    private MemberEntity member;
+    private Integer shareNoteNum;
+    private String memberId;
     private boolean likeClicked;
 }

@@ -1,7 +1,6 @@
-    let noteNum;
 $(document).ready(function() {
     // "노트 보기" 버튼 클릭 시 이벤트 처리
-    $('.btn-view-note').on('click', function(e) {
+    $(document).on('click', '.btn-view-note', function(e) {
         e.preventDefault();
 
         let noteNum = $(this).data('note-num'); // 클릭된 노트의 번호 가져오기
@@ -76,7 +75,10 @@ $(document).ready(function() {
 
 
             },
-            error: function() {
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.log('Error Status: ' + textStatus); // 오류 상태
+                console.log('Error Thrown: ' + errorThrown); // 오류 메시지
+                console.log('Response Text: ' + jqXHR.responseText); // 서버 응답 내용
                 alert('노트 정보를 가져오는 중 오류가 발생했습니다.');
             }
         });
@@ -85,7 +87,7 @@ $(document).ready(function() {
     });
 
     // 댓글 작성 처리 로직
-    $('.replyBtn').on('click', function() {
+    $(document).on('click', '.replyBtn', function() {
         let noteNum = $('#noteNum').val(); // 숨겨진 입력 필드에서 noteNum 가져오기
         let inputData = {
             shareNoteNum: noteNum,
@@ -112,7 +114,7 @@ $(document).ready(function() {
     });
 
     // 좋아요 버튼 처리 로직
-    $('.likeBtn').click(function (){
+    $(document).on('click', '.likeBtn', function (){
         let noteNum = $('#noteNum').val(); // 숨겨진 입력 필드에서 noteNum 가져오기
         let likeCnt = $('#cnt').val();
         $.ajax({
@@ -125,7 +127,7 @@ $(document).ready(function() {
                 if (res.liked === true){
                     alert('이미 추천한 게시물입니다.');
                 }
-                $('#likeCnt').html(res.cnt);
+                $('#likeCnt').html(JSON.stringify(res.cnt));
             }
         });
 
@@ -143,25 +145,38 @@ $(document).ready(function() {
                 console.log(list);
                 $('.commentTbody').empty();
                 $(list).each(function(i, com) {
-                    /*let shouldShowEditButton = (authenticatedUser === com.memberId);
-                    let shouldShowDeleteButton = (authenticatedUser === com.memberId);*/
-                    console.log($('.commentTbody')); // DOM에서 선택된 요소가 있는지 확인
-                    console.log(com); // 각 댓글 데이터 확인
-                    console.log(com.createdDate);
-                    console.log(com.nickname);
-                    console.log(com.memberId);
+                    // 댓글 작성자가 현재 로그인한 사용자와 같은지 확인
+                    let isCurrentUser = (authenticatedUserId === com.memberId);
+                    let deleteIconHtml = '';
+                    if (isCurrentUser) {
+                        // 로그인한 사용자일 경우 삭제 아이콘 표시
+                        deleteIconHtml = `<a><img src="/images/xicon.png" style="width: 15px; height: 15px;" alt="삭제"></a>`;
+                    }
+
+                    // 댓글 HTML 구성
                     let html = `
                         <tr>
                             <td style="width: 80px">${com.nickname}</td>
                             <td style="width: 230px">${com.contents}</td>
                             <td>${moment(com.createdDate).format('YY.MM.DD')}</td>
-                            <td><a><img src="/images/xicon.png" style="width: 15px; height: 15px;" alt="삭제"></a></td>
+                            <td>${deleteIconHtml}</td>
                         </tr>
                     `;
                     $('.commentTbody').append(html);
                 });
-                /* $('.replyUpBtn').on('click', upBtnClicked);
-                 $('.replyDelBtn').on('click', delBtnClicked);*/
             }
         });
     }
+
+
+$('#noteModal').on('hidden.bs.modal', function () {
+    // 모달 초기화 코드
+    $('#noteModalLabel').text('');
+    $('#noteLocation').text('');
+    $('#noteDate').text('');
+    $('#noteEmotion').text('');
+    $('#noteContents').text('');
+    $('#noteHashtags').text('');
+    $('#personalNoteImage').hide();
+    $('#likeCnt').text('');
+});

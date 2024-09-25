@@ -396,6 +396,7 @@ public class ShareController {
         List<String> hashtags = shareNoteService.getHashtagsByNoteNum(noteNum);
         note.setHashtags(hashtags);  // DTO에 해시태그 리스트를 추가
 
+        log.debug("가져온 노트 정보:{}", note);
         if (note == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -491,6 +492,7 @@ public class ShareController {
             return createDiary(noteNum, diaryNum, noteName, model, principal);
         }
     }
+
     /**
      * 전체 공유 다이어리 리스트를 출력하는 메서드
      *
@@ -506,7 +508,16 @@ public class ShareController {
 
         log.debug("가져온 다이어리 리스트들 보여줘:{}", diaryList);
 
-        return "share/shareMemberTest";
+        return "share/listAll";
+    }
+
+    @GetMapping("listedByUserCategory")
+    public String listedByUserCategory(@AuthenticationPrincipal AuthenticatedUser user, Model model) {
+
+        List<ShareDiaryDTO> diaryList = shareDiaryService.getDiaryList();
+        model.addAttribute("diaryList", diaryList);
+
+        return "share/listAll";
     }
 
     /**
