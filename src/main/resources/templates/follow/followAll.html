@@ -154,7 +154,7 @@
 					</form>
 				</td>
 				<td>
-					<form th:action="@{/message/send}" method="get">
+					<form th:action="@{/SseHome}" method="get">
 						<input type="hidden" name="recipientId" th:value="${follow.followerId}" />
 						<button type="submit">쪽지</button>
 					</form>
@@ -192,7 +192,7 @@
 					</form>
 				</td>
 				<td>
-					<form th:action="@{/message/send}" method="get">
+					<form th:action="@{/SseHome}" method="get">
 						<input type="hidden" name="recipientId" th:value="${follow.followerId}" />
 						<button type="submit">쪽지</button>
 					</form>
