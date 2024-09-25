@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 import net.datasa.sharyproject.domain.entity.CategoryEntity;
 
@@ -14,6 +15,7 @@ import java.util.Locale;
 @AllArgsConstructor
 @SuperBuilder
 @Entity
+@ToString(exclude = "member")
 @Table(name = "user_category")
 public class UserCategoryEntity {
 

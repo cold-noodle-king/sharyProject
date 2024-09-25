@@ -118,6 +118,9 @@ public class MemberService {
         MemberEntity memberEntity = memberRepository.findById(memberId)
                 .orElseThrow(() -> new EntityNotFoundException("멤버를 찾을 수 없습니다: " + memberId));
 
+        // 기존에 저장된 유저 카테고리 삭제
+        userCategoryRepository.deleteByMember(memberEntity);
+
         // 선택된 각 카테고리 저장
         for (String categoryId : selectedCategoryIds) {
             log.debug("로그 다찍어어어어어ㅓ 저장하려는 categoryId: {}", categoryId);
