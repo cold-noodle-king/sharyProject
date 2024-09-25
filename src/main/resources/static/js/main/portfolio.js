@@ -1,18 +1,16 @@
-$(document).ready(function() {
+$(document).ready(function () {
     // 포트폴리오 링크 클릭 이벤트 핸들러
-    $('.portfolio-link').on('click', function(e) {
+    $('.portfolio-link').on('click', function (e) {
         e.preventDefault(); // 기본 클릭 동작 방지
 
         var noteNum = $(this).data('note-num'); // 클릭된 노트의 번호 가져오기
 
-        // Ajax를 통해 서버에서 노트 데이터를 가져오는 요청
+        // 노트 데이터를 가져오는 Ajax 요청
         $.ajax({
-            url: '/personal/viewNote/' + noteNum, // 해당 노트 데이터를 요청할 URL
+            url: '/portfolio/viewNote/' + noteNum, // 해당 노트 데이터를 요청할 URL
             type: 'GET',
-            success: function(response) {
-                console.log('템플릿 이미지:', response.noteTemplate ? response.noteTemplate.noteImage : '없음'); // 템플릿 이미지 확인 로그
-
-                // 노트 제목을 모달에 삽입
+            success: function (response) {
+                // 노트 모달에 데이터 삽입
                 $('#customModalNoteTitle').text(response.noteTitle);
 
                 // 위치 및 날짜 출력
@@ -32,28 +30,32 @@ $(document).ready(function() {
                 };
                 $('#customModalEmotion').text(emotionEmojiMap[response.emotionNum] || "🙂"); // 기본 감정은 '🙂'
 
-                // 프로필 이미지가 있을 경우 파일명만 사용하여 경로 설정
+                // 프로필 이미지 설정 및 member-id 추가
                 if (response.profilePicture) {
-                    var profilePicture = response.profilePicture.replace('/uploads/profile/', ''); // 중복된 경로 제거
-                    $('#customModalProfilePicture').attr('src', '/uploads/profile/' + profilePicture).show();
+                    var profilePicturePath = response.profilePicture.startsWith('/uploads/profile/')
+                        ? response.profilePicture
+                        : '/uploads/profile/' + response.profilePicture;
+
+                    $('#customModalProfilePicture')
+                        .attr('src', profilePicturePath)
+                        .data('member-id', response.memberId) // member-id 추가
+                        .show();
                 } else {
                     $('#customModalProfilePicture').hide();
                 }
 
-                // 노트 이미지 삽입
+                // 노트 이미지 설정 (노트에 이미지가 있을 경우)
                 if (response.fileName && response.fileName.trim() !== "") {
-                    $('#customModalNoteImage').attr('src', '/uploads/' + encodeURIComponent(response.fileName)).show();
+                    $('#customModalNoteImage').attr('src', '/uploads/' + encodeURIComponent(response.fileName)).show(); // 노트 이미지 표시
                 } else {
-                    $('#customModalNoteImage').hide();
+                    $('#customModalNoteImage').hide(); // 이미지가 없을 경우 숨김
                 }
 
-                // 백엔드에서 noteImage가 파일명으로만 전달되었을 때 경로 설정
+                // 노트 배경 이미지 설정 (노트 템플릿이 있을 경우)
                 if (response.noteTemplate && response.noteTemplate.noteImage) {
-                    // 경로가 로컬 경로일 경우 마지막 슬래시 이후의 파일명만 추출
-                    var noteImagePath = response.noteTemplate.noteImage;
-                    noteImagePath = noteImagePath.substring(noteImagePath.lastIndexOf("/") + 1);
-
-                    $('#customNoteContentModal').css('background-image', 'url(/images/' + noteImagePath + ')');
+                    var noteImagePath = '/images/' + response.noteTemplate.noteImage;
+                    console.log('배경 이미지 파일 경로:', noteImagePath);  // 로그로 경로 확인
+                    $('#customNoteContentModal').css('background-image', 'url(' + noteImagePath + ')');
                 } else {
                     console.error('배경 이미지 파일 이름이 없습니다.');
                 }
@@ -63,18 +65,66 @@ $(document).ready(function() {
 
                 // 해시태그 추가
                 $('#customModalHashtags').empty();
-                response.hashtags.forEach(function(tag) {
-                    $('#customModalHashtags').append('<span class="badge bg-secondary me-1">' + tag + '</span>');
+                response.hashtags.forEach(function (tag) {
+                    $('#customModalHashtags').append('<span class="badge bg-secondary me-1">' + tag + '</span>'); // 해시태그 추가
                 });
 
                 // 모달 열기
-                $('#customPortfolioModal').modal('show');
+                $('#customPortfolioModal').modal('show'); // 노트 모달 표시
+
+                // 노트 탭으로 초기화 (탭 있는 경우)
+                $('#modalTab a[href="#noteContent"]').tab('show');
+
+                // 프로필 정보 초기화
+                $('#profileModalNickname').text('');
+                $('#profileModalMent').text('');
             },
-            // 요청 중 에러 발생 시 처리
-            error: function(jqXHR, textStatus, errorThrown) {
-                console.error('노트 정보를 가져오는 중 오류:', textStatus, errorThrown);
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.error('노트 정보를 가져오는 중 오류:', textStatus, errorThrown); // 오류 발생 시 처리
                 alert('노트 정보를 가져오는 중 오류가 발생했습니다.');
             }
         });
+    });
+
+    // 프로필 탭 클릭 시 프로필 정보 가져오기
+    $('#profile-tab').on('click', function () {
+        var memberId = $('#customModalProfilePicture').data('member-id'); // 프로필 이미지에 저장된 member-id 가져오기
+
+        // memberId가 없는 경우 처리
+        if (!memberId) {
+            console.error('memberId가 지정되지 않았습니다.');
+            return;
+        }
+
+        // 프로필 정보를 가져오는 Ajax 요청
+        $.ajax({
+            url: '/portfolio/member/profile/' + memberId, // 프로필 정보 요청 URL
+            type: 'GET',
+            success: function (profileResponse) {
+                console.log('프로필 데이터:', profileResponse);
+
+                // 프로필 정보 탭 업데이트
+                var profilePicturePath = profileResponse.profilePicture
+                    ? profileResponse.profilePicture.startsWith('/uploads/profile/')
+                        ? profileResponse.profilePicture
+                        : '/uploads/profile/' + profileResponse.profilePicture
+                    : '/images/default_profile.png';
+
+                $('#profileModalImage').attr('src', profilePicturePath);
+                $('#profileModalNickname').text(profileResponse.nickname || '');
+                $('#profileModalMent').text(profileResponse.ment || '');
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.error('프로필 정보를 가져오는 중 오류:', textStatus, errorThrown);
+                alert('프로필 정보를 가져오는 중 오류가 발생했습니다.');
+            }
+        });
+    });
+
+    // 프로필 이미지 클릭 시 프로필 탭으로 전환 (기존 기능 유지)
+    $('#customModalProfilePicture').on('click', function () {
+        $('#profile-tab').trigger('click');
+        // 프로필 탭으로 자동 전환
+        $('#modalTab a[href="#profileContent"]').tab('show');
     });
 });

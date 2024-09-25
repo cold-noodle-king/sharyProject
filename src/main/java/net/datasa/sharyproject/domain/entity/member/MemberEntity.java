@@ -4,7 +4,9 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import lombok.experimental.SuperBuilder;
+import net.datasa.sharyproject.domain.entity.mypage.ProfileEntity;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -63,6 +65,10 @@ public class MemberEntity {
 
     // 회원이 선택한 카테고리들 (일대다 관계)
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    @ToString.Exclude  // 순환 참조 방지
     private List<UserCategoryEntity> userCategories;
 
+    @OneToOne(mappedBy = "member", cascade = CascadeType.ALL)
+    @ToString.Exclude  // 순환 참조 방지
+    private ProfileEntity profile;
 }

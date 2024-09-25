@@ -1,6 +1,7 @@
 package net.datasa.sharyproject.domain.dto.mypage;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -24,6 +25,9 @@ public class ProfileDTO {
     //프로필 소개글
     private String ment;
 
-    //사용자 아이디
-    private MemberEntity member;
+    // 사용자 아이디 (MemberEntity 대신 memberId를 별도로 저장)
+    private String memberId;
+
+    // 닉네임 추가
+    private String nickname;
 }

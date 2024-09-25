@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import net.datasa.sharyproject.domain.entity.member.MemberEntity;
+import net.minidev.json.annotate.JsonIgnore;
 
 @Data
 @Builder
@@ -37,6 +38,7 @@ public class ProfileEntity {
     //회원당 하나의 프로필, MemberEntity와 1:1 관계 설정
     @OneToOne
     @JoinColumn(name = "member_id", referencedColumnName = "member_id")
+    @JsonIgnore // 이 필드를 JSON 직렬화 시 무시
     private MemberEntity member;
 
 

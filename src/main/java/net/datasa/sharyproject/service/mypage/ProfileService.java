@@ -78,7 +78,7 @@ public class ProfileService {
                 .profilePicture(updatedProfile.getProfilePicture())
                 .profileOriginalName(updatedProfile.getProfileOriginalName())
                 .ment(updatedProfile.getMent())
-                .member(updatedProfile.getMember())
+                .memberId(updatedProfile.getMember().getMemberId())
                 .build();
     }
 
@@ -103,7 +103,7 @@ public class ProfileService {
                     .profilePicture(profile.getProfilePicture())
                     .profileOriginalName(profile.getProfileOriginalName())
                     .ment(profile.getMent())
-                    .member(profile.getMember())
+                    .memberId(profile.getMember().getMemberId())
                     .build();
         } else {
             // 프로필이 존재하지 않을 경우 기본 프로필 이미지와 멘트를 반환

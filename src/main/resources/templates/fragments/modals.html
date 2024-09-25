@@ -1,44 +1,76 @@
 <!-- 노트 보기 모달 -->
 <div th:fragment="modals">
+    <!-- 노트 보기 모달 -->
     <div class="modal fade" id="customPortfolioModal" tabindex="-1" aria-labelledby="customModalNoteTitle" aria-hidden="true">
-        <div class="modal-dialog custom-modal-xxl"> <!-- 모달 크기 설정을 custom-modal-xxl로 조정 -->
+        <div class="modal-dialog custom-modal-xxl">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="customModalNoteTitle">노트 제목</h5>
+                    <!-- 탭 메뉴 추가 -->
+                    <ul class="nav nav-tabs" id="modalTab" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="note-tab" data-bs-toggle="tab" href="#noteContent" role="tab" aria-controls="noteContent" aria-selected="true">노트 내용</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="profile-tab" data-bs-toggle="tab" href="#profileContent" role="tab" aria-controls="profileContent" aria-selected="false">프로필 정보</a>
+                        </li>
+                    </ul>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body" id="customNoteContentModal">
-                    <div class="custom-content-wrapper">
-                        <!-- 프로필 이미지 및 위치/날짜/감정 섹션 -->
-                        <div class="d-flex align-items-center mb-4 custom-profile-section">
-                            <div class="custom-profile-image me-3">
-                                <img id="customModalProfilePicture" src="/images/default_profile.png" class="rounded-circle" width="60" height="60" alt="프로필">
-                            </div>
-                            <div class="w-100">
-                                <p id="customModalLocation">[위치]</p>
-                                <div class="custom-date-emotion-section">
-                                    <span id="customModalDiaryDate">[작성일]</span>
-                                    <span id="customModalEmotion" class="ms-3 custom-emotion-icon">[감정]</span>
+                <div class="modal-body">
+                    <!-- 탭 콘텐츠 -->
+                    <div class="tab-content" id="modalTabContent">
+                        <!-- 노트 내용 탭 -->
+                        <div class="tab-pane fade show active" id="noteContent" role="tabpanel" aria-labelledby="note-tab">
+                            <!-- 배경 이미지 및 흰 배경 div 구성 -->
+                            <div class="custom-note-background" id="customNoteContentModal">
+                                <!-- 흰 배경 div 추가 -->
+                                <div class="custom-white-background">
+                                    <!-- 프로필 이미지 및 위치/날짜/감정 섹션 -->
+                                    <div class="d-flex align-items-center mb-4 custom-profile-section">
+                                        <div class="custom-profile-image me-3">
+                                            <!-- 프로필 이미지에 data-member-id 속성 추가 -->
+                                            <img id="customModalProfilePicture" src="/images/default_profile.png" class="rounded-circle" width="60" height="60" alt="프로필" data-member-id="">
+                                        </div>
+                                        <div class="w-100">
+                                            <p id="customModalLocation">[위치]</p>
+                                            <div class="custom-date-emotion-section">
+                                                <span id="customModalDiaryDate">[작성일]</span>
+                                                <span id="customModalEmotion" class="ms-3 custom-emotion-icon">[감정]</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- 노트 이미지 섹션 -->
+                                    <div class="custom-image-section">
+                                        <img src="" alt="노트 내용 이미지" id="customModalNoteImage" style="display: none;">
+                                    </div>
+
+                                    <!-- 내용 섹션 -->
+                                    <div class="custom-content-section">
+                                        <p id="customModalContents">[내용]</p>
+                                    </div>
+
+                                    <!-- 해시태그 섹션 -->
+                                    <div class="custom-hashtag-section">
+                                        <div id="customModalHashtags"></div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-
-                        <!-- 노트 이미지 섹션 -->
-                        <div class="custom-image-section">
-                            <img src="" alt="노트 내용 이미지" id="customModalNoteImage" style="display: none;">
-                        </div>
-
-                        <!-- 내용 섹션 -->
-                        <div class="custom-content-section">
-                            <p id="customModalContents">[내용]</p>
-                        </div>
-
-                        <!-- 해시태그 섹션 -->
-                        <div class="custom-hashtag-section">
-                            <div id="customModalHashtags"></div> <!-- 해시태그들을 위한 공간 -->
+                        <!-- 프로필 정보 탭 -->
+                        <div class="tab-pane fade" id="profileContent" role="tabpanel" aria-labelledby="profile-tab">
+                            <!-- 프로필 정보 표시 -->
+                            <div class="custom-content-wrapper text-center">
+                                <img id="profileModalImage" src="/images/default_profile.png" class="rounded-circle mb-3" width="100" height="100" alt="프로필 이미지"/>
+                                <h4 id="profileModalNickname">닉네임</h4>
+                                <p id="profileModalMent">한 줄 소개</p>
+                                <!-- 팔로우 버튼 -->
+                                <button id="followButton" class="btn btn-primary">팔로우</button>
+                            </div>
                         </div>
                     </div>
                 </div>
+                <!-- 모달 footer가 필요하다면 추가 -->
             </div>
         </div>
     </div>
