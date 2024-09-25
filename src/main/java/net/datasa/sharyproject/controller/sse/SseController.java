@@ -141,7 +141,7 @@ public class SseController {
 
     @GetMapping("/message")
     public String messagePage() {
-        return "sse/message";  // message.html로 이동
+        return "sse/SseMessage";  // message.html로 이동
     }
 
     // 모든 쪽지 조회 API 추가
