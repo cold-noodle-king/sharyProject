@@ -14,21 +14,22 @@ window.onload = function() {
     let waves = [];  // 파도 객체를 저장할 배열
     let waveCount = 6;  // 파도의 레이어(층) 수 설정
     // 밝은 계열의 따뜻한 색상 팔레트
-    let colors = ['#df9b70', '#f4901b', '#FFE7A8', '#FFD1A9', '#FFB6C1', '#FFEBCD'];
-
-    // Easing 함수 (사용하지 않으므로 제거 가능)
-    // function easeInOutSine(t) {
-    //     return -(Math.cos(Math.PI * t) - 1) / 2;
-    // }
+    let colors = ['#df9b70', '#f69d41', '#fad366', '#FFD1A9', '#FFB6C1', '#FFEBCD'];
 
     // 파도 클래스를 정의하여 각 파도에 대한 설정과 동작을 관리
     class Wave {
         constructor(index) {
             this.index = index;  // 파도의 인덱스 값
-            this.amplitude = 50 + (Math.random() * 50);  // 파도의 진폭을 랜덤으로 설정 (출렁임의 높이)
-            this.frequency = 0.004 + (Math.random() * 0.002);  // 파도의 주기 (파도의 너비 조정)
-            this.phase = Math.random() * Math.PI * 2;  // 파도의 위상 (파도 시작점의 위치)
+            this.amplitude = 50 + (Math.random() * 50);  // 파도의 진폭을 랜덤으로 설정
+            this.baseAmplitude = this.amplitude;  // 진폭의 기본값 저장
+            this.frequency = 0.004 + (Math.random() * 0.002);  // 파도의 주기
+            this.phase = Math.random() * Math.PI * 2;  // 파도의 위상
             this.speed = 0.01 + Math.random() * 0.02;  // 파도의 이동 속도
+
+            // 수직 움직임을 위한 변수들 추가
+            this.verticalPhase = Math.random() * Math.PI * 2;  // 수직 움직임의 위상
+            this.verticalSpeed = 0.005 + Math.random() * 0.01;  // 수직 움직임 속도
+            this.verticalAmplitude = 10 + Math.random() * 10;  // 수직 움직임 진폭
 
             // 첫 번째 파도의 색상을 #f89671로 고정
             if (this.index === 0) {
@@ -41,16 +42,16 @@ window.onload = function() {
         // 파도를 그리는 메서드
         draw() {
             ctx.beginPath();  // 새로운 경로 시작
-            ctx.moveTo(0, canvas.height / 2);  // 파도의 시작 위치를 화면 중앙으로 이동
+
+            // 수직 중심선을 계산 (위아래로 움직임)
+            let centerY = canvas.height / 2 + Math.sin(this.verticalPhase) * this.verticalAmplitude;
+
+            ctx.moveTo(0, centerY);  // 파도의 시작 위치를 수직 중심선으로 이동
 
             // 파도의 형태를 그리기 위한 반복문
-            for (let x = 0; x < canvas.width; x++) {
-                // 진폭을 일정하게 유지하기 위해 easing 함수 제거
-                // let progress = x / canvas.width;
-                // let easing = easeInOutSine(progress);
-
-                // y 좌표 계산 (진폭을 일정하게 유지)
-                let y = canvas.height / 2 + Math.sin(x * this.frequency + this.phase) * this.amplitude;
+            for (let x = 0; x <= canvas.width; x++) {
+                // y 좌표 계산 (진폭을 시간에 따라 변경)
+                let y = centerY + Math.sin(x * this.frequency + this.phase) * this.amplitude;
                 ctx.lineTo(x, y);  // 각 x 값에 대한 y 좌표로 라인을 그림
             }
 
@@ -64,7 +65,11 @@ window.onload = function() {
 
         // 파도의 움직임을 업데이트하는 메서드
         update() {
-            this.phase += this.speed;  // 파도의 위상(시작점)을 이동시켜 움직임을 표현
+            this.phase += this.speed;  // 파도의 위상 이동으로 수평 움직임 표현
+            this.verticalPhase += this.verticalSpeed;  // 수직 움직임의 위상 업데이트
+
+            // 진폭을 시간에 따라 변하게 하여 랜덤한 흔들림 효과 추가
+            this.amplitude = this.baseAmplitude + Math.sin(this.phase * 2) * (this.baseAmplitude * 0.2);
         }
     }
 
