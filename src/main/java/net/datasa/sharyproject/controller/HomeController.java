@@ -16,7 +16,7 @@ public class HomeController {
         this.portfolioService = portfolioService;
     }
 
-    @GetMapping({"/",""})   //info 컨트롤러와 경로 바꾸기 ("home")
+    @GetMapping("home")   //info 컨트롤러와 경로 바꾸기 ("home")
     public String home(Model model) {
         // PortfolioService를 통해 전체 공개된 노트 데이터를 가져옴
         List<PersonalNoteDTO> publicNotes = portfolioService.getPublicNotes();

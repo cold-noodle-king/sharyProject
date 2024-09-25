@@ -11,6 +11,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -60,5 +61,8 @@ public class MemberEntity {
     @Column(name = "enabled", nullable = false)
     private Boolean enabled = true;  // 필드를 Boolean으로 정의하고 기본값을 true로 설정
 
+    // 회원이 선택한 카테고리들 (일대다 관계)
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    private List<UserCategoryEntity> userCategories;
 
 }

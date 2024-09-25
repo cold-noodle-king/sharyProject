@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>category</title>
+    <script src="/js/main/category.js" defer></script> <!-- js 파일을 로드 -->
+</head>
+<body>
+<!-- 메인 컨테이너 -->
+<div id="main" class="container mt-5">
+    <!-- 카드 스타일의 섹션 -->
+    <div class="card text-center bg-dark text-white">
+        <div class="card-body">
+            <!-- 페이지 제목 -->
+            <h4 class="title mb-4">카테고리를 선택해주세요!</h4>
+            <!-- 카테고리 선택 폼 -->
+            <form id="categoryForm" action="/member/category" method="post">
+                <!-- hidden으로 memberId 추가 -->
+                <input type="hidden" name="memberId" id="memberId" value="${memberId}">
+                <input type="hidden" name="selectedCategory" id="selectedCategory" value="">
+                <!-- 카테고리 버튼 그룹 -->
+                <div class="cat-group mb-4">
+                    <button type="button" class="btn btn-secondary cat-btn me-2 mb-2" data-cat-num="1">일상</button>
+                    <button type="button" class="btn btn-secondary cat-btn me-2 mb-2" data-cat-num="2">여행</button>
+                    <button type="button" class="btn btn-secondary cat-btn me-2 mb-2" data-cat-num="3">육아</button>
+                    <button type="button" class="btn btn-secondary cat-btn me-2 mb-2" data-cat-num="4">연애</button>
+                    <button type="button" class="btn btn-secondary cat-btn me-2 mb-2" data-cat-num="5">취미</button>
+                    <button type="button" class="btn btn-secondary cat-btn me-2 mb-2" data-cat-num="6">운동</button>
+                </div>
+
+                <!-- 저장 및 취소 버튼 -->
+                <div class="btn-group">
+                    <button id="save" type="button" class="btn btn-secondary me-2">저장</button>
+                    <button id="cancel" type="button" class="btn btn-secondary">취소</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

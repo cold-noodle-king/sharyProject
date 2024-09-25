@@ -23,4 +23,6 @@ public class CategoryEntity {
 
     @Column(name = "category_name", nullable = false)
     private String categoryName;
+
+
 }

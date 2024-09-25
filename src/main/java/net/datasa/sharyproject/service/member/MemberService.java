@@ -4,12 +4,19 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.datasa.sharyproject.domain.dto.CategoryDTO;
 import net.datasa.sharyproject.domain.dto.member.MemberDTO;
+import net.datasa.sharyproject.domain.dto.member.UserCategoryDTO;
+import net.datasa.sharyproject.domain.entity.CategoryEntity;
 import net.datasa.sharyproject.domain.entity.member.MemberEntity;
+import net.datasa.sharyproject.domain.entity.member.UserCategoryEntity;
+import net.datasa.sharyproject.repository.CategoryRepository;
 import net.datasa.sharyproject.repository.member.MemberRepository;
+import net.datasa.sharyproject.repository.member.UserCategoryRepository;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -21,8 +28,11 @@ import java.util.Optional;
 @Service
 public class MemberService {
 
+    private final CategoryRepository categoryRepository;
     private final MemberRepository memberRepository;
     private final BCryptPasswordEncoder passwordEncoder;
+    private final UserCategoryRepository userCategoryRepository;
+
 
     public void join(MemberDTO memberDTO) {
         MemberEntity memberEntity = MemberEntity.builder()
@@ -100,5 +110,36 @@ public class MemberService {
         memberEntity.setPhoneNumber(memberDTO.getPhoneNumber());
         memberEntity.setNickname(memberDTO.getNickname());
 
+    }
+
+    public void selectedCategories(String memberId, List<String> selectedCategoryIds) {
+        log.debug("이게 되냐구우우우ㅜ 저장하려는 memberId: {}", memberId);
+        // 멤버 엔티티 가져오기
+        MemberEntity memberEntity = memberRepository.findById(memberId)
+                .orElseThrow(() -> new EntityNotFoundException("멤버를 찾을 수 없습니다: " + memberId));
+
+        // 선택된 각 카테고리 저장
+        for (String categoryId : selectedCategoryIds) {
+            log.debug("로그 다찍어어어어어ㅓ 저장하려는 categoryId: {}", categoryId);
+            // 카테고리 엔티티 가져오기
+            CategoryEntity categoryEntity = categoryRepository.findById(Integer.parseInt(categoryId))
+                    .orElseThrow(() -> new EntityNotFoundException("카테고리를 찾을 수 없습니다: " + categoryId));
+
+            // 중복된 카테고리 선택 방지 (선택된 카테고리가 이미 존재하는지 확인)
+            if (userCategoryRepository.existsByMemberAndCategory(memberEntity, categoryEntity)) {
+                log.debug("이미 선택된 카테고리입니다: {}", categoryEntity.getCategoryName());
+                continue; // 이미 선택된 경우는 저장하지 않음
+            }
+
+            // UserCategoryEntity 객체 생성 및 저장
+            UserCategoryEntity userCategoryEntity = UserCategoryEntity.builder()
+                    .member(memberEntity)  // setMemberId 대신, 멤버 엔티티 자체를 넣음
+                    .category(categoryEntity)  // setUserCategoryNum 대신, 카테고리 엔티티 자체를 넣음
+                    .build();
+
+            // 저장
+            userCategoryRepository.save(userCategoryEntity);
+
+        }
     }
 }

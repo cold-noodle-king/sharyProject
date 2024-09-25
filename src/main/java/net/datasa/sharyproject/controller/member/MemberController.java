@@ -1,12 +1,18 @@
 package net.datasa.sharyproject.controller.member;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.datasa.sharyproject.domain.dto.member.MemberDTO;
+import net.datasa.sharyproject.security.AuthenticatedUser;
 import net.datasa.sharyproject.service.member.MemberService;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -17,7 +23,6 @@ public class MemberController {
     private final MemberService memberService;
     /**
      * 로그인
-     *
      * @return 로그인페이지로 이동 html
      */
     @GetMapping("loginForm")
@@ -94,7 +99,35 @@ public class MemberController {
         return "member/nickCheck";
     }
 
+    @GetMapping("category")
+    public String category(@AuthenticationPrincipal AuthenticatedUser user, Model model
+            , @ModelAttribute MemberDTO memberDTO) {
+        // 로그인된 사용자 정보에서 memberId 가져오기
+        memberDTO.setMemberId(user.getMemberId());
+//       String memberId = user.getMemberId();
 
+        // memberId를 모델에 추가하여 뷰로 전달
+        model.addAttribute("member", memberDTO);
 
+        // 디버깅용 로그 출력
+        log.debug("넘어오냐구우우우우ㅜ 로그인된 사용자 memberId: {}", memberDTO.getMemberId());
+        return "member/category";
+    }
 
+    @PostMapping("category")
+    public String category(@AuthenticationPrincipal AuthenticatedUser user,
+                           @RequestParam("selectedCategory") List<String> selectedCategories) {
+// 유저 카테고리 테이블에 memberId와 선택된 카테고리를 저장하는 로직 구현
+        // 예: userCategoryService.saveCategory(memberId, selectedCategory);
+        String memberId = user.getMemberId();
+        // List<String>으로 바로 카테고리 ID들을 받아 처리
+        memberService.selectedCategories(memberId, selectedCategories);
+        // 선택된 카테고리 리스트를 서비스로 전달하여 저장
+        log.debug("로그인된 사용자 memberId: {}", memberId);
+        System.out.println("아아아ㅏ 전달된 Member ID: " + memberId);
+        System.out.println("제바아아알 전달된 Selected Category: " + selectedCategories);
+        // 콤마로 구분된 카테고리 ID 리스트를 배열로 변환
+       // memberService.saveCategory(memberId, categoryIds);
+        return "redirect:/home";
+    }
 }

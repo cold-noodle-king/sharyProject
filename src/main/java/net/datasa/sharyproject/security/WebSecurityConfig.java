@@ -15,7 +15,6 @@ public class WebSecurityConfig {
     //로그인 없이 접근 가능 경로
     private static final String[] PUBLIC_URLS = {
             "/**"                 //메인화면(root)
-            , "/view1"          //로그인 없이 접근할 수 있는 페이지. static에 있는 리소스들도 따로 추가해 줘야만 볼 수 있다
             , "/imagefile/**"   //**: 해당 경로 아래의 모든 경로 허용
             , "css/**"
             , "js/**"
@@ -62,7 +61,7 @@ public class WebSecurityConfig {
                         .usernameParameter("memberId")
                         .passwordParameter("memberPw")
                         .loginProcessingUrl("/member/login")
-                        .defaultSuccessUrl("/", true)
+                        .defaultSuccessUrl("/member/category", true)
                         .permitAll()
                 )
 
