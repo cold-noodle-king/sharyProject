@@ -53,6 +53,17 @@ public class SseMessageService {
                 .collect(Collectors.toList());
     }
 
+    // SseMessageService.java
+    @Transactional(readOnly = true)
+    public List<MessageDTO> getReceivedMessages(String toId) {
+        List<SseMessageEntity> messages = sseMessageRepository.findByToMember_MemberId(toId);
+
+        return messages.stream()
+                .map(message -> new MessageDTO(message.getFromMember().getMemberId(), message.getContent(), message.getCreateDate()))
+                .collect(Collectors.toList());
+    }
+
+
     // 로그인한 사용자의 일반 알림을 DB에서 조회
     @Transactional(readOnly = true)
     public List<NotificationDTO> getNotifications(String memberId) {
@@ -66,6 +77,18 @@ public class SseMessageService {
                         .isRead(notification.isRead())
                         .notificationType(notification.getNotificationType()) // 추가
                         .build())
+                .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public List<MessageDTO> getAllMessages(String toId) {
+        List<SseMessageEntity> messages = sseMessageRepository.findByToMember_MemberId(toId);
+
+        return messages.stream()
+                .map(message -> new MessageDTO(
+                        message.getFromMember().getMemberId(),
+                        message.getContent(),
+                        message.getCreateDate()))
                 .collect(Collectors.toList());
     }
 }

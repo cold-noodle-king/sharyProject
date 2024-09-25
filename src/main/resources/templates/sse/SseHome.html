@@ -4,42 +4,98 @@
       xmlns:sec="http://www.thymeleaf.org/extras/springsecurity6">
 <head>
     <meta charset="UTF-8">
-    <title>test_sse2</title>
+    <title>쪽지 보내기</title>
     <style>
-        #sendDiv {
-            border: 1px solid black;
-            margin: 10px;
-            padding: 10px;
-            width : 300px;
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 20px;
         }
 
-        /* 알림 스타일 추가 */
-        .notification {
-            border-bottom: 1px solid #e0e0e0;
-            padding: 10px 0;
-        }
-
-        .notification .content {
-            background-color: #f9f9f9;
-            padding: 10px;
-            border-radius: 5px;
-        }
-
-        .notification .text {
-            font-size: 14px;
+        h1, h2 {
+            text-align: center;
             color: #333;
+            margin-bottom: 20px;
         }
 
-        .notification .time {
-            font-size: 12px;
-            color: #888;
-            text-align: right;
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .message-form {
+            margin-bottom: 20px;
+        }
+
+        .message-form p {
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .message-form label {
+            font-weight: bold;
+        }
+
+        .message-form input[type="text"] {
+            width: 60%; /* 더 좁게 */
+            padding: 5px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .message-form button {
+            background-color: white; /* 흰색 배경 */
+            color: #5dade2; /* 텍스트 색상 */
+            border: 1px solid #5dade2; /* 테두리 추가 */
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-left: 10px; /* 버튼과 입력란 사이 여백 추가 */
+        }
+
+        .message-form button:hover {
+            background-color: #f0f0f0; /* 호버 시 배경색 변화 */
+        }
+
+        /* 쪽지함 버튼 */
+        .message-box {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .message-box a {
+            display: inline-block;
+            background-color: #5dade2;
+            color: white;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 20px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-left: 10px; /* 왼쪽 여백 추가 */
+        }
+
+        .message-box a:hover {
+            background-color: #3498db;
         }
     </style>
 
+
     <script src="/js/jquery-3.7.1.min.js"></script>
 
-    <script>
+<!--    <script>
         $(document).ready(function() {
 
             // 보내기 버튼 클릭하면 전송
@@ -111,58 +167,66 @@
                 }
             });
         }
+    </script>-->
+    <script src="/js/jquery-3.7.1.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#sendButton').click(function() {
+                let id = $('#id').val();
+                let msg = $('#msg').val();
+
+                if (id === '' || msg === '') {
+                    alert('수신자 아이디와 메시지 내용을 입력하세요.');
+                    return;
+                }
+
+                $.ajax({
+                    url: '/send',
+                    type: 'post',
+                    data: { memberId: id, message: msg },
+                    success: function () {
+                        $('#msg').val('');
+                        console.log('쪽지 전송 완료');
+                    },
+                    error: function (err) {
+                        console.log('오류 발생: ' + JSON.stringify(err));
+                    }
+                });
+            });
+        });
     </script>
 </head>
 <body>
-<h1>[ SSE 테스트 ]</h1>
+<!--<p sec:authorize="isAuthenticated()"><a href="/msgTest">알림함</a></p>-->
+<!--<h2>쪽지</h2>
+<p>* 이곳에서 아이디와 쪽지내용을 입력하여 로그인된 사용자에게 메시지를 보낸다.</p>-->
+<div class="container">
+    <h1>[ 쪽지 보내기 ]</h1>
 
-<p sec:authorize="isAuthenticated()"><a href="/msgTest">알림함</a></p>
+    <div class="message-form">
+        <p>
+            <input type="text" id="id" placeholder="수신자 아이디를 입력하세요">
+        </p>
+        <p>
+            <input type="text" id="msg" placeholder="쪽지 내용을 입력하세요">
+            <button id="sendButton">보내기</button>
+        </p>
+    </div>
 
-<br>
-<h2>* 쪽지 알림</h2>
-<p>* 이곳에서 아이디와 쪽지내용을 입력하여 로그인된 사용자에게 메시지를 보낸다.</p>
-<div id="sendDiv">
-    <p>수신자 아이디 : 	<input type="text" id="id"></p>
-    <p>쪽지 내용 : 		<input type="text" id="msg"></p>
-    <p><button id="sendButton">보내기</button></p>
+    <!-- 쪽지함 버튼 -->
+    <div class="message-box">
+        <a href="/message" sec:authorize="isAuthenticated()">쪽지함으로 이동</a>
+    </div>
 </div>
-<pre>
-    - HTTP를 이용한 단방향 통신 (서버 -> 클라이언트)
-</pre>
-<br>
+
 
 <!-- 팔로우 요청 알림 표시 영역 -->
-<h2>* 팔로우 요청 알림 테스트</h2>
+<!--<h2>* 팔로우 요청 알림 테스트</h2>-->
 <!-- 전체 사용자 목록으로 이동하는 링크 -->
 <!-- sec:authorize 속성을 올바르게 수정 -->
-<p sec:authorize="isAuthenticated()"><a href="/allUsers">전체 사용자 목록</a></p>
-<br>
-
-<!-- 채팅 알림 표시 영역 -->
-<h2>* SharyTalk 새로운 메세지 알림 테스트</h2>
-<!-- <p sec:authorize=""><a href="/chatForm">SharyTalk</a></p> -->
-
-<br>
-
-<!-- 영역 -->
-<p>* 다른 user가 나에게 공유 다이어리 요청을 보냈을 때 </p>
-<div>
-    dd
-</div>
-<br>
-
-<!-- 영역 -->
-<p>* 다른 user가 내가 보낸 공유 다이어리 요청을 수락했을 때</p>
-<div>
-    dd
-</div>
-<br>
-<p>
+<!--<p sec:authorize="isAuthenticated()"><a href="/allUsers">전체 사용자 목록</a></p>-->
 
 
 
-
-
-</p>
 </body>
 </html>

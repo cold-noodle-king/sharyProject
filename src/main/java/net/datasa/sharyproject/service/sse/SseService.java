@@ -38,7 +38,8 @@ public class SseService {
 
         if (emitter != null) {
             try {
-                String jsonMessage = String.format("{\"type\":\"message\", \"sender\":\"%s\", \"content\":\"%s\", \"createdAt\":\"%s\"}",
+                String jsonMessage = String.format(
+                        "{\"type\":\"message\", \"sender\":\"%s\", \"content\":\"%s\", \"createdAt\":\"%s\"}",
                         fromId, content, LocalDateTime.now().toString());
                 emitter.send(SseEmitter.event().name("message").data(jsonMessage));
             } catch (IOException e) {

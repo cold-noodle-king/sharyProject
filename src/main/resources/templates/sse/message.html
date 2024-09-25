@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>쪽지함</title>
+  <script src="/js/jquery-3.7.1.min.js"></script>
+  <style>
+    body { font-family: Arial, sans-serif; background-color: #f7f7f7; }
+    h1 { background-color: #5dade2; color: white; padding: 10px; text-align: center; }
+    .message-box { margin: 20px auto; max-width: 600px; background-color: white; border-radius: 10px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); padding: 20px; }
+    .message { display: flex; margin-bottom: 15px; border-bottom: 1px solid #e0e0e0; padding-bottom: 10px; }
+    .avatar { background-color: #5dade2; color: white; border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; font-size: 18px; margin-right: 15px; }
+    .content { background-color: #f1f1f1; border-radius: 10px; padding: 10px 15px; max-width: 70%; word-break: break-word; }
+    .content .sender { font-weight: bold; color: #333; }
+    .content .text { color: #555; }
+    #messageView { max-height: 400px; overflow-y: auto; }
+    .main-btn {
+      display: block;
+      width: 150px;
+      margin: 20px auto;
+      padding: 10px 15px;
+      background-color: #5dade2;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      text-align: center;
+      text-decoration: none;
+      font-size: 16px;
+    }
+    .main-btn:hover { background-color: #3498db; }
+  </style>
+</head>
+<body>
+<h1>쪽지함</h1>
+<div class="message-box">
+  <div id="messageView"></div>
+</div>
+
+<a class="main-btn" href="/home">홈페이지로 돌아가기</a>
+
+<script>
+  $(document).ready(function() {
+    // 알림 데이터를 담을 배열
+    let messages = [];
+
+    // 모든 받은 쪽지 불러오기
+    $.get("/receivedMessages", function(data) {
+      data.forEach(item => {
+        addMessageItem(item);
+      });
+    });
+
+    // SSE 연결
+    const eventSource = new EventSource("/subscribe");
+
+    // SSE 이벤트 처리 (message)
+    eventSource.addEventListener('message', function(event) {
+      let data = JSON.parse(event.data);
+      addMessageItem(data);
+    });
+
+    // 쪽지 목록 추가하는 함수 (최신 쪽지가 위로 쌓이게 함)
+    function addMessageItem(item) {
+      messages.push(item);
+
+      // createdAt 기준으로 정렬 (최신 순)
+      messages.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+      // 화면 초기화
+      $('#messageView').empty();
+
+      // 정렬된 쪽지들을 다시 렌더링
+      messages.forEach(item => {
+        let formattedDate = new Date(item.createdAt).toLocaleString();
+        let html = `
+                    <div class="message">
+                        <div class="avatar">${item.sender.charAt(0).toUpperCase()}</div>
+                        <div class="content">
+                            <div class="sender">${item.sender}</div>
+                            <div class="text">${item.content}</div>
+                            <div class="time">${formattedDate}</div>
+                        </div>
+                    </div>`;
+        $('#messageView').append(html);
+      });
+    }
+  });
+</script>
+</body>
+</html>

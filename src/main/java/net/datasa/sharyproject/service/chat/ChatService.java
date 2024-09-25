@@ -51,6 +51,7 @@ public class ChatService {
         if (chatOpt.isPresent()) {
             return new ChatDTO(chatOpt.get().getChatId(), chatOpt.get().getParticipant1Id(), chatOpt.get().getParticipant2Id(), chatOpt.get().getCreatedDate());
         } else {
+            // 채팅방이 없을 경우 새로 생성
             ChatEntity chat = ChatEntity.builder()
                     .participant1Id(participant1Id)
                     .participant2Id(participant2Id)

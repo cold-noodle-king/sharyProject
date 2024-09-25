@@ -90,5 +90,19 @@ public class ChatController {
         return ResponseEntity.ok(messageDTO);
     }
 
+    @GetMapping("/chat/start")
+    public String startChat(@RequestParam("participant1Id") String participant1Id,
+                            @RequestParam("participant2Id") String participant2Id,
+                            Model model) {
+        // 채팅방 생성 또는 기존 채팅방 가져오기
+        ChatDTO chat = chatService.findOrCreateChat(participant1Id, participant2Id);
+
+        // 채팅 메시지 가져오기
+        model.addAttribute("chat", chat);
+        model.addAttribute("messages", chatService.getMessages(chat.getChatId()));
+
+        return "chat/chatRoom"; // 채팅방으로 리다이렉트
+    }
+
 
 }

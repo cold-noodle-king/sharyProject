@@ -126,8 +126,8 @@
         <table>
             <thead>
             <tr>
-                <th>사용자 ID</th>
-                <th>대화 시작</th>
+                <th>팔로잉 ID</th>
+                <th>채팅</th>
             </tr>
             </thead>
             <tbody>
@@ -137,7 +137,7 @@
                     <form th:action="@{/chat/room}" method="get">
                         <input type="hidden" name="participant1Id" th:value="${#authentication.name}" />
                         <input type="hidden" name="participant2Id" th:value="${user.followingId}" />
-                        <button type="submit">대화 시작</button>
+                        <button type="submit">메시지</button>
                     </form>
                 </td>
             </tr>
@@ -151,8 +151,8 @@
         <table>
             <thead>
             <tr>
-                <th>사용자 ID</th>
-                <th>대화 시작</th>
+                <th>팔로워 ID</th>
+                <th>채팅</th>
             </tr>
             </thead>
             <tbody>
@@ -162,7 +162,7 @@
                     <form th:action="@{/chat/room}" method="get">
                         <input type="hidden" name="participant1Id" th:value="${#authentication.name}" />
                         <input type="hidden" name="participant2Id" th:value="${user.followerId}" />
-                        <button type="submit">대화 시작</button>
+                        <button type="submit">메시지</button>
                     </form>
                 </td>
             </tr>

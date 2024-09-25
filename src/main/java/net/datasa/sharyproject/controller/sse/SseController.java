@@ -133,6 +133,24 @@ public class SseController {
     }
 
 
+    @ResponseBody
+    @GetMapping("/receivedMessages")
+    public List<MessageDTO> getReceivedMessages(@AuthenticationPrincipal AuthenticatedUser user) {
+        return sseMessageService.getReceivedMessages(user.getUsername());
+    }
+
+    @GetMapping("/message")
+    public String messagePage() {
+        return "sse/message";  // message.html로 이동
+    }
+
+    // 모든 쪽지 조회 API 추가
+    @ResponseBody
+    @GetMapping("/allMessages")
+    public List<MessageDTO> getAllMessages(@AuthenticationPrincipal AuthenticatedUser user) {
+        return sseMessageService.getAllMessages(user.getUsername());
+    }
+
 }
 
 

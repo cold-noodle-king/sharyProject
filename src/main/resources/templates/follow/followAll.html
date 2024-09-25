@@ -2,7 +2,95 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
 	<meta charset="UTF-8">
-	<title>test_composite_key</title>
+	<title>Follow List</title>
+	<style>
+		body {
+			font-family: 'Arial', sans-serif;
+			background-color: #f0f0f0;
+			margin: 0;
+			padding: 20px;
+		}
+
+		h1, h2 {
+			text-align: center;
+			color: #333;
+			margin-bottom: 20px;
+		}
+
+		.container {
+			max-width: 800px;
+			margin: 0 auto;
+			background-color: #fff;
+			padding: 20px;
+			border-radius: 8px;
+			box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+		}
+
+		.tabs {
+			display: flex;
+			justify-content: center;
+			margin-bottom: 20px;
+		}
+
+		.tab {
+			padding: 10px 20px;
+			cursor: pointer;
+			background-color: #ddd;
+			border-radius: 5px 5px 0 0;
+			margin-right: 5px;
+			transition: background-color 0.3s;
+		}
+
+		.tab:hover {
+			background-color: #bbb;
+		}
+
+		.tab.active {
+			background-color: #5dade2;
+			color: white;
+		}
+
+		.tab-content {
+			display: none;
+		}
+
+		.tab-content.active {
+			display: block;
+		}
+
+		table {
+			width: 100%;
+			border-collapse: collapse;
+			margin-bottom: 20px;
+		}
+
+		th, td {
+			border: 1px solid #ddd;
+			padding: 10px;
+			text-align: center;
+			color: #333;
+		}
+
+		th {
+			background-color: #5dade2;
+			color: white;
+		}
+
+		button {
+			background-color: #5dade2;
+			color: white;
+			border: none;
+			padding: 5px 10px;
+			border-radius: 5px;
+			font-size: 14px;
+			cursor: pointer;
+			transition: background-color 0.3s ease;
+		}
+
+		button:hover {
+			background-color: #3498db;
+		}
+	</style>
 	<script>
 		function confirmUnfollow(event, form) {
 			event.preventDefault(); // 기본 폼 제출 동작 막기
@@ -10,58 +98,117 @@
 
 			if (result) { // '예'를 누르면
 				form.submit(); // 폼 제출
-			} else {
-				// '아니오'를 누르면 아무 동작도 하지 않음
 			}
+		}
+
+		function openTab(tabName) {
+			var i, tabContent, tablinks;
+			tabContent = document.getElementsByClassName("tab-content");
+			for (i = 0; i < tabContent.length; i++) {
+				tabContent[i].style.display = "none";
+			}
+
+			tablinks = document.getElementsByClassName("tab");
+			for (i = 0; i < tablinks.length; i++) {
+				tablinks[i].classList.remove("active");
+			}
+
+			document.getElementById(tabName).style.display = "block";
+			document.getElementById(tabName + "-tab").classList.add("active");
 		}
 	</script>
 </head>
-<body>
+<body onload="openTab('followers')">
 
-<h1>[ follow list ]</h1>
+<div class="container">
+	<h1>[ Follow List ]</h1>
 
-<h2>나를 팔로우하는 사람들</h2>
-<table>
-	<thead>
-	<tr>
-		<th>목록</th>
-		<th>팔로워 ID</th>
-		<th>날짜</th>
-	</tr>
-	</thead>
-	<tbody>
-	<tr th:each="follow, iterStat : ${followers}">
-		<td th:text="${iterStat.count}">1</td>
-		<td th:text="${follow.followerId}">followerId</td>
-		<td th:text="${#temporals.format(follow.followDate, 'yyyy-MM-dd HH:mm:ss')}">followDate</td>
-	</tr>
-	</tbody>
-</table>
+	<div class="tabs">
+		<div id="followers-tab" class="tab active" onclick="openTab('followers')">팔로워</div>
+		<div id="following-tab" class="tab" onclick="openTab('following')">팔로잉</div>
+	</div>
 
-<h2>내가 팔로우하고 있는 사람들</h2>
-<table>
-	<thead>
-	<tr>
-		<th>목록</th>
-		<th>팔로잉 ID</th>
-		<th>날짜</th>
-		<th>팔로우 취소</th>
-	</tr>
-	</thead>
-	<tbody>
-	<tr th:each="follow, iterStat : ${following}">
-		<td th:text="${iterStat.count}">1</td>
-		<td th:text="${follow.followingId}">followingId</td>
-		<td th:text="${#temporals.format(follow.followDate, 'yyyy-MM-dd HH:mm:ss')}">followDate</td>
-		<td>
-			<form action="/follow/delete" method="post" onsubmit="confirmUnfollow(event, this)">
-				<input type="hidden" name="followingId" th:value="${follow.followingId}" />
-				<button type="submit">팔로우 취소</button>
-			</form>
-		</td>
-	</tr>
-	</tbody>
-</table>
+	<!-- 팔로워 탭 콘텐츠 -->
+	<div id="followers" class="tab-content active">
+		<h2>나를 팔로우하는 사람들</h2>
+		<table>
+			<thead>
+			<tr>
+				<th>목록</th>
+				<th>팔로워 ID</th>
+				<!--<th>날짜</th>-->
+				<th>채팅</th>
+				<th>쪽지</th>
+			</tr>
+			</thead>
+			<tbody>
+			<tr th:each="follow, iterStat : ${followers}">
+				<td th:text="${iterStat.count}">1</td>
+				<td th:text="${follow.followerId}">followerId</td>
+				<!--<td th:text="${#temporals.format(follow.followDate, 'yyyy-MM-dd HH:mm:ss')}">followDate</td>-->
+				<td>
+					<form th:action="@{/chat/room}" method="get">
+						<input type="hidden" name="participant1Id" th:value="${#authentication.name}" />
+						<input type="hidden" name="participant2Id" th:value="${follow.followerId}" />
+						<button type="submit">채팅</button>
+					</form>
+				</td>
+				<td>
+					<form th:action="@{/message/send}" method="get">
+						<input type="hidden" name="recipientId" th:value="${follow.followerId}" />
+						<button type="submit">쪽지</button>
+					</form>
+				</td>
+			</tr>
+			</tbody>
+		</table>
+	</div>
+
+	<!-- 팔로잉 탭 콘텐츠 -->
+	<div id="following" class="tab-content">
+		<h2>내가 팔로우하고 있는 사람들</h2>
+		<table>
+			<thead>
+			<tr>
+				<th>목록</th>
+				<th>팔로잉 ID</th>
+				<!--<th>날짜</th>-->
+				<th>채팅</th>
+				<th>쪽지</th>
+				<th>팔로우 취소</th>
+
+			</tr>
+			</thead>
+			<tbody>
+			<tr th:each="follow, iterStat : ${following}">
+				<td th:text="${iterStat.count}">1</td>
+				<td th:text="${follow.followingId}">followingId</td>
+				<!--<td th:text="${#temporals.format(follow.followDate, 'yyyy-MM-dd HH:mm:ss')}">followDate</td>-->
+				<td>
+					<form th:action="@{/chat/room}" method="get">
+						<input type="hidden" name="participant1Id" th:value="${#authentication.name}" />
+						<input type="hidden" name="participant2Id" th:value="${follow.followingId}" />
+						<button type="submit">채팅</button>
+					</form>
+				</td>
+				<td>
+					<form th:action="@{/message/send}" method="get">
+						<input type="hidden" name="recipientId" th:value="${follow.followerId}" />
+						<button type="submit">쪽지</button>
+					</form>
+				</td>
+
+				<td>
+					<form action="/follow/delete" method="post" onsubmit="confirmUnfollow(event, this)">
+						<input type="hidden" name="followingId" th:value="${follow.followingId}" />
+						<button type="submit">팔로우 취소</button>
+					</form>
+				</td>
+			</tr>
+			</tbody>
+		</table>
+	</div>
+</div>
 
 </body>
 </html>
