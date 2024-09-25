@@ -13,14 +13,13 @@ window.onload = function() {
 
     let waves = [];  // 파도 객체를 저장할 배열
     let waveCount = 6;  // 파도의 레이어(층) 수 설정
-    // 밝은 계열의 따뜻한 색상 팔레트로 변경
+    // 밝은 계열의 따뜻한 색상 팔레트
     let colors = ['#df9b70', '#f4901b', '#FFE7A8', '#FFD1A9', '#FFB6C1', '#FFEBCD'];
 
-    // Easing 함수 적용 (움직임을 부드럽게 하는 수학적 함수)
-    function easeInOutSine(t) {
-        // t 값이 0에서 1로 변할 때, Sine 함수를 사용해 완만한 시작과 종료를 표현
-        return -(Math.cos(Math.PI * t) - 1) / 2;
-    }
+    // Easing 함수 (사용하지 않으므로 제거 가능)
+    // function easeInOutSine(t) {
+    //     return -(Math.cos(Math.PI * t) - 1) / 2;
+    // }
 
     // 파도 클래스를 정의하여 각 파도에 대한 설정과 동작을 관리
     class Wave {
@@ -46,15 +45,14 @@ window.onload = function() {
 
             // 파도의 형태를 그리기 위한 반복문
             for (let x = 0; x < canvas.width; x++) {
-                let progress = x / canvas.width;  // x 좌표에 대한 진행도 (0에서 1까지)
-                let easing = easeInOutSine(progress);  // easing 함수로 부드러운 애니메이션 효과 적용
+                // 진폭을 일정하게 유지하기 위해 easing 함수 제거
+                // let progress = x / canvas.width;
+                // let easing = easeInOutSine(progress);
 
-                // y 좌표 계산 (주기와 진폭을 바탕으로 파도 높이 조정)
-                let y = canvas.height / 2 + Math.sin(x * this.frequency + this.phase) * this.amplitude * easing;
+                // y 좌표 계산 (진폭을 일정하게 유지)
+                let y = canvas.height / 2 + Math.sin(x * this.frequency + this.phase) * this.amplitude;
                 ctx.lineTo(x, y);  // 각 x 값에 대한 y 좌표로 라인을 그림
             }
-
-
 
             // 파도의 아래쪽을 캔버스 끝까지 채우기 위한 경로 닫기
             ctx.lineTo(canvas.width, canvas.height);
