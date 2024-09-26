@@ -20,11 +20,13 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            background: linear-gradient(to bottom, #f8e3f2, #d8b6d5);
+            transition: background 0.5s ease-in-out; /* 배경이 바뀔 때 부드럽게 변하도록 설정 */
         }
 
         /* 전체 컨테이너 스타일 */
         .emotion-container {
-            width: 90%;
+            width: 100%;
             max-width: 400px;
             margin: 10px auto;
             text-align: center;
@@ -82,7 +84,57 @@
 <script src="https://sdk.scdn.co/spotify-player.js"></script>
 
 <!-- Emotion 섹션 -->
-<div th:replace="fragments/home_emotions :: home-emotions"></div>
+<div th:fragment="home-emotions">
+    <div class="emotion-container">
+        <div class="text-center">
+            <h2 class="section-heading text-uppercase">Emotion</h2>
+        </div>
+        <div class="row emotion-images">
+            <!-- 감정 이미지 1 -->
+            <div class="col-lg-2 col-md-4 col-sm-6">
+                <img src="/images/emotions/happy.gif" alt="행복" class="img-fluid emotion-image">
+            </div>
+            <!-- 감정 이미지 2 -->
+            <div class="col-lg-2 col-md-4 col-sm-6">
+                <img src="/images/emotions/sad.gif" alt="슬픔" class="img-fluid emotion-image">
+            </div>
+            <!-- 감정 이미지 3 -->
+            <div class="col-lg-2 col-md-4 col-sm-6">
+                <img src="/images/emotions/angry.gif" alt="화남" class="img-fluid emotion-image">
+            </div>
+            <!-- 감정 이미지 4 -->
+            <div class="col-lg-2 col-md-4 col-sm-6">
+                <img src="/images/emotions/surprised.gif" alt="놀람" class="img-fluid emotion-image">
+            </div>
+            <!-- 감정 이미지 5 -->
+            <div class="col-lg-2 col-md-4 col-sm-6">
+                <img src="/images/emotions/scared.gif" alt="두려움" class="img-fluid emotion-image">
+            </div>
+            <!-- 감정 이미지 6 -->
+            <div class="col-lg-2 col-md-4 col-sm-6">
+                <img src="/images/emotions/love.gif" alt="사랑" class="img-fluid emotion-image">
+            </div>
+        </div>
+
+        <!-- 사용자 정의 컨트롤 -->
+        <div class="player-controls" id="control-buttons">
+            <button id="prevButton" class="custom-button control-button"><i class="fas fa-backward"></i></button>
+            <button id="playPauseButton" class="custom-button control-button"><i class="fas fa-play"></i></button>
+            <button id="nextButton" class="custom-button control-button"><i class="fas fa-forward"></i></button>
+        </div>
+
+        <!-- 시크바 추가 -->
+        <input type="range" id="seek-bar" value="0" max="100">
+
+        <!-- 볼륨 슬라이더 -->
+        <div class="volume-control">
+            <label for="volume-slider">
+                <i class="fas fa-volume-up"></i> <!-- 볼륨 아이콘 -->
+            </label>
+            <input type="range" id="volume-slider" min="0" max="100" value="50">
+        </div>
+    </div>
+</div>
 
 <!-- 버튼들을 감싸는 부모 요소 -->
 <div class="button-container">
@@ -99,6 +151,34 @@
 <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 <script>
     AOS.init();
+    // 감정 이미지 클릭 시 배경 색상이 변경되도록 설정
+    const emotionImages = document.querySelectorAll('.emotion-image');
+
+    emotionImages.forEach(image => {
+        image.addEventListener('click', () => {
+            document.body.style.background = getBackgroundForEmotion(image.alt);
+        });
+    });
+
+    // 각 감정에 맞는 배경 색상 설정 함수
+    function getBackgroundForEmotion(emotion) {
+        switch (emotion) {
+            case '행복':
+                return 'linear-gradient(to bottom, #fefbd8, #f6d365)';  // 밝은 노랑색 배경
+            case '슬픔':
+                return 'linear-gradient(to bottom, #a1c4fd, #c2e9fb)';  // 푸른색 배경
+            case '화남':
+                return 'linear-gradient(to bottom, #ff758c, #ff7eb3)';  // 빨간색 배경
+            case '놀람':
+                return 'linear-gradient(to bottom, #fbc2eb, #a18cd1)';  // 보라색과 핑크
+            case '두려움':
+                return 'linear-gradient(to bottom, #f85032, #e73827)';  // 어두운 빨강
+            case '사랑':
+                return 'linear-gradient(to bottom, #f857a6, #ff5858)';  // 사랑스러운 핑크
+            default:
+                return 'linear-gradient(to bottom, #f8e3f2, #d8b6d5)';  // 기본 배경
+        }
+    }
 </script>
 </body>
 </html>
