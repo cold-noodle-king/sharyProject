@@ -1,5 +1,6 @@
 package net.datasa.sharyproject.domain.dto.member;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -37,4 +38,7 @@ public class MemberDTO {
     private boolean enabled;
 
     private String roleName;
+
+    @JsonProperty("isFollowing") // JSON 직렬화 시 필드 이름을 지정
+    private boolean isFollowing; // 추가: 현재 사용자가 이 회원을 팔로우하고 있는지 여부
 }

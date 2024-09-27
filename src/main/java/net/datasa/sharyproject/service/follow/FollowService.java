@@ -32,6 +32,10 @@ public class FollowService {
     private final NotificationRepository notificationRepository; // 알림 리포지토리 추가
 
 
+    /**
+     * 현재 로그인한 사용자 ID를 반환
+     * @return
+     */
     public String getCurrentUserId() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (principal instanceof UserDetails) {
@@ -41,6 +45,10 @@ public class FollowService {
         }
     }
 
+    /**
+     * 현재 사용자의 팔로워 목록을 가져옴
+     * @return
+     */
     public List<FollowDTO> getFollowersForCurrentUser() {
         String currentUserId = getCurrentUserId();
         List<FollowEntity> entities = followRepository.findByFollowingId(currentUserId);
@@ -53,6 +61,10 @@ public class FollowService {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * 현재 사용자가 팔로우하고 있는 사용자 목록을 가져옴
+     * @return
+     */
     public List<FollowDTO> getFollowingForCurrentUser() {
         String currentUserId = getCurrentUserId();
         List<FollowEntity> entities = followRepository.findByFollowerId(currentUserId);
@@ -65,7 +77,7 @@ public class FollowService {
                 .collect(Collectors.toList());
     }
 
-    // 팔로우 기능 수정
+    // 팔로우 기능
     public void follow(String followerId, String followingId) {
         FollowId followId = new FollowId(followerId, followingId);
 
@@ -84,12 +96,16 @@ public class FollowService {
                 .build();
         followRepository.save(followEntity);
 
-        // 팔로우 알림을 db에 저장하고 수신자에게 전송
+        // 팔로우 알림 전송
         sendFollowNotification(followerId, followingId);
     }
 
 
-    //
+    /**
+     * 팔로우 알림을 db에 저장하고 sse로 전송
+     * @param followerId
+     * @param followingId
+     */
     private void sendFollowNotification(String followerId, String followingId) {
         MemberEntity followingMember = memberRepository.findById(followingId)
                 .orElseThrow(() -> new IllegalArgumentException("팔로우 대상 사용자를 찾을 수 없습니다."));
@@ -111,15 +127,19 @@ public class FollowService {
         sseService.sendNotification(followingId, message, "follow");
     }
 
-
-
-
+    /**
+     * 언팔로우 기능
+     * @param followingId
+     */
     public void unfollow(String followingId) {
         String followerId = getCurrentUserId();
         FollowId followId = new FollowId(followerId, followingId);
         followRepository.deleteById(followId);
     }
 
+    /**
+     *
+     */
     public void insert() {
         String currentUserId = getCurrentUserId();
         // MemberEntity 클래스 임포트 및 사용
@@ -135,7 +155,7 @@ public class FollowService {
         }
     }
 
-    public List<FollowDTO> getFollowListForCurrentUser() {
+/*    public List<FollowDTO> getFollowListForCurrentUser() {
         String currentUserId = getCurrentUserId();
         List<FollowEntity> entities = followRepository.findByFollowerId(currentUserId);
 
@@ -145,9 +165,49 @@ public class FollowService {
                         entity.getFollowingId(),
                         entity.getFollowDate()))
                 .collect(Collectors.toList());
+    }*/
+    
+
+    /**
+     * 전체 사용자 검색 기능 추가
+     * @param query
+     * @param currentUserId
+     * @return
+     */
+    public List<MemberDTO> searchAllUsers(String query, String currentUserId) {
+        // 현재 사용자가 팔로우하고 있는 사용자 ID 목록 가져오기
+        List<String> followingIds = followRepository.findByFollowerId(currentUserId)
+                .stream()
+                .map(FollowEntity::getFollowingId)
+                .collect(Collectors.toList());
+
+        return memberRepository.findAll().stream()
+                .filter(member -> !member.getMemberId().equals(currentUserId)) // 현재 사용자 제외
+                .filter(member -> member.getMemberId().toLowerCase().contains(query.toLowerCase()) ||
+                        member.getNickname().toLowerCase().contains(query.toLowerCase()))
+                .map(member -> {
+                    boolean isFollowing = followingIds.contains(member.getMemberId());
+                    return new MemberDTO(
+                            member.getMemberId(),
+                            null, // 비밀번호는 제외
+                            member.getEmail(),
+                            member.getPhoneNumber(),
+                            member.getFullName(),
+                            member.getNickname(),
+                            member.getGender(),
+                            member.getBirthdate(),
+                            member.getCreatedDate(),
+                            member.getUpdatedDate(),
+                            member.getEnabled(),
+                            member.getRoleName(),
+                            isFollowing // isFollowing 값을 설정
+                    );
+                })
+                .collect(Collectors.toList());
     }
 
-    public List<MemberDTO> getAllUsersExceptCurrentUser(String currentUserId) {
+    //
+/*    public List<MemberDTO> getAllUsersExceptCurrentUser(String currentUserId) {
         return memberRepository.findAll().stream()
                 .filter(member -> !member.getMemberId().equals(currentUserId)) // 현재 로그인한 사용자 제외
                 .map(member -> new MemberDTO(
@@ -162,8 +222,35 @@ public class FollowService {
                         member.getCreatedDate(),
                         member.getUpdatedDate(),
                         member.getEnabled(), // 필드 이름을 올바르게 사용
-                        member.getRoleName()
+                        member.getRoleName(),
                 ))
                 .collect(Collectors.toList());
+    }*/
+
+    /**
+     * 팔로워 검색 기능
+     * @param query
+     * @param currentUserId
+     * @return
+     */
+    public List<FollowDTO> searchFollowers(String query, String currentUserId) {
+        return followRepository.findByFollowingId(currentUserId).stream()
+                .filter(follow -> follow.getFollowerId().toLowerCase().contains(query.toLowerCase()))
+                .map(follow -> new FollowDTO(follow.getFollowerId(), follow.getFollowingId(), follow.getFollowDate()))
+                .collect(Collectors.toList());
     }
+
+    /**
+     * 팔로잉 검색 기능
+     * @param query
+     * @param currentUserId
+     * @return
+     */
+    public List<FollowDTO> searchFollowing(String query, String currentUserId) {
+        return followRepository.findByFollowerId(currentUserId).stream()
+                .filter(follow -> follow.getFollowingId().toLowerCase().contains(query.toLowerCase()))
+                .map(follow -> new FollowDTO(follow.getFollowerId(), follow.getFollowingId(), follow.getFollowDate()))
+                .collect(Collectors.toList());
+    }
+
 }

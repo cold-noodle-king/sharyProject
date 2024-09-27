@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
 
@@ -44,25 +45,7 @@ public class FollowController {
     }
 
     /**
-     * followUser 기능
-     * @param followerId
-     * @param followingId
-     * @return
-     */
-    @PostMapping("/followUser")
-    public String followUser(@RequestParam("followerId") String followerId,
-                             @RequestParam("followingId") String followingId) {
-        try {
-            followService.follow(followerId, followingId);
-        } catch (Exception e) {
-            log.error("Error during follow operation", e);
-            return "redirect:/followAll?error=follow_error"; // 오류 메시지 전달
-        }
-        return "redirect:/followAll";
-    }
-
-    /**
-     * followAll 기능
+     * 팔로우 전체 목록 페이지로 이동
      * @param model
      * @return
      */
@@ -80,7 +63,27 @@ public class FollowController {
     }
 
     /**
-     * followingId 기능
+     * 팔로우하기
+     * @param followerId
+     * @param followingId
+     * @return
+     */
+    @PostMapping("/followUser")
+    public String followUser(@RequestParam("followerId") String followerId,
+                             @RequestParam("followingId") String followingId) {
+        try {
+            followService.follow(followerId, followingId);
+        } catch (Exception e) {
+            log.error("Error during follow operation", e);
+            return "redirect:/followAll?error=follow_error"; // 오류 메시지 전달
+        }
+        return "redirect:/followAll";
+    }
+
+
+
+    /**
+     * 언팔로우하기
      * @param followingId
      * @return
      */
@@ -89,22 +92,43 @@ public class FollowController {
         try {
             followService.unfollow(followingId);
         } catch (Exception e) {
-            log.error("Error during delete operation", e);
+            log.error("언팔로우 중 오류 발생", e);
         }
         return "redirect:/followAll";
     }
 
     /**
-     * allUsers 기능
-     * @param model
-     * @return
+     * 전체 사용자 목록을 검색하는 메서드
+     * @param query 검색어
+     * @param model 모델에 검색 결과 담기
+     * @return 전체 사용자 목록 페이지
      */
-    @GetMapping("/allUsers")
-    public String getAllUsers(Model model) {
-        String currentUserId = followService.getCurrentUserId(); // 현재 로그인한 사용자 ID 가져오기
-        List<MemberDTO> allUsers = followService.getAllUsersExceptCurrentUser(currentUserId); // 현재 사용자 제외한 모든 사용자 가져오기
+/*    @GetMapping("/allUsers")
+    public String getAllUsers(@RequestParam(value = "query", required = false) String query, Model model) {
+        String currentUserId = followService.getCurrentUserId();
+        List<MemberDTO> allUsers;
+
+        if (query != null && !query.isEmpty()) {
+            allUsers = followService.searchAllUsers(query, currentUserId);
+        } else {
+            allUsers = followService.getAllUsersExceptCurrentUser(currentUserId);
+        }
 
         model.addAttribute("allUsers", allUsers);
         return "follow/allUsers"; // 전체 사용자 목록을 보여주는 HTML 페이지
+    }*/
+
+
+    /**
+     * 전체 사용자 검색(ajax 요청)
+     * @param query
+     * @return
+     */
+    @GetMapping("/searchUsers")
+    @ResponseBody
+    public List<MemberDTO> searchUsersAjax(@RequestParam("query") String query) {
+        String currentUserId = followService.getCurrentUserId();
+        List<MemberDTO> matchingUsers = followService.searchAllUsers(query, currentUserId);
+        return matchingUsers;
     }
 }
