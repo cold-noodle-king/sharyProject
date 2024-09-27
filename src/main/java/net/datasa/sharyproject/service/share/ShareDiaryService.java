@@ -8,15 +8,18 @@ import net.datasa.sharyproject.domain.dto.share.ShareDiaryDTO;
 import net.datasa.sharyproject.domain.dto.share.ShareMemberDTO;
 import net.datasa.sharyproject.domain.entity.member.MemberEntity;
 import net.datasa.sharyproject.domain.entity.CategoryEntity;
+import net.datasa.sharyproject.domain.entity.member.UserCategoryEntity;
 import net.datasa.sharyproject.domain.entity.personal.CoverTemplateEntity;
 import net.datasa.sharyproject.domain.entity.share.ShareDiaryEntity;
 import net.datasa.sharyproject.domain.entity.share.ShareMemberEntity;
 import net.datasa.sharyproject.repository.member.MemberRepository;
 import net.datasa.sharyproject.repository.CategoryRepository;
+import net.datasa.sharyproject.repository.member.UserCategoryRepository;
 import net.datasa.sharyproject.repository.personal.CoverTemplateRepository;
 import net.datasa.sharyproject.repository.share.ShareDiaryRepository;
 import net.datasa.sharyproject.repository.share.ShareMemberRepository;
 import net.datasa.sharyproject.security.AuthenticatedUser;
+import org.apache.catalina.User;
 import org.springframework.data.domain.Sort;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.stereotype.Service;
@@ -39,6 +42,7 @@ public class ShareDiaryService {
     private final CategoryRepository categoryRepository;
     private final LocalContainerEntityManagerFactoryBean entityManagerFactory;
     private final ShareMemberRepository shareMemberRepository;
+    private final UserCategoryRepository userCategoryRepository;
 
     /**
      * 생성한 다이어리를 저장하는 메서드
@@ -165,6 +169,75 @@ public class ShareDiaryService {
     }
 
     /**
+     * 사용자의 관심 카테고리별 다이어리 리스트를 가져오는 메서드
+     * @param user
+     * @return List<ShareDiaryDTO>
+     */
+    public List<ShareDiaryDTO> listedByUserCategory(AuthenticatedUser user) {
+        // 사용자의 UserCategory 리스트 가져오기
+        List<UserCategoryEntity> userCategories = userCategoryRepository.findByMember_MemberId(user.getUsername());
+
+        // 사용자의 관심 카테고리명 리스트 추출
+        List<String> categoryNames = userCategories.stream()
+                .map(uc -> uc.getCategory().getCategoryName())
+                .collect(Collectors.toList());
+
+
+        // 카테고리에 해당하는 다이어리 리스트 가져오기
+        List<ShareDiaryEntity> diaries = shareDiaryRepository.findByCategoryNames(categoryNames);
+
+        // ShareDiaryEntity를 ShareDiaryDTO로 변환하여 반환
+        return diaries.stream()
+                .map(this::convertEntityToDTO)  // 엔티티를 DTO로 변환하는 매퍼 메서드 가정
+                .collect(Collectors.toList());
+    }
+
+    public List<String> getUserCategories(AuthenticatedUser user){
+
+        // 사용자의 UserCategory 리스트 가져오기
+        List<UserCategoryEntity> userCategories = userCategoryRepository.findByMember_MemberId(user.getUsername());
+
+        // 사용자의 관심 카테고리명 리스트 추출
+        List<String> categoryNames = userCategories.stream()
+                .map(uc -> uc.getCategory().getCategoryName())
+                .collect(Collectors.toList());
+
+        log.debug("카테고리 이름 추출:{}", categoryNames);
+        return categoryNames;
+    }
+
+    /**
+     * 각 카테고리별 다이어리 리스트를 가져오는 메서드
+     * @param categoryName
+     * @return
+     */
+    public List<ShareDiaryDTO> getCategoryList(String categoryName){
+        Integer categoryNum = 0;
+        switch (categoryName){
+            case "일상":
+                categoryNum = 1; break;
+            case "여행":
+                categoryNum = 2; break;
+            case "육아":
+                categoryNum = 3; break;
+            case "연애":
+                categoryNum = 4; break;
+            case "취미":
+                categoryNum = 5; break;
+            case "운동":
+                categoryNum = 5; break;
+        }
+
+        List<ShareDiaryEntity> entity = shareDiaryRepository.findByCategory_CategoryNum(categoryNum);
+        log.debug("카테고리별 다이어리 리스트:{}", entity);
+
+        // ShareDiaryEntity를 ShareDiaryDTO로 변환하여 반환
+        return entity.stream()
+                .map(this::convertEntityToDTO)  // 엔티티를 DTO로 변환하는 매퍼 메서드 가정
+                .collect(Collectors.toList());
+    }
+
+    /**
      * 공유 다이어리 소개글을 저장하는 메서드
      * @param diaryNum
      * @param diaryBio
@@ -195,9 +268,6 @@ public class ShareDiaryService {
         MemberEntity memberEntity = memberRepository.findById(memberId)
                 .orElseThrow(() -> new EntityNotFoundException("사용자 정보를 찾을 수 없습니다."));
 
-        // 해당 다이어리와 멤버가 이미 가입 요청을 했는지 확인
-       /* Optional<ShareMemberEntity> existingRequest = shareMemberRepository
-                .findByShareDiary_ShareDiaryNumAndMember_MemberId(diaryNum, memberId);*/
 
         Optional<ShareDiaryEntity> existingRequest = shareMemberRepository
                 .findPendingShareDiaryByDiaryNumAndMemberId(diaryNum, memberId);
@@ -336,22 +406,4 @@ public class ShareDiaryService {
                 .build();
     }
 
-
-   /* private ShareDiaryDTO convertEntityToDTO(ShareDiaryEntity diary) {
-        return ShareDiaryDTO.builder()
-                .shareDiaryNum(diary.getShareDiaryNum())   // 다이어리 고유 번호
-                .shareDiaryName(diary.getShareDiaryName())                 // 다이어리 제목
-                .createdDate(diary.getCreatedDate())             // 다이어리 생성 날짜
-                .updatedDate(diary.getUpdatedDate())             // 다이어리 수정 날짜
-                .categoryNum(diary.getCategory().getCategoryNum()) // 카테고리 번호
-                .categoryName(diary.getCategory().getCategoryName()) // 카테고리 이름
-                .coverTemplateNum(diary.getCoverTemplate().getCoverNum())  // 커버 번호
-                .coverTemplateName(diary.getCoverTemplate().getCoverName()) // 커버 이름 (추가)
-                .memberId(diary.getMember().getMemberId())        // 회원 ID
-                .nickname(diary.getMember().getNickname())
-                .diaryBio(diary.getDiaryBio())
-                .shareMemberList(diary.setShareMemberList())
-                .build();
-    }
-*/
 }

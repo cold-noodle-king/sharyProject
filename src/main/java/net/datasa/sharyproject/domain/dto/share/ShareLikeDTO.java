@@ -5,8 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import net.datasa.sharyproject.domain.entity.member.MemberEntity;
-import net.datasa.sharyproject.domain.entity.share.ShareNoteEntity;
 
 @Builder
 @Data

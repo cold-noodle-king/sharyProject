@@ -284,7 +284,6 @@ public class ShareController {
 
     /**
      * 공유 다이어리 소개 멘트를 수정하는 메서드
-     *
      * @param diaryNum
      * @param diaryBio
      * @param user
@@ -315,6 +314,7 @@ public class ShareController {
      */
     @GetMapping("note")
     public String note(@RequestParam(value = "diaryNum", required = false) Integer diaryNum, Model model) {
+        log.debug("다이어리 넘버 확인:{}", diaryNum);
         if (diaryNum == null) {
             throw new RuntimeException("Diary number is missing");
         }
@@ -359,6 +359,8 @@ public class ShareController {
         ShareDiaryDTO diary = shareDiaryService.getDiary(diaryNum);
 
         // 감정 목록 가져오기
+
+
         List<EmotionDTO> emotions = emotionService.getAllEmotions();
 
         // 다이어리 카테고리에 맞는 해시태그 목록 가져오기
@@ -504,21 +506,92 @@ public class ShareController {
     public String listAll(@AuthenticationPrincipal AuthenticatedUser user, Model model) {
 
         List<ShareDiaryDTO> diaryList = shareDiaryService.getDiaryList();
+        List<String> categoryNames = shareDiaryService.getUserCategories(user);
+
         model.addAttribute("diaryList", diaryList);
+        model.addAttribute("categoryNames", categoryNames);
+        model.addAttribute("activeCategory", "전체");  // 전체 탭이 활성화되도록 설정
 
         log.debug("가져온 다이어리 리스트들 보여줘:{}", diaryList);
+        log.debug("가져온 유저별 카테고리:{}", categoryNames);
 
         return "share/listAll";
     }
 
+    /**
+     * 유저별 관심 카테고리 클릭 시 해당 카테고리를 가진 다이어리를 출력하는 메서드
+     * @param user
+     * @param model
+     * @param categoryName
+     * @return
+     */
     @GetMapping("listedByUserCategory")
-    public String listedByUserCategory(@AuthenticationPrincipal AuthenticatedUser user, Model model) {
+    public String listedByUserCategory(@AuthenticationPrincipal AuthenticatedUser user, Model model,
+                                       @RequestParam("categoryName") String categoryName) {
+
+        log.debug("가져온 카테고리 이름:{}", categoryName);
+
+        List<String> categoryNames = shareDiaryService.getUserCategories(user);
+        List<ShareDiaryDTO> categoryList = shareDiaryService.getCategoryList(categoryName);
+
+        model.addAttribute(user);
+        model.addAttribute("categoryNames", categoryNames);
+        model.addAttribute("diaryList", categoryList);
+        model.addAttribute("activeCategory", categoryName);  // 선택된 카테고리를 active로 설정
+
+        return "share/listAll";
+    }
+
+
+    /**
+     * 전체 공유 다이어리 리스트를 출력하는 메서드
+     *
+     * @param user
+     * @param model
+     * @return
+     *//*
+    @GetMapping("listAll")
+    public String listAll(@AuthenticationPrincipal AuthenticatedUser user, Model model) {
 
         List<ShareDiaryDTO> diaryList = shareDiaryService.getDiaryList();
+        List<String> categoryNames = shareDiaryService.getUserCategories(user);
+
         model.addAttribute("diaryList", diaryList);
+        model.addAttribute("categoryNames", categoryNames);
+
+        log.debug("가져온 다이어리 리스트들 보여줘:{}", diaryList);
+        log.debug("가져온 유저별 카테고리:{}", categoryNames);
 
         return "share/listAll";
     }
+
+    *//**
+     * 유저별 관심 카테고리 클릭 시 해당 카테고리를 가진 다이어리를 출력하는 메서드
+     * @param user
+     * @param model
+     * @param categoryName
+     * @return
+     *//*
+    @GetMapping("listedByUserCategory")
+    public String listedByUserCategory(@AuthenticationPrincipal AuthenticatedUser user, Model model,
+                                       @RequestParam("categoryName") String categoryName) {
+
+        log.debug("가져온 카테고리 이름:{}", categoryName);
+
+//        List<ShareDiaryDTO> diaryList = shareDiaryService.listedByUserCategory(user);
+        List<String> categoryNames = shareDiaryService.getUserCategories(user);
+        List<ShareDiaryDTO> categoryList = shareDiaryService.getCategoryList(categoryName);
+
+//        log.debug("유저별 다이어리리스트:{}", diaryList);
+
+        model.addAttribute(user);
+        model.addAttribute("categoryNames", categoryNames);
+        model.addAttribute("diaryList", categoryList);
+
+
+
+        return "share/listAll";
+    }*/
 
     /**
      * 좋아요 버튼 클릭 시 처리 메서드

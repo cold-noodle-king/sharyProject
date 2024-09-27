@@ -21,6 +21,26 @@ public interface ShareDiaryRepository extends JpaRepository<ShareDiaryEntity, In
     @Query("SELECT d FROM ShareDiaryEntity d LEFT JOIN FETCH d.shareMemberList WHERE d.shareDiaryNum = :diaryNum")
     Optional<ShareDiaryEntity> findByIdWithMembers(@Param("diaryNum") Integer diaryNum);
 
+    /*@Query("SELECT sd FROM ShareDiaryEntity sd " +
+            "JOIN ShareMemberEntity sm ON sm.shareDiary = sd " +
+            "JOIN UserCategoryEntity uc ON uc.member = sm.member " +
+            "JOIN CategoryEntity c ON uc.category = c " +
+            "WHERE sm.member.memberId = :memberId " +
+            "AND c.categoryName IN :categoryNames")
+    List<ShareDiaryEntity> findByMemberAndCategories(
+            @Param("memberId") String memberId,
+            @Param("categoryNames") List<String> categoryNames);
+*/
 
+    @Query("SELECT sd FROM ShareDiaryEntity sd " +
+            "JOIN sd.category c " +
+            "WHERE c.categoryName IN :categoryNames")
+    List<ShareDiaryEntity> findByCategoryNames(@Param("categoryNames") List<String> categoryNames);
 
+    @Query("SELECT sd FROM ShareDiaryEntity sd WHERE LOWER(sd.category.categoryName) LIKE LOWER(CONCAT('%', :categoryName, '%'))")
+    List<ShareDiaryEntity> findByCategoryNameContainingIgnoreCase(@Param("categoryName") String categoryName);
+
+    List<ShareDiaryEntity> findByCategory_CategoryNameContaining(String categoryName);
+
+    List<ShareDiaryEntity> findByCategory_CategoryNum(Integer categoryNum);
 }

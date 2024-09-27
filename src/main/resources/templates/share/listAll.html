@@ -1,55 +1,87 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
-    <title>공유 다이어리 리스트</title>
+    <title>공유 다이어리 둘러보기</title>
+
+    <!-- jQuery 로드 -->
     <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
+
+    <!-- css파일 불러오기 -->
+    <link href="/css/share/ShareDiaryList.css" rel="stylesheet">
+
+    <!-- moment.js 라이브러리 로드 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
     <script th:inline="javascript">
-        $(document).ready(function (){
-            //가입 요청 버튼 클릭 시 이벤트 처리
-            $('.joinBtn').on('click', function (){
+        $(document).ready(function () {
+            // 가입 요청 버튼 클릭 시 이벤트 처리
+            $('.joinBtn').on('click', function () {
                 let diaryNum = $(this).data('diary-num');
                 console.log(diaryNum);
 
-                if (!confirm('가입 요청하시겠습니까?')){
+                if (!confirm('가입 요청하시겠습니까?')) {
                     return false;
                 } else {
                     // AJAX 요청 보내기
                     $.ajax({
                         type: 'GET',
                         url: '/sharemember/join',
-                        data: { diaryNum: diaryNum },
-                        success: function(response) {
+                        data: {diaryNum: diaryNum},
+                        success: function (response) {
                             // 서버로부터 받은 msg 값으로 alert 창 띄우기
                             if (response) {
                                 alert(response);
                             }
                         },
-                        error: function(error) {
+                        error: function (error) {
                             console.log("에러 발생:", error);
                         }
                     });
                 }
-
             });
 
+
+
+
         });
+
     </script>
 
+    <!-- 부트스트랩 CSS 로드 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- 헤더와 푸터용 스타일 -->
+    <link th:href="@{/header/css/styles.css}" rel="stylesheet">
+    <link th:href="@{/footer/css/styles.css}" rel="stylesheet">
+
+    <!-- MyNote 페이지 전용 CSS 파일 -->
+    <link href="/css/share/MyNote.css" rel="stylesheet">
 </head>
 <body>
+<!-- 헤더 부분 불러오기 -->
+<div th:replace="~{fragments/header :: header}"></div>
+<br>
+<br>
+
+<!-- 메인 컨테이너 -->
+<div id="my-note-main" class="container mt-5">
     <div>
         <h2>공유 다이어리 둘러보기</h2>
     </div>
     <div>
-        <a th:href="@{/share/listAll}">전체</a>
-        <a></a>
-        <a>전체</a>
-        <a>전체</a>
+        <a th:href="@{/share/listAll}" th:classappend="${activeCategory == '전체'} ? 'active' : ''">전체</a>
+        <span th:each="category : ${categoryNames}">
+        <a th:href="@{/share/listedByUserCategory(categoryName=${category})}"
+           th:text="${category}"
+           th:classappend="${activeCategory == category} ? 'active' : ''"></a>
+    </span>
     </div>
+
     <div>
         <table>
+            <thead>
             <tr>
                 <td>No.</td>
                 <td>카테고리</td>
@@ -58,19 +90,34 @@
                 <td>소개글</td>
                 <td></td>
             </tr>
+            </thead>
             <tr th:each="diary, i : ${diaryList}">
                 <td th:text="${i.count}"></td>
+                <td>
+                    <img th:src="@{'/images/' + ${diary.coverTemplateName} + '.png'}" alt="커버 이미지" class="card-img-top">
+                </td>
                 <td th:text="${diary.categoryName}"></td>
                 <td th:text="${diary.shareDiaryName}"></td>
-                <td th:text="${diary.memberId}"></td>
+                <td th:text="${diary.nickname}"></td>
                 <td th:text="${diary.diaryBio}"></td>
                 <td>
                     <span th:if="${#authentication.name} != ${diary.memberId}">
-                        <button class="joinBtn" th:attr="data-diary-num=${diary.shareDiaryNum}">가입</button>
+                         <button class="joinBtn" th:attr="data-diary-num=${diary.shareDiaryNum}">가입</button>
                     </span>
                 </td>
             </tr>
         </table>
     </div>
+
+</div>
+
+<!-- 푸터 부분 불러오기 -->
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+<!-- 부트스트랩 JS 로드 -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- 노트 보기 JS -->
+<script th:src="@{/js/share/viewNote.js}"></script>
 </body>
 </html>
