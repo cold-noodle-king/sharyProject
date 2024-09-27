@@ -1,5 +1,6 @@
 package net.datasa.sharyproject.controller;
 
+import net.datasa.sharyproject.domain.dto.personal.PersonalLikeDTO;
 import net.datasa.sharyproject.domain.dto.personal.PersonalNoteDTO;
 import net.datasa.sharyproject.domain.dto.mypage.ProfileDTO;
 import net.datasa.sharyproject.service.PortfolioService;
@@ -7,9 +8,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class PortfolioController {
@@ -28,6 +28,10 @@ public class PortfolioController {
      */
     @GetMapping("/portfolio/viewNote/{noteNum}")
     public PersonalNoteDTO viewNoteDetails(@PathVariable("noteNum") Integer noteNum) {
+        // 노트 번호가 제대로 전달되는지 로그 확인
+        logger.info("컨트롤러에서 전달된 노트 번호: " + noteNum);
+
+        // 서비스에서 노트 정보를 가져와서 반환
         return portfolioService.getNoteByNum(noteNum);
     }
 
@@ -39,15 +43,48 @@ public class PortfolioController {
     @GetMapping("/portfolio/member/profile/{memberId}")
     public ResponseEntity<?> getMemberProfile(@PathVariable("memberId") String memberId) {
         try {
+            // 서비스에서 회원의 프로필 정보를 가져옴
             ProfileDTO profile = portfolioService.getMemberProfileById(memberId);
 
-            // 데이터가 제대로 반환되고 있는지 확인
-            System.out.println("Profile data: " + profile);
+            // 프로필 정보를 로그로 확인
+            logger.info("Profile data: " + profile);
 
+            // 성공 시 프로필 정보를 클라이언트에 반환
             return ResponseEntity.ok(profile);
         } catch (RuntimeException e) {
-            // 예외 메시지를 클라이언트로 전달
+            // 예외 발생 시 로그를 남기고, 404 상태로 클라이언트에 메시지 전달
+            logger.error("프로필 정보를 가져오는 중 오류 발생", e);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
+
+    // ========== 추가된 좋아요 관련 엔드포인트 ==========
+
+    // ========== 추가된 좋아요 관련 엔드포인트 ==========
+
+    /**
+     * 좋아요 상태를 토글하는 엔드포인트
+     * 사용자가 노트에 좋아요를 누르거나 취소할 수 있는 기능
+     * @param personalNoteNum 좋아요를 누를 노트 번호
+     * @param authentication 인증 정보 (로그인한 사용자)
+     * @return ResponseEntity<PersonalLikeDTO> - 좋아요 상태 정보 반환
+     */
+    @PostMapping("/portfolio/like/{personalNoteNum}")
+    public ResponseEntity<PersonalLikeDTO> toggleLike(
+            @PathVariable Integer personalNoteNum,
+            Authentication authentication) {
+        try {
+            String memberId = authentication.getName(); // 로그인한 사용자의 ID 가져오기
+
+            // 좋아요 상태를 토글하고, 결과를 DTO로 반환
+            PersonalLikeDTO likeDTO = portfolioService.toggleLike(personalNoteNum, memberId);
+
+            // 성공적으로 좋아요 상태를 변경한 경우, 새로운 상태를 클라이언트에 반환
+            return ResponseEntity.ok(likeDTO);
+        } catch (RuntimeException e) {
+            // 오류가 발생한 경우 로그를 남기고, 500 에러 상태로 클라이언트에 반환
+            logger.error("좋아요 상태 변경 중 오류 발생", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
 }
