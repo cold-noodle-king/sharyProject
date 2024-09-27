@@ -16,8 +16,12 @@
   <link th:href="@{/css/mypage/sideBar.css}" rel="stylesheet">
   <link th:href="@{/css/mypage/stats.css}" rel="stylesheet">
 
-  <!-- Chart.js 로드 -->
+  <!-- WordCloud.js 라이브러리 로드 -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/wordcloud2.js/1.0.6/wordcloud2.min.js"></script>
+
+  <!-- Chart.js 라이브러리 로드 -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 </head>
 <body>
 <div class="wrapper">
@@ -26,10 +30,10 @@
 
   <!-- 사이드바와 메인 콘텐츠를 포함하는 레이아웃 -->
   <div class="content">
-    <!-- 사이드바 유지 -->
+    <!-- 사이드바 -->
     <div class="sidebar">
       <div class="sidebar-content">
-        <!-- 프로필 이미지, 닉네임, 간단한 프로필 소개 -->
+        <!-- 프로필 이미지와 닉네임, 간단한 소개 -->
         <img src="/images/emotions/happy.png" alt="프로필사진" class="profile-img">
         <p class="nickname">사용자 닉네임</p>
         <p class="profile-intro">짧은 프로필 소개글</p>
@@ -39,64 +43,93 @@
         <a th:href="@{/mypage/message}">채팅</a>
         <a th:href="@{/mypage/stats}">통계</a>
       </div>
-      <!-- 회원탈퇴 항목 -->
+      <!-- 회원탈퇴 버튼 -->
       <div class="logout">
         <a th:href="@{/member/logout}">회원탈퇴</a>
       </div>
     </div>
 
-    <!-- 메인 콘텐츠 -->
+    <!-- 메인 콘텐츠 영역 -->
     <div class="main-content">
       <section class="page-content">
-        <h2>카테고리별 해시태그 사용 통계</h2>
+        <h2>콘텐츠별 통계</h2>
 
-        <!-- 카테고리 탭 -->
+        <!-- 최상단 탭: 해시태그와 다이어리 구분 -->
         <ul class="nav nav-tabs" id="categoryTab" role="tablist">
+          <!-- 해시태그 탭 -->
           <li class="nav-item">
-            <a class="nav-link active" id="category1-tab" data-bs-toggle="tab" href="#category1" role="tab" aria-controls="category1" aria-selected="true">일상</a>
+            <a class="nav-link active" id="hashtag-tab" data-bs-toggle="tab" href="#hashtag" role="tab" aria-controls="hashtag" aria-selected="true">해시태그</a>
           </li>
+          <!-- 다이어리 탭 -->
           <li class="nav-item">
-            <a class="nav-link" id="category2-tab" data-bs-toggle="tab" href="#category2" role="tab" aria-controls="category2" aria-selected="false">여행</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" id="category3-tab" data-bs-toggle="tab" href="#category3" role="tab" aria-controls="category3" aria-selected="false">육아</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" id="category4-tab" data-bs-toggle="tab" href="#category4" role="tab" aria-controls="category4" aria-selected="false">연애</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" id="category5-tab" data-bs-toggle="tab" href="#category5" role="tab" aria-controls="category5" aria-selected="false">취미</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" id="category6-tab" data-bs-toggle="tab" href="#category6" role="tab" aria-controls="category6" aria-selected="false">운동</a>
+            <a class="nav-link" id="diary-tab" data-bs-toggle="tab" href="#diary" role="tab" aria-controls="diary" aria-selected="false">다이어리</a>
           </li>
         </ul>
 
-        <!-- 각 카테고리에 해당하는 차트를 표시할 탭 콘텐츠 -->
+        <!-- 탭 콘텐츠 -->
         <div class="tab-content mt-4">
-          <!-- 일상 카테고리 -->
-          <div class="tab-pane fade show active" id="category1" role="tabpanel" aria-labelledby="category1-tab">
-            <canvas id="hashtagChart1" width="400" height="200"></canvas>
+          <!-- 해시태그 탭 콘텐츠 -->
+          <div class="tab-pane fade show active" id="hashtag" role="tabpanel" aria-labelledby="hashtag-tab">
+            <!-- 해시태그 카테고리별 탭 -->
+            <ul class="nav nav-tabs" id="hashtagCategoryTab" role="tablist">
+              <!-- 일상 카테고리 -->
+              <li class="nav-item">
+                <a class="nav-link active" id="category1-tab" data-bs-toggle="tab" href="#category1" role="tab" aria-controls="category1" aria-selected="true">일상</a>
+              </li>
+              <!-- 여행 카테고리 -->
+              <li class="nav-item">
+                <a class="nav-link" id="category2-tab" data-bs-toggle="tab" href="#category2" role="tab" aria-controls="category2" aria-selected="false">여행</a>
+              </li>
+              <!-- 육아 카테고리 -->
+              <li class="nav-item">
+                <a class="nav-link" id="category3-tab" data-bs-toggle="tab" href="#category3" role="tab" aria-controls="category3" aria-selected="false">육아</a>
+              </li>
+              <!-- 연애 카테고리 -->
+              <li class="nav-item">
+                <a class="nav-link" id="category4-tab" data-bs-toggle="tab" href="#category4" role="tab" aria-controls="category4" aria-selected="false">연애</a>
+              </li>
+              <!-- 취미 카테고리 -->
+              <li class="nav-item">
+                <a class="nav-link" id="category5-tab" data-bs-toggle="tab" href="#category5" role="tab" aria-controls="category5" aria-selected="false">취미</a>
+              </li>
+              <!-- 운동 카테고리 -->
+              <li class="nav-item">
+                <a class="nav-link" id="category6-tab" data-bs-toggle="tab" href="#category6" role="tab" aria-controls="category6" aria-selected="false">운동</a>
+              </li>
+            </ul>
+
+            <!-- 각 카테고리에 대한 워드 클라우드 -->
+            <div class="tab-content mt-4">
+              <!-- 일상 카테고리 워드 클라우드 -->
+              <div class="tab-pane fade show active" id="category1" role="tabpanel" aria-labelledby="category1-tab">
+                <canvas id="wordCloudCanvas1" width="500" height="500"></canvas>
+              </div>
+              <!-- 여행 카테고리 워드 클라우드 -->
+              <div class="tab-pane fade" id="category2" role="tabpanel" aria-labelledby="category2-tab">
+                <canvas id="wordCloudCanvas2" width="500" height="500"></canvas>
+              </div>
+              <!-- 육아 카테고리 워드 클라우드 -->
+              <div class="tab-pane fade" id="category3" role="tabpanel" aria-labelledby="category3-tab">
+                <canvas id="wordCloudCanvas3" width="500" height="500"></canvas>
+              </div>
+              <!-- 연애 카테고리 워드 클라우드 -->
+              <div class="tab-pane fade" id="category4" role="tabpanel" aria-labelledby="category4-tab">
+                <canvas id="wordCloudCanvas4" width="500" height="500"></canvas>
+              </div>
+              <!-- 취미 카테고리 워드 클라우드 -->
+              <div class="tab-pane fade" id="category5" role="tabpanel" aria-labelledby="category5-tab">
+                <canvas id="wordCloudCanvas5" width="500" height="500"></canvas>
+              </div>
+              <!-- 운동 카테고리 워드 클라우드 -->
+              <div class="tab-pane fade" id="category6" role="tabpanel" aria-labelledby="category6-tab">
+                <canvas id="wordCloudCanvas6" width="500" height="500"></canvas>
+              </div>
+            </div>
           </div>
-          <!-- 여행 카테고리 -->
-          <div class="tab-pane fade" id="category2" role="tabpanel" aria-labelledby="category2-tab">
-            <canvas id="hashtagChart2" width="400" height="200"></canvas>
-          </div>
-          <!-- 육아 카테고리 -->
-          <div class="tab-pane fade" id="category3" role="tabpanel" aria-labelledby="category3-tab">
-            <canvas id="hashtagChart3" width="400" height="200"></canvas>
-          </div>
-          <!-- 연애 카테고리 -->
-          <div class="tab-pane fade" id="category4" role="tabpanel" aria-labelledby="category4-tab">
-            <canvas id="hashtagChart4" width="400" height="200"></canvas>
-          </div>
-          <!-- 취미 카테고리 -->
-          <div class="tab-pane fade" id="category5" role="tabpanel" aria-labelledby="category5-tab">
-            <canvas id="hashtagChart5" width="400" height="200"></canvas>
-          </div>
-          <!-- 운동 카테고리 -->
-          <div class="tab-pane fade" id="category6" role="tabpanel" aria-labelledby="category6-tab">
-            <canvas id="hashtagChart6" width="400" height="200"></canvas>
+
+          <!-- 다이어리 탭 콘텐츠 -->
+          <div class="tab-pane fade" id="diary" role="tabpanel" aria-labelledby="diary-tab">
+            <canvas id="diaryChart" width="500" height="500"></canvas>
           </div>
         </div>
       </section>
