@@ -45,8 +45,8 @@ public class ShareDiaryEntity {
     @Column(name = "updated_date", nullable = false)
     private LocalDateTime updatedDate;
 
-    //다이어리 커버 정보 (외래키)
-    //다대일 관계. 다이어리 여러개가 하나의 커버를 참조한다.
+    //다이어리 카테고리 정보 (외래키)
+    //다대일 관계. 다이어리 여러개가 하나의 카테고리를 참조한다.
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_num", referencedColumnName = "category_num")
     private CategoryEntity category;
