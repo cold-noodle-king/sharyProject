@@ -1,0 +1,47 @@
+/* 헤더와 메인 콘텐츠 사이의 간격을 조정 */
+.wrapper {
+    padding-top: 50px;  /* 헤더와의 간격을 설정 (필요에 따라 조정 가능) */
+}
+
+/* 메인 콘텐츠 크기 조정 */
+.main-content {
+    max-width: 90%;  /* 메인 콘텐츠 너비를 전체의 80%로 설정 */
+    max-height: 50%;
+    margin: 0 auto;  /* 중앙 정렬 */
+    margin-top: 50px;
+}
+
+/* 메인 콘텐츠 영역에 약간의 패딩 추가 */
+.page-content {
+    padding: 20px;  /* 페이지 콘텐츠에 패딩 추가 */
+    background-color: #f9f9f9;  /* 배경색 설정 (필요에 따라 조정 가능) */
+    border-radius: 8px;  /* 약간의 둥근 모서리 */
+}
+
+/* 차트의 크기 조정 */
+canvas {
+    max-width: 100%;  /* 차트가 메인 콘텐츠 너비에 맞게 크기를 자동으로 조정 */
+    height: auto;     /* 높이를 자동으로 조정하여 비율 유지 */
+}
+
+/* 탭과 차트 사이 간격 조정 */
+.tab-content {
+    margin-top: 20px;  /* 탭과 차트 사이의 간격 조정 */
+}
+
+/* 프로필 이미지 및 사이드바 간격 조정 */
+.sidebar-content img.profile-img {
+    width: 80px;  /* 프로필 이미지 크기 */
+    margin-bottom: 20px;  /* 이미지 아래에 간격 추가 */
+}
+
+/* 모바일 및 작은 화면 대응 */
+@media (max-width: 768px) {
+    .main-content {
+        max-width: 95%;  /* 작은 화면에서는 메인 콘텐츠 너비를 95%로 설정 */
+    }
+
+    .sidebar-content {
+        font-size: 14px;  /* 작은 화면에서 사이드바 텍스트 크기 조정 */
+    }
+}

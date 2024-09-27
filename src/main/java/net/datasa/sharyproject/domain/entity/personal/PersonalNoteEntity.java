@@ -2,9 +2,11 @@ package net.datasa.sharyproject.domain.entity.personal;
 
 import jakarta.persistence.*;
 import lombok.*;
+import net.datasa.sharyproject.domain.entity.CategoryEntity;
 import net.datasa.sharyproject.domain.entity.EmotionEntity;
 import net.datasa.sharyproject.domain.entity.HashtagEntity;
 import net.datasa.sharyproject.domain.entity.member.MemberEntity;
+import net.datasa.sharyproject.domain.entity.member.UserCategoryEntity;
 import net.datasa.sharyproject.domain.entity.mypage.ProfileEntity;
 
 import java.sql.Timestamp;
@@ -103,4 +105,5 @@ public class PersonalNoteEntity {
     protected void onUpdate() {
         this.updatedDate = new Timestamp(System.currentTimeMillis());
     }
+
 }

@@ -111,26 +111,31 @@ document.addEventListener('DOMContentLoaded', function () {
     const emotionTracks = {
         "행복": [
             "spotify:track:60nZcImufyMA1MKQY3dcCH?si=85311777eb444bf2", // "Happy" - Pharrell Williams
-            "spotify:track:4ppKRxity3jJd2hGoVyD4u?si=1d117fb66d0c46f6", // "No make up" - 자이언티
-            "spotify:track:1pz24zu5H9A0S1a2NKT4F0?si=27f27692be264a27"  // "SoulMate" - ZICO
+            "spotify:track:7GVUmCP00eSsqc4tzj1sDD?si=f424ec6a8a254d7a",  // "come and get your love" - 아이유
+            "spotify:track:0GsRx0gPft6RmijIwMsKmG?si=31db09799cc04ffc",  // "금요일에 만나요" - 아이유
+            "spotify:track:4ppKRxity3jJd2hGoVyD4u?si=1d117fb66d0c46f6", // "No makeup" - 자이언티
+            "spotify:track:1pz24zu5H9A0S1a2NKT4F0?si=27f27692be264a27",  // "SoulMate" - ZICO
+            "spotify:track:15c7KZTrsCUxCQcOdUVELc?si=10985b832de64324",  // "우주를 줄게" - 볼빨간사춘기
+            "spotify:track:03qu1u4hDyepQQi2lNxCka?si=19b5f9fb31c54239"  // "신호등" - 이무진
+
         ],
         "슬픔": [
             "spotify:track:2njgIBj0nJ1UUFYNuW06et?si=5337a89a01644761", // "비가 오는 날엔" - 비스트 (B2ST)
             "spotify:track:1VnjByC7TUx5A73A4qtgoo?si=7e19abf3e28b4010", // "우산" - 에픽하이
             "spotify:track:4RqL3r72UOdolRaOwykb32?si=1e96cbbb917441aa", // "서쪽하늘" - 울랄라세션
-            "spotify:track:5UEnHoDYpsA3cEH4Rz4oXT", // "All I Want" - Kodaline
-            "spotify:track:6NpP18oTkDAFhzT7s3bJGW", // "Tears in Heaven" - Eric Clapton
+            "spotify:track:2zlgwqw8BLX2JGB76LIFeF?si=ddce96a8d98a4bff", // "그리워하다" - 비투비
+            "spotify:track:1tSE6WK5ZavbqYQoiPoeu0?si=209de55051124fec", // "이별길" - IKON
             "spotify:track:0Ryd8975WihbObpp5cPW1t"  // "Goodbye My Lover" - James Blunt
         ],
         "화남": [
-            "spotify:track:5ghIJDpPoe3CfHMGu71E6T", // "Smells Like Teen Spirit" - Nirvana
-            "spotify:track:2G7V7zsVDxg1yRsu7Ew9RJ", // "Lose Yourself" - Eminem
+            "spotify:track:6VRhkROS2SZHGlp0pxndbJ?si=50723db511c04566", // "Banggarang" - Skrillex
+            "spotify:track:6N9ZOtguCnnrvwH7zD82WJ?si=462667fe661a4330", // "GDFR" - Flo Rida
             "spotify:track:60a0Rd6pjrkxjPbaKzXjfq"  // "In the End" - Linkin Park
         ],
         "놀람": [
-            "spotify:track:3gkvM6A51Uydh0bNE3u8GC", // "Thunder" - Imagine Dragons
-            "spotify:track:2cGxRwrMyEAp8dEbuZaVv6", // "Thriller" - Michael Jackson
-            "spotify:track:2nLtzopw4rPReszdYBJU6h", // "Don't Stop Believin'" - Journey
+            "spotify:track:1zB4vmk8tFRmM9UULNzbLB?si=3b6aab2946d24c46", // "Thunder" - Imagine Dragons
+            "spotify:track:5mqzhMuUpvnMfwNz6iepmO?si=40961e65dc1f4a20", // "Welcome to the party" - Diplo
+            "spotify:track:3hm9Df6fGtYVPicuJulXyN?si=8f52a96de1f84094", // "celebrate'" - 핏불
             "spotify:track:4uLU6hMCjMI75M1A2tKUQC"  // "Bohemian Rhapsody" - Queen
         ],
         "두려움": [
@@ -141,7 +146,8 @@ document.addEventListener('DOMContentLoaded', function () {
         "사랑": [
             "spotify:track:6cxbaStUOFS9Ssz3bHVVDJ?si=5a294cebf2594738", // "사랑은 은하수 다방에서" - 10CM
             "spotify:track:1qosh64U6CR5ki1g1Rf2dZ?si=4fcbf310d0ca45db", // "Love Lee" - 악동뮤지션
-            "spotify:track:3U4isOIWM3VvDubwSI3y7a"  // "All of Me" - John Legend
+            "spotify:track:1rVPj9cryjgB7MdaU6sqN3?si=a81e49e89cc348b4",  // "봄봄봄" - 로이킴
+            "spotify:track:1rVPj9cryjgB7MdaU6sqN3?si=a81e49e89cc348b4"  // "Love Blossom" - K.WILL
         ]
     };
 

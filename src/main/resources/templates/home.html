@@ -53,8 +53,13 @@
 
 
 
+<!-- wave 섹션 -->
+<section id="wave" data-aos="fade-up" data-aos-duration="1000">
+    <div th:insert="fragments/wave_section :: wave_section"></div>
+</section>
+
 <!-- wave_animation.html의 파도 애니메이션 섹션 불러오기 -->
-<div class="animated-header" th:replace="~{fragments/wave_animation :: wave_animation}"></div>
+<!--<div class="animated-header" th:replace="~{fragments/wave_animation :: wave_animation}"></div>-->
 
 
 
@@ -68,8 +73,6 @@
 <!-- 페이지의 다른 콘텐츠 -->
 <section id="main-content" data-aos="fade-up">
     <div class="container">
-        <h1>Welcome to the Main Page</h1>
-        <p>This is the main content of the page.</p>
 
 
         <!-- 팝업 창 구조 -->
@@ -84,8 +87,11 @@
 
 
 
+
         <div th:replace="fragments/home_emotions :: home-emotions"></div>
 
+        <br>
+        <br>
         <!-- 버튼들을 감싸는 부모 요소 -->
         <div class="button-container">
             <!-- 첫 번째 "Spotify 로그인" 버튼 (OAuth 인증) -->
@@ -140,10 +146,6 @@
 </div>
 
 
-<!-- wave 섹션 -->
-<section id="wave" data-aos="fade-up" data-aos-duration="1000">
-    <div th:insert="fragments/wave_section :: wave_section"></div>
-</section>
 
 
 
