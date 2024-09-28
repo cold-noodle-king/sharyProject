@@ -39,6 +39,7 @@ public class MypageController {
      */
     @GetMapping("mypageView")
     public String mypage(@AuthenticationPrincipal AuthenticatedUser user, Model model) {
+
         MemberDTO memberDTO = memberService.getMember(user.getUsername());
         model.addAttribute("member", memberDTO);
 
@@ -227,5 +228,44 @@ public class MypageController {
     @GetMapping("message")
     public String message() {
         return "mypage/message";
+    }
+
+    /**
+     * 모달용 프로필 페이지
+     * @param model
+     * @param user 현재 로그인 중인 유저
+     * @return modal에 필요한 데이터를 전달하는 메서드
+     */
+    @GetMapping("/profile/modal")
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> profileModal(@AuthenticationPrincipal AuthenticatedUser user) {
+        if (user == null) {
+            log.error("인증된 사용자가 없습니다.");
+            return ResponseEntity.badRequest().build();
+        }
+
+        String username = user.getUsername();
+        MemberEntity member = memberService.findById(username)
+                .orElseThrow(() -> new RuntimeException("사용자 (" + username + ")를 찾을 수 없습니다."));
+
+        // 프로필 정보를 데이터베이스에서 가져옴
+        ProfileEntity profile = profileService.findByMember(member)
+                .orElseGet(() -> {
+                    ProfileEntity defaultProfile = ProfileEntity.builder()
+                            .member(member)
+                            .profilePicture("/images/profile.png")  // 기본 이미지 설정
+                            .ment("기본 소개글")  // 기본 소개글 설정
+                            .build();
+                    profileService.saveProfile(defaultProfile);
+                    return defaultProfile;
+                });
+
+        // 프로필 정보를 JSON으로 반환
+        Map<String, Object> response = new HashMap<>();
+        response.put("profilePicture", profile.getProfilePicture());
+        response.put("nickname", member.getNickname());  // 멤버의 닉네임
+        response.put("ment", profile.getMent());
+
+        return ResponseEntity.ok(response);
     }
 }

@@ -1,0 +1,76 @@
+/* 메인 카드 스타일 */
+.card {
+    background-color: rgba(30, 30, 30, 0.8); /* 투명도 있는 다크 배경 */
+    border-radius: 10px; /* 모서리 둥글게 */
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* 그림자 */
+    color: white;
+    padding: 20px;
+    text-align: center;
+    width: 100%; /* 전체 너비 사용 */
+    max-width: 600px; /* 카드의 최대 너비를 설정하여 너무 넓지 않게 */
+    margin: auto; /* 수평 중앙 정렬 */
+}
+
+/* 카테고리 버튼 스타일 */
+.cat-btn {
+    background-color: #6c757d; /* 기본적으로 회색 */
+    color: #ffffff;
+    border-radius: 30px; /* 둥근 모서리 */
+    padding: 10px 20px;
+    margin: 10px; /* 버튼 간격 */
+    font-size: 16px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* 선택된 버튼 - 파란색 */
+.btn-primary {
+    background-color: #007bff; /* 파란색 */
+    border: none;
+}
+
+/* 기본 버튼 - 회색 */
+.btn-secondary {
+    background-color: #6c757d; /* 회색 */
+    border: none;
+}
+
+/* 저장 및 취소 버튼 스타일 */
+.btn-group button {
+    background-color: #6c757d;
+    color: #ffffff;
+    border: none;
+    border-radius: 20px;
+    padding: 10px 20px;
+    font-size: 18px;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: background-color 0.3s ease;
+}
+
+.btn-group button:hover {
+    background-color: #adb5bd;
+}
+
+/* 취소 버튼 링크 스타일링 */
+.btn-group a {
+    color: #ffffff;
+    text-decoration: none;
+}
+
+.btn-group a:hover {
+    color: #adb5bd;
+}
+
+/* 메인 컨테이너에 최소 높이 추가 */
+#main {
+    display: flex;
+    justify-content: center; /* 수평 중앙 정렬 */
+    align-items: center; /* 수직 중앙 정렬 */
+    min-height: 100vh; /* 화면 전체 높이 설정 */
+    padding: 20px; /* 내부 패딩 */
+    box-sizing: border-box; /* 패딩을 포함한 크기 계산 */
+}
+
+header {
+    margin-bottom: 40px; /* 헤더 아래에 40px의 여백 추가 */
+}
