@@ -29,8 +29,35 @@ $(document).ready(function() {
                 var formattedDate = diaryDate.getFullYear() + '년 ' + (diaryDate.getMonth() + 1) + '월 ' + diaryDate.getDate() + '일';
                 $('#noteDate').text(formattedDate);
 
+                /*// 감정 정보 설정
+                $('#noteEmotion').text(response.emotionName);*/
+
                 // 감정 정보 설정
-                $('#noteEmotion').text(response.emotionName);
+                var emotionIcon;
+                switch(response.emotionName) {
+                    case '기쁨':
+                        emotionIcon = '😊'; // 기쁨 아이콘
+                        break;
+                    case '슬픔':
+                        emotionIcon = '😢'; // 슬픔 아이콘
+                        break;
+                    case '화남':
+                        emotionIcon = '😠'; // 화남 아이콘
+                        break;
+                    case '놀람':
+                        emotionIcon = '😮'; // 놀람 아이콘
+                        break;
+                    case '두려움':
+                        emotionIcon = '😱'; // 두려움 아이콘
+                        break;
+                    case '사랑':
+                        emotionIcon = '❤️'; // 사랑 아이콘
+                        break;
+                    default:
+                        emotionIcon = '😐'; // 기본 아이콘
+                        break;
+                }
+                $('#noteEmotion').html(emotionIcon); // 감정 아이콘 삽입
 
                 // 노트 내용 설정
                 $('#noteContents').text(response.contents);

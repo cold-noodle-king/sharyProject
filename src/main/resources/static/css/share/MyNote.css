@@ -116,7 +116,7 @@
     padding: 20px; /* 내부 여백 */
     background-color: rgba(255, 255, 255, 0.8); /* 흰 배경의 투명도 */
     border-radius: 12px; /* 모서리 둥글게 */
-    max-width: 90%; /* 너비 조정 - 좌우 줄임 */
+    max-width: 80%; /* 너비 조정 - 좌우 줄임 */
     margin: 0 auto; /* 중앙 정렬 */
     box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
 }
