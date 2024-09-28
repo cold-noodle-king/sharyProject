@@ -106,3 +106,54 @@
     margin: 0 auto; /* 중앙 정렬 */
     box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
 }
+
+/* 좋아요 버튼 스타일링 */
+/* 좋아요 버튼 스타일 수정 (하트 아이콘만 표시) */
+#likeButton {
+    padding: 10px 20px; /* 버튼의 padding을 적절히 설정 */
+    font-size: 1.2rem; /* 아이콘 및 숫자의 크기를 조정 */
+    border-radius: 50px; /* 둥근 버튼 스타일 */
+    background-color: #fff; /* 버튼 배경색 */
+    color: #e74c3c; /* 아이콘과 숫자의 색을 빨간색으로 설정 */
+    border: 2px solid #e74c3c; /* 버튼의 테두리도 빨간색으로 설정 */
+}
+
+/* 좋아요 버튼 호버 시 배경색 변화 */
+#likeButton:hover {
+    background-color: #ff6b6b; /* 호버 시 배경색 변경 */
+    color: #fff; /* 호버 시 아이콘 색상 흰색으로 변경 */
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15); /* 호버 시 그림자 강화 */
+}
+
+/* 하트 아이콘 및 숫자 정렬 조정 */
+#likeButton i {
+    margin-right: 5px; /* 아이콘과 숫자 간격 조정 */
+    font-size: 1.5rem; /* 아이콘 크기 조정 */
+}
+
+/* 좋아요 수 스타일 (좋아요 수: ♥ 1 의 형태는 유지) */
+#likeStatus {
+    font-size: 1rem; /* 좋아요 수 글자 크기 */
+    color: #333; /* 글자 색상 */
+    margin-top: 8px; /* 버튼과 좋아요 수 사이의 간격 */
+    font-weight: bold; /* 좋아요 수를 굵게 */
+    text-align: center; /* 중앙 정렬 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* 좋아요 수 텍스트만 별도로 스타일링 */
+#likeCountText {
+    font-size: 1.2rem; /* 숫자의 크기를 아이콘과 어울리게 조정 */
+    font-weight: bold; /* 숫자를 굵게 표시 */
+}
+
+/* 좋아요 수 텍스트를 아이콘처럼 배경을 추가 */
+#likeCountText:before {
+    content: "♥"; /* 좋아요 아이콘 (하트) 추가 */
+    color: #ff6b6b; /* 하트 색상 */
+    margin-right: 5px; /* 숫자와 하트 사이 간격 */
+    font-size: 1.3rem; /* 하트 아이콘 크기 */
+    vertical-align: middle; /* 텍스트와 수평 맞춤 */
+}

@@ -1,6 +1,5 @@
 <!-- 노트 보기 모달 -->
 <div th:fragment="modals">
-    <!-- 노트 보기 모달 -->
     <div class="modal fade" id="customPortfolioModal" tabindex="-1" aria-labelledby="customModalNoteTitle" aria-hidden="true">
         <div class="modal-dialog custom-modal-xxl">
             <div class="modal-content">
@@ -17,18 +16,18 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <!-- 탭 콘텐츠 -->
+                    <!-- 노트 번호 및 좋아요 수를 저장하는 hidden input -->
+                    <input type="hidden" id="hiddenNoteNum">
+                    <input type="hidden" id="hiddenLikeCount">
+
                     <div class="tab-content" id="modalTabContent">
                         <!-- 노트 내용 탭 -->
                         <div class="tab-pane fade show active" id="noteContent" role="tabpanel" aria-labelledby="note-tab">
-                            <!-- 배경 이미지 및 흰 배경 div 구성 -->
                             <div class="custom-note-background" id="customNoteContentModal">
-                                <!-- 흰 배경 div 추가 -->
                                 <div class="custom-white-background">
                                     <!-- 프로필 이미지 및 위치/날짜/감정 섹션 -->
                                     <div class="d-flex align-items-center mb-4 custom-profile-section">
                                         <div class="custom-profile-image me-3">
-                                            <!-- 프로필 이미지에 data-member-id 속성 추가 -->
                                             <img id="customModalProfilePicture" src="/images/default_profile.png" class="rounded-circle" width="60" height="60" alt="프로필" data-member-id="">
                                         </div>
                                         <div class="w-100">
@@ -48,6 +47,15 @@
                                     <!-- 내용 섹션 -->
                                     <div class="custom-content-section">
                                         <p id="customModalContents">[내용]</p>
+                                    </div>
+
+                                    <!-- 좋아요 버튼 및 좋아요 수 표시 -->
+                                    <div class="d-flex flex-column align-items-center mb-3">
+                                        <!-- 좋아요 버튼 (아이콘과 숫자가 자연스럽게 표시되도록 수정) -->
+                                        <button id="likeButton" class="btn btn-outline-primary d-flex align-items-center">
+                                            <i class="bi bi-heart"></i> <!-- 하트 아이콘 -->
+                                            <span id="likeCountText" class="ms-2">0</span> <!-- 좋아요 숫자 -->
+                                        </button>
                                     </div>
 
                                     <!-- 해시태그 섹션 -->
@@ -70,7 +78,6 @@
                         </div>
                     </div>
                 </div>
-                <!-- 모달 footer가 필요하다면 추가 -->
             </div>
         </div>
     </div>

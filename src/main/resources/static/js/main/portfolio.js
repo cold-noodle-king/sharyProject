@@ -4,14 +4,20 @@ $(document).ready(function () {
         e.preventDefault(); // 기본 클릭 동작 방지
 
         var noteNum = $(this).data('note-num'); // 클릭된 노트의 번호 가져오기
+        console.log('노트 번호:', noteNum); // 노트 번호 콘솔 출력 (디버깅용)
 
         // 노트 데이터를 가져오는 Ajax 요청
         $.ajax({
             url: '/portfolio/viewNote/' + noteNum, // 해당 노트 데이터를 요청할 URL
             type: 'GET',
             success: function (response) {
-                // 노트 모달에 데이터 삽입
+                // 노트 번호 및 좋아요 수를 hidden input에 저장
+                $('#hiddenNoteNum').val(noteNum);
+                $('#hiddenLikeCount').val(response.likeCount || 0);
+
+                // 모달에 데이터 삽입
                 $('#customModalNoteTitle').text(response.noteTitle);
+                console.log('모달에 설정된 노트 번호:', noteNum); // 모달에 설정된 노트 번호 로그 출력
 
                 // 위치 및 날짜 출력
                 $('#customModalLocation').text(response.location);
@@ -40,6 +46,7 @@ $(document).ready(function () {
                         .attr('src', profilePicturePath)
                         .data('member-id', response.memberId) // member-id 추가
                         .show();
+                    console.log('모달에 설정된 사용자 ID:', response.memberId); // 사용자 ID 로그 출력
                 } else {
                     $('#customModalProfilePicture').hide();
                 }
@@ -54,7 +61,6 @@ $(document).ready(function () {
                 // 노트 배경 이미지 설정 (노트 템플릿이 있을 경우)
                 if (response.noteTemplate && response.noteTemplate.noteImage) {
                     var noteImagePath = '/images/' + response.noteTemplate.noteImage;
-                    console.log('배경 이미지 파일 경로:', noteImagePath);  // 로그로 경로 확인
                     $('#customNoteContentModal').css('background-image', 'url(' + noteImagePath + ')');
                 } else {
                     console.error('배경 이미지 파일 이름이 없습니다.');
@@ -68,6 +74,10 @@ $(document).ready(function () {
                 response.hashtags.forEach(function (tag) {
                     $('#customModalHashtags').append('<span class="badge bg-secondary me-1">' + tag + '</span>'); // 해시태그 추가
                 });
+
+                // 좋아요 수 초기화 및 설정
+                $('#likeCount').text(response.likeCount || 0); // 서버에서 좋아요 수를 받아서 설정
+                $('#likeCountText').text(response.likeCount || 0);
 
                 // 모달 열기
                 $('#customPortfolioModal').modal('show'); // 노트 모달 표시
@@ -126,5 +136,36 @@ $(document).ready(function () {
         $('#profile-tab').trigger('click');
         // 프로필 탭으로 자동 전환
         $('#modalTab a[href="#profileContent"]').tab('show');
+    });
+
+    // 좋아요 버튼 처리 로직
+    $(document).on('click', '#likeButton', function () {
+        var noteNum = $('#hiddenNoteNum').val(); // 노트 번호 가져오기
+
+        // 현재 좋아요 수 가져오기
+        var likeCnt = parseInt($('#hiddenLikeCount').val());
+
+        $.ajax({
+            url: '/portfolio/like/' + noteNum, // 수정된 URL
+            type: 'POST',
+            dataType: 'json',
+            success: function (res) {
+                if (res.likeClicked === false) {
+                    // 좋아요 취소된 경우
+                    alert('좋아요가 취소되었습니다.');
+                } else {
+                    // 좋아요 된 경우
+                    alert('좋아요를 눌렀습니다.');
+                }
+                likeCnt = res.likeCount;
+                $('#likeCount').html(likeCnt);  // 새로운 좋아요 수 업데이트
+                $('#likeCountText').text(likeCnt);  // 좋아요 수 텍스트 업데이트
+                $('#hiddenLikeCount').val(likeCnt);  // 숨겨진 필드에 새로운 좋아요 수 설정
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.error('좋아요 요청 중 오류 발생:', textStatus, errorThrown);
+                alert('좋아요 처리 중 오류가 발생했습니다.');
+            }
+        });
     });
 });
