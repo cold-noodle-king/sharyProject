@@ -116,11 +116,12 @@
                             <img src="/images/profile.png" class="rounded-circle" width="50" height="50" alt="프로필">
                         </div>
                         <div class="w-100">
-                            <p id="noteLocation">[위치]</p> <!-- 위치 텍스트 (추후 수정 가능) -->
+
                             <div class="date-emotion-section">
-                                <span id="noteDate">[작성일]</span> <!-- 작성일 텍스트 -->
-                                <span id="noteEmotion" class="ms-3">[감정]</span> <!-- 감정 텍스트 -->
+                                <span id="nickname"></span> <span>작성일: <span id="createdDate"></span></span> <p><span id="noteDate">[작성일]</span> <!-- 작성일 텍스트 -->
+                                <span id="noteEmotion" class="ms-3">[감정]</span></p> <!-- 감정 텍스트 -->
                             </div>
+                            <p id="noteLocation">[위치]</p> <!-- 위치 텍스트 (추후 수정 가능) -->
                         </div>
                     </div>
 
@@ -143,22 +144,16 @@
                     <div id="likeBox">
                         <input type="hidden" id="cnt">
                         <div class="emoji-buttons">
-                            <span class="likeBtn" data-emoji="😊">😊</span>
-                            <span class="likeBtn" data-emoji="😢">😢</span>
-                            <span class="likeBtn" data-emoji="😠">😠</span>
-                            <span class="likeBtn" data-emoji="😮">😮</span>
-                            <span class="likeBtn" data-emoji="😱">😱</span>
+                            <span class="likeBtn" data-emoji="1">😊</span><span id="joyCnt"></span>
+                            <span class="likeBtn" data-emoji="2">😍</span><span id="loveCnt"></span>
+                            <span class="likeBtn" data-emoji="3">😢</span><span id="sadCnt"></span>
+                            <span class="likeBtn" data-emoji="4">😡</span><span id="angryCnt"></span>
+                            <span class="likeBtn" data-emoji="5">😮</span><span id="wowCnt"></span>
                         </div>
                         <p>공감❤️<span id="likeCnt"></span></p>
                     </div>
 
 
-
-                    <!--&lt;!&ndash; 좋아요 버튼 섹션 &ndash;&gt;
-                    <div id="likeBox">
-                        <input type="hidden" id="cnt">
-                        <button class="likeBtn">좋아요</button><p id="likeCnt"></p>
-                    </div>-->
                 </div> <!-- content-wrapper 끝 -->
 
                 <br>

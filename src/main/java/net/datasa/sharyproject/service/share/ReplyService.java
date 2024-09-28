@@ -67,5 +67,17 @@ public class ReplyService {
         replyRepository.save(entity);
     }
 
+    public void delete(ReplyDTO dto) throws Exception{
+
+        ReplyEntity entity = replyRepository.findById(dto.getReplyNum())
+                .orElseThrow(() -> new RuntimeException("삭제할 수 없습니다."));
+
+        if (entity.getMember().getMemberId().equals(dto.getMemberId())) {
+            replyRepository.delete(entity);
+        } else {
+            throw new EntityNotFoundException("삭제할 수 없습니다.");
+        }
+    }
+
 
 }

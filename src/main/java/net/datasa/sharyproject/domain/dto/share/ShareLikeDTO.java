@@ -18,4 +18,5 @@ public class ShareLikeDTO {
     private Integer shareNoteNum;
     private String memberId;
     private boolean likeClicked;
+    private String emotionName;
 }

@@ -359,8 +359,6 @@ public class ShareController {
         ShareDiaryDTO diary = shareDiaryService.getDiary(diaryNum);
 
         // 감정 목록 가져오기
-
-
         List<EmotionDTO> emotions = emotionService.getAllEmotions();
 
         // 다이어리 카테고리에 맞는 해시태그 목록 가져오기
@@ -542,70 +540,23 @@ public class ShareController {
         return "share/listAll";
     }
 
-
-    /**
-     * 전체 공유 다이어리 리스트를 출력하는 메서드
-     *
-     * @param user
-     * @param model
-     * @return
-     *//*
-    @GetMapping("listAll")
-    public String listAll(@AuthenticationPrincipal AuthenticatedUser user, Model model) {
-
-        List<ShareDiaryDTO> diaryList = shareDiaryService.getDiaryList();
-        List<String> categoryNames = shareDiaryService.getUserCategories(user);
-
-        model.addAttribute("diaryList", diaryList);
-        model.addAttribute("categoryNames", categoryNames);
-
-        log.debug("가져온 다이어리 리스트들 보여줘:{}", diaryList);
-        log.debug("가져온 유저별 카테고리:{}", categoryNames);
-
-        return "share/listAll";
-    }
-
-    *//**
-     * 유저별 관심 카테고리 클릭 시 해당 카테고리를 가진 다이어리를 출력하는 메서드
-     * @param user
-     * @param model
-     * @param categoryName
-     * @return
-     *//*
-    @GetMapping("listedByUserCategory")
-    public String listedByUserCategory(@AuthenticationPrincipal AuthenticatedUser user, Model model,
-                                       @RequestParam("categoryName") String categoryName) {
-
-        log.debug("가져온 카테고리 이름:{}", categoryName);
-
-//        List<ShareDiaryDTO> diaryList = shareDiaryService.listedByUserCategory(user);
-        List<String> categoryNames = shareDiaryService.getUserCategories(user);
-        List<ShareDiaryDTO> categoryList = shareDiaryService.getCategoryList(categoryName);
-
-//        log.debug("유저별 다이어리리스트:{}", diaryList);
-
-        model.addAttribute(user);
-        model.addAttribute("categoryNames", categoryNames);
-        model.addAttribute("diaryList", categoryList);
-
-
-
-        return "share/listAll";
-    }*/
-
     /**
      * 좋아요 버튼 클릭 시 처리 메서드
-     * @param num
+     * @param noteNum
      * @param user
      * @return
      */
     @ResponseBody
-    @PostMapping("like")
-    public LikeResponseDTO like(@RequestParam("num") Integer num
-                              , @AuthenticationPrincipal AuthenticatedUser user){
+    @PostMapping("/like")
+    public LikeResponseDTO like(@RequestParam("noteNum") Integer noteNum,
+                                @RequestParam("emotionNum") Integer emotionNum,
+                                @AuthenticationPrincipal AuthenticatedUser user) {
 
-        // 리턴타입 LikeResponseDTO 로 바꾸기
-        return shareNoteService.like(num, user.getUsername());
+        // 좋아요 서비스 호출
+        LikeResponseDTO dto = shareNoteService.like(noteNum, emotionNum, user.getUsername());
+        log.debug("보낼 dto: {}", dto);
+
+        return dto;
     }
 
 }
