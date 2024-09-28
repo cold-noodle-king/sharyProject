@@ -51,11 +51,11 @@
                     <td>가입일</td>
                 </tr>
                 <tr th:each="list, i : ${list}">
+                    <td th:text="${i.count}"></td>
                     <td>
                         <img th:src="${profile?.profilePicture != null} ? ${profile.profilePicture} : '/images/profile.png'"
                              alt="프로필 사진" class="profile-img">
                     </td>
-                    <td th:text="${i.count}"></td>
                     <td th:text="${list.nickname}"></td>
                     <td th:text="${list.memberId}"></td>
                     <td th:text="${#temporals.format(list.joinDate, 'yyyy-MM-dd')}"></td>

@@ -144,21 +144,32 @@ $(document).ready(function() {
     $(document).on('click', '.likeBtn', function (){
         let noteNum = $('#noteNum').val(); // 숨겨진 입력 필드에서 noteNum 가져오기
         let likeCnt = $('#cnt').val();
+
+        // 클릭한 이모지 가져오기 (선택 사항)
+        const emoji = $(this).data('emoji');
+        console.log(`Clicked emoji: ${emoji}`);  // 클릭된 이모지 콘솔 출력
+
         $.ajax({
             url: 'like',
             type: 'post',
-            data: {num: noteNum},
+            data: {num: noteNum}, // noteNum 서버로 전송
             dataType: 'json',
             success: function (res) {
                 console.log(res.liked);
                 if (res.liked === true){
                     alert('이미 추천한 게시물입니다.');
+                } else {
+                    $('#cnt').val(res.cnt); // 좋아요 수 갱신
+                    $('#likeCnt').html(res.cnt);
                 }
-                $('#likeCnt').html(JSON.stringify(res.cnt));
+            },
+            error: function (err) {
+                console.error('좋아요 처리 중 오류:', err);
             }
         });
-
     });
+
+
 
 });
     // 댓글 목록 출력 함수
