@@ -118,7 +118,7 @@ $(document).ready(function () {
                     ? profileResponse.profilePicture.startsWith('/uploads/profile/')
                         ? profileResponse.profilePicture
                         : '/uploads/profile/' + profileResponse.profilePicture
-                    : '/images/default_profile.png';
+                    : '/images/profile.png';
 
                 $('#profileModalImage').attr('src', profilePicturePath);
                 $('#profileModalNickname').text(profileResponse.nickname || '');
