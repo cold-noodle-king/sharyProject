@@ -107,6 +107,7 @@ public class SseController {
                     .sender(null)
                     .content(notification.getContent())
                     .createdAt(notification.getCreatedAt())
+                    .notificationType(notification.getNotificationType()) // 추가
                     .build());
         }
 

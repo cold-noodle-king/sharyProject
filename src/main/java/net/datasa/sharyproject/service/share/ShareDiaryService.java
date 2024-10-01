@@ -12,12 +12,15 @@ import net.datasa.sharyproject.domain.entity.member.UserCategoryEntity;
 import net.datasa.sharyproject.domain.entity.personal.CoverTemplateEntity;
 import net.datasa.sharyproject.domain.entity.share.ShareDiaryEntity;
 import net.datasa.sharyproject.domain.entity.share.ShareMemberEntity;
+import net.datasa.sharyproject.domain.entity.sse.NotificationEntity; //추가
+import net.datasa.sharyproject.service.sse.SseService;  // 추가
 import net.datasa.sharyproject.repository.member.MemberRepository;
 import net.datasa.sharyproject.repository.CategoryRepository;
 import net.datasa.sharyproject.repository.member.UserCategoryRepository;
 import net.datasa.sharyproject.repository.personal.CoverTemplateRepository;
 import net.datasa.sharyproject.repository.share.ShareDiaryRepository;
 import net.datasa.sharyproject.repository.share.ShareMemberRepository;
+import net.datasa.sharyproject.repository.sse.NotificationRepository;
 import net.datasa.sharyproject.security.AuthenticatedUser;
 import org.apache.catalina.User;
 import org.springframework.data.domain.Sort;
@@ -29,6 +32,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+
+
 
 @Slf4j
 @RequiredArgsConstructor
@@ -44,6 +50,10 @@ public class ShareDiaryService {
     private final ShareMemberRepository shareMemberRepository;
     private final UserCategoryRepository userCategoryRepository;
 
+    // 추가된 부분(윤조 알림)
+    private final SseService sseService;
+    private final NotificationRepository notificationRepository;
+    
     /**
      * 생성한 다이어리를 저장하는 메서드
      * @param shareDiaryDTO 생성한 다이어리 정보를 담은 DTO
@@ -297,6 +307,23 @@ public class ShareDiaryService {
 
         // 새로운 요청 저장
         shareMemberRepository.save(shareMemberEntity);
+
+        // **가입 요청 알림 생성 및 전송**
+        MemberEntity managerEntity = shareDiaryEntity.getMember(); // 다이어리 매니저 정보
+        String message = memberEntity.getNickname() + "님이 공유 다이어리 가입을 요청했습니다";
+
+        // 알림 엔티티 생성 및 저장
+        NotificationEntity notification = NotificationEntity.builder()
+                .receiver(managerEntity)
+                .content(message)
+                .createdAt(LocalDateTime.now())
+                .isRead(false)
+                .notificationType("join_request")
+                .build();
+        notificationRepository.save(notification);
+
+        // SSE 알림 전송
+        sseService.sendNotification(managerEntity.getMemberId(), message, "join_request");
     }
 
 
@@ -329,13 +356,39 @@ public class ShareDiaryService {
      */
     public void acceptRegister(Integer diaryNum, String memberId){
         // 공유 멤버 엔티티 조회
-        ShareMemberEntity entity = shareMemberRepository.ShareDiary_shareDiaryNumAndMember_memberId(diaryNum, memberId);
+        ShareMemberEntity entity = shareMemberRepository
+                .findByShareDiary_ShareDiaryNumAndMember_MemberId(diaryNum, memberId)
+                .orElseThrow(() -> new EntityNotFoundException("가입 요청을 찾을 수 없습니다."));
 
         log.debug("가져온 회원 정보:{}", entity);
+
+        // 상태를 ACCEPTED로 변경하고 가입 날짜 설정
         entity.setStatus("ACCEPTED");
         entity.setJoinDate(LocalDateTime.now());
 
+        // 변경된 엔티티를 저장
+        shareMemberRepository.save(entity);
+
+        // 가입 수락 알림 생성 및 전송
+        MemberEntity requester = entity.getMember(); // 가입 요청한 사용자
+        MemberEntity manager = entity.getManager();  // 다이어리 매니저
+
+        String message = manager.getNickname() + "님이 공유 다이어리 가입 요청을 수락했습니다.";
+
+        // 알림 엔티티 생성 및 저장
+        NotificationEntity notification = NotificationEntity.builder()
+                .receiver(requester)
+                .content(message)
+                .createdAt(LocalDateTime.now())
+                .isRead(false)
+                .notificationType("join_accept")
+                .build();
+        notificationRepository.save(notification);
+
+        // SSE 알림 전송
+        sseService.sendNotification(requester.getMemberId(), message, "join_accept");
     }
+
 
     public List<ShareMemberDTO> getMemberList(Integer diaryNum, String memberId){
         // 공유 다이어리 엔티티 조회

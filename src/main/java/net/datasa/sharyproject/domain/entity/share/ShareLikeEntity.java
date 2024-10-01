@@ -33,4 +33,7 @@ public class ShareLikeEntity {
 
     @Column(name = "like_clicked", columnDefinition = "tinyint(1) default 0 check(like_clicked in(1, 0))")
     private Boolean likeClicked;
+
+    @Column(name = "emotion_name")
+    private String emotionName;
 }

@@ -17,8 +17,12 @@ $(document).ready(function() {
             url: '/share/viewNote/' + noteNum, // 노트 정보 요청 URL
             type: 'GET',
             success: function(response) {
+                console.log(response);
                 // 노트 제목 설정
-                $('#noteModalLabel').text(response.noteTitle);
+                $('#noteModalLabel').text(response.ShareNoteTitle);
+
+                $('#nickname').text(response.nickname);
+                $('#createdDate').text(response.createdDate);
 
                 // 위치 정보에서 괄호 제거 후 표시
                 var location = response.location.replace(/\(.*?\)/g, '');
@@ -29,8 +33,6 @@ $(document).ready(function() {
                 var formattedDate = diaryDate.getFullYear() + '년 ' + (diaryDate.getMonth() + 1) + '월 ' + diaryDate.getDate() + '일';
                 $('#noteDate').text(formattedDate);
 
-                /*// 감정 정보 설정
-                $('#noteEmotion').text(response.emotionName);*/
 
                 // 감정 정보 설정
                 var emotionIcon;
@@ -141,6 +143,58 @@ $(document).ready(function() {
     });
 
     // 좋아요 버튼 처리 로직
+    $(document).on('click', '.likeBtn', function () {
+        let noteNum = $('#noteNum').val(); // 숨겨진 입력 필드에서 noteNum 가져오기
+        let likeCnt = $('#cnt').val();
+
+        // 클릭한 이모지 가져오기 (선택 사항)
+        const emoji = $(this).data('emoji');
+        console.log(emoji);
+        // console.log(`Clicked emoji: ${emoji}`);  // 클릭된 이모지 콘솔 출력
+
+        $.ajax({
+            url: 'like',
+            type: 'post',
+            data: { noteNum: noteNum, emotionNum : emoji }, // noteNum 서버로 전송
+            dataType: 'json',
+            success: function (res) {
+                console.log(res.isLiked);
+                console.log(res.joyCnt);
+                console.log(res.loveCnt);
+                console.log(res.sadCnt);
+                console.log(res.angryCnt);
+                console.log(res.wowCnt);
+                // 좋아요 상태에 따라 처리
+                if (res.isLiked === true) {
+                    // 좋아요 추가됨
+                    $('#cnt').val(res.cnt); // 좋아요 수 갱신
+                    $('#likeCnt').html(res.cnt);
+                    $('#joyCnt').html(res.joyCnt);
+                    $('#loveCnt').html(res.loveCnt);
+                    $('#sadCnt').html(res.sadCnt);
+                    $('#angryCnt').html(res.angryCnt);
+                    $('#wowCnt').html(res.wowCnt);
+
+                } else {
+                    // 좋아요 취소됨
+                    $('#cnt').val(res.cnt); // 좋아요 수 갱신
+                    $('#likeCnt').html(res.cnt);
+                    $('#joyCnt').html(res.joyCnt);
+                    $('#loveCnt').html(res.loveCnt);
+                    $('#sadCnt').html(res.sadCnt);
+                    $('#angryCnt').html(res.angryCnt);
+                    $('#wowCnt').html(res.wowCnt);
+                    alert('좋아요를 취소했습니다.');
+                }
+            },
+            error: function (err) {
+                console.error('좋아요 처리 중 오류:', err);
+            }
+        });
+    });
+
+
+    /*// 좋아요 버튼 처리 로직
     $(document).on('click', '.likeBtn', function (){
         let noteNum = $('#noteNum').val(); // 숨겨진 입력 필드에서 noteNum 가져오기
         let likeCnt = $('#cnt').val();
@@ -167,12 +221,72 @@ $(document).ready(function() {
                 console.error('좋아요 처리 중 오류:', err);
             }
         });
-    });
+    });*/
 
 
 
 });
-    // 댓글 목록 출력 함수
+
+function commentList(noteNum) {
+    $.ajax({
+        url: '/reply/commentList',
+        type: 'post',
+        data: { noteNum: noteNum },
+        dataType: 'json',
+        success: function(list) {
+            console.log(list);
+            $('.commentTbody').empty();
+            $(list).each(function(i, com) {
+                // 댓글 작성자가 현재 로그인한 사용자와 같은지 확인
+                let isCurrentUser = (authenticatedUserId === com.memberId);
+                let deleteIconHtml = '';
+                if (isCurrentUser) {
+                    // 로그인한 사용자일 경우 삭제 아이콘 표시
+                    deleteIconHtml = `<img src="/images/xicon.png" style="width: 15px; height: 15px;" alt="삭제">`;
+                }
+
+                // 댓글 HTML 구성
+                let html = `
+                    <tr>
+                        <td style="width: 80px">${com.nickname}</td>
+                        <td style="width: 230px">${com.contents}</td>
+                        <td>${moment(com.createdDate).format('YY.MM.DD')}</td>
+                        <td><a href="#" class="delReply" data-note-num="${com.shareNoteNum}" data-reply-num="${com.replyNum}">${deleteIconHtml}</a></td>
+                    </tr>
+                `;
+                $('.commentTbody').append(html);
+            });
+
+            // 삭제 아이콘 클릭 이벤트 리스너 추가
+            $('.delReply').off('click').on('click', function(e) {
+                e.preventDefault(); // 기본 링크 동작 방지
+                let noteNum = $(this).data('note-num'); // 노트 번호 가져오기
+                let replyNum = $(this).data('reply-num'); // 댓글 번호 가져오기
+                let trElement = $(this).closest('tr'); // 해당 tr 요소 가져오기
+
+                // 삭제 확인 알림
+                if (!confirm('댓글을 삭제하시겠습니까?')) {
+                    return;
+                } else {
+                    $.ajax({
+                        url: '/reply/delete',
+                        type: 'post',
+                        data: { noteNum: noteNum, replyNum: replyNum },
+                        success: function() {
+                            trElement.css('display', 'none'); // 해당 tr을 숨김
+                        },
+                        error: function() {
+                            alert('댓글 삭제 중 오류가 발생했습니다.');
+                        }
+                    });
+                }
+            });
+        }
+    });
+}
+
+
+   /* // 댓글 목록 출력 함수
     function commentList(noteNum) {
         $.ajax({
             url: '/reply/commentList',
@@ -188,7 +302,7 @@ $(document).ready(function() {
                     let deleteIconHtml = '';
                     if (isCurrentUser) {
                         // 로그인한 사용자일 경우 삭제 아이콘 표시
-                        deleteIconHtml = `<a><img src="/images/xicon.png" style="width: 15px; height: 15px;" alt="삭제"></a>`;
+                        deleteIconHtml = `<img src="/images/xicon.png" style="width: 15px; height: 15px;" alt="삭제">`;
                     }
 
                     // 댓글 HTML 구성
@@ -197,14 +311,39 @@ $(document).ready(function() {
                             <td style="width: 80px">${com.nickname}</td>
                             <td style="width: 230px">${com.contents}</td>
                             <td>${moment(com.createdDate).format('YY.MM.DD')}</td>
-                            <td>${deleteIconHtml}</td>
+                            <td><a href="#" class="delReply" data-note-num="${com.shareNoteNum}" data-reply-num="${com.replyNum}">${deleteIconHtml}</a></td>
                         </tr>
                     `;
                     $('.commentTbody').append(html);
+                    // 삭제 아이콘 클릭 이벤트 리스너 추가
+                    $('.delReply').on('click', function(e) {
+                        e.preventDefault(); // 기본 링크 동작 방지
+                        let noteNum = $(this).data('note-num'); // 노트 번호 가져오기
+                        let replyNum = $(this).data('reply-num'); // 댓글 번호 가져오기
+                        let trElement = $(this).closest('tr'); // 해당 tr 요소 가져오기
+
+                        // 삭제 확인 알림
+                        if (!confirm('댓글을 삭제하시겠습니까?')){
+                            return;
+                        } else {
+                            $.ajax({
+                                url: '/reply/delete',
+                                type: 'post',
+                                data: {noteNum: noteNum, replyNum: replyNum},
+                                success: function (){
+                                    commentList();
+                                },
+                                error: function (){
+                                    alert('댓글 목록 조회 실패');
+                                }
+
+                            });
+                        }
+                    });
                 });
             }
         });
-    }
+    }*/
 
 
 $('#noteModal').on('hidden.bs.modal', function () {
