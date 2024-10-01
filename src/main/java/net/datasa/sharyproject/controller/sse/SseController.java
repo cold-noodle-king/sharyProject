@@ -128,10 +128,18 @@ public class SseController {
         sseService.sendNotification(memberId, message, "follow");  // 새로운 알림 유형 "follow"
     }*/
 
-    @GetMapping("/notifications")
+  /*  @GetMapping("/notifications")
     public String notificationsPage() {
         return "sse/msg";  // 알림함 페이지 템플릿 파일 경로
+    }*/
+
+    // 알림함 페이지에 접근할 때 markAllAsRead 메서드를 호출하여 해당 사용자의 모든 알림을 읽음 처리
+    @GetMapping("/notifications")
+    public String notificationsPage(@AuthenticationPrincipal AuthenticatedUser user) {
+        sseMessageService.markAllAsRead(user.getUsername());
+        return "sse/msg";  // 알림함 페이지 템플릿 파일 경로
     }
+
 
 
     @ResponseBody
@@ -150,6 +158,20 @@ public class SseController {
     @GetMapping("/allMessages")
     public List<MessageDTO> getAllMessages(@AuthenticationPrincipal AuthenticatedUser user) {
         return sseMessageService.getAllMessages(user.getUsername());
+    }
+
+    // 알림 배지 관련
+    @ResponseBody
+    @GetMapping("/unreadNotificationsCount")
+    public int getUnreadNotificationsCount(@AuthenticationPrincipal AuthenticatedUser user) {
+        return sseMessageService.getUnreadNotificationsCount(user.getUsername());
+    }
+
+    //
+    @ResponseBody
+    @PostMapping("/markNotificationsAsRead")
+    public void markNotificationsAsRead(@AuthenticationPrincipal AuthenticatedUser user) {
+        sseMessageService.markAllAsRead(user.getUsername());
     }
 
 }

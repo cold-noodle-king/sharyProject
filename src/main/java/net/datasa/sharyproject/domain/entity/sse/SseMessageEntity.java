@@ -34,4 +34,7 @@ public class SseMessageEntity {
 
     @Column(name = "create_date", nullable = false)
     private LocalDateTime createDate;
+
+    @Column(name = "is_read", nullable = false)
+    private boolean isRead = false;
 }

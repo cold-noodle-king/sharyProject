@@ -91,4 +91,37 @@ public class SseMessageService {
                         message.getCreateDate()))
                 .collect(Collectors.toList());
     }
+
+
+/*    @Transactional(readOnly = true)
+    public int getUnreadNotificationsCount(String memberId) {
+        int notificationCount = notificationRepository.countByReceiver_MemberIdAndIsReadFalse(memberId);
+        int messageCount = sseMessageRepository.countByToMember_MemberIdAndIsReadFalse(memberId);
+        return notificationCount + messageCount;
+    }*/
+
+    @Transactional(readOnly = true)
+    public int getUnreadNotificationsCount(String memberId) {
+        int notificationCount = notificationRepository.countByReceiver_MemberIdAndIsReadFalse(memberId);
+        int messageCount = sseMessageRepository.countByToMember_MemberIdAndIsReadFalse(memberId);
+        // log.debug("Unread counts for user {}: notifications={}, messages={}", memberId, notificationCount, messageCount);
+        return notificationCount + messageCount;
+    }
+
+
+
+    // 알림 배지 관련
+/*    @Transactional
+    public void markAllAsRead(String memberId) {
+        notificationRepository.markAllAsReadByReceiverId(memberId);
+        sseMessageRepository.markAllAsReadByToMemberId(memberId);
+    }*/
+
+    @Transactional
+    public void markAllAsRead(String memberId) {
+        notificationRepository.markAllAsReadByReceiverId(memberId);
+        sseMessageRepository.markAllAsReadByToMemberId(memberId);
+        //log.debug("사용자 {}의 모든 알림을 읽음 처리했습니다.", memberId);
+    }
+
 }

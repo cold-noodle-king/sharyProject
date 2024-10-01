@@ -1,65 +1,140 @@
-<script th:src="@{/header/js/header-scripts.js}" xmlns:sec="http://www.w3.org/1999/xhtml"></script>
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/extras/spring-security6">
 
-<!-- fragments/header.html -->
-<div xmlns:th="http://www.thymeleaf.org"
-     xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
-     th:fragment="header">
-    <!--<div th:fragment="header">-->
-    <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
+<head>
+    <meta charset="UTF-8">
+    <title>header</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Font Awesome CSS (종 아이콘 사용을 위해 추가) -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css">
+
+
+    <!-- jQuery 라이브러리 -->
+    <!--<script th:src="@{/js/jquery-3.7.1.min.js}"></script>-->
+
+
+    <!-- CSS 스타일 -->
+    <style>
+/*        .navbar .notification-icon {
+            position: relative;
+            display: inline-block;
+        }
+
+        .navbar .notification-icon .badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background-color: red !important;
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            display: flex; !* 배지를 보일 때 flex로 설정 *!
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+        }*/
+
+        .hidden {
+            display: none !important;
+        }
+
+    </style>
+</head>
+<body>
+
+<!-- templates/fragments/header.html -->
+<!--<div xmlns:th="http://www.thymeleaf.org"
+     xmlns:sec="https://www.thymeleaf.org/extras/spring-security6"
+     th:fragment="header">-->
+
+
+    <!-- 헤더 시작 -->
+    <div th:fragment="header">
+        <!-- 네비게이션 바 -->
+        <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
         <div class="container">
             <a class="navbar-brand" th:href="@{/home}">
                 <img th:src="@{/header/assets/img/navbar_logo2.png}" alt="Logo"/>
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive"
-                    aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarResponsive"
+                    aria-controls="navbarResponsive" aria-expanded="false"
+                    aria-label="Toggle navigation">
                 Menu
                 <i class="fas fa-bars ms-1"></i>
             </button>
             <div class="collapse navbar-collapse" id="navbarResponsive">
+                <!-- 왼쪽 메뉴 -->
                 <ul class="navbar-nav text-uppercase mx-auto py-4 py-lg-0">
-                    <li class="nav-item"><a class="nav-link" href="#page-top">Emotion</a></li> <!-- ID로 변경 -->
-                    <li class="nav-item"><a class="nav-link" href="#portfolio">둘러보기</a></li> <!-- ID로 변경 -->
+                    <li class="nav-item"><a class="nav-link" href="#page-top">Emotion</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#portfolio">둘러보기</a></li>
                     <li class="nav-item"><a class="nav-link" th:href="@{/personal/MyDiary}">개인 다이어리</a></li>
                     <li class="nav-item"><a class="nav-link" th:href="@{/share/main}">공유 다이어리</a></li>
                     <li class="nav-item"><a class="nav-link" th:href="@{/share/listAll}">공유 게시판</a></li>
                 </ul>
 
                 <!-- 오른쪽에 위치할 링크 -->
-                <ul class="navbar-nav ms-auto text-uppercase py-4 py-lg-0"> <!-- ms-auto 클래스로 오른쪽 정렬 -->
-
-                    <div>
-                        <li class="nav-item">
-                            <a href="#" id="profileModalTrigger" data-bs-toggle="modal" data-bs-target="#profileModal">프로필</a>
-                        </li>
-                    </div>
-
-
-                    <!-- 알림 이미지 삽입 -->
-                    <!--<div>
-                                        <li class="nav-item">
-                                            <a class="nav-link" th:href="@{/notifications.html}">
-                                                <img src="/images/notification.png" alt="알림" style="width: 24px; height: 24px;"/>
-                                            </a>
-                                        </li>
-                    </div>-->
-
-
-                    <!-- 알림 로고 클릭 시 알림함으로 이동 -->
+                <ul class="navbar-nav ms-auto text-uppercase py-4 py-lg-0">
+                    <!-- 프로필 -->
                     <li class="nav-item">
+                        <a href="#" id="profileModalTrigger" data-bs-toggle="modal" data-bs-target="#profileModal">프로필</a>
+                    </li>
+
+                    <!-- 알림 아이콘과 배지 -->
+                    <!-- <li class="nav-item notification-icon">
                         <a class="nav-link" th:href="@{/notifications}">
-                            <img src="/images/notification.png" alt="알림" style="width: 24px; height: 24px;" />
+                            <i class="fas fa-bell" style="font-size: 24px;"></i>
+                            <span id="notification-badge" class="badge hidden">N</span>
+                        </a>
+                    </li> -->
+
+                    <!-- 알림 아이콘과 배지 -->
+<!--                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/notifications}">
+                            <div class="notification-icon">
+                                <i class="fas fa-bell" style="font-size: 24px;"></i>
+                                <span id="notification-badge" class="badge hidden"></span>
+                            </div>
+                        </a>
+                    </li>-->
+
+                    <!-- 알림 아이콘과 배지 -->
+                    <li class="nav-item">
+                        <a class="nav-link position-relative" th:href="@{/notifications}">
+                            <i class="fas fa-bell" style="font-size: 24px;"></i>
+                            <span id="notification-badge" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger hidden">
+                                    N
+                                    <span class="visually-hidden">New notifications</span>
+                                </span>
                         </a>
                     </li>
 
-
-
+                    <!-- 마이페이지 -->
                     <li class="nav-item"><a class="nav-link" th:href="@{/mypage/mypageView}">마이페이지</a></li>
 
-                    <li class="nav-item"><a sec:authorize="isAuthenticated()"><a class="nav-link" th:href="@{/member/logout}">로그아웃</a></a></li>
+                    <!-- 로그아웃 -->
+                    <li class="nav-item" th:if="${#authentication.authenticated}">
+                        <a class="nav-link" th:href="@{/member/logout}">로그아웃</a>
+                    </li>
                 </ul>
             </div>
         </div>
-    </nav>
+        </nav>
+    </div>
+
+<!-- jQuery (Bootstrap JS보다 먼저 로드) -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Bootstrap JS (Popper 포함) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
 
     <!-- 배경 이미지와 버튼 섹션 -->
     <!--<header class="masthead" th:style="|background-image: url('@{/header/assets/img/header_background.jpg}');|">
@@ -69,4 +144,110 @@
             <a class="btn btn-primary btn-xl text-uppercase" th:href="@{/user/login}">로그인</a>
         </div>
     </header>-->
-</div>
+
+<!-- 헤더 관련 JavaScript 코드 -->
+<script th:inline="javascript">
+        $(document).ready(function() {
+            const $notificationBadge = $('#notification-badge');
+
+
+            // 배지를 표시하는 함수
+            function showNotificationBadge() {
+                console.log('Showing notification badge');
+                $notificationBadge.removeClass('hidden');
+            }
+
+            // 배지를 숨기는 함수
+            function hideNotificationBadge() {
+                $notificationBadge.addClass('hidden');
+            }
+
+            // 읽지 않은 알림이 있는지 서버에 요청하는 함수
+            function checkUnreadNotifications() {
+                $.get('/unreadNotificationsCount', function(response) {
+                    console.log('Unread notifications count:', response);
+                    var count = parseInt(response);
+                    if (count > 0) {
+                        showNotificationBadge(); // 알림이 있으면 배지를 표시
+                    } else {
+                        hideNotificationBadge(); // 알림이 없으면 배지를 숨김
+                    }
+                }).fail(function(error) {
+                    console.error('Error fetching unread notifications count:', error);
+                });
+            }
+
+            // 알림을 읽음 처리하는 함수
+            function markNotificationsAsRead() {
+                $.post('/markNotificationsAsRead', function() {
+                    console.log('알림을 모두 읽음 처리했습니다.');
+                    // 읽음 처리 후에 읽지 않은 알림 수를 다시 확인
+                    checkUnreadNotifications();
+                }).fail(function(error) {
+                    console.error('알림 읽음 처리 중 오류 발생:', error);
+                });
+            }
+
+            // SSE 연결 설정
+            const eventSource = new EventSource("/subscribe");
+
+
+            // SSE 이벤트 처리
+            eventSource.addEventListener('message', function(event) {
+                console.log('Message event received:', event);
+                showNotificationBadge();
+            });
+
+            eventSource.addEventListener('notification', function(event) {
+                console.log('Notification event received:', event);
+                showNotificationBadge();
+            });
+
+            // 페이지 로드 시 읽지 않은 알림이 있는지 확인
+            checkUnreadNotifications();
+
+            // 현재 페이지가 알림 페이지인 경우 알림 읽음 처리
+            // 헤더의 JavaScript 코드 내에서
+            if (window.location.pathname === '/notifications') {
+                console.log('/notifications 페이지에 접속하였습니다.');
+                markNotificationsAsRead();
+            }
+
+            if (window.location.pathname.includes('/notifications')) {
+                // ... 나머지 코드
+            }
+
+            // 현재 페이지가 알림 페이지인지 확인하여 배지 숨김
+/*
+            if (window.location.pathname === '/notifications') {
+                hideNotificationBadge();
+            } else {
+                checkUnreadNotifications(); // 읽지 않은 알림이 있는지 확인
+            }
+*/
+
+            // 읽지 않은 알림이 있는지 서버에 요청하는 함수
+            /*function checkUnreadNotifications() {
+                $.get('/unreadNotificationsCount', function(response) {
+                    console.log('Unread notifications response:', response);
+                    var count = parseInt(response);
+                    if (count > 0) {
+                        showNotificationBadge(); // 알림이 있으면 배지를 표시
+                    } else {
+                        hideNotificationBadge(); // 알림이 없으면 배지를 숨김
+                    }
+                }).fail(function(error) {
+                    console.error('Error fetching unread notifications count:', error);
+                });
+            }*/
+
+
+        });
+</script>
+</body>
+</html>
+
+
+
+
+
