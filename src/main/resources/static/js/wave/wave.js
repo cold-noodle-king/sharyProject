@@ -33,7 +33,7 @@ window.onload = function() {
 
             // 첫 번째 파도의 색상을 #f89671로 고정
             if (this.index === 0) {
-                this.color = '#f89671';
+                this.color = '#eaa087';
             } else {
                 this.color = colors[index % colors.length];  // 다른 파도는 색상 팔레트에서 순서대로 가져옴
             }
