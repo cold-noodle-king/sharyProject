@@ -19,8 +19,8 @@
             });
             $('.okBtn').on('click', function () {
                 let diaryNum = $(this).data('diary-num');
-                let member = $(this).data('member');
-                console.log(diaryNum, member);
+                let memberId = $(this).data('member-id');
+                console.log(diaryNum, memberId);
 
                  if (!confirm('가입 요청을 수락하시겠습니까?')){
                      return false;
@@ -28,7 +28,7 @@
                 $.ajax({
                     type: 'POST',
                     url: '/sharemember/acceptRequest',
-                    data: JSON.stringify({ diaryNum: diaryNum, member: member }),
+                    data: JSON.stringify({ diaryNum: diaryNum, memberId: memberId }),
                     contentType: 'application/json; charset=utf-8',
                     success: function (response) {
                         console.log('Success:', response);
@@ -38,6 +38,7 @@
                     },
                     error: function (error) {
                         console.error('Error:', error);
+                        alert('가입 요청 수락 중 오류 발생.');
                     }
                 });
                 }
@@ -77,8 +78,8 @@
                     <td><p th:text="${list.shareDiaryNum}"></p></td>
                     <td><p th:text="${list.memberId}"></p></td>
                     <td><p th:text="${list.nickname}"></p></td>
-                    <td><button class="okBtn" th:data-diary-num="${list.shareDiaryNum}" th:data-member="${list.memberId}">수락</button></td>
-                    <td><button class="noBtn" th:data-diary-num="${list.shareDiaryNum}" th:data-member="${list.memberId}">거절</button></td>
+                    <td><button class="okBtn" th:data-diary-num="${list.shareDiaryNum}" th:data-member-id="${list.memberId}">수락</button></td>
+                    <td><button class="noBtn" th:data-diary-num="${list.shareDiaryNum}" th:data-member-id="${list.memberId}">거절</button></td>
                 </tr>
             </table>
         </div>

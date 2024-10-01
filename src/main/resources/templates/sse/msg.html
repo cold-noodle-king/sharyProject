@@ -89,22 +89,45 @@
                             <div class="time">${formattedDate}</div>
                         </div>
                     </div>`;
-                    } else if (item.type === 'notification') {
-                        html = `
+                    }  else if (item.type === 'notification') {
+                        if (item.notificationType === 'join_request') {
+                            html = `
                     <div class="notification">
-                        <div class="avatar">N</div>
+                        <div class="avatar">요청</div>
+                        <div class="content">
+                            <div class="sender">가입 요청</div>
+                            <div class="text">${item.content}</div>
+                            <div class="time">${formattedDate}</div>
+                        </div>
+                    </div>`;
+                        }  else if (item.notificationType === 'join_accept') {
+                            html = `
+                    <div class="notification">
+                        <div class="avatar">수락</div>
+                        <div class="content">
+                            <div class="sender">가입 수락</div>
+                            <div class="text">${item.content}</div>
+                            <div class="time">${formattedDate}</div>
+                        </div>
+                    </div>`;
+                        } else {
+                            html = `
+                    <div class="notification">
+                        <div class="avatar">알림</div>
                         <div class="content">
                             <div class="sender">알림</div>
                             <div class="text">${item.content}</div>
                             <div class="time">${formattedDate}</div>
                         </div>
                     </div>`;
+                        }
                     }
 
                     $('#msgView').append(html);
                 });
             }
         });
+
     </script>
 
 
