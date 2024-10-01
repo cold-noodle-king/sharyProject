@@ -49,40 +49,7 @@ public class SseService {
         }
     }
 
-    // 알림 전송
-/*    public void sendNotification(String memberId, String content) {
-        SseEmitter emitter = emitterMap.get(memberId);
-
-        if (emitter != null) {
-            try {
-                String jsonNotification = String.format("{\"type\":\"notification\", \"content\":\"%s\", \"createdAt\":\"%s\"}",
-                        content, LocalDateTime.now().toString());
-                emitter.send(SseEmitter.event().name("notification").data(jsonNotification));
-            } catch (IOException e) {
-                emitterMap.remove(memberId);
-                log.error("알림 전송 실패: {}", e.getMessage());
-            }
-        }
-    }*/
-
-    // 알림 전송
-/*    public void sendNotification(String memberId, String content, String notificationType) {
-        SseEmitter emitter = emitterMap.get(memberId);
-
-        if (emitter != null) {
-            try {
-                String jsonNotification = String.format(
-                        "{\"type\":\"notification\", \"content\":\"%s\", \"createdAt\":\"%s\", \"notificationType\":\"%s\"}",
-                        content, LocalDateTime.now().toString(), notificationType);
-                emitter.send(SseEmitter.event().name("notification").data(jsonNotification));
-            } catch (IOException e) {
-                emitterMap.remove(memberId);
-                log.error("알림 전송 실패: {}", e.getMessage());
-            }
-        }
-    }*/
-
-    //SSE 전송
+    //SSE 알림 전송
     public void sendNotification(String memberId, String content, String notificationType) {
         SseEmitter emitter = emitterMap.get(memberId);
 

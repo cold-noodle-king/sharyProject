@@ -2,6 +2,7 @@ package net.datasa.sharyproject.controller.share;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.datasa.sharyproject.domain.dto.share.AcceptRequestDTO;
 import net.datasa.sharyproject.domain.dto.share.ShareDiaryDTO;
 import net.datasa.sharyproject.domain.dto.share.ShareMemberDTO;
 import net.datasa.sharyproject.domain.entity.member.MemberEntity;
@@ -13,6 +14,7 @@ import net.datasa.sharyproject.service.mypage.ProfileService;
 import net.datasa.sharyproject.service.personal.CoverTemplateService;
 import net.datasa.sharyproject.service.personal.NoteTemplateService;
 import net.datasa.sharyproject.service.share.ShareDiaryService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -113,7 +115,7 @@ public class SharememberController {
         return "share/RegisterRequest";
     }
 
-    @ResponseBody
+/*    @ResponseBody
     @PostMapping("/acceptRequest")
     public ResponseEntity<String> acceptRequest(@RequestBody Map<String, Object> requestData) {
         Integer diaryNum = (Integer) requestData.get("diaryNum");
@@ -124,6 +126,24 @@ public class SharememberController {
         shareDiaryService.acceptRegister(diaryNum, memberId);
 
         return ResponseEntity.ok("가입 요청을 수락하였습니다.");
-    }
+    }*/
 
+    // 누들킹 이거 요청 수락해도 리스트 계속 잔존해있어서 수정했옹(윤조)
+    @ResponseBody
+    @PostMapping("/acceptRequest")
+    public ResponseEntity<String> acceptRequest(@RequestBody AcceptRequestDTO requestDTO) {
+        try {
+            Integer diaryNum = requestDTO.getDiaryNum();
+            String memberId = requestDTO.getMemberId();
+
+            log.debug("Received accept request for diaryNum: {}, memberId: {}", diaryNum, memberId);
+
+            shareDiaryService.acceptRegister(diaryNum, memberId);
+
+            return ResponseEntity.ok("가입 요청을 수락하였습니다.");
+        } catch (Exception e) {
+            log.error("Error accepting join request", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("가입 요청 수락 중 오류 발생");
+        }
+    }
 }

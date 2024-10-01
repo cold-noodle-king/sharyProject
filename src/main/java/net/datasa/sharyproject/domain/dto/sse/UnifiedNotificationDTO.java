@@ -17,4 +17,6 @@ public class UnifiedNotificationDTO {
     private String sender; // 메시지의 경우 발신자
     private String content;
     private LocalDateTime createdAt;
+    private String notificationType; // 추가된 필드
+
 }

@@ -39,7 +39,7 @@ public class NotificationEntity {
     @Column(name = "is_read", nullable = false)
     private boolean isRead = false;
 
-    //
+    //알림 타입
     @Column(name = "notification_type", nullable = false)
     private String notificationType; // 예: 'chat', 'follow', 'system' 등
 }
