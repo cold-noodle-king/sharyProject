@@ -1,151 +1,162 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <title>통계</title>
+    <meta charset="UTF-8">
+    <title>통계</title>
 
-  <!-- jQuery 로드 -->
-  <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
+    <!-- jQuery 로드 -->
+    <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
 
-  <!-- 부트스트랩 CSS 로드 -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- 부트스트랩 CSS 로드 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
-  <!-- 헤더와 푸터용 스타일 -->
-  <link href="../header/css/styles.css" rel="stylesheet">
-  <link rel="stylesheet" href="../footer/css/styles.css">
-  <link th:href="@{/css/mypage/sideBar.css}" rel="stylesheet">
-  <link th:href="@{/css/mypage/stats.css}" rel="stylesheet">
+    <!-- 헤더와 푸터용 스타일 -->
+    <link href="../header/css/styles.css" rel="stylesheet">
+    <link rel="stylesheet" href="../footer/css/styles.css">
+    <link th:href="@{/css/mypage/sideBar.css}" rel="stylesheet">
+    <link th:href="@{/css/mypage/stats.css}" rel="stylesheet">
 
-  <!-- WordCloud.js 라이브러리 로드 -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/wordcloud2.js/1.0.6/wordcloud2.min.js"></script>
+    <!-- WordCloud.js 라이브러리 로드 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/wordcloud2.js/1.0.6/wordcloud2.min.js"></script>
 
-  <!-- Chart.js 라이브러리 로드 -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Chart.js 라이브러리 로드 -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 </head>
 <body>
 <div class="wrapper">
-  <!-- 헤더 부분 불러오기 -->
-  <header th:replace="~{fragments/header :: header}"></header>
+    <!-- 헤더 부분 불러오기 -->
+    <header th:replace="~{fragments/header :: header}"></header>
 
-  <!-- 사이드바와 메인 콘텐츠를 포함하는 레이아웃 -->
-  <div class="content">
-    <!-- 사이드바 -->
-    <div class="sidebar">
-      <div class="sidebar-content">
-        <!-- 프로필 이미지와 닉네임, 간단한 소개 -->
-        <img src="/images/emotions/happy.png" alt="프로필사진" class="profile-img">
-        <p class="nickname">사용자 닉네임</p>
-        <p class="profile-intro">짧은 프로필 소개글</p>
-        <a th:href="@{/mypage/info}">개인정보</a>
-        <a th:href="@{/mypage/profile}">프로필</a>
-        <a th:href="@{/mypage/follow}">친구</a>
-        <a th:href="@{/mypage/message}">채팅</a>
-        <a th:href="@{/mypage/stats}">통계</a>
-      </div>
-      <!-- 회원탈퇴 버튼 -->
-      <div class="logout">
-        <a th:href="@{/member/logout}">회원탈퇴</a>
-      </div>
-    </div>
-
-    <!-- 메인 콘텐츠 영역 -->
-    <div class="main-content">
-      <section class="page-content">
-        <h2>콘텐츠별 통계</h2>
-
-        <!-- 최상단 탭: 해시태그와 다이어리 구분 -->
-        <ul class="nav nav-tabs" id="categoryTab" role="tablist">
-          <!-- 해시태그 탭 -->
-          <li class="nav-item">
-            <a class="nav-link active" id="hashtag-tab" data-bs-toggle="tab" href="#hashtag" role="tab" aria-controls="hashtag" aria-selected="true">해시태그</a>
-          </li>
-          <!-- 다이어리 탭 -->
-          <li class="nav-item">
-            <a class="nav-link" id="diary-tab" data-bs-toggle="tab" href="#diary" role="tab" aria-controls="diary" aria-selected="false">다이어리</a>
-          </li>
-          <!-- 좋아요 랭킹 탭 추가 -->
-          <li class="nav-item">
-            <a class="nav-link" id="likes-tab" data-bs-toggle="tab" href="#likes" role="tab" aria-controls="likes" aria-selected="false">좋아요 랭킹</a>
-          </li>
-        </ul>
-
-        <!-- 탭 콘텐츠 -->
-        <div class="tab-content mt-4">
-          <!-- 해시태그 탭 콘텐츠 -->
-          <div class="tab-pane fade show active" id="hashtag" role="tabpanel" aria-labelledby="hashtag-tab">
-            <!-- 해시태그 카테고리별 탭 -->
-            <ul class="nav nav-tabs" id="hashtagCategoryTab" role="tablist">
-              <!-- 일상 카테고리 -->
-              <li class="nav-item">
-                <a class="nav-link active" id="category1-tab" data-bs-toggle="tab" href="#category1" role="tab" aria-controls="category1" aria-selected="true">일상</a>
-              </li>
-              <!-- 여행 카테고리 -->
-              <li class="nav-item">
-                <a class="nav-link" id="category2-tab" data-bs-toggle="tab" href="#category2" role="tab" aria-controls="category2" aria-selected="false">여행</a>
-              </li>
-              <!-- 육아 카테고리 -->
-              <li class="nav-item">
-                <a class="nav-link" id="category3-tab" data-bs-toggle="tab" href="#category3" role="tab" aria-controls="category3" aria-selected="false">육아</a>
-              </li>
-              <!-- 연애 카테고리 -->
-              <li class="nav-item">
-                <a class="nav-link" id="category4-tab" data-bs-toggle="tab" href="#category4" role="tab" aria-controls="category4" aria-selected="false">연애</a>
-              </li>
-              <!-- 취미 카테고리 -->
-              <li class="nav-item">
-                <a class="nav-link" id="category5-tab" data-bs-toggle="tab" href="#category5" role="tab" aria-controls="category5" aria-selected="false">취미</a>
-              </li>
-              <!-- 운동 카테고리 -->
-              <li class="nav-item">
-                <a class="nav-link" id="category6-tab" data-bs-toggle="tab" href="#category6" role="tab" aria-controls="category6" aria-selected="false">운동</a>
-              </li>
-            </ul>
-
-            <!-- 각 카테고리에 대한 워드 클라우드 -->
-            <div class="tab-content mt-4">
-              <!-- 일상 카테고리 워드 클라우드 -->
-              <div class="tab-pane fade show active" id="category1" role="tabpanel" aria-labelledby="category1-tab">
-                <canvas id="wordCloudCanvas1" width="500" height="500"></canvas>
-              </div>
-              <!-- 여행 카테고리 워드 클라우드 -->
-              <div class="tab-pane fade" id="category2" role="tabpanel" aria-labelledby="category2-tab">
-                <canvas id="wordCloudCanvas2" width="500" height="500"></canvas>
-              </div>
-              <!-- 육아 카테고리 워드 클라우드 -->
-              <div class="tab-pane fade" id="category3" role="tabpanel" aria-labelledby="category3-tab">
-                <canvas id="wordCloudCanvas3" width="500" height="500"></canvas>
-              </div>
-              <!-- 연애 카테고리 워드 클라우드 -->
-              <div class="tab-pane fade" id="category4" role="tabpanel" aria-labelledby="category4-tab">
-                <canvas id="wordCloudCanvas4" width="500" height="500"></canvas>
-              </div>
-              <!-- 취미 카테고리 워드 클라우드 -->
-              <div class="tab-pane fade" id="category5" role="tabpanel" aria-labelledby="category5-tab">
-                <canvas id="wordCloudCanvas5" width="500" height="500"></canvas>
-              </div>
-              <!-- 운동 카테고리 워드 클라우드 -->
-              <div class="tab-pane fade" id="category6" role="tabpanel" aria-labelledby="category6-tab">
-                <canvas id="wordCloudCanvas6" width="500" height="500"></canvas>
-              </div>
+    <!-- 사이드바와 메인 콘텐츠를 포함하는 레이아웃 -->
+    <div class="content">
+        <!-- 사이드바 -->
+        <div class="sidebar">
+            <div class="sidebar-content">
+                <!-- 프로필 이미지와 닉네임, 간단한 소개 -->
+                <img src="/images/emotions/happy.png" alt="프로필사진" class="profile-img">
+                <p class="nickname">사용자 닉네임</p>
+                <p class="profile-intro">짧은 프로필 소개글</p>
+                <a th:href="@{/mypage/info}">개인정보</a>
+                <a th:href="@{/mypage/profile}">프로필</a>
+                <a th:href="@{/mypage/follow}">친구</a>
+                <a th:href="@{/mypage/message}">채팅</a>
+                <a th:href="@{/mypage/stats}">통계</a>
             </div>
-          </div>
+            <!-- 회원탈퇴 버튼 -->
+            <div class="logout">
+                <a th:href="@{/member/logout}">회원탈퇴</a>
+            </div>
+        </div>
 
-          <!-- 다이어리 탭 콘텐츠 -->
-          <div class="tab-pane fade" id="diary" role="tabpanel" aria-labelledby="diary-tab">
-            <canvas id="diaryChart" width="500" height="500"></canvas>
-          </div>
+        <!-- 메인 콘텐츠 영역 -->
+        <div class="main-content">
+            <section class="page-content">
+                <h2>콘텐츠별 통계</h2>
 
-          <!-- 좋아요 랭킹 탭 콘텐츠 -->
-          <div class="tab-pane fade" id="likes" role="tabpanel" aria-labelledby="likes-tab">
-            <h3>좋아요 랭킹 TOP 3</h3>
-            <ul id="likeRankingList">
-              <!-- 좋아요 랭킹 항목이 여기 추가됨 -->
-            </ul>
-          </div>
-      </section>
+                <!-- 최상단 탭: 해시태그와 다이어리 구분 -->
+                <ul class="nav nav-tabs" id="categoryTab" role="tablist">
+                    <!-- 해시태그 탭 -->
+                    <li class="nav-item">
+                        <a class="nav-link active" id="hashtag-tab" data-bs-toggle="tab" href="#hashtag" role="tab"
+                           aria-controls="hashtag" aria-selected="true">해시태그</a>
+                    </li>
+                    <!-- 다이어리 탭 -->
+                    <li class="nav-item">
+                        <a class="nav-link" id="diary-tab" data-bs-toggle="tab" href="#diary" role="tab"
+                           aria-controls="diary" aria-selected="false">다이어리</a>
+                    </li>
+                    <!-- 좋아요 랭킹 탭 추가 -->
+                    <li class="nav-item">
+                        <a class="nav-link" id="likes-tab" data-bs-toggle="tab" href="#likes" role="tab"
+                           aria-controls="likes" aria-selected="false">좋아요 랭킹</a>
+                    </li>
+                </ul>
+
+                <!-- 탭 콘텐츠 -->
+                <div class="tab-content mt-4">
+                    <!-- 해시태그 탭 콘텐츠 -->
+                    <div class="tab-pane fade show active" id="hashtag" role="tabpanel" aria-labelledby="hashtag-tab">
+                        <!-- 해시태그 카테고리별 탭 -->
+                        <ul class="nav nav-tabs" id="hashtagCategoryTab" role="tablist">
+                            <!-- 일상 카테고리 -->
+                            <li class="nav-item">
+                                <a class="nav-link active" id="category1-tab" data-bs-toggle="tab" href="#category1"
+                                   role="tab" aria-controls="category1" aria-selected="true">일상</a>
+                            </li>
+                            <!-- 여행 카테고리 -->
+                            <li class="nav-item">
+                                <a class="nav-link" id="category2-tab" data-bs-toggle="tab" href="#category2" role="tab"
+                                   aria-controls="category2" aria-selected="false">여행</a>
+                            </li>
+                            <!-- 육아 카테고리 -->
+                            <li class="nav-item">
+                                <a class="nav-link" id="category3-tab" data-bs-toggle="tab" href="#category3" role="tab"
+                                   aria-controls="category3" aria-selected="false">육아</a>
+                            </li>
+                            <!-- 연애 카테고리 -->
+                            <li class="nav-item">
+                                <a class="nav-link" id="category4-tab" data-bs-toggle="tab" href="#category4" role="tab"
+                                   aria-controls="category4" aria-selected="false">연애</a>
+                            </li>
+                            <!-- 취미 카테고리 -->
+                            <li class="nav-item">
+                                <a class="nav-link" id="category5-tab" data-bs-toggle="tab" href="#category5" role="tab"
+                                   aria-controls="category5" aria-selected="false">취미</a>
+                            </li>
+                            <!-- 운동 카테고리 -->
+                            <li class="nav-item">
+                                <a class="nav-link" id="category6-tab" data-bs-toggle="tab" href="#category6" role="tab"
+                                   aria-controls="category6" aria-selected="false">운동</a>
+                            </li>
+                        </ul>
+
+                        <!-- 각 카테고리에 대한 워드 클라우드 -->
+                        <div class="tab-content mt-4">
+                            <!-- 일상 카테고리 워드 클라우드 -->
+                            <div class="tab-pane fade show active" id="category1" role="tabpanel"
+                                 aria-labelledby="category1-tab">
+                                <canvas id="wordCloudCanvas1" width="500" height="500"></canvas>
+                            </div>
+                            <!-- 여행 카테고리 워드 클라우드 -->
+                            <div class="tab-pane fade" id="category2" role="tabpanel" aria-labelledby="category2-tab">
+                                <canvas id="wordCloudCanvas2" width="500" height="500"></canvas>
+                            </div>
+                            <!-- 육아 카테고리 워드 클라우드 -->
+                            <div class="tab-pane fade" id="category3" role="tabpanel" aria-labelledby="category3-tab">
+                                <canvas id="wordCloudCanvas3" width="500" height="500"></canvas>
+                            </div>
+                            <!-- 연애 카테고리 워드 클라우드 -->
+                            <div class="tab-pane fade" id="category4" role="tabpanel" aria-labelledby="category4-tab">
+                                <canvas id="wordCloudCanvas4" width="500" height="500"></canvas>
+                            </div>
+                            <!-- 취미 카테고리 워드 클라우드 -->
+                            <div class="tab-pane fade" id="category5" role="tabpanel" aria-labelledby="category5-tab">
+                                <canvas id="wordCloudCanvas5" width="500" height="500"></canvas>
+                            </div>
+                            <!-- 운동 카테고리 워드 클라우드 -->
+                            <div class="tab-pane fade" id="category6" role="tabpanel" aria-labelledby="category6-tab">
+                                <canvas id="wordCloudCanvas6" width="500" height="500"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 다이어리 탭 콘텐츠 -->
+                    <div class="tab-pane fade" id="diary" role="tabpanel" aria-labelledby="diary-tab">
+                        <canvas id="diaryChart" width="500" height="500"></canvas>
+                    </div>
+
+                    <!-- 좋아요 랭킹 탭 콘텐츠 -->
+                    <div class="tab-pane fade" id="likes" role="tabpanel" aria-labelledby="likes-tab">
+                        <h3>좋아요 랭킹 TOP 3</h3>
+                        <ul id="likeRankingList">
+                            <!-- 좋아요 랭킹 항목이 여기 추가됨 -->
+                        </ul>
+                    </div>
+                </div>
+            </section>
+        </div>
     </div>
-  </div>
 </div>
 
 <!-- 푸터 부분 불러오기 -->
