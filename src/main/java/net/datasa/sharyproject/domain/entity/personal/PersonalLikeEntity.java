@@ -17,10 +17,14 @@ public class PersonalLikeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "personal_like_num")
-    private Integer personalLikeNum;  // 변경된 필드 이름
+    private Integer personalLikeNum;
 
     @Column(name = "personal_note_num", nullable = false)
     private Integer personalNoteNum;
+
+    @ManyToOne
+    @JoinColumn(name = "personal_note_num", insertable = false, updatable = false)
+    private PersonalNoteEntity personalNote;
 
     @Column(name = "member_id", nullable = false, length = 50)
     private String memberId;
