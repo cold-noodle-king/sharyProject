@@ -21,6 +21,7 @@ public class ShareNoteDTO {
     private String weather; // 날씨
     private String contents; // 내용
     private Timestamp diaryDate; // 작성 날짜
+    private LocalDateTime createDate;
     private Integer likeCount; // 추천 수
     private List<Integer> hashtagNums; // 해시태그 번호 리스트
     private String emotionName; // 감정 이름
@@ -30,6 +31,7 @@ public class ShareNoteDTO {
     private Integer shareDiaryNum; // 다이어리 번호
     private NoteTemplateDTO noteTemplate; // 노트 템플릿 정보 추가 (노트 이미지 및 기타 정보 포함)
     private String memberId; // 회원 ID
+    private String nickname;
     private List<String> hashtags; // 해시태그 이름 리스트 추가
     private ProfileDTO profile; // Profile 정보를 위한 필드 추가
     private String profilePicture; // 프로필 이미지 경로

@@ -1,0 +1,7 @@
+/* modal.css 또는 공통 스타일 파일 (예: styles.css) */
+#profileImage {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 50%; /* 이미지를 동그랗게 자르는 속성 */
+}

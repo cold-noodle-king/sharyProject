@@ -104,7 +104,8 @@ public class MemberController {
             , @ModelAttribute MemberDTO memberDTO) {
         // 로그인된 사용자 정보에서 memberId 가져오기
         memberDTO.setMemberId(user.getMemberId());
-//       String memberId = user.getMemberId();
+        memberDTO.setNickname(user.getNickname());
+
 
         // memberId를 모델에 추가하여 뷰로 전달
         model.addAttribute("member", memberDTO);

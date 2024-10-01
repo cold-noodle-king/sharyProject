@@ -42,16 +42,18 @@ public class ReplyController {
         replyService.save(dto);
     }
 
-    /*@ResponseBody
+    @ResponseBody
     @PostMapping("delete")
     public void delete(@AuthenticationPrincipal AuthenticatedUser user,
-                       @RequestParam("bnum") Integer bnum,
-                       @RequestParam("rnum") Integer rnum){
+                       @RequestParam("noteNum") Integer noteNum,
+                       @RequestParam("replyNum") Integer replyNum){
+
+        log.debug("노트번호:{}, 댓글번호:{}", noteNum, replyNum);
 
         ReplyDTO dto = new ReplyDTO();
 
-        dto.setBoardNum(bnum);
-        dto.setReplyNum(rnum);
+        dto.setShareNoteNum(noteNum);
+        dto.setReplyNum(replyNum);
         dto.setMemberId(user.getUsername());
         log.debug("dto가 뭐니:{}", dto);
 
@@ -64,6 +66,7 @@ public class ReplyController {
 
     }
 
+/*
     @ResponseBody
     @PostMapping("update")
     public void udpate(@ModelAttribute ReplyDTO dto
