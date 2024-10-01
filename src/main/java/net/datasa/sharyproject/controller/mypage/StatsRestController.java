@@ -8,16 +8,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-@RestController  // API 응답을 위한 @RestController
+@RestController
 @RequestMapping("/mypage/api")
 @RequiredArgsConstructor
 public class StatsRestController {
 
     private final StatsService statsService;
 
-    // 카테고리별 해시태그 및 다이어리 사용 통계 데이터를 JSON으로 반환하는 API
     @GetMapping("/stats")
     public ResponseEntity<Map<String, Object>> getStats() {
         Map<String, Object> stats = new HashMap<>();
@@ -27,8 +27,12 @@ public class StatsRestController {
         stats.put("해시태그", hashtagStats);
 
         // 다이어리 통계 데이터 추가
-        Map<String, Long> diaryStats = statsService.getDiaryStats();  // 서비스에서 다이어리 통계 데이터 가져옴
+        Map<String, Long> diaryStats = statsService.getDiaryStats();
         stats.put("다이어리", diaryStats);
+
+        // 좋아요 랭킹 데이터 추가 (키 이름 수정)
+        List<Map<String, Object>> topLikedNotes = statsService.getTopLikedNotes();
+        stats.put("좋아요랭킹", topLikedNotes);
 
         return ResponseEntity.ok(stats);  // JSON 응답
     }

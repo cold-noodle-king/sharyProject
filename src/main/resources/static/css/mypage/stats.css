@@ -45,3 +45,92 @@ canvas {
         font-size: 14px;  /* 작은 화면에서 사이드바 텍스트 크기 조정 */
     }
 }
+
+/* 좋아요 랭킹 섹션 전체 너비 맞추기 */
+#likeRankingList {
+    list-style-type: none;  /* 기본 리스트 스타일 제거 */
+    padding: 0;
+    margin-top: 20px;
+    max-width: 100%;  /* 랭킹 리스트 너비를 부모 요소에 맞게 설정 */
+    width: 100%;  /* 너비를 100%로 설정 */
+    box-sizing: border-box;  /* 패딩 포함하여 크기 계산 */
+}
+
+/* 랭킹 리스트 항목 크기 조정 */
+#likeRankingList li {
+    background-color: #f5f5f5;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    width: 100%;  /* 항목의 너비를 100%로 설정 */
+    box-sizing: border-box;  /* 패딩 포함하여 크기 계산 */
+}
+
+/* 1위, 2위, 3위 색상 구분 */
+#likeRankingList li:first-child {
+    background-color: #ffeb3b;  /* 1위: 황금색 */
+}
+
+#likeRankingList li:nth-child(2) {
+    background-color: #c0c0c0;  /* 2위: 은색 */
+}
+
+#likeRankingList li:nth-child(3) {
+    background-color: #cd7f32;  /* 3위: 동색 */
+}
+
+/* 왕관 아이콘 추가 */
+#likeRankingList li:first-child::before,
+#likeRankingList li:nth-child(2)::before,
+#likeRankingList li:nth-child(3)::before {
+    content: '👑';  /* 왕관 이모지 */
+    position: absolute;
+    left: -40px;
+    top: 10px;
+    font-size: 24px;
+}
+
+#likeRankingList li span.rank-number {
+    font-size: 18px;
+    color: #333;
+}
+
+#likeRankingList li span.like-count {
+    background-color: #ff6b6b;
+    padding: 5px 10px;
+    border-radius: 4px;
+    color: #fff;
+}
+
+/* 좋아요 랭킹 섹션 헤더 */
+h3 {
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+/* 좋아요 랭킹 탭 컨테이너 조정 */
+#likes {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;  /* 다른 탭과 비슷한 높이 설정 */
+    padding: 20px;
+    width: 100%;  /* 탭의 너비를 100%로 설정 */
+    box-sizing: border-box;  /* 패딩 포함하여 크기 계산 */
+}
+
+/* 탭과 컨텐츠의 간격 맞추기 */
+.tab-pane {
+    min-height: 500px;  /* 탭의 최소 높이를 설정하여 동일한 높이 유지 */
+    width: 100%;  /* 탭 컨텐츠의 너비를 100%로 설정 */
+    box-sizing: border-box;  /* 패딩 포함하여 크기 계산 */
+}

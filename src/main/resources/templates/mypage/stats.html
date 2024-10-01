@@ -64,6 +64,10 @@
           <li class="nav-item">
             <a class="nav-link" id="diary-tab" data-bs-toggle="tab" href="#diary" role="tab" aria-controls="diary" aria-selected="false">다이어리</a>
           </li>
+          <!-- 좋아요 랭킹 탭 추가 -->
+          <li class="nav-item">
+            <a class="nav-link" id="likes-tab" data-bs-toggle="tab" href="#likes" role="tab" aria-controls="likes" aria-selected="false">좋아요 랭킹</a>
+          </li>
         </ul>
 
         <!-- 탭 콘텐츠 -->
@@ -131,7 +135,14 @@
           <div class="tab-pane fade" id="diary" role="tabpanel" aria-labelledby="diary-tab">
             <canvas id="diaryChart" width="500" height="500"></canvas>
           </div>
-        </div>
+
+          <!-- 좋아요 랭킹 탭 콘텐츠 -->
+          <div class="tab-pane fade" id="likes" role="tabpanel" aria-labelledby="likes-tab">
+            <h3>좋아요 랭킹 TOP 3</h3>
+            <ul id="likeRankingList">
+              <!-- 좋아요 랭킹 항목이 여기 추가됨 -->
+            </ul>
+          </div>
       </section>
     </div>
   </div>

@@ -1,51 +1,66 @@
 $(document).ready(function() {
-    // 페이지 로드 시 AJAX 요청으로 해시태그 및 다이어리 통계 데이터를 가져옴
+    // 페이지 로드 시 AJAX 요청으로 해시태그, 다이어리, 좋아요 랭킹 통계 데이터를 가져옴
     $.ajax({
-        url: '/mypage/api/stats',  // 백엔드에서 데이터를 가져옴
+        url: '/mypage/api/stats',  // 백엔드에서 통계 데이터를 가져오는 URL
         method: 'GET',
         success: function(data) {
-            console.log('Data received:', data);  // 전체 데이터 로그
+            console.log('Data received:', data);  // 수신된 데이터 로그 출력
 
-            // 해시태그 데이터가 존재하는지 확인
+            // 1. 해시태그 데이터가 존재하는지 확인하고 초기 워드 클라우드 렌더링
             if (data['해시태그'] && data['해시태그']['일상']) {
-                generateWordCloud('wordCloudCanvas1', data['해시태그']['일상']);
+                generateWordCloud('wordCloudCanvas1', data['해시태그']['일상']);  // 일상 카테고리 워드 클라우드 렌더링
                 console.log('일상 해시태그 데이터:', data['해시태그']['일상']);
             } else {
                 console.log('일상 해시태그 데이터가 없습니다.');
             }
 
-            // 다이어리 데이터가 존재하는지 확인
+            // 2. 다이어리 데이터가 존재하는지 확인하고 초기 차트 렌더링
             if (data['다이어리']) {
-                renderDiaryChart(data['다이어리']);
-                console.log('다이어리 데이터:', data['다이어리']);  // 다이어리 데이터 로그
+                renderDiaryChart(data['다이어리']);  // 다이어리 차트 렌더링
+                console.log('다이어리 데이터:', data['다이어리']);
             } else {
                 console.log('다이어리 데이터가 없습니다.');
             }
 
-            // 해시태그 카테고리 탭 전환 시 워드 클라우드를 렌더링
-            $('a[data-bs-toggle="tab"]').on('shown.bs.tab', function (e) {
-                const targetTabId = $(e.target).attr('href');  // href 속성값을 가져옴 (#category1 등)
-                const chartId = targetTabId.replace('#category', 'wordCloudCanvas');  // category1 -> wordCloudCanvas1
-                const category = $(e.target).text().trim();  // 탭의 텍스트 (카테고리 이름)
-                console.log('Switched to category:', category);  // 선택된 카테고리 로그
+            // 3. 좋아요 랭킹 데이터가 존재하는지 확인하고 초기 렌더링
+            if (data['좋아요랭킹'] && data['좋아요랭킹'].length > 0) {
+                renderTopLikedNotesChart(data['좋아요랭킹']);  // 좋아요 랭킹 렌더링
+                console.log('좋아요 랭킹 데이터:', data['좋아요랭킹']);
+            } else {
+                console.log('좋아요 랭킹 데이터가 없습니다.');
+            }
 
-                // 선택된 카테고리의 해시태그 데이터를 가져옴
-                if (data['해시태그'] && data['해시태그'][category]) {
-                    console.log(`${category} 데이터:`, data['해시태그'][category]);
-                    generateWordCloud(chartId, data['해시태그'][category]);  // 해당 카테고리의 워드 클라우드 렌더링
-                } else {
-                    console.log(`${category} 해시태그 데이터가 없습니다.`);
-                }
-            });
-
-            // 다이어리 탭 전환 시 다이어리 차트를 렌더링
+            // 4. 탭 전환 시 이벤트 처리 (하나의 이벤트 핸들러로 통합)
             $('a[data-bs-toggle="tab"]').on('shown.bs.tab', function (e) {
-                const targetTabId = $(e.target).attr('href');
-                if (targetTabId === '#diary') {
+                const targetTabId = $(e.target).attr('href');  // 탭의 href 속성 가져오기
+                const tabId = targetTabId.substring(1);  // '#' 제거
+
+                if (tabId.startsWith('category')) {
+                    const categoryIndex = parseInt(tabId.replace('category', '')) - 1;  // 카테고리 인덱스 계산
+                    const categoryNames = ['일상', '여행', '육아', '연애', '취미', '운동'];
+                    const categoryName = categoryNames[categoryIndex];  // 카테고리 이름 가져오기
+                    const canvasId = 'wordCloudCanvas' + (categoryIndex + 1);  // 해당 워드 클라우드 캔버스 ID
+
+                    console.log('Switched to category:', categoryName);
+
+                    // 선택된 카테고리의 해시태그 데이터가 존재하는지 확인하고, 워드 클라우드 렌더링
+                    if (data['해시태그'] && data['해시태그'][categoryName]) {
+                        console.log(`${categoryName} 데이터:`, data['해시태그'][categoryName]);
+                        generateWordCloud(canvasId, data['해시태그'][categoryName]);  // 워드 클라우드 렌더링
+                    } else {
+                        console.log(`${categoryName} 해시태그 데이터가 없습니다.`);
+                    }
+                } else if (tabId === 'diary') {
                     if (data['다이어리']) {
-                        renderDiaryChart(data['다이어리']);
+                        renderDiaryChart(data['다이어리']);  // 다이어리 차트 렌더링
                     } else {
                         console.log('다이어리 데이터가 없습니다.');
+                    }
+                } else if (tabId === 'likes') {
+                    if (data['좋아요랭킹'] && data['좋아요랭킹'].length > 0) {
+                        renderTopLikedNotesChart(data['좋아요랭킹']);  // 좋아요 랭킹 렌더링
+                    } else {
+                        console.log('좋아요 랭킹 데이터가 없습니다.');
                     }
                 }
             });
@@ -60,16 +75,16 @@ $(document).ready(function() {
         const canvas = document.getElementById(canvasId);
 
         if (!canvas) {
-            console.error(`Canvas with id ${canvasId} not found.`);
+            console.error(`Canvas with id ${canvasId} not found.`);  // 해당 id를 가진 canvas가 없으면 오류 출력
             return;
         }
 
-        const words = Object.entries(hashtagData).map(([word, count]) => [word, count * 10]);
+        const words = Object.entries(hashtagData).map(([word, count]) => [word, count]);  // 해시태그 데이터를 워드 클라우드 형식으로 변환
 
         WordCloud(canvas, {
             list: words,
             gridSize: 12,
-            weightFactor: 2,
+            weightFactor: 20,
             fontFamily: 'Arial, sans-serif',
             color: 'random-light',
             backgroundColor: '#fff',
@@ -82,18 +97,16 @@ $(document).ready(function() {
     function renderDiaryChart(diaryData) {
         const ctx = document.getElementById('diaryChart').getContext('2d');
 
-        // 다이어리 카테고리 이름 배열
-        const categories = Object.keys(diaryData);
+        const categories = Object.keys(diaryData);  // 다이어리 카테고리 이름 배열
         const counts = Object.values(diaryData);  // 카테고리별 다이어리 수
 
-        // 기존 차트가 있다면 제거
         if (window.diaryChart && typeof window.diaryChart.destroy === 'function') {
-            window.diaryChart.destroy();
+            window.diaryChart.destroy();  // 기존 차트가 있으면 제거
         }
 
-        // 새로운 차트를 생성하여 window.diaryChart에 저장
+        // 새로운 차트를 생성
         window.diaryChart = new Chart(ctx, {
-            type: 'bar',  // 막대 차트
+            type: 'bar',  // 막대 차트 형식
             data: {
                 labels: categories,
                 datasets: [{
@@ -123,11 +136,11 @@ $(document).ready(function() {
                 maintainAspectRatio: false,  // 차트가 화면 크기에 맞게 조정되도록 설정
                 scales: {
                     y: {
-                        beginAtZero: true,  // y축 0부터 시작
+                        beginAtZero: true,  // y축이 0부터 시작하도록 설정
                         ticks: {
                             color: '#333',  // y축 텍스트 색상
                             font: {
-                                size: 14  // 폰트 크기
+                                size: 14  // y축 폰트 크기
                             }
                         }
                     },
@@ -135,7 +148,7 @@ $(document).ready(function() {
                         ticks: {
                             color: '#333',  // x축 텍스트 색상
                             font: {
-                                size: 14  // 폰트 크기
+                                size: 14  // x축 폰트 크기
                             }
                         }
                     }
@@ -160,6 +173,17 @@ $(document).ready(function() {
                     }
                 }
             }
+        });
+    }
+
+    // 좋아요 랭킹을 렌더링하는 함수
+    function renderTopLikedNotesChart(likeRankingData) {
+        const rankingList = $('#likeRankingList');  // 좋아요 랭킹 리스트를 표시할 DOM 요소
+        rankingList.empty();  // 기존 리스트 초기화
+
+        // 상위 3개의 좋아요 랭킹을 리스트에 추가
+        likeRankingData.slice(0, 3).forEach((note, index) => {
+            rankingList.append(`<li>${index + 1}위: ${note.noteTitle} (좋아요: ${note.likeCount}개)</li>`);
         });
     }
 });
