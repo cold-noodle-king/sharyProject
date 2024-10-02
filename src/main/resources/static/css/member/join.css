@@ -1,0 +1,155 @@
+/* join.css */
+
+/* 전체 페이지 스타일 초기화 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Spoqa Han Sans Neo', sans-serif;
+    background-color: #f5f5f5;
+}
+
+/* 섹션 스타일 */
+section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+/* 폼 컨테이너 스타일 */
+form#joinform {
+    background-color: #ffffff;
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 500px;
+}
+
+/* 테이블 스타일 */
+form#joinform table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+form#joinform th,
+form#joinform td {
+    padding: 10px;
+    text-align: left;
+    vertical-align: middle;
+}
+
+form#joinform th {
+    width: 30%;
+    font-weight: bold;
+    color: #072153;
+}
+
+form#joinform td {
+    width: 70%;
+}
+
+/* 입력 필드 스타일 */
+form#joinform input[type="text"],
+form#joinform input[type="password"],
+form#joinform input[type="date"] {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+form#joinform input[readonly] {
+    background-color: #f9f9f9;
+    cursor: not-allowed;
+}
+
+/* 버튼 스타일 */
+form#joinform input[type="button"],
+form#joinform button {
+    padding: 12px 20px;
+    border: none;
+    border-radius: 4px;
+    background-color: #072153; /* 기본 버튼 색상 */
+    color: #fff;
+    font-size: 14px;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+form#joinform input[type="button"] {
+    background-color: #ce8ece; /* 중복확인 버튼 색상 */
+}
+
+form#joinform input[type="button"]:hover,
+form#joinform button:hover {
+    background-color: #072153;
+}
+
+form#joinform input[type="button"]:hover {
+    background-color: #ce8ece;
+}
+
+/* 성별 라디오 버튼 스타일 */
+form#joinform input[type="radio"] {
+    margin-right: 5px;
+}
+
+form#joinform label {
+    margin-right: 15px;
+    font-size: 14px;
+    color: #bc9fbc;
+}
+
+/* 제출 버튼 영역 정렬 */
+form#joinform #submit {
+    text-align: center;
+}
+
+form#joinform #submit button {
+    width: 100px;
+}
+
+form#joinform #submit button[type="reset"] {
+    background-color: #dd5e54;
+}
+
+form#joinform #submit button[type="reset"]:hover {
+    background-color: #ed564d;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 600px) {
+    form#joinform {
+        width: 90%;
+        padding: 20px;
+    }
+
+    form#joinform th,
+    form#joinform td {
+        display: block;
+        width: 100%;
+    }
+
+    form#joinform th {
+        margin-top: 20px;
+    }
+
+    form#joinform td {
+        margin-bottom: 10px;
+    }
+
+    form#joinform #submit {
+        display: flex;
+        flex-direction: column;
+    }
+
+    form#joinform #submit button {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+}

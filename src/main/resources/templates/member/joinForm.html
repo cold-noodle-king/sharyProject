@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <title>회원가입</title>
     <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
+    <!-- 웹 폰트 추가 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/spoqa/spoqa-han-sans/css/SpoqaHanSansNeo.css">
+    <!-- CSS 파일 링크 -->
+    <link rel="stylesheet" th:href="@{/css/member/join.css}">
     <script>
         $(document).ready(function (){
             let today = new Date().toISOString().split("T")[0]; // 오늘 날짜를 YYYY-MM-DD 형식으로 변환
@@ -84,6 +88,7 @@
             return true; // 모든 조건이 통과되면 true 반환
         }
     </script>
+
 </head>
 <body>
 <section>
