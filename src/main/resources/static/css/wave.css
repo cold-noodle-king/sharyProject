@@ -6,6 +6,8 @@
     height: 100vh;
     background-color: #f2d7d2; /* 상단 배경색 */
     overflow: hidden;
+    transition: background-color 0.5s ease; /* 배경색 전환 효과 추가 */
+
 }
 
 canvas {
@@ -39,4 +41,9 @@ canvas {
     50% {
         transform: translate(-50%, -50%) scale(1.05);
     }
+}
+
+.main-title {
+    cursor: pointer;
+    user-select: none; /* 텍스트 선택 비활성화 */
 }

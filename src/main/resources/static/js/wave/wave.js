@@ -13,8 +13,49 @@ window.onload = function() {
 
     let waves = [];  // 파도 객체를 저장할 배열
     let waveCount = 6;  // 파도의 레이어(층) 수 설정
-    // 밝은 계열의 따뜻한 색상 팔레트
-    let colors = ['#df9b70', '#f69d41', '#fad366', '#FFD1A9', '#FFB6C1', '#FFEBCD'];
+
+    // 감정별 색상 팔레트 정의
+    const colorPalettes = [
+        {   // 행복 (Happiness) - 따뜻한 색상 팔레트
+            name: '행복',
+            colors: ['#df9b70', '#f69d41', '#fad366', '#FFD1A9', '#FFB6C1', '#FFEBCD'],
+            firstWaveColor: '#eaa087',
+            backgroundColor: '#f2d7d2'  // 행복의 배경색
+        },
+        {   // 우울 (Sadness) - 시원한 색상 팔레트
+            name: '우울',
+            colors: ['#70a1df', '#419df6', '#66d3fa', '#a9d1ff', '#b6c1ff', '#ebcdff'],
+            firstWaveColor: '#70a1df',
+            backgroundColor: '#d2e9f2'  // 우울의 배경색
+        },
+        {   // 화남 (Anger) - 연한 붉은 색상 조합
+            name: '화남',
+            colors: ['#ffcccc', '#ff9999', '#ff6666', '#ff4d4d', '#ff1a1a', '#e60000'],
+            firstWaveColor: '#ffcccc',
+            backgroundColor: '#f2d2d2'  // 화남의 배경색
+        },
+        {   // 놀람 (Surprise) - 여러가지 색상 조합
+            name: '놀람',
+            colors: ['#ec1b2c', '#ffffff', '#d1a6e8', '#ffef93', '#FFB6C1', '#FFEBCD'],
+            firstWaveColor: '#0d1a5e',
+            backgroundColor: '#f2f2d2'  // 놀람의 배경색
+        },
+        {   // 두려움 (Fear) - 연한 보라색 계열
+            name: '두려움',
+            colors: ['#e6ccff', '#d1b3ff', '#bc99ff', '#a680ff', '#9966ff', '#8c4dff'],
+            firstWaveColor: '#e6ccff',
+            backgroundColor: '#e9d2f2'  // 두려움의 배경색
+        },
+        {   // 사랑 (Love) - 연한 핑크색 계열
+            name: '사랑',
+            colors: ['#ffe6f2', '#ffccdd', '#ffb3c9', '#ff99b5', '#ff80a1', '#ff668c'],
+            firstWaveColor: '#ffe6f2',
+            backgroundColor: '#f2d2e3'  // 사랑의 배경색
+        }
+    ];
+
+    let currentPaletteIndex = 0;  // 현재 색상 팔레트의 인덱스
+    let colors = colorPalettes[currentPaletteIndex].colors;  // 초기 색상 팔레트 설정
 
     // 파도 클래스를 정의하여 각 파도에 대한 설정과 동작을 관리
     class Wave {
@@ -31,9 +72,9 @@ window.onload = function() {
             this.verticalSpeed = 0.005 + Math.random() * 0.01;  // 수직 움직임 속도
             this.verticalAmplitude = 10 + Math.random() * 10;  // 수직 움직임 진폭
 
-            // 첫 번째 파도의 색상을 #f89671로 고정
+            // 첫 번째 파도의 색상을 팔레트의 첫 번째 색상으로 고정
             if (this.index === 0) {
-                this.color = '#eaa087';
+                this.color = colorPalettes[currentPaletteIndex].firstWaveColor;
             } else {
                 this.color = colors[index % colors.length];  // 다른 파도는 색상 팔레트에서 순서대로 가져옴
             }
@@ -71,6 +112,15 @@ window.onload = function() {
             // 진폭을 시간에 따라 변하게 하여 랜덤한 흔들림 효과 추가
             this.amplitude = this.baseAmplitude + Math.sin(this.phase * 2) * (this.baseAmplitude * 0.2);
         }
+
+        // 파도의 색상을 업데이트하는 메서드
+        updateColor() {
+            if (this.index === 0) {
+                this.color = colorPalettes[currentPaletteIndex].firstWaveColor;
+            } else {
+                this.color = colors[this.index % colors.length];
+            }
+        }
     }
 
     // 파도 배열 초기화
@@ -99,4 +149,28 @@ window.onload = function() {
 
     initWaves();  // 파도 초기화
     animate();  // 애니메이션 시작
-}
+
+    // "Shary" 요소 가져오기
+    const sharyText = document.getElementById('sharyText');
+
+    // ".wave-section" 요소 가져오기
+    const waveSection = document.querySelector('.wave-section');
+
+    // 초기 배경색 설정
+    waveSection.style.backgroundColor = colorPalettes[currentPaletteIndex].backgroundColor;
+
+    // "Shary" 클릭 이벤트 리스너 추가
+    sharyText.addEventListener('click', function() {
+        // 다음 색상 팔레트로 이동
+        currentPaletteIndex = (currentPaletteIndex + 1) % colorPalettes.length;
+        colors = colorPalettes[currentPaletteIndex].colors;
+
+        // 각 파도의 색상을 업데이트
+        waves.forEach(wave => {
+            wave.updateColor();
+        });
+
+        // 배경색 업데이트
+        waveSection.style.backgroundColor = colorPalettes[currentPaletteIndex].backgroundColor;
+    });
+};
