@@ -11,7 +11,7 @@ body {
 }
 
 .image-section {
-    flex: 1;
+    flex: 2;
     background-color: #ffffff;
     display: flex;
     justify-content: center;
@@ -24,12 +24,15 @@ body {
 }
 
 .form-section {
+    font-family: 'Spoqa Han Sans Neo', sans-serif;
     flex: 1;
     background-color: #ffffff;
     padding: 60px;
     display: flex;
     flex-direction: column;
     justify-content: center;
+    /*max-width: 400px; !* 최대 너비 설정 *!*/
+    margin: auto; /* 좌우 중앙 정렬 */
 }
 
 .form-section h1 {
@@ -38,6 +41,7 @@ body {
 }
 
 .input-group {
+    font-family: 'Spoqa Han Sans Neo', sans-serif;
     margin-bottom: 20px;
 }
 

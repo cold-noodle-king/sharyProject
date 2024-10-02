@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8">
@@ -7,7 +7,7 @@
     <link rel="stylesheet" th:href="@{/css/login.css}">
     <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
     <!-- 웹 폰트 추가 -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/spoqa/spoqa-han-sans@2.1.0/css/SpoqaHanSansNeo.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/spoqa/spoqa-han-sans/css/SpoqaHanSansNeo.css">
 
     <script>
         $(document).ready(function() {
@@ -26,18 +26,18 @@
 <div class="login-wrapper">
     <div class="image-section">
         <!-- 이미지 추가 -->
-        <img src="/images/noteCover5.png" alt="로그인 이미지">
+        <img src="/images/ai-generated.jpg" alt="로그인 이미지">
     </div>
     <div class="form-section">
         <h1>로그인</h1>
         <form id="loginForm" th:action="@{/member/login}" method="post">
             <div class="input-group">
                 <label for="memberId">아이디</label>
-                <input type="text" name="memberId" id="memberId" />
+                <input type="text" name="memberId" id="memberId" placeholder="아이디 입력"/>
             </div>
             <div class="input-group">
                 <label for="memberPw">비밀번호</label>
-                <input type="password" name="memberPw" id="memberPw" />
+                <input type="password" name="memberPw" id="memberPw" placeholder="비밀번호 입력"/>
             </div>
             <div class="button-group">
                 <input type="submit" value="로그인" />
