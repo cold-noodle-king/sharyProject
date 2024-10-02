@@ -223,7 +223,7 @@ public class MypageController {
 
     /**
      * 모달용 프로필 페이지
-     * @param model
+     * @param
      * @param user 현재 로그인 중인 유저
      * @return modal에 필요한 데이터를 전달하는 메서드
      */
