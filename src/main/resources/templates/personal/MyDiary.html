@@ -18,6 +18,9 @@
 
     <!-- MyDiary 페이지 전용 CSS 파일 -->
     <link href="/css/personal/MyDiary.css" rel="stylesheet">
+
+    <!-- jQuery 로드 -->
+    <script th:src="@{/js/personal/PersonalMyDiary.js}"></script>
 </head>
 <body>
 <!-- 헤더 부분 불러오기 -->
@@ -41,14 +44,11 @@
         <!-- 다이어리 목록 반복 출력 -->
         <div class="col-md-3 mb-4" th:each="diary : ${diaryList}">
             <div class="my-diary-card h-100">
-                <!-- 커버 이름을 사용해 절대경로에서 이미지를 불러오는 코드 -->
-                <a th:href="@{'/personal/MyNote/' + ${diary.personalDiaryNum}}"> <!-- 클릭 시 myNote 페이지로 이동하며 diaryNum을 전달 -->
-                    <img th:src="@{'/images/' + ${diary.coverName} + '.png'}"
-                         alt="커버 이미지" class="card-img-top">
+                <a th:href="@{'/personal/MyNote/' + ${diary.personalDiaryNum}}">
+                    <img th:src="@{'/images/' + ${diary.coverName} + '.png'}" alt="커버 이미지" class="card-img-top">
                 </a>
-                <!-- 다이어리 이름을 이미지 하단에 표시 -->
                 <div class="card-footer text-center">
-                    <p th:text="${diary.diaryName} != null ? ${diary.diaryName} : '이름 없음'"></p> <!-- 다이어리 이름 -->
+                    <p th:text="${diary.diaryName} != null ? ${diary.diaryName} : '이름 없음'"></p>
                 </div>
             </div>
         </div>
@@ -74,11 +74,17 @@
 
             <!-- 모달 본문 -->
             <div class="modal-body">
+                <h5>다이어리 선택</h5>
+                <select id="diarySelect" class="form-select">
+                    <option value="" selected>수정할 다이어리를 선택하세요</option>
+                    <option th:each="diary : ${diaryList}" th:value="${diary.personalDiaryNum}" th:text="${diary.diaryName}"></option>
+                </select>
+                <br>
+
                 <div class="menu-list">
-                    <a href="#" th:href="@{/personal/categorySelect}" class="menu-item action-btn">신규 다이어리</a>
-                    <a href="#" th:href="@{/personal/editDiary}" class="menu-item action-btn">다이어리 수정</a>
-                    <a href="#" th:href="@{/personal/deleteDiary}" class="menu-item action-btn">다이어리 삭제</a>
-                    <a href="#" th:href="@{/personal/addDiarySheet}" class="menu-item action-btn">다이어리 속지 추가</a>
+                    <a href="#" th:href="@{/personal/categorySelect}" class="menu-item action-btn">다이어리 생성</a>
+                    <a href="#" class="menu-item action-btn" onclick="handleEditDiary()">다이어리 수정</a>
+                    <a href="#" class="menu-item action-btn" onclick="handleDeleteDiary()">다이어리 삭제</a>
                 </div>
             </div>
 

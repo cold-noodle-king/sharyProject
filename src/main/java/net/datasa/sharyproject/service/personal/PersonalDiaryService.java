@@ -112,4 +112,32 @@ public class PersonalDiaryService {
                 .memberId(diary.getMember().getMemberId())        // 회원 ID
                 .build();
     }
+
+    // 카테고리 리스트를 가져오는 메서드 추가
+    public List<CategoryEntity> getAllCategories() {
+        return categoryRepository.findAll();  // 모든 카테고리를 반환
+    }
+
+    // 다이어리 수정 기능
+    public void updateDiary(PersonalDiaryDTO diaryDTO) {
+        PersonalDiaryEntity diary = personalDiaryRepository.findById(diaryDTO.getPersonalDiaryNum())
+                .orElseThrow(() -> new RuntimeException("해당 다이어리를 찾을 수 없습니다."));
+
+        // 다이어리 정보 업데이트
+        diary.setDiaryName(diaryDTO.getDiaryName());
+        diary.setCategory(categoryRepository.findById(diaryDTO.getCategoryNum())
+                .orElseThrow(() -> new RuntimeException("카테고리를 찾을 수 없습니다.")));
+        diary.setCoverTemplate(coverTemplateRepository.findById(diaryDTO.getCoverNum())
+                .orElseThrow(() -> new RuntimeException("커버 템플릿을 찾을 수 없습니다.")));
+
+        // 다이어리 저장
+        personalDiaryRepository.save(diary);
+    }
+
+
+    // 다이어리 삭제 기능
+    public void deleteDiary(Integer diaryNum) {
+        // 다이어리 삭제
+        personalDiaryRepository.deleteById(diaryNum);
+    }
 }

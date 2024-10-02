@@ -2,9 +2,11 @@ package net.datasa.sharyproject.controller.personal;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.datasa.sharyproject.domain.dto.CategoryDTO;
 import net.datasa.sharyproject.domain.dto.EmotionDTO;
 import net.datasa.sharyproject.domain.dto.HashtagDTO;
 import net.datasa.sharyproject.domain.dto.personal.*;
+import net.datasa.sharyproject.domain.entity.CategoryEntity;
 import net.datasa.sharyproject.service.EmotionService;
 import net.datasa.sharyproject.service.HashtagService;
 import net.datasa.sharyproject.service.personal.*;
@@ -171,6 +173,53 @@ public class MyDiaryController {
         } catch (Exception e) {
             log.error("다이어리 저장 실패", e);
             return ResponseEntity.status(500).body(Map.of("error", "다이어리 저장에 실패했습니다."));
+        }
+    }
+
+    // 수정/삭제 페이지로 이동
+    @GetMapping("/editOrDeleteDiary/{diaryNum}")
+    public String editOrDeleteDiary(@PathVariable("diaryNum") Integer diaryNum, Model model) {
+        // 선택된 다이어리 정보 가져오기
+        PersonalDiaryDTO diary = personalDiaryService.getDiaryById(diaryNum);
+        model.addAttribute("diary", diary);
+
+        // 카테고리 및 커버 리스트 가져오기
+        List<CategoryEntity> categories = personalDiaryService.getAllCategories();
+        List<CoverTemplateDTO> covers = coverTemplateService.getCoverTemplates();
+        model.addAttribute("categories", categories);
+        model.addAttribute("covers", covers);
+
+        return "personal/editOrDeleteDiary";
+    }
+
+    // 다이어리 수정 처리
+    @PostMapping("/updateDiary")
+    public ResponseEntity<?> updateDiary(@RequestParam Integer diaryNum,  // 다이어리 ID
+                                         @RequestParam String diaryName,  // 다이어리 이름
+                                         @RequestParam Integer categoryNum,  // 카테고리 ID
+                                         @RequestParam Integer coverNum) {  // 커버 ID
+        try {
+            // 수정할 다이어리 정보 가져오기
+            PersonalDiaryDTO diaryDTO = personalDiaryService.getDiaryById(diaryNum);
+            diaryDTO.setDiaryName(diaryName);  // 다이어리 이름 업데이트
+            diaryDTO.setCategoryNum(categoryNum);  // 카테고리 업데이트
+            diaryDTO.setCoverNum(coverNum);  // 커버 업데이트
+
+            personalDiaryService.updateDiary(diaryDTO);  // 다이어리 정보 저장
+            return ResponseEntity.ok("다이어리 수정 성공");
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("다이어리 수정 실패");
+        }
+    }
+
+    // 다이어리 삭제 처리 (POST)
+    @PostMapping("/deleteDiary")
+    public ResponseEntity<?> deleteDiary(@RequestParam Integer diaryNum) {  // 다이어리 ID
+        try {
+            personalDiaryService.deleteDiary(diaryNum);  // 다이어리 삭제
+            return ResponseEntity.ok("다이어리 삭제 성공");
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("다이어리 삭제 실패");
         }
     }
 
