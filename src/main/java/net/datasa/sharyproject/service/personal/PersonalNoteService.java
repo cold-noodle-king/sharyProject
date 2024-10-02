@@ -178,4 +178,59 @@ public class PersonalNoteService {
                 .map(noteHashtag -> noteHashtag.getHashtag().getHashtagName())
                 .collect(Collectors.toList());
     }
+
+    /**
+     * 노트 수정 메서드
+     *
+     * @param noteDTO    수정된 PersonalNoteDTO
+     * @param hashtagIds 해시태그 번호 리스트
+     */
+    @Transactional
+    public void updateNote(PersonalNoteDTO noteDTO, List<Integer> hashtagIds) {
+        // 기존 노트 정보 가져오기
+        PersonalNoteEntity existingNote = personalNoteRepository.findById(noteDTO.getPersonalNoteNum())
+                .orElseThrow(() -> new RuntimeException("노트 정보를 찾을 수 없습니다."));
+
+        // 새로운 값으로 노트 업데이트
+        existingNote.setNoteTitle(noteDTO.getNoteTitle());
+        existingNote.setContents(noteDTO.getContents());
+        existingNote.setDiaryDate(noteDTO.getDiaryDate());
+        existingNote.setEmotion(emotionRepository.findById(noteDTO.getEmotionNum())
+                .orElseThrow(() -> new RuntimeException("감정 정보가 없습니다.")));
+        existingNote.setGranted(grantedRepository.findById(noteDTO.getGrantedNum())
+                .orElseThrow(() -> new RuntimeException("공개 권한 정보가 없습니다.")));
+        existingNote.setLocation(noteDTO.getLocation());
+        existingNote.setFileName(noteDTO.getFileName());
+
+        // **노트 템플릿 업데이트**
+        NoteTemplateEntity noteTemplate = noteTemplateRepository.findById(noteDTO.getNoteTemplate().getNoteNum())
+                .orElseThrow(() -> new RuntimeException("노트 템플릿 정보가 없습니다."));
+        existingNote.setNoteTemplate(noteTemplate);
+
+        // 해시태그 업데이트
+        if (hashtagIds != null && !hashtagIds.isEmpty()) {
+            List<HashtagEntity> hashtags = hashtagRepository.findAllById(hashtagIds);
+            existingNote.setHashtags(hashtags);
+        }
+
+        // 업데이트된 노트 저장
+        personalNoteRepository.save(existingNote);
+    }
+
+    /**
+     * 노트 삭제 메서드
+     *
+     * @param noteNum 삭제할 노트 번호
+     */
+    @Transactional
+    public void deleteNoteById(Integer noteNum) {
+        PersonalNoteEntity note = personalNoteRepository.findById(noteNum)
+                .orElseThrow(() -> new RuntimeException("노트를 찾을 수 없습니다."));
+
+        // 중간 테이블(PersonalNoteHashtag)에서만 연관된 해시태그 제거
+        note.getHashtags().clear();  // 해시태그 리스트를 비워서 연결만 끊음
+
+        // 노트 삭제
+        personalNoteRepository.deleteById(noteNum);
+    }
 }

@@ -97,3 +97,36 @@ $(document).ready(function() {
         });
     });
 });
+
+function handleEditNote() {
+    var noteNum = document.getElementById("noteSelect").value; // 선택된 노트 번호 가져오기
+    if (noteNum) {
+        window.location.href = '/personal/editOrDeleteNote?noteNum=' + noteNum; // 노트 수정 또는 삭제 페이지로 이동
+    } else {
+        alert('수정할 노트를 선택하세요.');
+    }
+}
+
+function handleDeleteNote() {
+    const selectedNote = document.getElementById('noteSelect').value;
+    if (selectedNote) {
+        const confirmed = confirm('정말로 이 노트를 삭제하시겠습니까?');
+        if (confirmed) {
+            // 여기서 AJAX 요청을 사용하여 서버로 삭제 요청을 보냅니다.
+            $.ajax({
+                url: `/personal/deleteNote/${selectedNote}`,
+                type: 'DELETE',
+                success: function(response) {
+                    alert('노트가 성공적으로 삭제되었습니다.');
+                    // 페이지를 새로 고쳐 노트 목록을 업데이트합니다.
+                    location.reload();
+                },
+                error: function(error) {
+                    alert('노트 삭제에 실패했습니다.');
+                }
+            });
+        }
+    } else {
+        alert('삭제할 노트를 선택하세요.');
+    }
+}
