@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ko"
-      xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>My Diary</title>
@@ -14,7 +14,7 @@
 
     <!-- 헤더와 푸터용 스타일 -->
     <link href="../header/css/styles.css" rel="stylesheet">
-    <link rel="stylesheet" href="../footer/css/styles.css">
+    <link href="../footer/css/styles.css" rel="stylesheet">
 
     <!-- MyDiary 페이지 전용 CSS 파일 -->
     <link href="/css/personal/MyDiary.css" rel="stylesheet">
@@ -25,7 +25,7 @@
 <br>
 <br>
 <!-- 메인 컨테이너 -->
-<div id="main" class="container mt-5">
+<div class="container mt-5" id="main">
     <h2>My Diary</h2>
     <br>
 
@@ -42,9 +42,10 @@
         <div class="col-md-3 mb-4" th:each="diary : ${diaryList}">
             <div class="my-diary-card h-100">
                 <!-- 커버 이름을 사용해 절대경로에서 이미지를 불러오는 코드 -->
-                <a th:href="@{'/personal/MyNote/' + ${diary.personalDiaryNum}}"> <!-- 클릭 시 myNote 페이지로 이동하며 diaryNum을 전달 -->
-                    <img th:src="@{'/images/' + ${diary.coverName} + '.png'}"
-                         alt="커버 이미지" class="card-img-top">
+                <a th:href="@{'/personal/MyNote/' + ${diary.personalDiaryNum}}">
+                    <!-- 클릭 시 myNote 페이지로 이동하며 diaryNum을 전달 -->
+                    <img alt="커버 이미지"
+                         class="card-img-top" th:src="@{'/images/' + ${diary.coverName} + '.png'}">
                 </a>
                 <!-- 다이어리 이름을 이미지 하단에 표시 -->
                 <div class="card-footer text-center">
@@ -56,35 +57,35 @@
 
     <!-- 메뉴 버튼 -->
     <div class="text-center mt-4">
-        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#menuModal">
+        <button class="btn btn-primary" data-bs-target="#menuModal" data-bs-toggle="modal">
             메뉴 <!-- 메뉴 텍스트 -->
         </button>
     </div>
 </div>
 
 <!-- 메뉴 모달 -->
-<div class="modal fade" id="menuModal" tabindex="-1" aria-labelledby="menuLabel" aria-hidden="true">
+<div aria-hidden="true" aria-labelledby="menuLabel" class="modal fade" id="menuModal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
             <!-- 모달 헤더 -->
             <div class="modal-header">
                 <h5 class="modal-title" id="menuLabel">다이어리 관리</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
             </div>
 
             <!-- 모달 본문 -->
             <div class="modal-body">
                 <div class="menu-list">
-                    <a href="#" th:href="@{/personal/categorySelect}" class="menu-item action-btn">신규 다이어리</a>
-                    <a href="#" th:href="@{/personal/editDiary}" class="menu-item action-btn">다이어리 수정</a>
-                    <a href="#" th:href="@{/personal/deleteDiary}" class="menu-item action-btn">다이어리 삭제</a>
-                    <a href="#" th:href="@{/personal/addDiarySheet}" class="menu-item action-btn">다이어리 속지 추가</a>
+                    <a class="menu-item action-btn" href="#" th:href="@{/personal/categorySelect}">신규 다이어리</a>
+                    <a class="menu-item action-btn" href="#" th:href="@{/personal/editDiary}">다이어리 수정</a>
+                    <a class="menu-item action-btn" href="#" th:href="@{/personal/deleteDiary}">다이어리 삭제</a>
+                    <a class="menu-item action-btn" href="#" th:href="@{/personal/addDiarySheet}">다이어리 속지 추가</a>
                 </div>
             </div>
 
             <!-- 모달 푸터 -->
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary action-btn" data-bs-dismiss="modal">닫기</button>
+                <button class="btn btn-secondary action-btn" data-bs-dismiss="modal" type="button">닫기</button>
             </div>
         </div>
     </div>

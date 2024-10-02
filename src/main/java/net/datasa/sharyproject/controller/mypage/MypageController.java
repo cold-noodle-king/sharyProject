@@ -220,15 +220,6 @@ public class MypageController {
 
     }
 
-    @GetMapping("follow")
-    public String follow() {
-        return "mypage/follow";
-    }
-
-    @GetMapping("message")
-    public String message() {
-        return "mypage/message";
-    }
 
     /**
      * 모달용 프로필 페이지
@@ -267,5 +258,41 @@ public class MypageController {
         response.put("ment", profile.getMent());
 
         return ResponseEntity.ok(response);
+
     }
+
+
+    @GetMapping("calendar")
+    public String calendar(@AuthenticationPrincipal AuthenticatedUser user, Model model) {
+        if (user == null) {
+            log.error("인증된 사용자가 없습니다.");
+            throw new RuntimeException("인증된 사용자가 없습니다.");
+        }
+
+        String username = user.getUsername();
+        MemberEntity member = memberService.findById(username)
+                .orElseThrow(() -> new RuntimeException("사용자 (" + username + ")를 찾을 수 없습니다."));
+
+        // 프로필 정보를 데이터베이스에서 가져옴
+        ProfileEntity profile = profileService.findByMember(member)
+                .orElseGet(() -> {
+                    // 프로필 정보가 없으면 기본 프로필을 생성하여 반환
+                    ProfileEntity defaultProfile = ProfileEntity.builder()
+                            .member(member)
+                            .profilePicture("/images/profile.png")  // 기본 이미지 설정
+                            .ment("")  // 기본 소개글 설정
+                            .build();
+                    profileService.saveProfile(defaultProfile);  // 생성한 기본 프로필을 저장
+                    return defaultProfile;
+                });
+
+        log.info("로그인된 사용자: {}", username);
+        log.info("멤버 정보: {}", member);
+
+        model.addAttribute("profile", profile);
+        model.addAttribute("member", member);
+
+        return "mypage/calendar";
+    }
+
 }
