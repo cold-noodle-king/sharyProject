@@ -1,0 +1,126 @@
+/* 메인 컨테이너 마진 조정 */
+#main {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    margin-top: 150px; /* 헤더와의 간격 수정 */
+}
+
+/* 다이어리 수정 페이지 컨테이너 스타일 */
+.diary-edit-container {
+    max-width: 900px; /* 컨테이너 너비 확장 */
+    margin: 0 auto;
+    background-color: #f9f9f9;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-top: 50px; /* 컨테이너와 헤더 사이의 간격 */
+}
+
+/* 다이어리 수정 페이지 제목 */
+.diary-edit-title {
+    text-align: center;
+    font-size: 2.2rem;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 30px;
+}
+
+/* 폼 그룹 스타일 */
+.diary-edit-form-group {
+    margin-bottom: 20px;
+}
+
+/* 폼 입력 필드 스타일 */
+.diary-edit-input {
+    padding: 10px;
+    font-size: 1.1rem;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    transition: border-color 0.2s ease;
+}
+
+.diary-edit-input:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+/* 커버 선택 이미지 섹션 */
+.cover-selection {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.cover-selection .row {
+    justify-content: center;
+}
+
+.cover-img {
+    width: 100%;
+    height: auto;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.cover-img:hover {
+    transform: scale(1.05);
+}
+
+.selected {
+    border-color: #007bff;
+    transform: scale(1.1);
+}
+
+/* 버튼 스타일 */
+button[type="submit"] {
+    width: 100%;
+    padding: 12px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    border-radius: 5px;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+button[type="submit"]:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+}
+
+button[type="submit"].btn-danger:hover {
+    background-color: #c82333;
+}
+
+/* 폼 구분을 위한 hr 스타일 */
+hr {
+    margin: 40px 0;
+    border: 0;
+    border-top: 1px solid #ddd;
+}
+
+/* 반응형 설정 */
+@media (max-width: 768px) {
+    .diary-edit-container {
+        padding: 20px;
+    }
+
+    .cover-selection .col-md-3 {
+        width: 100%;
+    }
+
+    button[type="submit"] {
+        font-size: 1rem;
+    }
+}
+
+/* 추가적으로 header와 main container 간의 간격 조정 */
+body {
+    padding-top: 150px; /* 헤더와 본문 간격 */
+}
+
+/* 메인 컨테이너가 페이지 중앙에 있도록 설정 */
+#main.container {
+    margin: 0 auto;
+    max-width: 1100px; /* 최대 컨테이너 너비 설정 */
+}

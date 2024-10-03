@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="UTF-8">
+  <title>노트 수정</title>
+
+  <!-- jQuery 로드 -->
+  <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
+
+  <!-- 부트스트랩 CSS 로드 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- 헤더와 푸터용 스타일 -->
+  <link th:href="@{/header/css/styles.css}" rel="stylesheet">
+  <link th:href="@{/footer/css/styles.css}" rel="stylesheet">
+
+  <!-- 수정 폼 전용 CSS 파일 -->
+  <link th:href="@{/css/personal/editOrDeleteNote.css}" rel="stylesheet">
+
+  <!-- Kakao Maps API 로드 -->
+  <script src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=2ecac24e4cab9337d8d23e22fb469cb6&libraries=services"></script>
+</head>
+<body>
+<!-- 헤더 부분 불러오기 -->
+<div th:replace="~{fragments/header :: header}"></div>
+<br>
+<br>
+
+<!-- 메인 컨테이너 -->
+<div class="container mt-5">
+  <h2>노트 수정</h2>
+  <hr>
+
+  <!-- 노트 수정 폼 -->
+  <form id="editNoteForm" th:action="@{/personal/updateNote}" method="post" enctype="multipart/form-data">
+    <div class="note-form mx-auto">
+      <div class="note-form-content">
+        <!-- 노트 이름 섹션 -->
+        <div class="mb-4">
+          <label for="noteName" class="form-label">노트 이름</label>
+          <input type="text" id="noteName" name="noteName" class="form-control" th:value="${note.noteTitle}" required>
+        </div>
+
+        <!-- 노트 템플릿 선택 섹션 -->
+        <div class="form-group diary-edit-form-group">
+          <label for="noteTemplateSelect">노트 템플릿 선택</label>
+          <div id="noteTemplateSelect" class="cover-selection">
+            <div class="row">
+              <div class="col-md-3 mb-3" th:each="template : ${templates}">
+                <div class="template-wrapper" th:classappend="${template.noteNum == note.noteTemplate.noteNum} ? 'selected' : ''">
+                  <img th:src="@{${template.noteImage}}" alt="노트 템플릿 이미지" class="img-fluid cover-img">
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- 선택된 노트 템플릿 ID를 저장할 숨겨진 input -->
+          <input type="hidden" id="selectedTemplateNum" name="noteTemplateNum" th:value="${note.noteTemplate.noteNum}">
+        </div>
+
+        <!-- 프로필 및 위치 태그 섹션 -->
+        <div class="d-flex align-items-center mb-4">
+          <!-- 프로필 이미지 -->
+          <div class="profile-image me-3">
+            <img th:src="@{${profile.profilePicture}}" alt="프로필 이미지" class="rounded-circle" width="50" height="50">
+          </div>
+          <div class="location-tag w-100">
+            <!-- 위치 표시 -->
+            <input type="text" id="locationDisplay" class="form-control" th:value="${note.location}" readonly>
+            <!-- 위치 선택 버튼 -->
+            <button type="button" id="openMapModal" class="btn btn-secondary mt-2">위치 선택</button>
+
+            <!-- 지도 모달 -->
+            <div class="modal fade" id="mapModal" tabindex="-1" aria-labelledby="mapLabel" aria-hidden="true">
+              <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="mapLabel">위치 선택</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                    <!-- 지도 표시 영역 -->
+                    <div id="map" style="width: 100%; height: 400px;"></div>
+                    <p id="selectedAddress" class="mt-2">선택된 주소: 없음</p>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="confirmAddress">선택</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 숨겨진 필드로 노트 번호, 다이어리 번호 전송 -->
+        <input type="hidden" id="diaryNum" name="diaryNum" th:value="${note.diaryNum}">
+        <input type="hidden" id="noteNum" name="noteNum" th:value="${note.personalNoteNum}">
+
+        <!-- 숨겨진 필드로 위치 정보 전송 -->
+        <input type="hidden" id="locationTag" name="locationTag" th:value="${note.location}">
+
+        <!-- 날짜, 감정 선택, 공개 권한 섹션 -->
+        <div class="d-flex justify-content-between mb-4">
+          <!-- 날짜 선택 (기존 데이터 표시) -->
+          <input type="date" id="diaryDate" name="diaryDate" class="form-control me-3" th:value="${#dates.format(note.diaryDate, 'yyyy-MM-dd')}" required>
+          <!-- 감정 선택 (기존 감정 데이터 표시) -->
+          <select id="diaryEmotion" name="diaryEmotion" class="form-control me-3" required>
+            <option value="">감정을 선택하세요</option>
+            <option th:each="emotion : ${emotions}" th:value="${emotion.emotionNum}" th:selected="${emotion.emotionNum == note.emotionNum}" th:text="${emotion.emotionName}"></option>
+          </select>
+          <!-- 공개 권한 선택 (기존 권한 데이터 표시) -->
+          <select id="diaryPermission" name="diaryPermission" class="form-control" required>
+            <option value="">공개 권한을 선택하세요</option>
+            <option th:each="permission : ${permissions}" th:value="${permission.grantedNum}" th:selected="${permission.grantedNum == note.grantedNum}" th:text="${permission.grantedName}"></option>
+          </select>
+        </div>
+
+        <!-- 이미지 첨부 섹션 -->
+        <div class="mb-4">
+          <label for="diaryImage" class="form-label"><i class="fas fa-camera"></i> 이미지 변경</label>
+          <input type="file" id="diaryImage" name="diaryImage" class="form-control">
+          <!-- 기존 이미지 미리보기 -->
+          <div class="mt-2">
+            <img th:if="${note.fileName != null}" th:src="@{'/uploads/' + ${note.fileName}}" alt="노트 이미지" class="img-thumbnail" width="200">
+          </div>
+        </div>
+
+        <!-- 일기 내용 작성 섹션 -->
+        <div class="mb-4">
+          <textarea id="diaryContent" name="diaryContent" class="form-control" rows="6" th:text="${note.contents}" required></textarea>
+        </div>
+
+        <!-- 해시태그 선택 섹션 수정 -->
+        <div class="mb-4">
+          <label>해시태그 선택</label><br>
+          <div th:each="hashtag : ${hashtags}" class="form-check">
+            <input type="checkbox" th:id="'hashtag-' + ${hashtag.hashtagNum}" th:value="${hashtag.hashtagNum}"
+                   th:name="hashtags" class="form-check-input"
+                   th:checked="${note.hashtagNums.contains(hashtag.hashtagNum)}"> <!-- contains 메서드로 수정 -->
+            <label th:for="'hashtag-' + ${hashtag.hashtagNum}" th:text="${hashtag.hashtagName}" class="form-check-label"></label>
+          </div>
+        </div>
+
+        <!-- 저장 및 취소 버튼 -->
+        <div class="submit-buttons text-end">
+          <button type="submit" class="btn btn-primary">저장</button>
+          <button type="button" class="btn btn-outline-secondary" onclick="window.history.back();">취소</button>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+
+
+<!-- 푸터 부분 불러오기 -->
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+<!-- PersonalNoteForm.js 파일 로드 -->
+<script th:src="@{/js/personal/PersonalNoteForm.js}"></script>
+
+<!-- 부트스트랩 JS 로드 -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- 노트 보기 JS -->
+<script th:src="@{/js/personal/viewNote.js}"></script>
+<script>
+  // 노트 템플릿 선택 시 해당 템플릿을 저장하는 함수
+  function selectTemplate(element) {
+    // 선택된 템플릿의 번호를 히든 인풋에 설정
+    document.getElementById("selectedTemplateNum").value = element.getAttribute("data-template-num");
+
+    // 기존 선택된 템플릿에 적용된 'selected' 클래스를 제거
+    document.querySelectorAll('.template-wrapper').forEach(el => el.classList.remove('selected'));
+
+    // 클릭된 템플릿에 'selected' 클래스 추가
+    element.classList.add('selected');
+  }
+
+  // 모든 템플릿 이미지에 클릭 이벤트를 연결
+  document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll('.template-wrapper').forEach(template => {
+      template.addEventListener('click', function() {
+        selectTemplate(this);
+      });
+    });
+  });
+</script>
+</body>
+</html>

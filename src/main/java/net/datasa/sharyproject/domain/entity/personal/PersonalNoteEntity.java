@@ -86,7 +86,7 @@ public class PersonalNoteEntity {
     private GrantedEntity granted;
 
     // HashtagEntity와 다대다 관계
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany
     @JoinTable(
             name = "personal_note_hashtag",
             joinColumns = @JoinColumn(name = "personal_note_num"),
