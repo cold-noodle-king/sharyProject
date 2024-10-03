@@ -149,6 +149,8 @@
 <script src="/js/emotions/emotions.js"></script>
 <!-- AOS 스크립트 -->
 <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+
 <script>
     AOS.init();
     // 감정 이미지 클릭 시 배경 색상이 변경되도록 설정
@@ -157,6 +159,7 @@
     emotionImages.forEach(image => {
         image.addEventListener('click', () => {
             document.body.style.background = getBackgroundForEmotion(image.alt);
+            document.body.style.transition = 'background 1s ease'; // 배경 전환 효과 추가
         });
     });
 
@@ -168,17 +171,18 @@
             case '슬픔':
                 return 'linear-gradient(to bottom, #a1c4fd, #c2e9fb)';  // 푸른색 배경
             case '화남':
-                return 'linear-gradient(to bottom, #ff758c, #ff7eb3)';  // 빨간색 배경
+                return 'linear-gradient(to bottom, #ffb3ba, #ff9999)';  // 연한 빨강 배경
             case '놀람':
                 return 'linear-gradient(to bottom, #fbc2eb, #a18cd1)';  // 보라색과 핑크
             case '두려움':
-                return 'linear-gradient(to bottom, #f85032, #e73827)';  // 어두운 빨강
+                return 'linear-gradient(to bottom, #ffc3a0, #ffafbd)';  // 연한 오렌지
             case '사랑':
-                return 'linear-gradient(to bottom, #f857a6, #ff5858)';  // 사랑스러운 핑크
+                return 'linear-gradient(to bottom, #ffd1dc, #ff9aa2)';  // 연한 핑크
             default:
                 return 'linear-gradient(to bottom, #f8e3f2, #d8b6d5)';  // 기본 배경
         }
     }
 </script>
+
 </body>
 </html>
