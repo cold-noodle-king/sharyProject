@@ -12137,4 +12137,7 @@ section, .section, #section {
   padding: 0;
 }
 
+#main-content {
+  background-color: rgba(255,255,255,0.55);
+}
 
