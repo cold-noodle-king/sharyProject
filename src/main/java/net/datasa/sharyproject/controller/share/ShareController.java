@@ -22,6 +22,7 @@ import net.datasa.sharyproject.service.HashtagService;
 import net.datasa.sharyproject.service.mypage.ProfileService;
 import net.datasa.sharyproject.service.personal.CoverTemplateService;
 import net.datasa.sharyproject.service.personal.NoteTemplateService;
+import net.datasa.sharyproject.service.share.ReplyService;
 import net.datasa.sharyproject.service.share.ShareDiaryService;
 import net.datasa.sharyproject.service.share.ShareNoteService;
 import org.springframework.beans.factory.annotation.Value;
@@ -40,10 +41,7 @@ import java.security.Principal;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @Slf4j
 @Controller
@@ -62,6 +60,7 @@ public class ShareController {
     private final NoteTemplateRepository noteTemplateRepository;
     private final MemberRepository memberRepository;
     private final ProfileRepository profileRepository;
+    private final ReplyService replyService;
 
     // 파일 업로드 디렉토리 설정 (application.properties에서 주입)
     @Value("${file.upload-dir}")
@@ -242,8 +241,34 @@ public class ShareController {
     }
 
     /**
+     * 공유 다이어리 관리자가 전체 게시물을 확인할 수 있는 메서드
+     * @param diaryNum
+     * @return
+     */
+    @GetMapping("viewBoard")
+    public String viewBoard(@RequestParam("diaryNum") Integer diaryNum, Model model){
+
+        List<ShareNoteDTO> dtoList = shareNoteService.getNotesByDiaryNum(diaryNum);
+        model.addAttribute("noteList", dtoList);
+
+        return "share/viewBoard";
+    }
+
+    @GetMapping("viewReply")
+    public String viewReply(@RequestParam("diaryNum") Integer diaryNum, Model model){
+
+        List<ShareNoteDTO> dtoList = shareNoteService.getNotesByDiaryNum(diaryNum);
+        model.addAttribute("noteList", dtoList);
+
+        List<ReplyDTO> replyList = replyService.getReply(diaryNum);
+        model.addAttribute("replyList", replyList);
+        log.debug("댓글 리스트 정보:{}", replyList);
+
+        return "share/viewReply";
+    }
+
+    /**
      * 내가 생성한 공유다이어리를 삭제하는 메서드
-     *
      * @return
      */
     @GetMapping("deleteDiary")
@@ -388,22 +413,31 @@ public class ShareController {
      */
     @GetMapping("/viewNote/{noteNum}")
     @ResponseBody
-    public ResponseEntity<ShareNoteDTO> viewNote(@PathVariable("noteNum") Integer noteNum) {
-        // 노트 정보를 가져옴
-        ShareNoteDTO note = shareNoteService.getNoteByNum(noteNum);
+    public ResponseEntity<ShareNoteLikeResponseDTO> viewNote(@PathVariable("noteNum") Integer noteNum,
+                                                             @AuthenticationPrincipal AuthenticatedUser user) {
+        try {
+            // 노트 정보 가져오기
+            ShareNoteDTO note = shareNoteService.getNoteByNum(noteNum);
 
-        // 해시태그 정보를 추가로 가져옴
-        List<String> hashtags = shareNoteService.getHashtagsByNoteNum(noteNum);
-        note.setHashtags(hashtags);  // DTO에 해시태그 리스트를 추가
+            // 좋아요 정보 가져오기 (현재 사용자가 해당 노트를 좋아요 눌렀는지 여부 포함)
+            LikeResponseDTO likeResponse = shareNoteService.getLikeInfo(noteNum, user.getUsername());
 
-        log.debug("가져온 노트 정보:{}", note);
-        if (note == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            // 해시태그 정보 추가
+            List<String> hashtags = shareNoteService.getHashtagsByNoteNum(noteNum);
+            note.setHashtags(hashtags);
+
+            // 응답 DTO 생성
+            ShareNoteLikeResponseDTO response = new ShareNoteLikeResponseDTO();
+            response.setShareNote(note);
+            response.setLikeResponse(likeResponse);
+
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (Exception e) {
+            // 예외 처리 (노트가 없거나 오류가 발생한 경우)
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-
-        // 노트 정보 반환
-        return new ResponseEntity<>(note, HttpStatus.OK);
     }
+
 
     /**
      * 노트 저장을 위한 POST 메서드
@@ -559,4 +593,30 @@ public class ShareController {
         return dto;
     }
 
+    @GetMapping("/weather")
+    public String weather(Model model) {
+        // 날씨 API에서 가져온 데이터를 여기서 처리 (예시로 임시 데이터 사용)
+        int currentTemp = 15; // 현재 온도
+        int maxTemp = 20; // 최고 온도
+        int minTemp = 14; // 최저 온도
+        int tempDifference = 6; // 어제와의 온도 차이
+
+        // 시간별 예보 데이터 (임시 데이터)
+        List<Map<String, Object>> hourlyForecast = new ArrayList<>();
+        for (int i = 4; i <= 8; i++) {
+            Map<String, Object> forecast = new HashMap<>();
+            forecast.put("time", "오후 " + i + "시");
+            forecast.put("temp", 20 - i);
+            hourlyForecast.add(forecast);
+        }
+
+        // 데이터를 모델에 추가하여 Thymeleaf 템플릿에 전달
+        model.addAttribute("currentTemp", currentTemp);
+        model.addAttribute("maxTemp", maxTemp);
+        model.addAttribute("minTemp", minTemp);
+        model.addAttribute("tempDifference", tempDifference);
+        model.addAttribute("hourlyForecast", hourlyForecast);
+
+        return "weather"; // weather.html로 이동
+    }
 }

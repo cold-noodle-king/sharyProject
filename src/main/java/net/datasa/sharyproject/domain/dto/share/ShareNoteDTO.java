@@ -21,7 +21,7 @@ public class ShareNoteDTO {
     private String weather; // 날씨
     private String contents; // 내용
     private Timestamp diaryDate; // 작성 날짜
-    private LocalDateTime createDate;
+    private LocalDateTime createdDate;
     private Integer likeCount; // 추천 수
     private List<Integer> hashtagNums; // 해시태그 번호 리스트
     private String emotionName; // 감정 이름

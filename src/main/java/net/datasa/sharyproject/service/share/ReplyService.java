@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -77,6 +78,28 @@ public class ReplyService {
         } else {
             throw new EntityNotFoundException("삭제할 수 없습니다.");
         }
+    }
+
+    // 특정 다이어리의 모든 댓글을 가져오는 메서드
+    public List<ReplyDTO> getReply(Integer diaryNum) {
+        // ReplyRepository에서 다이어리 번호로 댓글 리스트를 조회
+        List<ReplyEntity> replies = replyRepository.findByShareNote_ShareDiary_ShareDiaryNum(diaryNum);
+
+        // Entity를 DTO로 변환
+        List<ReplyDTO> replyDTOList = replies.stream()
+                .map(reply -> ReplyDTO.builder()
+                        .replyNum(reply.getReplyNum())
+                        .contents(reply.getContents())
+                        .createdDate(reply.getCreatedDate())
+                        .updatedDate(reply.getUpdatedDate())
+                        .shareNoteNum(reply.getShareNote().getShareNoteNum())
+                        .shareNoteTitle(reply.getShareNote().getShareNoteTitle())
+                        .memberId(reply.getMember().getMemberId())
+                        .nickname(reply.getMember().getNickname())
+                        .build())
+                .collect(Collectors.toList());
+
+        return replyDTOList;
     }
 
 

@@ -1,0 +1,4 @@
+.weather-icon {
+    width: 50px; /* 아이콘의 너비 */
+    height: auto; /* 높이는 비율에 맞게 자동 조정 */
+}

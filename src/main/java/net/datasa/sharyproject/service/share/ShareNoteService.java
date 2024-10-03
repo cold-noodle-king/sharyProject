@@ -33,6 +33,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -79,6 +80,7 @@ public class ShareNoteService {
 
         return convertEntityToDTO(noteEntity);  // DTO 변환 후 반환
     }
+
 
     /**
      * ShareNoteEntity를 ShareNoteDTO로 변환하는 메서드
@@ -131,13 +133,13 @@ public class ShareNoteService {
                 .hashtagNums(hashtagNums)
                 .location(note.getLocation())
                 .fileName(note.getFileName())
+                .createdDate(note.getCreatedDate())
                 .shareDiaryNum(note.getShareDiary().getShareDiaryNum())
                 .noteTemplate(noteTemplateDTO)
                 .profilePicture(profilePicture) // Profile 정보 추가
                 .likeList(likes)  // Like 정보 추가
                 .build();
     }
-
 
 
     @org.springframework.transaction.annotation.Transactional
@@ -305,54 +307,68 @@ public class ShareNoteService {
                 .build();
     }
 
-    /*public LikeResponseDTO like(Integer num, Integer emotionNum, String userName) {
-        // 게시물 및 사용자 조회
-        ShareNoteEntity shareNoteEntity = shareNoteRepository.findById(num)
-                .orElseThrow(() -> new EntityNotFoundException("게시물이 존재하지 않습니다."));
-        MemberEntity memberEntity = memberRepository.findById(userName)
-                .orElseThrow(() -> new EntityNotFoundException("사용자를 찾을 수 없습니다."));
+    public LikeResponseDTO getLikeInfo(Integer noteNum, String username) {
+        // 노트와 사용자 정보 가져오기
+        ShareNoteEntity noteEntity = shareNoteRepository.findById(noteNum)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid note number: " + noteNum));
+        MemberEntity memberEntity = memberRepository.findById(username)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid member username: " + username));
 
-        String emotionName = "";
-        switch (emotionNum){
-            case 1: emotionName = "기쁨"; break;
-            case 2: emotionName = "사랑"; break;
-            case 3: emotionName = "슬픔"; break;
-            case 4: emotionName = "화남"; break;
-            case 5: emotionName = "놀람"; break;
+        // 사용자가 해당 노트에 좋아요를 눌렀는지 확인
+        ShareLikeEntity userLike = shareLikeRepository.findByShareNoteAndMember(noteEntity, memberEntity);
+        boolean isLiked = userLike != null;
+
+        // 감정별 좋아요 개수 계산
+        List<Object[]> emotionCounts = shareLikeRepository.countByEmotionName(noteNum);
+
+        // emotionCounts가 null일 경우 예외 처리
+        if (emotionCounts == null) {
+            emotionCounts = new ArrayList<>();
         }
 
-        // 이미 좋아요를 눌렀는지 확인
-        ShareLikeEntity likeEntity = shareLikeRepository.findByShareNoteAndMember(shareNoteEntity, memberEntity);
-        boolean isLiked = (likeEntity != null);
+        // 감정별 카운트 변수 초기화
+        int joyCnt = 0, loveCnt = 0, sadCnt = 0, angryCnt = 0, wowCnt = 0;
 
-        int cnt;
-        if (isLiked) {
-            // 이미 좋아요를 눌렀다면, 좋아요 취소 (likeEntity 삭제)
-            shareLikeRepository.delete(likeEntity);
-            cnt = shareNoteEntity.getLikeCount() - 1;
-            shareNoteEntity.setLikeCount(cnt); // 좋아요 수 감소
-        } else {
-            // 좋아요를 누르지 않았다면, 좋아요 추가
-            cnt = shareNoteEntity.getLikeCount() + 1;
-            shareNoteEntity.setLikeCount(cnt); // 좋아요 수 증가
-
-            // 새롭게 좋아요 엔티티 생성
-            ShareLikeEntity newLikeEntity = ShareLikeEntity.builder()
-                    .member(memberEntity)
-                    .shareNote(shareNoteEntity)
-                    .likeClicked(true)
-                    .emotionName(emotionName)
-                    .build();
-            log.debug("저장되는 좋아요 엔티티:{}", newLikeEntity);
-            shareLikeRepository.save(newLikeEntity);
+        // 감정별 카운트를 emotionCounts에서 추출
+        for (Object[] result : emotionCounts) {
+            if (result[0] != null && result[1] != null) {
+                String emotionName = (String) result[0];
+                Long count = (Long) result[1];
+                switch (emotionName) {
+                    case "기쁨":
+                        joyCnt = count.intValue();
+                        break;
+                    case "사랑":
+                        loveCnt = count.intValue();
+                        break;
+                    case "슬픔":
+                        sadCnt = count.intValue();
+                        break;
+                    case "화남":
+                        angryCnt = count.intValue();
+                        break;
+                    case "놀람":
+                        wowCnt = count.intValue();
+                        break;
+                }
+            }
         }
 
-        // 좋아요 수 업데이트
-        shareNoteRepository.save(shareNoteEntity);
+        // 총 좋아요 수 계산
+        int cnt = joyCnt + loveCnt + sadCnt + angryCnt + wowCnt;
 
-        // LikeResponseDTO 반환
-        return LikeResponseDTO.builder().isLiked(!isLiked).cnt(cnt).emotionName(emotionName).build();
-    }*/
+        // LikeResponseDTO 생성 및 반환
+        return LikeResponseDTO.builder()
+                .cnt(cnt)
+                .isLiked(isLiked)
+                .joyCnt(joyCnt)
+                .loveCnt(loveCnt)
+                .sadCnt(sadCnt)
+                .angryCnt(angryCnt)
+                .wowCnt(wowCnt)
+                .build();
+    }
+
 
 
 }
