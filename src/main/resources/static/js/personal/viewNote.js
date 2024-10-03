@@ -50,8 +50,9 @@ $(document).ready(function() {
                 }
                 $('#noteEmotion').html(emotionIcon); // 감정 아이콘 삽입
 
-                // 노트 내용 설정
-                $('#noteContents').text(response.contents);
+                // 노트 내용 설정 (HTML 포맷팅 적용)
+                $('#noteContents').html(response.contents);
+
 
                 // 해시태그 설정
                 if (response.hashtags && response.hashtags.length > 0) {

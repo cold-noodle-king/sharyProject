@@ -52,7 +52,6 @@ public class SseService {
     //SSE 알림 전송
     public void sendNotification(String memberId, String content, String notificationType) {
         SseEmitter emitter = emitterMap.get(memberId);
-
         if (emitter != null) {
             try {
                 String jsonNotification = String.format(
@@ -60,12 +59,9 @@ public class SseService {
                         content, LocalDateTime.now().toString(), notificationType);
                 emitter.send(SseEmitter.event().name("notification").data(jsonNotification));
             } catch (IOException e) {
-                emitterMap.remove(memberId); // Emitter 제거
+                emitterMap.remove(memberId);
                 log.error("알림 전송 실패: {}", e.getMessage());
-                retryNotification(memberId, content, notificationType); // 재시도 로직 추가
             }
-        } else {
-            log.warn("수신자의 SSE Emitter를 찾을 수 없음 - 수신자 ID: {}", memberId);
         }
     }
 
