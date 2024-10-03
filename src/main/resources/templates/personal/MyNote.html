@@ -152,7 +152,7 @@
 
                     <!-- 내용 섹션 -->
                     <div class="content-section">
-                        <p id="noteContents">[내용]</p> <!-- 노트 내용 텍스트 -->
+                        <p id="noteContents" th:utext="${note != null ? note.contents : '내용이 없습니다.'}" style="white-space: pre-wrap;">[내용]</p>
                     </div>
 
                     <!-- 해시태그 섹션 -->

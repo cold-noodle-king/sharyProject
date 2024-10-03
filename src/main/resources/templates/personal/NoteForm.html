@@ -9,6 +9,10 @@
     <!-- jQuery 로드 -->
     <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
 
+    <!-- Quill 에디터 CSS 및 JS 로드 -->
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+
     <!-- 부트스트랩 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
@@ -21,6 +25,9 @@
 
     <!-- Kakao Maps API 로드 -->
     <script src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=2ecac24e4cab9337d8d23e22fb469cb6&libraries=services"></script>
+
+    <!-- Google Fonts 불러오기 -->
+    <link href="https://fonts.googleapis.com/css2?family=Arial:wght@400;700&family=Georgia:wght@400;700&family=Times+New+Roman:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
 <!-- 헤더 부분 불러오기 -->
@@ -80,10 +87,14 @@
                     <input type="file" id="diaryImage" name="diaryImage" class="form-control">
                 </div>
 
-                <!-- 일기 내용 작성 섹션 -->
+                <!-- 일기 내용 작성 섹션 (Quill 에디터 적용) -->
                 <div class="mb-4">
-                    <textarea id="diaryContent" name="diaryContent" class="form-control" rows="6" placeholder="오늘의 이야기를 적어보세요" required></textarea>
+                    <label for="editor" class="form-label">일기 내용</label>
+                    <div id="editor" class="form-control" style="height: 300px;"></div>
                 </div>
+
+                <!-- 숨겨진 textarea (Quill 에디터의 HTML 데이터를 이 필드에 저장) -->
+                <textarea id="diaryContent" name="diaryContent" style="display: none;"></textarea>
 
                 <!-- 해시태그 선택 -->
                 <div class="mb-4">
@@ -131,6 +142,33 @@
 
 <!-- PersonalNoteForm.js 파일 로드 -->
 <script th:src="@{/js/personal/PersonalNoteForm.js}"></script>
+<script>
+    var Font = Quill.import('formats/font');
+
+    // 폰트 목록에 추가할 폰트들 (중복 제거)
+    Font.whitelist = ['sans-serif', 'serif', 'monospace'];
+    Quill.register(Font, true);
+
+    var quill = new Quill('#editor', {
+        theme: 'snow',
+        modules: {
+            toolbar: [
+                [{ 'font': Font.whitelist }], // 폰트 선택을 위한 옵션 추가
+                [{ 'size': ['small', false, 'large', 'huge'] }], // 폰트 크기 설정
+                ['bold', 'italic', 'underline'], // 텍스트 스타일 옵션
+                [{ 'color': [] }, { 'background': [] }], // 색상 선택 옵션
+                [{ 'align': [] }], // 텍스트 정렬
+                ['link', 'image'] // 링크, 이미지 삽입 옵션
+            ]
+        }
+    });
+
+    // Form 제출 시 에디터 내용이 숨겨진 textarea에 저장되도록 처리
+    document.getElementById('diaryForm').onsubmit = function() {
+        var diaryContent = document.querySelector('textarea[name=diaryContent]');
+        diaryContent.value = quill.root.innerHTML;
+    }
+</script>
 
 <!-- 부트스트랩 JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
