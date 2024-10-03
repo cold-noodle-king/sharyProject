@@ -27,10 +27,10 @@ window.addEventListener('DOMContentLoaded', event => {
         // 페이지 스크롤 위치가 맨 위에 있을 경우, 배경색을 연보라색으로 고정
         if (window.scrollY === 0) {
             navbarCollapsible.classList.remove('navbar-shrink');
-            navbarCollapsible.style.backgroundColor = '#ce8ece';  // 연보라색 배경색 설정
+            navbarCollapsible.style.backgroundColor = '#d3b3d3';  // 연보라색 배경색 설정
         } else {
             navbarCollapsible.classList.add('navbar-shrink');
-            navbarCollapsible.style.backgroundColor = '#ce8ece';  // 스크롤이 내려가도 연보라색 유지
+            navbarCollapsible.style.backgroundColor = '#d3b3d3';  // 스크롤이 내려가도 연보라색 유지
         }
     };
 
@@ -72,7 +72,7 @@ document.addEventListener("DOMContentLoaded", function() {
     var navbar = document.querySelector('.navbar'); // 헤더를 선택합니다.
 
     // 기본 배경색을 연보라색으로 고정
-    navbar.style.backgroundColor = '#ce8ece'; // 연보라색으로 고정
+    navbar.style.backgroundColor = '#d3b3d3'; // 연보라색으로 고정
 });
 
 // 이미지 슬라이더 부분
