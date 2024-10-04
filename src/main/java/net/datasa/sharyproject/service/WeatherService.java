@@ -423,5 +423,20 @@ public class WeatherService {
     }
 
 
+    public WeatherData getCurrentWeather() throws Exception {
+        // getTodayWeather() 메서드를 호출하여 현재 날씨 데이터를 가져옵니다.
+        TodayWeatherData todayWeather = getTodayWeather();
+
+        // TodayWeatherData에서 온도와 아이콘을 추출합니다.
+        String temperature = todayWeather.getTemperature();
+        String icon = todayWeather.getIcon();
+
+        // WeatherData 객체를 생성하고 데이터 설정
+        WeatherData weatherData = new WeatherData();
+        weatherData.setTemperature(temperature);
+        weatherData.setIcon(icon);
+
+        return weatherData;
+    }
 
 }

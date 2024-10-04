@@ -1,6 +1,30 @@
 $(document).ready(function() {
+    // 페이지 로드 시 현재 날씨 데이터 가져오기
+    $.ajax({
+        url: '/currentWeatherData',  // 서버에서 현재 날씨 데이터를 제공하는 엔드포인트
+        method: 'GET',
+        dataType: 'json',
+        success: function(response) {
+            // 응답 데이터 처리
+            var currentWeather = response.currentWeather;
+            var temperature = currentWeather.temperature;  // 현재 온도
+            var weatherIcon = currentWeather.icon;         // 날씨 아이콘 파일명 (예: 'sunny.png')
+
+            // 헤더의 날씨 아이콘 업데이트
+            $('#headerWeatherIcon').attr('src', '/images/weather/' + weatherIcon);
+
+            // 헤더의 온도 표시 업데이트
+            $('#headerTemperature').text(temperature + '℃');
+        },
+        error: function(xhr, status, error) {
+            console.error('현재 날씨 정보를 가져오는 데 실패했습니다:', error);
+        }
+    });
+
+
     // 날씨 아이콘 클릭 이벤트 핸들러
     $('.weather').on('click', function() {
+        event.preventDefault(); // 기본 링크 동작 방지
         // AJAX 요청을 보내 날씨 정보를 가져옴
         $.ajax({
             url: '/weatherData',
@@ -49,7 +73,6 @@ $(document).ready(function() {
                         '</tr>';
                     $tbody.append(row);
                 });
-
 
                 // 모달 열기
                 var weatherModal = new bootstrap.Modal(document.getElementById('weatherModal'));

@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.datasa.sharyproject.domain.dto.weather.NewWeatherData;
 import net.datasa.sharyproject.domain.dto.weather.TodayWeatherData;
+import net.datasa.sharyproject.domain.dto.weather.WeatherData;
 import net.datasa.sharyproject.service.WeatherService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -56,5 +57,19 @@ public class WeatherController {
         response.put("lastWeekWeather", lastWeekWeather);
 
         return response;
+    }
+
+    @ResponseBody
+    @GetMapping("/currentWeatherData")
+    public Map<String, Object> getCurrentWeatherData() {
+        Map<String, Object> data = new HashMap<>();
+        try {
+            WeatherData currentWeather = weatherService.getCurrentWeather();
+            data.put("currentWeather", currentWeather);
+        } catch (Exception e) {
+            e.printStackTrace();
+            data.put("error", "날씨 정보를 가져오는 데 실패했습니다.");
+        }
+        return data;
     }
 }
