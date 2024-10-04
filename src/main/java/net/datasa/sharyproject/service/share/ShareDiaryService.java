@@ -9,10 +9,12 @@ import net.datasa.sharyproject.domain.dto.share.ShareMemberDTO;
 import net.datasa.sharyproject.domain.entity.member.MemberEntity;
 import net.datasa.sharyproject.domain.entity.CategoryEntity;
 import net.datasa.sharyproject.domain.entity.member.UserCategoryEntity;
+import net.datasa.sharyproject.domain.entity.mypage.ProfileEntity;
 import net.datasa.sharyproject.domain.entity.personal.CoverTemplateEntity;
 import net.datasa.sharyproject.domain.entity.share.ShareDiaryEntity;
 import net.datasa.sharyproject.domain.entity.share.ShareMemberEntity;
 import net.datasa.sharyproject.domain.entity.sse.NotificationEntity; //추가
+import net.datasa.sharyproject.service.mypage.ProfileService;
 import net.datasa.sharyproject.service.sse.SseService;  // 추가
 import net.datasa.sharyproject.repository.member.MemberRepository;
 import net.datasa.sharyproject.repository.CategoryRepository;
@@ -49,6 +51,7 @@ public class ShareDiaryService {
     private final LocalContainerEntityManagerFactoryBean entityManagerFactory;
     private final ShareMemberRepository shareMemberRepository;
     private final UserCategoryRepository userCategoryRepository;
+    private final ProfileService profileService;
 
     // 추가된 부분(윤조 알림)
     private final SseService sseService;
@@ -389,22 +392,52 @@ public class ShareDiaryService {
         sseService.sendNotification(requester.getMemberId(), message, "join_accept");
     }
 
-
-    public List<ShareMemberDTO> getMemberList(Integer diaryNum, String memberId){
+    public List<ShareMemberDTO> getMemberList(Integer diaryNum, String memberId) {
         // 공유 다이어리 엔티티 조회
         ShareDiaryEntity shareDiaryEntity = shareDiaryRepository.findById(diaryNum)
                 .orElseThrow(() -> new EntityNotFoundException("다이어리를 찾을 수 없습니다."));
 
-        // 상태가 'PENDING'인 공유 멤버 엔티티 리스트 조회
+        // 상태가 'ACCEPTED'인 공유 멤버 엔티티 리스트 조회
         List<ShareMemberEntity> memberList = shareMemberRepository.findByShareDiaryAndStatus(shareDiaryEntity, "ACCEPTED");
 
-        // 엔티티를 DTO로 변환
+        // 엔티티를 DTO로 변환하면서 프로필 정보 추가
         List<ShareMemberDTO> memberDTOs = memberList.stream()
-                .map(this::convertShareMemberEntityToDTO)
+                .map(shareMemberEntity -> {
+                    MemberEntity member = shareMemberEntity.getMember();
+
+                    // 프로필 정보 조회
+                    ProfileEntity profile = profileService.findByMember(member)
+                            .orElseGet(() -> {
+                                // 프로필 정보가 없으면 기본 프로필 생성
+                                ProfileEntity defaultProfile = ProfileEntity.builder()
+                                        .member(member)
+                                        .profilePicture("/images/profile.png") // 기본 이미지 설정
+                                        .ment("") // 기본 소개글 설정
+                                        .build();
+                                profileService.saveProfile(defaultProfile);
+                                return defaultProfile;
+                            });
+
+                    // DTO 변환
+                    return ShareMemberDTO.builder()
+                            .shareMemberNum(shareMemberEntity.getShareMemberNum())
+                            .memberId(member.getMemberId())
+                            .nickname(member.getNickname())
+                            .profilePicture(profile.getProfilePicture()) // 프로필 사진 추가
+                            .status(shareMemberEntity.getStatus())
+                            .joinDate(shareMemberEntity.getJoinDate())
+                            // 필요한 다른 필드들...
+                            .build();
+                })
                 .collect(Collectors.toList());
 
         log.debug("가입 요청 리스트:{}", memberDTOs);
         return memberDTOs;
+    }
+
+    // 멤버 수를 가져오는 메서드 추가
+    public int getMemberCount(Integer diaryNum) {
+        return shareMemberRepository.countByShareDiary_ShareDiaryNumAndStatus(diaryNum, "ACCEPTED");
     }
     
     // ShareMemberEntity를 ShareMemberDTO로 변환하는 헬퍼 메서드
@@ -463,4 +496,6 @@ public class ShareDiaryService {
         ShareDiaryEntity diary = shareDiaryRepository.findById(diaryNum).orElseThrow(() -> new RuntimeException("Diary not found"));
         return diary.getMember().getMemberId().equals(memberId);  // 다이어리의 생성자가 현재 사용자와 같은지 확인
     }
+
+
 }

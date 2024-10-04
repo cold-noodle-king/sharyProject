@@ -46,7 +46,7 @@
     <h2><p th:text="${diary.shareDiaryName}"></p></h2>
     <div>
         <p>방장: <span th:text="${diary.nickname}"></span> 카테고리: <span th:text="${diary.categoryName}"></span>
-            <a th:href="@{/share/manageDiary(diaryNum=${diary.shareDiaryNum})}">다이어리 관리</a></p>
+            &nbsp;<a th:href="@{/share/manageDiary(diaryNum=${diary.shareDiaryNum})}" class="btn btn-custom">다이어리 관리</a>
     </div>
     <br>
 
