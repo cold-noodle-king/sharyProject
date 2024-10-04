@@ -25,6 +25,12 @@
 
   <!-- Kakao Maps API 로드 -->
   <script src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=2ecac24e4cab9337d8d23e22fb469cb6&libraries=services"></script>
+
+  <!-- Quill CSS 추가 -->
+  <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+
+  <!-- Quill JS 추가 -->
+  <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 </head>
 <body>
 <!-- 헤더 부분 불러오기 -->
@@ -131,9 +137,14 @@
           </div>
         </div>
 
-        <!-- 일기 내용 작성 섹션 -->
+        <!-- 일기 내용 작성 섹션 (Quill 적용) -->
         <div class="mb-4">
-          <textarea id="diaryContent" name="diaryContent" class="form-control" rows="6" th:text="${note.contents}" required></textarea>
+          <label for="diaryContentEditor">일기 내용</label>
+          <div id="diaryContentEditor" style="height: 200px;"> <!-- Quill 에디터가 삽입될 div -->
+            <p th:text="${note.contents}"></p>
+          </div>
+          <!-- Quill에서 작성된 내용을 저장할 숨겨진 input -->
+          <input type="hidden" id="diaryContent" name="diaryContent" th:value="${note.contents}" />
         </div>
 
         <!-- 해시태그 선택 섹션 수정 -->
@@ -191,6 +202,40 @@
     });
   });
 </script>
+<!-- Quill 초기화 및 설정 스크립트 -->
+<script>
+  var Font = Quill.import('formats/font');
+
+  // 폰트 목록에 추가할 폰트들
+  Font.whitelist = ['sans-serif', 'serif', 'monospace'];
+  Quill.register(Font, true);
+
+  // Quill 에디터 초기화
+  var quill = new Quill('#diaryContentEditor', {
+    theme: 'snow',
+    modules: {
+      toolbar: [
+        [{ 'font': Font.whitelist }], // 폰트 선택
+        [{ 'size': ['small', false, 'large', 'huge'] }], // 폰트 크기
+        ['bold', 'italic', 'underline'], // 텍스트 스타일
+        [{ 'color': [] }, { 'background': [] }], // 색상 선택
+        [{ 'align': [] }], // 텍스트 정렬
+        ['link', 'image'] // 링크, 이미지 삽입
+      ]
+    }
+  });
+
+  // 기존 내용 로드
+  var diaryContent = document.getElementById('diaryContent').value;
+  quill.clipboard.dangerouslyPasteHTML(diaryContent);
+
+  // 폼 제출 시 Quill 에디터의 HTML 내용을 숨겨진 필드에 저장
+  document.getElementById('editNoteForm').onsubmit = function() {
+    var content = quill.root.innerHTML;
+    document.getElementById('diaryContent').value = content;
+  };
+</script>
+
 <!-- weather.js 파일 로드 -->
 <script th:src="@{/js/main/weather.js}"></script>
 </body>
