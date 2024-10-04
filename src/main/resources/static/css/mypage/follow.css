@@ -1,0 +1,154 @@
+body{
+    height: 100%;
+}
+
+/* 메인 콘텐츠 전체를 감싸는 wrapper */
+.main-content-wrapper {
+    padding: 30px;
+    max-width: 100%; /* 화면의 전체 너비를 사용 */
+    background-color: #fff7e6;
+    border-radius: 12px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+    margin: 20px auto; /* 중앙 정렬 */
+    margin-top: 100px;
+}
+
+/* 메인 콘텐츠 내부 스타일 */
+.main-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    width: 100%;
+    margin-top: 20px;
+}
+
+/* 검색창 스타일 */
+.search-bar {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.search-bar input {
+    width: 500px;
+    padding: 12px 20px;
+    border-radius: 50px;
+    border: 2px solid #d6a2e8;  /* 연보라색 테두리 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 검색창에 그림자 효과 */
+    font-size: 16px;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+.search-bar input:focus {
+    border-color: #b484d3; /* 포커스 시 더 진한 보라색 테두리 */
+}
+
+/* 탭 스타일 */
+.tabs {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    width: 100%;
+    margin-bottom: 0px;
+}
+
+.tab {
+    padding: 12px 24px;
+    background-color: #e6d1f2;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-weight: bold;
+}
+
+.tab:hover {
+    background-color: #cdb6eb;
+}
+
+.tab.active {
+    background-color: #b08ed9;
+    color: white;
+}
+
+/* 테이블 스타일 */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 0px;
+    font-size: 16px;
+}
+
+th, td {
+    padding: 16px;
+    border: 1px solid #ddd;
+    text-align: center;
+    vertical-align: middle;
+}
+
+th {
+    background-color: #b08ed9;
+    color: white;
+    font-weight: bold;
+    font-size: 16px;
+    text-transform: uppercase;
+}
+
+td {
+    background-color: #fafafa;
+}
+
+/* 버튼 스타일 */
+button {
+    background-color: #b08ed9;
+    border: none;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-weight: bold;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+button:hover {
+    background-color: #8c6bc6;
+}
+
+/* 팔로우/언팔로우 버튼 스타일 */
+button.follow {
+    background-color: #b08ed9;
+}
+
+button.unfollow {
+    background-color: #ff6b6b;
+}
+
+button.unfollow:hover {
+    background-color: #e74c3c;
+}
+
+/* 팔로워/팔로잉 탭 콘텐츠 스타일 */
+.tab-content {
+    display: none;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* 테이블 반응형 디자인 */
+@media (max-width: 768px) {
+    table, th, td {
+        font-size: 14px;
+    }
+
+    .search-bar input {
+        width: 100%;
+        max-width: 350px;
+    }
+}
