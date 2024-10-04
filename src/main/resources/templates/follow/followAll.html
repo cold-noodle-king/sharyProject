@@ -34,7 +34,6 @@
         function confirmFollow(event, form) {
             event.preventDefault();
             const result = confirm('해당 사용자를 팔로우 하시겠습니까?');
-
             if (result) {
                 form.submit();
             }
@@ -44,7 +43,6 @@
         function confirmUnfollow(event, form) {
             event.preventDefault();
             const result = confirm('팔로우를 취소하시겠습니까?');
-
             if (result) {
                 form.submit();
             }
@@ -78,7 +76,6 @@
         // 사용자 검색 함수
         function searchUsers() {
             const searchTerm = document.getElementById('search-input').value.toLowerCase();
-
             const activeTab = document.querySelector('.tab-content.active');
 
             if (!activeTab) return;
@@ -178,10 +175,28 @@
             }
         }
 
-        // 페이지 로드 시 'followers' 탭을 자동으로 열기
+        // 페이지 로드 시 처리
         window.onload = function () {
-            openTab('followers');
-        }
+            const searchInput = document.getElementById('search-input');
+
+            // 검색창 엘리먼트가 존재하는지 확인
+            if (!searchInput) {
+                console.error('검색창(search-input)이 존재하지 않습니다.');
+                return;
+            }
+
+            // URL에서 쿼리 파라미터 가져오기 (search 파라미터를 활용해 검색창 자동 입력)
+            const urlParams = new URLSearchParams(window.location.search);
+            const searchQuery = urlParams.get('search');
+
+            if (searchQuery) {
+                searchInput.value = searchQuery;
+                openTab('allUsers'); // 'allUsers' 탭을 활성화
+                searchUsers(); // 쿼리 파라미터 값으로 사용자 검색 실행
+            } else {
+                openTab('followers'); // 검색어가 없으면 기본적으로 'followers' 탭을 활성화
+            }
+        };
     </script>
 
 </head>

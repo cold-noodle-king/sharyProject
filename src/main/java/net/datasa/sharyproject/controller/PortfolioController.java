@@ -1,9 +1,11 @@
 package net.datasa.sharyproject.controller;
 
+import net.datasa.sharyproject.domain.dto.follow.FollowDTO;
 import net.datasa.sharyproject.domain.dto.personal.PersonalLikeDTO;
 import net.datasa.sharyproject.domain.dto.personal.PersonalNoteDTO;
 import net.datasa.sharyproject.domain.dto.mypage.ProfileDTO;
 import net.datasa.sharyproject.service.PortfolioService;
+import net.datasa.sharyproject.service.follow.FollowService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -15,10 +17,13 @@ import org.springframework.web.bind.annotation.*;
 public class PortfolioController {
 
     private final PortfolioService portfolioService;
+    private final FollowService followService; // FollowService 의존성 추가
     private static final Logger logger = LoggerFactory.getLogger(PortfolioController.class);
 
-    public PortfolioController(PortfolioService portfolioService) {
+    // 생성자를 통한 의존성 주입 (FollowService 추가)
+    public PortfolioController(PortfolioService portfolioService, FollowService followService) {
         this.portfolioService = portfolioService;
+        this.followService = followService;
     }
 
     /**
@@ -60,8 +65,6 @@ public class PortfolioController {
 
     // ========== 추가된 좋아요 관련 엔드포인트 ==========
 
-    // ========== 추가된 좋아요 관련 엔드포인트 ==========
-
     /**
      * 좋아요 상태를 토글하는 엔드포인트
      * 사용자가 노트에 좋아요를 누르거나 취소할 수 있는 기능
@@ -88,3 +91,4 @@ public class PortfolioController {
         }
     }
 }
+
