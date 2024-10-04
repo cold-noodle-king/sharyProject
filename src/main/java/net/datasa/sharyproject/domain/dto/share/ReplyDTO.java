@@ -18,6 +18,7 @@ public class ReplyDTO {
         private LocalDateTime createdDate;
         private LocalDateTime updatedDate;
         private Integer shareNoteNum; // ShareNoteEntity의 ID
+        private String shareNoteTitle;
         private String memberId; // MemberEntity의 ID
         private String nickname;
 

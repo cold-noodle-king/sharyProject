@@ -1,5 +1,6 @@
 package net.datasa.sharyproject.controller.sse;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.datasa.sharyproject.domain.dto.sse.MessageDTO;
@@ -48,10 +49,19 @@ public class SseController {
      * 클라이언트가 SSE를 구독(기존)
      * 로그인한 사용자의 아이디를 이용하여 SseEmitter 생성
      */
-    @ResponseBody
+/*    @ResponseBody
     @GetMapping("subscribe")
     public SseEmitter subscribe(@AuthenticationPrincipal AuthenticatedUser user) {
 
+        log.debug("구독할 로그인 아이디 : {}", user.getUsername());
+        return sseService.subscribe(user.getUsername());
+    }*/
+    @ResponseBody
+    @GetMapping("subscribe")
+    public SseEmitter subscribe(@AuthenticationPrincipal AuthenticatedUser user) {
+        if (user == null) {
+            return new SseEmitter(0L);  // 사용자 인증이 되지 않았을 경우 빈 응답
+        }
         log.debug("구독할 로그인 아이디 : {}", user.getUsername());
         return sseService.subscribe(user.getUsername());
     }
@@ -133,12 +143,6 @@ public class SseController {
         return "sse/msg";  // 알림함 페이지 템플릿 파일 경로
     }*/
 
-    // 알림함 페이지에 접근할 때 markAllAsRead 메서드를 호출하여 해당 사용자의 모든 알림을 읽음 처리
-    @GetMapping("/notifications")
-    public String notificationsPage(@AuthenticationPrincipal AuthenticatedUser user) {
-        sseMessageService.markAllAsRead(user.getUsername());
-        return "sse/msg";  // 알림함 페이지 템플릿 파일 경로
-    }
 
 
 
@@ -160,18 +164,51 @@ public class SseController {
         return sseMessageService.getAllMessages(user.getUsername());
     }
 
-    // 알림 배지 관련
+
+
+
+    /*// 알림함 페이지에 접근할 때 markAllAsRead 메서드를 호출하여 해당 사용자의 모든 알림을 읽음 처리
+    @GetMapping("/notifications")
+    public String notificationsPage(@AuthenticationPrincipal AuthenticatedUser user) {
+        sseMessageService.markAllAsRead(user.getUsername()); // 알림 페이지 접속 시 모든 알림을 읽음 처리
+        return "sse/msg"; // 알림 페이지로 이동
+    }*/
+
+    /**
+     * 알림 페이지로 이동 시 모든 알림을 읽음 처리
+     */
+    @GetMapping("/notifications")
+    public String notificationsPage(@AuthenticationPrincipal AuthenticatedUser user) {
+        if (user != null) {
+            log.info("모든 알림을 읽음 처리합니다: {}", user.getUsername());
+            sseMessageService.markAllAsRead(user.getUsername());
+        }
+        return "sse/msg";  // 알림 페이지로 이동
+    }
+
+
+    /**
+     * 읽지 않은 알림 수 반환 API
+     */
     @ResponseBody
     @GetMapping("/unreadNotificationsCount")
     public int getUnreadNotificationsCount(@AuthenticationPrincipal AuthenticatedUser user) {
-        return sseMessageService.getUnreadNotificationsCount(user.getUsername());
+        if (user != null) {
+            return sseMessageService.getUnreadNotificationsCount(user.getUsername());
+        }
+        return 0;  // 인증되지 않은 경우 알림 없음
     }
 
-    //
+    /**
+     * 알림 읽음 처리
+     */
     @ResponseBody
     @PostMapping("/markNotificationsAsRead")
     public void markNotificationsAsRead(@AuthenticationPrincipal AuthenticatedUser user) {
-        sseMessageService.markAllAsRead(user.getUsername());
+        if (user != null) {
+            log.info("알림 읽음 처리 중: {}", user.getUsername());
+            sseMessageService.markAllAsRead(user.getUsername());  // 알림을 읽음 처리
+        }
     }
 
 }

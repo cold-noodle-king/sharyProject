@@ -66,8 +66,8 @@ $(document).ready(function () {
                     console.error('배경 이미지 파일 이름이 없습니다.');
                 }
 
-                // 노트 내용 삽입
-                $('#customModalContents').text(response.contents);
+                // 노트 내용 삽입 (수정된 코드)
+                $('#customModalContents').html(response.contents);
 
                 // 해시태그 추가
                 $('#customModalHashtags').empty();

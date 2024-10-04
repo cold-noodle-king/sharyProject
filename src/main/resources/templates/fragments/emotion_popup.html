@@ -9,6 +9,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" crossorigin="anonymous">
     <!-- AOS 라이브러리 사용 링크 -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <!-- Google폰트 사용 링크 -->
+    <link href='//spoqa.github.io/spoqa-han-sans/css/SpoqaHanSansNeo.css' rel='stylesheet' type='text/css'>
+
     <!-- 추가 스타일 -->
     <!-- 반응형 디자인을 위한 추가 스타일 -->
     <style>
@@ -149,6 +153,8 @@
 <script src="/js/emotions/emotions.js"></script>
 <!-- AOS 스크립트 -->
 <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+
 <script>
     AOS.init();
     // 감정 이미지 클릭 시 배경 색상이 변경되도록 설정
@@ -157,6 +163,7 @@
     emotionImages.forEach(image => {
         image.addEventListener('click', () => {
             document.body.style.background = getBackgroundForEmotion(image.alt);
+            document.body.style.transition = 'background 1s ease'; // 배경 전환 효과 추가
         });
     });
 
@@ -168,17 +175,18 @@
             case '슬픔':
                 return 'linear-gradient(to bottom, #a1c4fd, #c2e9fb)';  // 푸른색 배경
             case '화남':
-                return 'linear-gradient(to bottom, #ff758c, #ff7eb3)';  // 빨간색 배경
+                return 'linear-gradient(to bottom, #ffb3ba, #ff9999)';  // 연한 빨강 배경
             case '놀람':
                 return 'linear-gradient(to bottom, #fbc2eb, #a18cd1)';  // 보라색과 핑크
             case '두려움':
-                return 'linear-gradient(to bottom, #f85032, #e73827)';  // 어두운 빨강
+                return 'linear-gradient(to bottom, #ffc3a0, #ffafbd)';  // 연한 오렌지
             case '사랑':
-                return 'linear-gradient(to bottom, #f857a6, #ff5858)';  // 사랑스러운 핑크
+                return 'linear-gradient(to bottom, #ffd1dc, #ff9aa2)';  // 연한 핑크
             default:
                 return 'linear-gradient(to bottom, #f8e3f2, #d8b6d5)';  // 기본 배경
         }
     }
 </script>
+
 </body>
 </html>

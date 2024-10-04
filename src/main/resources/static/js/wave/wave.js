@@ -16,13 +16,13 @@ window.onload = function() {
 
     // 감정별 색상 팔레트 정의
     const colorPalettes = [
-        {   // 행복 (Happiness) - 따뜻한 색상 팔레트
+        {   // 행복 (Happiness) - 색상 팔레트
             name: '행복',
             colors: ['#df9b70', '#f69d41', '#fad366', '#FFD1A9', '#FFB6C1', '#FFEBCD'],
             firstWaveColor: '#eaa087',
             backgroundColor: '#f2d7d2'  // 행복의 배경색
         },
-        {   // 우울 (Sadness) - 시원한 색상 팔레트
+        {   // 우울 (Sadness) - 색상 팔레트
             name: '우울',
             colors: ['#70a1df', '#419df6', '#66d3fa', '#a9d1ff', '#b6c1ff', '#ebcdff'],
             firstWaveColor: '#70a1df',
@@ -30,11 +30,11 @@ window.onload = function() {
         },
         {   // 화남 (Anger) - 연한 붉은 색상 조합
             name: '화남',
-            colors: ['#ffcccc', '#ff9999', '#ff6666', '#ff4d4d', '#ff1a1a', '#e60000'],
+            colors: ['#ffcccc', '#ffb3a0', '#ff9980', '#ff8066', '#ff6666', '#ff9966'],
             firstWaveColor: '#ffcccc',
             backgroundColor: '#f2d2d2'  // 화남의 배경색
         },
-        {   // 놀람 (Surprise) - 여러가지 색상 조합
+        {   // 놀람 (Surprise) - 여러가지 색상 계열
             name: '놀람',
             colors: ['#ec1b2c', '#ffffff', '#d1a6e8', '#ffef93', '#FFB6C1', '#FFEBCD'],
             firstWaveColor: '#0d1a5e',
@@ -57,6 +57,36 @@ window.onload = function() {
     let currentPaletteIndex = 0;  // 현재 색상 팔레트의 인덱스
     let colors = colorPalettes[currentPaletteIndex].colors;  // 초기 색상 팔레트 설정
 
+    // HEX 색상을 RGB 객체로 변환하는 함수
+    function hexToRgb(hex) {
+        hex = hex.replace('#', '');
+        if (hex.length === 3) {
+            hex = hex.split('').map(char => char + char).join('');
+        }
+        const bigint = parseInt(hex, 16);
+        const r = (bigint >> 16) & 255;
+        const g = (bigint >> 8) & 255;
+        const b = bigint & 255;
+        return { r, g, b };
+    }
+
+    // 두 색상 사이를 보간하는 함수
+    function interpolateColor(color1, color2, factor) {
+        const result = {};
+        result.r = Math.round(color1.r + (color2.r - color1.r) * factor);
+        result.g = Math.round(color1.g + (color2.g - color1.g) * factor);
+        result.b = Math.round(color1.b + (color2.b - color1.b) * factor);
+        return result;
+    }
+
+    // RGB 객체를 HEX 문자열로 변환하는 함수
+    function rgbToHex(rgb) {
+        const r = rgb.r.toString(16).padStart(2, '0');
+        const g = rgb.g.toString(16).padStart(2, '0');
+        const b = rgb.b.toString(16).padStart(2, '0');
+        return `#${r}${g}${b}`;
+    }
+
     // 파도 클래스를 정의하여 각 파도에 대한 설정과 동작을 관리
     class Wave {
         constructor(index) {
@@ -72,11 +102,62 @@ window.onload = function() {
             this.verticalSpeed = 0.005 + Math.random() * 0.01;  // 수직 움직임 속도
             this.verticalAmplitude = 10 + Math.random() * 10;  // 수직 움직임 진폭
 
-            // 첫 번째 파도의 색상을 팔레트의 첫 번째 색상으로 고정
+            // 색상 전환을 위한 속성 추가
+            this.color = null;           // 현재 색상 (HEX 문자열)
+            this.currentColor = null;    // 현재 색상 (RGB 객체)
+            this.targetColor = null;     // 목표 색상 (RGB 객체)
+            this.transitionProgress = 1; // 색상 전환 진행도 (0 ~ 1)
+
+            // 초기 색상 설정
+            this.setColor();
+        }
+
+        // 초기 색상 설정 메서드
+        setColor() {
             if (this.index === 0) {
-                this.color = colorPalettes[currentPaletteIndex].firstWaveColor;
+                this.colorHex = colorPalettes[currentPaletteIndex].firstWaveColor;
             } else {
-                this.color = colors[index % colors.length];  // 다른 파도는 색상 팔레트에서 순서대로 가져옴
+                this.colorHex = colors[this.index % colors.length];
+            }
+            this.currentColor = hexToRgb(this.colorHex);
+            this.targetColor = this.currentColor;
+            this.color = this.colorHex;
+            this.transitionProgress = 1;
+        }
+
+        // 색상 전환 시작 메서드
+        updateColor() {
+            // 현재 색상을 시작 색상으로 설정
+            this.currentColor = hexToRgb(this.color);
+            // 목표 색상을 새로운 팔레트의 색상으로 설정
+            if (this.index === 0) {
+                this.colorHex = colorPalettes[currentPaletteIndex].firstWaveColor;
+            } else {
+                this.colorHex = colors[this.index % colors.length];
+            }
+            this.targetColor = hexToRgb(this.colorHex);
+            // 전환 진행도 초기화
+            this.transitionProgress = 0;
+        }
+
+        // 파도의 움직임과 색상을 업데이트하는 메서드
+        update() {
+            this.phase += this.speed;  // 파도의 위상 이동으로 수평 움직임 표현
+            this.verticalPhase += this.verticalSpeed;  // 수직 움직임의 위상 업데이트
+
+            // 진폭을 시간에 따라 변하게 하여 랜덤한 흔들림 효과 추가
+            this.amplitude = this.baseAmplitude + Math.sin(this.phase * 2) * (this.baseAmplitude * 0.2);
+
+            // 색상 전환 진행
+            if (this.transitionProgress < 1) {
+                this.transitionProgress += 0.02;  // 전환 속도 조절
+                if (this.transitionProgress > 1) {
+                    this.transitionProgress = 1;
+                }
+                const interpolatedColor = interpolateColor(this.currentColor, this.targetColor, this.transitionProgress);
+                this.color = rgbToHex(interpolatedColor);
+            } else {
+                this.color = this.colorHex;
             }
         }
 
@@ -103,24 +184,6 @@ window.onload = function() {
             ctx.fillStyle = this.color;  // 파도의 색상을 설정
             ctx.fill();  // 파도 채우기
         }
-
-        // 파도의 움직임을 업데이트하는 메서드
-        update() {
-            this.phase += this.speed;  // 파도의 위상 이동으로 수평 움직임 표현
-            this.verticalPhase += this.verticalSpeed;  // 수직 움직임의 위상 업데이트
-
-            // 진폭을 시간에 따라 변하게 하여 랜덤한 흔들림 효과 추가
-            this.amplitude = this.baseAmplitude + Math.sin(this.phase * 2) * (this.baseAmplitude * 0.2);
-        }
-
-        // 파도의 색상을 업데이트하는 메서드
-        updateColor() {
-            if (this.index === 0) {
-                this.color = colorPalettes[currentPaletteIndex].firstWaveColor;
-            } else {
-                this.color = colors[this.index % colors.length];
-            }
-        }
     }
 
     // 파도 배열 초기화
@@ -140,15 +203,15 @@ window.onload = function() {
 
         // 각 파도 업데이트 및 그리기
         waves.forEach(wave => {
-            wave.update();  // 파도 위치 업데이트
-            wave.draw();  // 파도 그리기
+            wave.update();  // 파도 위치 및 색상 업데이트
+            wave.draw();    // 파도 그리기
         });
 
         requestAnimationFrame(animate);  // 애니메이션을 지속적으로 실행
     }
 
     initWaves();  // 파도 초기화
-    animate();  // 애니메이션 시작
+    animate();    // 애니메이션 시작
 
     // "Shary" 요소 가져오기
     const sharyText = document.getElementById('sharyText');
@@ -165,7 +228,7 @@ window.onload = function() {
         currentPaletteIndex = (currentPaletteIndex + 1) % colorPalettes.length;
         colors = colorPalettes[currentPaletteIndex].colors;
 
-        // 각 파도의 색상을 업데이트
+        // 각 파도의 색상 전환 시작
         waves.forEach(wave => {
             wave.updateColor();
         });

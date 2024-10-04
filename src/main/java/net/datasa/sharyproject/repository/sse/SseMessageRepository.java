@@ -24,5 +24,6 @@ public interface SseMessageRepository extends JpaRepository<SseMessageEntity, In
     @Modifying(clearAutomatically = true)
     @Query("UPDATE SseMessageEntity m SET m.isRead = true WHERE m.toMember.memberId = :memberId")
     void markAllAsReadByToMemberId(@Param("memberId") String memberId);
+
 }
 

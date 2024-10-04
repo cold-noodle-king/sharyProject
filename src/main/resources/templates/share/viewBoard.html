@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>공유 다이어리 둘러보기</title>
+
+    <!-- jQuery 로드 -->
+    <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
+
+    <!-- css파일 불러오기 -->
+    <link href="/css/share/MyNote.css" rel="stylesheet">
+
+    <!-- moment.js 라이브러리 로드 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <script>
+        $(document).ready(function (){
+
+            $('.update').on('click', function (){
+               confirm('수정하시겠습니까?');
+            });
+
+            $('.delete').on('click', function (){
+                confirm('삭제하시겠습니까?');
+            });
+
+            // 제목 클릭 시 이벤트 처리
+            $(document).on('click', '.view-note', function(e) {
+                e.preventDefault();
+
+                // 클릭된 노트의 번호와 좋아요 수를 가져오기
+                let noteNum = $(this).data('note-num');
+                let likeCnt = $(this).data('like-cnt');
+
+                // 좋아요 수 업데이트
+                $('#cnt').val(likeCnt);
+                $('#likeCnt').html(likeCnt);
+
+                // Ajax로 서버에서 노트 정보를 가져오는 요청
+                $.ajax({
+                    url: '/share/viewNote/' + noteNum, // 노트 정보 요청 URL
+                    type: 'GET',
+                    success: function(response) {
+                        // 데이터 분리
+                        var note = response.shareNote;
+                        var likeResponse = response.likeResponse;
+
+                        // 모달에 데이터 설정
+                        $('#noteModalLabel').text(note.shareNoteTitle); // 노트 제목 설정
+                        $('#nickname').text(note.nickname); // 작성자 설정
+
+                        // 작성일 설정
+                        let createdDate = new Date(note.createdDate);
+                        let formattedCreatedDate = `${createdDate.getFullYear()}.${('0' + (createdDate.getMonth() + 1)).slice(-2)}.${('0' + createdDate.getDate()).slice(-2)}`;
+                        $('#createdDate').text(formattedCreatedDate);
+
+                        // 위치 정보 설정
+                        var location = note.location.replace(/\(.*?\)/g, ''); // 괄호 제거
+                        $('#noteLocation').text(location);
+
+                        // 작성일 설정
+                        var diaryDate = new Date(note.diaryDate);
+                        var formattedDiaryDate = `${diaryDate.getFullYear()}년 ${(diaryDate.getMonth() + 1)}월 ${diaryDate.getDate()}일`;
+                        $('#noteDate').text(formattedDiaryDate);
+
+                        // 감정 아이콘 설정
+                        var emotionIcon;
+                        switch(note.emotionName) {
+                            case '기쁨': emotionIcon = '😊'; break;
+                            case '슬픔': emotionIcon = '😢'; break;
+                            case '화남': emotionIcon = '😠'; break;
+                            case '놀람': emotionIcon = '😮'; break;
+                            case '두려움': emotionIcon = '😱'; break;
+                            case '사랑': emotionIcon = '❤️'; break;
+                            default: emotionIcon = '😐'; break;
+                        }
+                        $('#noteEmotion').html(emotionIcon);
+
+                        // 좋아요 정보 업데이트
+                        $('#cnt').val(likeResponse.cnt);
+                        $('#likeCnt').text(likeResponse.cnt);
+
+                        // 감정별 좋아요 수 설정
+                        $('#joyCnt').html(likeResponse.joyCnt);
+                        $('#loveCnt').html(likeResponse.loveCnt);
+                        $('#sadCnt').html(likeResponse.sadCnt);
+                        $('#angryCnt').html(likeResponse.angryCnt);
+                        $('#wowCnt').html(likeResponse.wowCnt);
+
+                        // 노트 내용 설정
+                        $('#noteContents').text(note.contents);
+
+                        // 해시태그 설정
+                        if (note.hashtags && note.hashtags.length > 0) {
+                            var hashtagsText = note.hashtags.join(', ');
+                            $('#noteHashtags').text(hashtagsText);
+                        } else {
+                            $('#noteHashtags').text('해시태그 없음');
+                        }
+
+                        // 이미지가 있을 경우 이미지 표시, 없으면 숨김
+                        if (note.fileName && note.fileName.trim() !== "") {
+                            $('#personalNoteImage').attr('src', '/uploads/' + encodeURIComponent(note.fileName)).show();
+                        } else {
+                            $('#personalNoteImage').hide();
+                        }
+
+                        // 배경 이미지 설정
+                        if (note.noteTemplate && note.noteTemplate.noteName) {
+                            var backgroundImageUrl = '/images/' + encodeURIComponent(note.noteTemplate.noteName) + '.png';
+                            $('#noteContentModal').css({
+                                'background-image': 'url(' + backgroundImageUrl + ')',
+                                'background-size': 'cover',
+                                'background-position': 'center',
+                                'background-repeat': 'no-repeat'
+                            });
+                        } else {
+                            $('#noteContentModal').css('background-image', 'none');
+                        }
+
+                        // 프로필 이미지 설정
+                        if (note.profilePicture && note.profilePicture.trim() !== "") {
+                            $('.profile-image img').attr('src', note.profilePicture);
+                        } else {
+                            $('.profile-image img').attr('src', '/images/default_profile.png');
+                        }
+
+                        // 모달 열기
+                        $('#noteModal').modal('show');
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        alert('노트 정보를 가져오는 중 오류가 발생했습니다.');
+                        console.log('Error Status: ' + textStatus);
+                        console.log('Error Thrown: ' + errorThrown);
+                        console.log('Response Text: ' + jqXHR.responseText);
+                    }
+                });
+            });
+        });
+
+    </script>
+
+    <!-- 부트스트랩 CSS 로드 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- 헤더와 푸터용 스타일 -->
+    <link th:href="@{/header/css/styles.css}" rel="stylesheet">
+    <link th:href="@{/footer/css/styles.css}" rel="stylesheet">
+
+    <!-- MyNote 페이지 전용 CSS 파일 -->
+    <link href="/css/share/MyNote.css" rel="stylesheet">
+
+    <!-- Google폰트 사용 링크 -->
+    <link href='//spoqa.github.io/spoqa-han-sans/css/SpoqaHanSansNeo.css' rel='stylesheet' type='text/css'>
+</head>
+<body>
+<!-- 헤더 부분 불러오기 -->
+<div th:replace="~{fragments/header :: header}"></div>
+<br>
+<br>
+
+<!-- 메인 컨테이너 -->
+<div id="my-note-main" class="container mt-5">
+    <div>
+        <h2>게시물 관리</h2>
+    </div>
+
+    <div>
+        <table>
+            <thead>
+                <tr>
+                    <td>No.</td>
+                    <td>노트 제목</td>
+                    <td>작성자</td>
+                    <td>작성일</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="note, i : ${noteList}">
+                    <td th:text="${note.shareNoteNum}"></td>
+
+                    <td>
+                        <a href="#" class="view-note"
+                           th:data-note-num="${note.shareNoteNum}"
+                           th:data-like-cnt="${note.likeCount}">
+                            <span th:text="${note.shareNoteTitle}"></span>
+                        </a>
+                    </td>
+                    <td th:text="${note.nickname}"></td>
+                    <td th:text="${#temporals.format(note.createdDate, 'yyyy.MM.dd HH:mm:ss')}"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+<div class="modal fade" id="noteModal" tabindex="-1" aria-labelledby="noteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xxl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="noteModalLabel">노트 제목</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <!-- 노트 템플릿 이미지 배경으로 설정 -->
+            <div class="modal-body" id="noteContentModal" style="background-size: cover; background-repeat: no-repeat;">
+                <!-- 콘텐츠 전체를 묶는 div -->
+                <div class="content-wrapper">
+
+                    <!-- 프로필 이미지 및 위치/날짜/감정 섹션 -->
+                    <div class="d-flex align-items-center mb-4">
+                        <div class="profile-image me-3">
+                            <img src="/images/profile.png" class="rounded-circle" width="50" height="50" alt="프로필">
+                        </div>
+                        <div class="w-100">
+
+                            <div class="date-emotion-section">
+                                <span id="nickname"></span> <span>작성일: <span id="createdDate"></span></span> <p><span id="noteDate">[작성일]</span> <!-- 작성일 텍스트 -->
+                                <span id="noteEmotion" class="ms-3">[감정]</span></p> <!-- 감정 텍스트 -->
+                            </div>
+                            <p id="noteLocation">[위치]</p> <!-- 위치 텍스트 (추후 수정 가능) -->
+                        </div>
+                    </div>
+
+                    <!-- 이미지 섹션 -->
+                    <div class="image-section">
+                        <img src="" alt="노트 내용 이미지" id="personalNoteImage" style="display: none;"> <!-- 처음에는 숨긴 상태 -->
+                    </div>
+
+                    <!-- 내용 섹션 -->
+                    <div class="content-section">
+                        <p id="noteContents">[내용]</p> <!-- 노트 내용 텍스트 -->
+                    </div>
+
+                    <!-- 해시태그 섹션 -->
+                    <div class="hashtag-section">
+                        <p id="noteHashtags">[해시태그]</p> <!-- 해시태그 텍스트 -->
+                    </div>
+
+                    <!-- 좋아요 버튼 섹션 -->
+                    <div id="likeBox">
+                        <input type="hidden" id="cnt">
+                        <div class="emoji-buttons">
+                            <span class="likeBtn" data-emoji="1">😊</span><span id="joyCnt"></span>
+                            <span class="likeBtn" data-emoji="2">😍</span><span id="loveCnt"></span>
+                            <span class="likeBtn" data-emoji="3">😢</span><span id="sadCnt"></span>
+                            <span class="likeBtn" data-emoji="4">😡</span><span id="angryCnt"></span>
+                            <span class="likeBtn" data-emoji="5">😮</span><span id="wowCnt"></span>
+                        </div>
+                        <p>공감❤️<span id="likeCnt"></span></p>
+                    </div>
+
+                    <!-- 수정/삭제 버튼 섹션 -->
+                    <div>
+                        <button class="update">수정</button>
+                        <button class="delete">삭제</button>
+                    </div>
+                </div>
+                <br>
+                <div class="content-wrapper">
+                    <!-- 댓글 섹션 -->
+                    <div class="comment-section">
+                        <form>
+                            <input type="hidden" id="noteNum" name="noteNum">
+                            <div style="text-align: center">
+                                <h5>댓글입력</h5> <input id="contents" type="text" name="contents" required="required"
+                                                     style="width: 300px">
+                                <b><input class="replyBtn" type="button" th:value="확인"></b>
+                            </div>
+                        </form>
+                        <table class="comment-table">
+                            <thead>
+                            <tr>
+                                <th colspan="4"><h6>댓글</h6></th>
+                            </tr>
+                            </thead>
+                            <tbody class="commentTbody">
+
+                            </tbody>
+                        </table>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 푸터 부분 불러오기 -->
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+<!-- 부트스트랩 JS 로드 -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- 노트 보기 JS -->
+<script th:src="@{/js/share/viewNote.js}"></script>
+</body>
+</html>

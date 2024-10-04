@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>날씨 정보</title>
+    <style>
+        .weather-icon {
+            width: 100px; /* 아이콘의 너비 */
+            height: auto; /* 높이는 비율에 맞게 자동 조정 */
+        }
+    </style>
+</head>
+<body>
+<h1>오늘의 날씨</h1>
+<p>기온: <span th:text="${todayWeather.temperature}"></span>℃</p>
+<p>습도: <span th:text="${todayWeather.humidity}"></span>%</p>
+<p>풍속: <span th:text="${todayWeather.windSpeed}"></span>m/s</p>
+<p>날씨: <span th:text="${todayWeather.weather}"></span></p>
+<p>
+    <img th:src="@{'/images/weather/' + ${todayWeather.icon}}" alt="날씨 아이콘" class="weather-icon">
+</p>
+
+
+<h1>지난 일주일간의 날씨</h1>
+<table border="1">
+    <thead>
+    <tr>
+        <th>날짜</th>
+        <th>평균 기온 (℃)</th>
+        <th>최저 기온 (℃)</th>
+        <th>최고 기온 (℃)</th>
+        <th>습도 (%)</th>
+        <th>풍속 (m/s)</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="weather : ${lastWeekWeather}">
+        <td th:text="${weather.date}"></td>
+        <td th:text="${weather.avgTemperature}"></td>
+        <td th:text="${weather.minTemperature}"></td>
+        <td th:text="${weather.maxTemperature}"></td>
+        <td th:text="${weather.humidity}"></td>
+        <td th:text="${weather.windSpeed}"></td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

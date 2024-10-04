@@ -19,6 +19,9 @@
 
     <!-- MyDiary 페이지 전용 CSS 파일 -->
     <link href="/css/share/MyDiary.css" rel="stylesheet">
+
+    <!-- Google폰트 사용 링크 -->
+    <link href='//spoqa.github.io/spoqa-han-sans/css/SpoqaHanSansNeo.css' rel='stylesheet' type='text/css'>
     <script>
         $(document).ready(function() {
             $('#goBack').click(function() {
@@ -40,14 +43,14 @@
     <br>
     <div class="diary-container">
         <div>
-            <p>방장: <span th:text="${diary.nickname}"></span>(<span th:text="${diary.memberId}"></span>)</p>
+            <p>방장: <span th:text="${diary.nickname}"></span></p>
         </div>
         <div>
             <table>
                 <tr>
                     <td>번호</td>
+                    <td>프로필</td>
                     <td>닉네임</td>
-                    <td>ID</td>
                     <td>가입일</td>
                 </tr>
                 <tr th:each="list, i : ${list}">
@@ -57,7 +60,6 @@
                              alt="프로필 사진" class="profile-img">
                     </td>
                     <td th:text="${list.nickname}"></td>
-                    <td th:text="${list.memberId}"></td>
                     <td th:text="${#temporals.format(list.joinDate, 'yyyy-MM-dd')}"></td>
                 </tr>
             </table>

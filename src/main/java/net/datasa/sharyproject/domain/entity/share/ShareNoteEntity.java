@@ -11,6 +11,8 @@ import net.datasa.sharyproject.domain.entity.HashtagEntity;
 import net.datasa.sharyproject.domain.entity.member.MemberEntity;
 import net.datasa.sharyproject.domain.entity.mypage.ProfileEntity;
 import net.datasa.sharyproject.domain.entity.personal.NoteTemplateEntity;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -23,6 +25,7 @@ import java.util.List;
 @Entity
 @Builder
 @Table(name = "share_note")
+@EntityListeners(AuditingEntityListener.class)
 public class ShareNoteEntity {
 
     @Id
@@ -69,6 +72,10 @@ public class ShareNoteEntity {
 
     @Column(name = "diary_date", nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private Timestamp diaryDate;
+
+    @CreatedDate
+    @Column(name = "created_date", columnDefinition = "")
+    private LocalDateTime createdDate;
 
     @Column(name = "like_count", columnDefinition = "INT DEFAULT 0")
     private Integer likeCount = 0;
