@@ -81,6 +81,8 @@ public class NewWeatherResponse {
         @JsonProperty("avgWs")
         private String avgWs; // 평균 풍속
 
-        // 필요한 다른 필드 추가 가능
+        private double sumRn; // 일강수량 필드 추가
+        private double avgTca; // 평균 전운량 필드 추가
+
     }
 }

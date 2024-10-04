@@ -459,4 +459,8 @@ public class ShareDiaryService {
                 .build();
     }
 
+    public boolean isDiaryCreatedByUser(Integer diaryNum, String memberId) {
+        ShareDiaryEntity diary = shareDiaryRepository.findById(diaryNum).orElseThrow(() -> new RuntimeException("Diary not found"));
+        return diary.getMember().getMemberId().equals(memberId);  // 다이어리의 생성자가 현재 사용자와 같은지 확인
+    }
 }

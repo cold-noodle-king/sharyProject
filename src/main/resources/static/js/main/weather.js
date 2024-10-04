@@ -1,134 +1,63 @@
-$(document).ready(function () {
-    $("#getWeatherButton").click(function () {
-        getWeather();
+$(document).ready(function() {
+    // 날씨 아이콘 클릭 이벤트 핸들러
+    $('.weather').on('click', function() {
+        // AJAX 요청을 보내 날씨 정보를 가져옴
+        $.ajax({
+            url: '/weatherData',
+            method: 'GET',
+            dataType: 'json',
+            success: function(response) {
+                // 응답 데이터 처리
+                var todayWeather = response.todayWeather;
+                var lastWeekWeather = response.lastWeekWeather;
+
+                // 날짜 포맷팅 (baseDate)
+                var baseDate = todayWeather.baseDate; // 예: "20241004"
+                if (baseDate.length === 8) {
+                    var year = baseDate.substring(0, 4);
+                    var month = baseDate.substring(4, 6);
+                    var day = baseDate.substring(6, 8);
+                    baseDate = year + '년 ' + month + '월 ' + day + '일';
+                }
+
+                // 모달의 내용을 업데이트
+                $('#baseDate').text(baseDate);
+                $('#todayWeatherIcon').attr('src', '/images/weather/' + todayWeather.icon);
+                $('#todayWeatherDesc').text(todayWeather.weather);
+                $('#todayTemperature').text(todayWeather.temperature);
+                $('#todayHumidity').text(todayWeather.humidity);
+
+                // 지난 일주일의 날씨 정보 업데이트
+                var $tbody = $('#lastWeekWeatherTable tbody');
+                $tbody.empty(); // 기존 내용 지우기
+
+                lastWeekWeather.forEach(function(weather) {
+                    // 기존 날짜 포맷 0000-00-00
+                    var originalDate = weather.date;
+
+                    // 날짜를 월/일 형식으로 변환
+                    var dateParts = originalDate.split('-'); // ["2024", "09", "27"]
+                    var formattedDate = dateParts[1] + '/' + dateParts[2]; // "09/27"
+
+                    var row = '<tr>' +
+                        '<td>' + formattedDate + '</td>' +
+                        '<td>' +
+                        '<img src="/images/weather/' + weather.icon + '" alt="날씨 아이콘" class="weather-icon" style="width: 30px; height: 30px; margin-right: 5px;">' +
+                        weather.weatherDescription +
+                        '</td>' +
+                        '<td>' + weather.avgTemperature + "℃" + '</td>' +
+                        '</tr>';
+                    $tbody.append(row);
+                });
+
+
+                // 모달 열기
+                var weatherModal = new bootstrap.Modal(document.getElementById('weatherModal'));
+                weatherModal.show();
+            },
+            error: function(xhr, status, error) {
+                console.error('날씨 정보를 가져오는 데 실패했습니다:', error);
+            }
+        });
     });
 });
-
-function getWeather() {
-    $.ajax({
-        url: "/weather/come",
-        type: "get",
-        timeout: 30000,
-        contentType: "application/json",
-        dataType: "json",
-        success: function (data, status, xhr) {
-            let dataHeader = data.result.response.header.resultsCode;
-
-            if (dataHeader === "00") {
-                console.log("success == >");
-                console.log(data);
-
-                // 데이터를 화면에 표시
-                displayWeatherData(data.result.response.body.items.item);
-            } else {
-                console.log("fail == >");
-                console.log(data);
-            }
-        },
-        error: function (e, status, xhr, data) {
-            console.log("error == >");
-            console.log(e);
-        }
-    });
-}
-
-function displayWeatherData(items) {
-    // 결과를 표시할 위치
-    let resultContainer = $("#weatherResult");
-
-    // 이전에 표시된 내용 제거
-    resultContainer.empty();
-
-    // 각 항목을 결과 컨테이너에 추가
-    items.forEach(function (item) {
-        let info = item.category;
-        let dataValue = item.fcstValue;
-
-        switch (info) {
-            case "TMP":
-                info = "기온";
-                dataValue = dataValue + " ℃";
-                break;
-            case "UUU":
-                info = "동서 성분 풍속";
-                dataValue = dataValue + " m/s";
-                break;
-            case "VVV":
-                info = "남북 성분 풍속";
-                dataValue = dataValue + " m/s";
-                break;
-            case "VEC":
-                info = "풍향";
-                dataValue = dataValue + " ℃";
-                break;
-            case "WSD":
-                info = "풍속";
-                dataValue = dataValue + " m/s";
-                break;
-            case "SKY":
-                info = "하늘 상태";
-                // 조건에 따라 SKY 값 변경
-                switch (dataValue) {
-                    case "1":
-                        dataValue = "맑음";
-                        break;
-                    case "2":
-                        dataValue = "비";
-                        break;
-                    case "3":
-                        dataValue = "구름 많음";
-                        break;
-                    // 다른 조건들 추가
-                    default:
-                        break;
-                }
-                break;
-            case "PTY":
-                info = "강수형태";
-                // 조건에 따라 PTY 값 변경
-                switch (dataValue) {
-                    case "0":
-                        dataValue = "없음";
-                        break;
-                    case "1":
-                        dataValue = "비";
-                        break;
-                    case "2":
-                        dataValue = "눈/비";
-                        break;
-                    case "3":
-                        dataValue = "눈";
-                        break;
-                    // 다른 조건들 추가
-                    default:
-                        break;
-                }
-                break;
-            case "POP":
-                info = "강수확률";
-                dataValue = dataValue + " %";
-                break;
-            case "WAV":
-                info = "파고";
-                dataValue = dataValue + " m";
-                break;
-            case "PCP":
-                info = "강수량";
-                // 조건에 따라 PCP 값 변경
-                switch (dataValue) {
-                    case "0":
-                        dataValue = "강수 없음";
-                        break;
-                    // 다른 조건들 추가
-                    default:
-                        break;
-                }
-                break;
-            // 다른 항목들도 추가
-            default:
-                break;
-        }
-        resultContainer.append("<div class='weatherItem'>" + info + " : "
-            + dataValue + "</div>");
-    });
-}

@@ -104,4 +104,31 @@
             </div>
         </div>
     </div>
+    <!-- 날씨 모달 -->
+    <div class="modal fade" id="weatherModal" tabindex="-1" aria-labelledby="weatherModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">날씨 정보</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <h3><span id="baseDate"></span></h3>
+                    <p>
+                        <img id="todayWeatherIcon" src="" alt="날씨 아이콘" class="weather-modal-icon">
+                    </p>
+                    <h5><p><span id="todayWeatherDesc"></span></p></h5>
+                    <h5><p><span id="todayTemperature"></span>℃ / <span id="todayHumidity"></span>%</p></h5>
+
+                    <h4>지난주 날씨</h4>
+                    <table id="lastWeekWeatherTable" class="table table-bordered">
+                        <tbody>
+                        <!-- 데이터가 동적으로 추가됩니다 -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>

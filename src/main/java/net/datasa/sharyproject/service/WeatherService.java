@@ -1,6 +1,7 @@
 package net.datasa.sharyproject.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
 import net.datasa.sharyproject.domain.dto.weather.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -18,6 +19,7 @@ import java.util.*;
 /**
  * 기상청 날씨 API를 이용하여 날씨 정보를 가져오는 메서드
  */
+@Slf4j
 @Service
 public class WeatherService {
 
@@ -80,10 +82,18 @@ public class WeatherService {
                     weatherData.setMaxTemperature(item.getMaxTa()); // 최고 기온
                     weatherData.setHumidity(item.getAvgRhm()); // 평균 상대습도
                     weatherData.setWindSpeed(item.getAvgWs()); // 평균 풍속
+
+                    // **추가된 부분: 날씨 상태 추정**
+                    String weatherCode = getWeatherCodeFromAsosData(item);
+                    WeatherDescription weatherDescription = getWeatherDescriptionFromCode(weatherCode);
+                    weatherData.setWeatherDescription(weatherDescription.getDescription());
+                    weatherData.setIcon(weatherDescription.getIcon());
+
                     // 필요한 필드 추가
                     weatherDataList.add(weatherData);
                 }
             }
+            log.debug("일주일 날씨 데이터: {}", weatherDataList);
 
             return weatherDataList;
         } else {
@@ -278,8 +288,11 @@ public class WeatherService {
         return new WeatherDescription(description, icon);
     }
 
-
-
+    /**
+     * 오늘 날씨의 기준 시간을 구하는 메서드
+     * @param dateTime
+     * @return
+     */
     private String getBaseTimeForNcst(LocalDateTime dateTime) {
         int minute = dateTime.getMinute();
         int hour = dateTime.getHour();
@@ -360,5 +373,55 @@ public class WeatherService {
         }
         return String.format("%02d30", hour); // 초단기예보의 base_time은 매시각 30분
     }
+
+    private String getWeatherCodeFromAsosData(NewWeatherResponse.Item item) {
+        double sumRn = item.getSumRn(); // 일강수량
+        double avgTca = item.getAvgTca(); // 평균 전운량
+
+        if (sumRn > 0) {
+            return "RAIN"; // 비
+        } else {
+            if (avgTca <= 2) {
+                return "SUNNY"; // 맑음
+            } else if (avgTca <= 7) {
+                return "CLOUDY"; // 구름 많음
+            } else {
+                return "OVERCAST"; // 흐림
+            }
+        }
+    }
+
+    private WeatherDescription getWeatherDescriptionFromCode(String code) {
+        String description = "알 수 없음";
+        String icon = "unknown.png";
+
+        switch (code) {
+            case "SUNNY":
+                description = "맑음";
+                icon = "sunny.png";
+                break;
+            case "CLOUDY":
+                description = "구름 많음";
+                icon = "cloudy.png";
+                break;
+            case "OVERCAST":
+                description = "흐림";
+                icon = "overcast.png";
+                break;
+            case "RAIN":
+                description = "비";
+                icon = "rain.png";
+                break;
+            // 필요한 경우 추가적인 날씨 상태 코드와 아이콘을 매핑
+            default:
+                description = "알 수 없음";
+                icon = "unknown.png";
+                break;
+        }
+
+        return new WeatherDescription(description, icon);
+    }
+
+
 
 }

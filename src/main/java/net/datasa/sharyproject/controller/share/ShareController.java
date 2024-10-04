@@ -518,7 +518,18 @@ public class ShareController {
             // 서비스 호출
             shareNoteService.saveNote(noteDTO, hashtags);
 
-            return "redirect:/share/main";
+//            return "redirect:/share/main";
+            // 다이어리가 사용자가 생성한 것인지 확인
+            String loginedMemberId = principal.getName();
+            boolean isCreatedDiary = shareDiaryService.isDiaryCreatedByUser(diaryNum, loginedMemberId);
+
+            // 다이어리 타입에 따라 리다이렉션 경로 설정
+            if (isCreatedDiary) {
+                return "redirect:/share/createdDiary?diaryNum=" + diaryNum;
+            } else {
+                return "redirect:/share/joinedDiary?diaryNum=" + diaryNum;
+            }
+
 
         } catch (Exception e) {
             log.error("노트 저장 중 오류 발생", e);
