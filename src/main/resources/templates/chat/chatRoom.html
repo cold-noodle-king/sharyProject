@@ -3,6 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <title>채팅 방</title>
+
+    <!-- weather 스타일 시트 -->
+    <link rel="stylesheet" th:href="@{/css/weather.css}">
+
+
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -221,6 +226,8 @@
     </form>
 
     <a href="/home">홈페이지로 돌아가기</a>
+    <!-- weather.js 파일 로드 -->
+    <script th:src="@{/js/main/weather.js}"></script>
 </div>
 </body>
 </html>

@@ -6,6 +6,9 @@
     <link rel="stylesheet" href="/footer/css/styles.css">
 
     <link th:href="@{/css/mypage/sideBar.css}" rel="stylesheet">
+    <!-- weather 스타일 시트 -->
+    <link rel="stylesheet" th:href="@{/css/weather.css}">
+
 
 
     <!-- Google폰트 사용 링크 -->
@@ -230,6 +233,8 @@
 
 <!-- footer.html의 푸터 부분 불러오기 -->
 <div th:replace="~{fragments/footer :: footer}"></div>
+<!-- weather.js 파일 로드 -->
+<script th:src="@{/js/main/weather.js}"></script>
 
 </body>
 </html>
