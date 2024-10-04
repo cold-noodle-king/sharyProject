@@ -27,6 +27,31 @@
         });
     </script>
 
+    <style>
+        .nav-links {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .nav-links a {
+            padding: 10px 20px;
+            text-decoration: none;
+            color: #333;
+            background-color: #e9ecef;
+            border-radius: 20px;
+            font-weight: bold;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .nav-links a.active {
+            background-color: #d9a8e6;
+            color: #fff;
+        }
+        .nav-links a:hover {
+            background-color: #ba68c6;
+            color: #fff;
+        }
+    </style>
+
 
     <!-- 부트스트랩 CSS 로드 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -49,9 +74,16 @@
 <!-- 메인 컨테이너 -->
 <div id="main" class="container mt-5">
     <h2>My Share Diary</h2>
-    <div>
+    <!--<div>
         <a th:href="@{/share/main}"><span>생성한 다이어리</span></a>
         <a th:href="@{/share/joinedList}"><span>가입한 다이어리</span></a>
+    </div>-->
+    <!-- 링크 부분 수정 -->
+    <div class="nav-links">
+        <a th:href="@{/share/main}"
+           th:classappend="${activePage == 'created' ? ' active' : ''}">생성한 다이어리</a>
+        <a th:href="@{/share/joinedList}"
+           th:classappend="${activePage == 'joined' ? ' active' : ''}">가입한 다이어리</a>
     </div>
 
     <br>

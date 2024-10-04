@@ -13,7 +13,7 @@
     <link rel="stylesheet" th:href="@{/css/weather.css}">
 
     <!-- css파일 불러오기 -->
-    <link href="/css/share/ShareDiaryList.css" rel="stylesheet">
+    <link th:href="@{/css/share/ShareDiaryList.css}" rel="stylesheet">
 
     <!-- Google폰트 사용 링크 -->
     <link href='//spoqa.github.io/spoqa-han-sans/css/SpoqaHanSansNeo.css' rel='stylesheet' type='text/css'>
@@ -74,47 +74,56 @@
 <!-- 메인 컨테이너 -->
 <div id="my-note-main" class="container mt-5">
     <div>
+        <br>
         <h2>공유 다이어리 둘러보기</h2>
-    </div>
-    <div>
-        <a th:href="@{/share/listAll}" th:classappend="${activeCategory == '전체'} ? 'active' : ''">전체</a>
-        <span th:each="category : ${categoryNames}">
-        <a th:href="@{/share/listedByUserCategory(categoryName=${category})}"
-           th:text="${category}"
-           th:classappend="${activeCategory == category} ? 'active' : ''"></a>
-    </span>
+        <br>
     </div>
 
+
+    <!-- 카테고리 링크 -->
+    <div class="category-links">
+        <a th:href="@{/share/listAll}"
+           th:classappend="${activeCategory == '전체'} ? ' active' : ''">전체</a>
+        <a th:each="category : ${categoryNames}"
+           th:href="@{/share/listedByUserCategory(categoryName=${category})}"
+           th:text="${category}"
+           th:classappend="${activeCategory == category} ? ' active' : ''"></a>
+    </div>
+
+
+    <!-- 다이어리 리스트 테이블 -->
     <div>
-        <table>
+        <table class="diary-table">
             <thead>
             <tr>
-                <td>No.</td>
-                <td>카테고리</td>
-                <td>다이어리 이름</td>
-                <td>방장</td>
-                <td>소개글</td>
-                <td></td>
+                <th>No.</th>
+                <th>커버 이미지</th>
+                <th>카테고리</th>
+                <th>다이어리 이름</th>
+                <th>방장</th>
+                <th class="intro">소개글</th> <!-- 클래스 추가 -->
+                <th>가입</th>
             </tr>
             </thead>
+            <tbody>
             <tr th:each="diary, i : ${diaryList}">
                 <td th:text="${i.count}"></td>
                 <td>
-                    <img th:src="@{'/images/' + ${diary.coverTemplateName} + '.png'}" alt="커버 이미지" class="card-img-top">
+                    <img th:src="@{'/images/' + ${diary.coverTemplateName} + '.png'}" alt="커버 이미지">
                 </td>
                 <td th:text="${diary.categoryName}"></td>
                 <td th:text="${diary.shareDiaryName}"></td>
                 <td th:text="${diary.nickname}"></td>
-                <td th:text="${diary.diaryBio}"></td>
+                <td class="intro" th:text="${diary.diaryBio}"></td> <!-- 클래스 추가 -->
                 <td>
                     <span th:if="${#authentication.name} != ${diary.memberId}">
-                         <button class="joinBtn" th:attr="data-diary-num=${diary.shareDiaryNum}">가입</button>
+                        <button class="joinBtn" th:attr="data-diary-num=${diary.shareDiaryNum}">가입</button>
                     </span>
                 </td>
             </tr>
+            </tbody>
         </table>
     </div>
-
 </div>
 
 <!-- 푸터 부분 불러오기 -->

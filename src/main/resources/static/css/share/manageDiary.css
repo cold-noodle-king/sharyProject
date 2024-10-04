@@ -1,0 +1,68 @@
+/* 메인 컨테이너 스타일 */
+#main {
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    margin-top: 80px; /* 헤더와의 간격 더 추가 */
+    text-align: center; /* 중앙 정렬 */
+}
+
+/* 페이지 제목 스타일 */
+.main-content h2 {
+    text-align: center;
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-bottom: 40px;
+    color: #007bff;
+}
+
+/* 중앙에 위치한 메뉴 리스트 스타일 */
+.list-container {
+    display: inline-block;
+    width: 100%; /* 가로 너비 조정 */
+    max-width: 400px; /* 최대 너비 설정 */
+    margin: 0 auto; /* 중앙 정렬 */
+}
+
+/* 메뉴 리스트 항목 스타일 */
+.list-container p {
+    margin: 0;
+    margin-bottom: 20px;
+}
+
+.list-container a {
+    display: block;
+    background-color: #007bff;
+    color: white;
+    padding: 12px;
+    text-align: center;
+    border-radius: 5px;
+    text-decoration: none; /* 링크 밑줄 제거 */
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    font-size: 1.1rem;
+}
+
+/* 링크에 마우스 오버 시 효과 */
+.list-container a:hover {
+    background-color: #0056b3;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* 다이어리로 돌아가기 버튼 스타일 */
+#goBack {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* 돌아가기 버튼에 마우스 오버 시 효과 */
+#goBack:hover {
+    background-color: #218838;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}

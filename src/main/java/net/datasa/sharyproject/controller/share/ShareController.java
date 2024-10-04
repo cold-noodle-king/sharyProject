@@ -81,6 +81,8 @@ public class ShareController {
 
         log.debug("불러온 다이어리들 정보:{}", createdDiaries);
         model.addAttribute("diaryList", createdDiaries);
+        model.addAttribute("activePage", "created");
+
 
         return "share/Main";
     }
@@ -102,10 +104,15 @@ public class ShareController {
         log.debug("가져온 다이어리 정보:{}", dto);
         List<ShareNoteDTO> dtoList = shareNoteService.getNotesByDiaryNum(diaryNum);
         log.debug("리스트를 제대로 갖고왔니?{}", dtoList);
+        // 멤버 수 가져오기
+        int memberCount = shareDiaryService.getMemberCount(diaryNum);
+
 
         model.addAttribute("diary", dto);
         model.addAttribute("noteList", dtoList);
         model.addAttribute("user", user);
+        model.addAttribute("memberCount", memberCount);
+
 
         return "share/createdDiary";
     }
@@ -123,6 +130,7 @@ public class ShareController {
         List<ShareDiaryDTO> joinedDiaries = shareDiaryService.getJoinedList(user.getUsername());
         log.debug("가입한 다이어리 리스트:{}", joinedDiaries);
         model.addAttribute("diaryList", joinedDiaries);
+        model.addAttribute("activePage", "joined");
 
         return "share/JoinedList";
     }
@@ -143,8 +151,13 @@ public class ShareController {
         ShareDiaryDTO dto = shareDiaryService.getJoinedDiary(diaryNum, user.getUsername());
         List<ShareNoteDTO> dtoList = shareNoteService.getNotesByDiaryNum(diaryNum);
         log.debug("가져온 다이어리 정보:{}", dto);
+        // 멤버 수 가져오기
+        int memberCount = shareDiaryService.getMemberCount(diaryNum);
+
         model.addAttribute("diary", dto);
         model.addAttribute("noteList", dtoList);
+        model.addAttribute("memberCount", memberCount);
+
 
         return "share/JoinedDiary";
     }

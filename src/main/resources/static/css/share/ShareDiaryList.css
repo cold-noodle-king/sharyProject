@@ -1,102 +1,86 @@
-/* 선택된 탭을 강조하는 스타일 */
-a.active {
-    font-weight: bold;
-    color: #007bff; /* 강조된 색상 */
-    text-decoration: underline; /* 밑줄 추가 */
-}
 /* 메인 컨테이너 스타일 */
 #my-note-main {
-    max-width: 800px;
+    max-width: 1000px;
     margin: 0 auto;
     padding: 20px;
-}
-
-/* 다이어리 리스트의 카드 스타일 */
-.card {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    padding: 15px;
-    margin-bottom: 10px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    transition: box-shadow 0.3s;
-}
-
-.card:hover {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-/* 이미지 스타일 */
-.card img {
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    object-fit: cover;
-    margin-right: 15px;
-}
-
-/* 다이어리 정보 섹션 */
-.card .info {
-    flex-grow: 1;
-}
-
-.card .info h5 {
-    font-size: 18px;
-    font-weight: bold;
-    margin: 0 0 5px;
-}
-
-.card .info p {
-    margin: 0;
-    color: #666;
-    font-size: 14px;
-}
-
-/* 회원 수 및 설명 */
-.card .stats {
-    font-size: 14px;
-    color: #888;
-    margin-top: 5px;
-}
-
-/* 가입 버튼 스타일 */
-.card .joinBtn {
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    padding: 8px 12px;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.card .joinBtn:hover {
-    background-color: #0056b3;
 }
 
 /* 카테고리 링크 스타일 */
 .category-links {
     display: flex;
+    gap: 10px;
     margin-bottom: 20px;
 }
 
 .category-links a {
-    margin-right: 10px;
-    padding: 8px 12px;
-    border-radius: 20px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 20px;
     text-decoration: none;
-    color: #007bff;
-    background-color: #f1f1f1;
+    color: #333;
+    background-color: #e9ecef;
+    border-radius: 20px;
+    font-weight: bold;
     transition: background-color 0.3s, color 0.3s;
 }
 
 .category-links a.active {
-    background-color: #007bff;
+    background-color: #c288f4;
     color: #fff;
 }
 
 .category-links a:hover {
-    background-color: #0056b3;
+    background-color: #b26df5;
     color: #fff;
+}
+
+/* 다이어리 리스트 테이블 스타일 */
+.diary-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.diary-table th, .diary-table td {
+    padding: 12px;
+    text-align: center;
+    border: none;
+}
+
+.diary-table thead {
+    background-color: transparent;
+}
+
+.diary-table tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+/* 커버 이미지 크기 조정 */
+.diary-table img {
+    width: 150px; /* 이미지 크기 증가 */
+    height: 200px;
+    object-fit: cover;
+    border-radius: 5px;
+
+}
+
+/* 소개글 컬럼 너비 조정 */
+.diary-table th.intro, .diary-table td.intro {
+    width: 30%; /* 소개글 컬럼 너비 설정 */
+}
+
+/* 가입 버튼 스타일 */
+.joinBtn {
+    background-color: #5bafea;
+    color: #ffffff;
+    font-weight: bold;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.joinBtn:hover {
+    background-color: #1d6de3;
+
 }

@@ -43,7 +43,9 @@
 <div id="my-note-main" class="container mt-5">
     <h2><p th:text="${diary.shareDiaryName}"></p></h2>
     <div>
-        <p>방장: <span th:text="${diary.nickname}"></span> 카테고리: <span th:text="${diary.categoryName}"></span> </p>
+        <strong>방장</strong> <span th:text="${diary.nickname}"></span>
+        <strong>카테고리</strong> <span th:text="${diary.categoryName}"></span>
+        <strong>멤버 수</strong> <span th:text="${memberCount}">0</span>
     </div>
     <br>
 
@@ -175,7 +177,7 @@
                                 <span class="emoji-count" id="wowCnt">0</span>
                             </div>
                         </div>
-                        <p>공감❤️<span id="likeCnt">0</span></p>
+                        <p id="allCnt">공감❤️<span id="likeCnt">0</span></p>
                     </div>
 
                 </div> <!-- content-wrapper 끝 -->
