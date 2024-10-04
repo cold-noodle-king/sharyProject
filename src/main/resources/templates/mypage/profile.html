@@ -20,6 +20,9 @@
     <link href='//spoqa.github.io/spoqa-han-sans/css/SpoqaHanSansNeo.css' rel='stylesheet' type='text/css'>
 
     <style>
+        pre{
+            font-family: 'SpoqaHanSansNeo', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif !important;
+        }
         /* 프로필 컨테이너 스타일 */
         .profile-container {
             border: 2px solid #ddd;  /* 테두리 */
@@ -129,7 +132,7 @@
                 <img th:src="${profile?.profilePicture != null} ? ${profile.profilePicture} : '/images/profile.png'"
                      alt="프로필 사진" class="profile-img">
                 <p th:text="${member.nickname}"></p>
-                <p th:text="${profile.ment}"></p>
+                <pre th:text="${profile.ment}"></pre>
 
                 <a th:href="@{/mypage/info}">개인정보</a>
                 <a th:href="@{/mypage/profile}">프로필</a>

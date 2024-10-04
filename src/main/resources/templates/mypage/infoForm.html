@@ -20,6 +20,10 @@
     <link th:href="@{/css/mypage/sideBar.css}" rel="stylesheet">
     <link th:href="@{/css/mypage/infoForm.css}" rel="stylesheet">
 
+    <style>
+        pre{font-family: 'SpoqaHanSansNeo', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif !important;}
+    </style>
+
     <!-- Google폰트 사용 링크 -->
     <link href='//spoqa.github.io/spoqa-han-sans/css/SpoqaHanSansNeo.css' rel='stylesheet' type='text/css'>
 
@@ -84,7 +88,7 @@
                 <img th:src="${profile?.profilePicture != null} ? ${profile.profilePicture} : '/images/profile.png'"
                      alt="프로필 사진" class="profile-img">
                 <p th:text="${member.nickname}"></p>
-                <p th:text="${profile.ment}"></p>
+                <pre th:text="${profile.ment}"></pre>
 
                 <a th:href="@{/mypage/info}">개인정보</a>
                 <a th:href="@{/mypage/profile}">프로필</a>
