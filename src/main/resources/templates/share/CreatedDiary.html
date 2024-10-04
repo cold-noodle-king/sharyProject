@@ -126,11 +126,14 @@
                         <div class="w-100">
 
                             <div class="date-emotion-section">
-                                <span id="nickname"></span>
-                                <span>작성일: <span id="createdDate"></span></span> <p><span id="noteDate">[작성일]</span> <!-- 작성일 텍스트 -->
+                                <div class="date-container">
+                                    <span id="nickname"></span>
+                                    <span id="createdBox">작성일: <span id="createdDate"></span></span>
+                                </div>
+                                <p><span id="noteDate"></span> <!-- 작성일 텍스트 -->
                                 <span id="noteEmotion" class="ms-3">[감정]</span></p> <!-- 감정 텍스트 -->
                             </div>
-                            <p id="noteLocation">[위치]</p> <!-- 위치 텍스트 (추후 수정 가능) -->
+                            <p>📍<span id="noteLocation"></span></p> <!-- 위치 텍스트 (추후 수정 가능) -->
                         </div>
                     </div>
 
@@ -171,10 +174,11 @@
                             </div>
                             <div class="emoji-container">
                                 <span class="likeBtn" data-emoji="5">😮</span>
-                                <span class="emoji-count" id="wowCnt">0</span>
+                                <span class="emoji-c8ount" id="wowCnt">0</span>
                             </div>
                         </div>
-                        <p>공감❤️<span id="likeCnt">0</span></p>
+                        <br>
+                        <p id="allCnt">공감❤️<span id="likeCnt">0</span></p>
                     </div>
 
 
@@ -183,22 +187,18 @@
 
                 <br>
                 <div class="content-wrapper">
+                    <h5>댓글</h5>
                     <!-- 댓글 섹션 -->
                     <div class="comment-section">
                         <form>
                             <input type="hidden" id="noteNum" name="noteNum">
-                            <div style="text-align: center">
-                                <h5>댓글입력</h5> <input id="contents" type="text" name="contents" required="required"
-                                                        style="width: 300px">
-                                <b><input class="replyBtn" type="button" th:value="확인"></b>
-                            </div>
+                            <label for="contents" class="visually-hidden">댓글 입력</label> <!-- 접근성 개선을 위한 레이블 추가 -->
+                            <input id="contents" type="text" name="contents" required="required" placeholder="댓글을 입력하세요">
+                            <button type="button" class="replyBtn">확인</button> <!-- 버튼을 input에서 button으로 변경 -->
                         </form>
+                        <br>
                         <table class="comment-table">
-                            <thead>
-                            <tr>
-                                <th colspan="4"><h6>댓글</h6></th>
-                            </tr>
-                            </thead>
+
                             <tbody class="commentTbody">
 
                             </tbody>

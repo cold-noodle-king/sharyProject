@@ -1,19 +1,15 @@
 $(document).ready(function() {
     // 페이지 로드 시 현재 날씨 데이터 가져오기
     $.ajax({
-        url: '/currentWeatherData',  // 서버에서 현재 날씨 데이터를 제공하는 엔드포인트
+        url: '/currentWeatherData',
         method: 'GET',
         dataType: 'json',
         success: function(response) {
-            // 응답 데이터 처리
             var currentWeather = response.currentWeather;
-            var temperature = currentWeather.temperature;  // 현재 온도
-            var weatherIcon = currentWeather.icon;         // 날씨 아이콘 파일명 (예: 'sunny.png')
+            var temperature = currentWeather.temperature;
+            var weatherIcon = currentWeather.icon;
 
-            // 헤더의 날씨 아이콘 업데이트
             $('#headerWeatherIcon').attr('src', '/images/weather/' + weatherIcon);
-
-            // 헤더의 온도 표시 업데이트
             $('#headerTemperature').text(temperature + '℃');
         },
         error: function(xhr, status, error) {
@@ -21,22 +17,27 @@ $(document).ready(function() {
         }
     });
 
-
-    // 날씨 아이콘 클릭 이벤트 핸들러
-    $('.weather').on('click', function() {
+    // 이벤트 리스너가 중복으로 등록되지 않도록 .off() 사용
+    $('.weather').off('click').on('click', function(event) {
         event.preventDefault(); // 기본 링크 동작 방지
-        // AJAX 요청을 보내 날씨 정보를 가져옴
+
+        // 모달 요소가 존재하는지 확인
+        var weatherModalElement = document.getElementById('weatherModal');
+        if (!weatherModalElement) {
+            console.error('모달 요소가 존재하지 않습니다. 페이지에 모달 HTML이 포함되어 있는지 확인하세요.');
+            return;
+        }
+
+
         $.ajax({
             url: '/weatherData',
             method: 'GET',
             dataType: 'json',
             success: function(response) {
-                // 응답 데이터 처리
                 var todayWeather = response.todayWeather;
                 var lastWeekWeather = response.lastWeekWeather;
 
-                // 날짜 포맷팅 (baseDate)
-                var baseDate = todayWeather.baseDate; // 예: "20241004"
+                var baseDate = todayWeather.baseDate;
                 if (baseDate.length === 8) {
                     var year = baseDate.substring(0, 4);
                     var month = baseDate.substring(4, 6);
@@ -44,24 +45,19 @@ $(document).ready(function() {
                     baseDate = year + '년 ' + month + '월 ' + day + '일';
                 }
 
-                // 모달의 내용을 업데이트
                 $('#baseDate').text(baseDate);
                 $('#todayWeatherIcon').attr('src', '/images/weather/' + todayWeather.icon);
                 $('#todayWeatherDesc').text(todayWeather.weather);
                 $('#todayTemperature').text(todayWeather.temperature);
                 $('#todayHumidity').text(todayWeather.humidity);
 
-                // 지난 일주일의 날씨 정보 업데이트
                 var $tbody = $('#lastWeekWeatherTable tbody');
-                $tbody.empty(); // 기존 내용 지우기
+                $tbody.empty();
 
                 lastWeekWeather.forEach(function(weather) {
-                    // 기존 날짜 포맷 0000-00-00
                     var originalDate = weather.date;
-
-                    // 날짜를 월/일 형식으로 변환
-                    var dateParts = originalDate.split('-'); // ["2024", "09", "27"]
-                    var formattedDate = dateParts[1] + '/' + dateParts[2]; // "09/27"
+                    var dateParts = originalDate.split('-');
+                    var formattedDate = dateParts[1] + '/' + dateParts[2];
 
                     var row = '<tr>' +
                         '<td>' + formattedDate + '</td>' +
@@ -74,8 +70,9 @@ $(document).ready(function() {
                     $tbody.append(row);
                 });
 
-                // 모달 열기
-                var weatherModal = new bootstrap.Modal(document.getElementById('weatherModal'));
+                // 모달을 열기 전에 Bootstrap 모달 인스턴스 확인
+                var weatherModalElement = document.getElementById('weatherModal');
+                var weatherModal = bootstrap.Modal.getInstance(weatherModalElement) || new bootstrap.Modal(weatherModalElement);
                 weatherModal.show();
             },
             error: function(xhr, status, error) {
@@ -83,4 +80,12 @@ $(document).ready(function() {
             }
         });
     });
+    $('.btn-close, .modal-backdrop').on('click', function() {
+        var weatherModalElement = document.getElementById('weatherModal');
+        var weatherModal = bootstrap.Modal.getInstance(weatherModalElement);
+        if (weatherModal) {
+            weatherModal.hide();
+        }
+    });
+
 });
