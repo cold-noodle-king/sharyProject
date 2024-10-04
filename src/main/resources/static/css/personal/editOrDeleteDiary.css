@@ -4,7 +4,7 @@
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-    margin-top: 150px; /* 헤더와의 간격 수정 */
+    margin-top: 100px; /* 헤더와의 간격 수정 */
 }
 
 /* 다이어리 수정 페이지 컨테이너 스타일 */
@@ -15,7 +15,6 @@
     padding: 30px;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    margin-top: 50px; /* 컨테이너와 헤더 사이의 간격 */
 }
 
 /* 다이어리 수정 페이지 제목 */
@@ -73,23 +72,33 @@
     transform: scale(1.1);
 }
 
-/* 버튼 스타일 */
+/* 버튼 스타일 수정 */
 button[type="submit"] {
-    width: 100%;
-    padding: 12px;
-    font-size: 1.2rem;
+    width: 20%; /* 버튼 너비를 20%로 설정 */
+    padding: 8px;
+    font-size: 1rem;
     font-weight: bold;
     border-radius: 5px;
     transition: background-color 0.3s ease, transform 0.3s ease;
+    margin: 0 auto; /* 중앙 정렬을 위해 margin을 auto로 설정 */
+    display: block; /* 중앙 정렬을 위해 display를 block으로 설정 */
 }
 
 button[type="submit"]:hover {
     background-color: #0056b3;
-    transform: scale(1.05);
+    transform: scale(1.03);
 }
 
 button[type="submit"].btn-danger:hover {
     background-color: #c82333;
+}
+
+/* 반응형 설정에서 버튼 크기 조정 */
+@media (max-width: 768px) {
+    button[type="submit"] {
+        font-size: 0.9rem;
+        width: 50%; /* 작은 화면에서는 너비를 50%로 조정 */
+    }
 }
 
 /* 폼 구분을 위한 hr 스타일 */

@@ -192,3 +192,64 @@
     color: #666; /* 텍스트 색상 */
     text-align: center; /* 해시태그 중앙 정렬 */
 }
+
+/* 메뉴 모달 스타일 */
+#menuModal .modal-content {
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+#menuModal .modal-header {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #dee2e6;
+}
+
+#menuModal .modal-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+    text-align: center;
+}
+
+#menuModal .modal-body {
+    padding: 20px;
+}
+
+#menuModal .menu-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+#menuModal .menu-item {
+    display: block;
+    padding: 12px 20px;
+    font-size: 1rem;
+    text-align: center;
+    color: #007bff;
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+#menuModal .menu-item:hover {
+    background-color: #007bff;
+    color: white;
+}
+
+/* 노트 선택 드롭다운 스타일 */
+#noteSelect {
+    padding: 10px;
+    font-size: 1rem;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+}
+
+/* 모달 닫기 버튼 스타일 */
+#menuModal .modal-footer .btn {
+    font-size: 1rem;
+    padding: 10px 20px;
+    border-radius: 6px;
+}
