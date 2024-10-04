@@ -12,8 +12,8 @@
     <!-- 헤더와 푸터용 스타일 -->
     <link href="../header/css/styles.css" rel="stylesheet">
     <link rel="stylesheet" href="../footer/css/styles.css">
-    <link th:href="@{/css/mypage/sideBar.css}" rel="stylesheet">
     <link th:href="@{/css/mypage/follow.css}" rel="stylesheet">
+    <link th:href="@{/css/mypage/sideBar.css}" rel="stylesheet">
     <!-- weather 스타일 시트 -->
     <link rel="stylesheet" th:href="@{/css/weather.css}">
 
@@ -183,14 +183,14 @@
 </head>
 <body onload="openTab('followers')">
 
-<div class="container-fluid">
+<div class="wrapper">
     <!-- 헤더 부분 불러오기 -->
     <header th:replace="~{fragments/header :: header}"></header>
 
     <!-- 사이드바와 메인 콘텐츠를 포함하는 레이아웃 -->
-    <div class="row">
+    <div class="content">
         <!-- 사이드바 -->
-        <div class="col-md-3 sidebar">
+        <div class="sidebar">
             <div class="sidebar-content">
                 <img th:src="${profile?.profilePicture != null} ? ${profile.profilePicture} : '/images/profile.png'"
                      alt="프로필 사진" class="profile-img">
@@ -203,7 +203,6 @@
                 <a th:href="@{/chat/chatForm}">채팅</a>
                 <a th:href="@{/mypage/stats}">통계</a>
                 <a th:href="@{/mypage/calendar}">캘린더</a>
-
             </div>
             <br>
             <!-- 회원탈퇴 항목 -->
@@ -213,121 +212,118 @@
         </div>
 
         <!-- 메인 콘텐츠 컬럼 -->
-        <div class="col-md-9">
-            <div class="main-content-wrapper">
-                <div class="main-content">
-                    <h6>[ Social ]</h6>
+        <div class="main-content-wrapper">
+            <div class="main-content">
+                <h6>[ Social ]</h6>
 
-                    <!-- 검색창 추가 -->
-                    <div class="search-bar">
-                        <input type="text" id="search-input" placeholder="검색어를 입력하세요" onkeyup="searchUsers()"/>
-                    </div>
+                <!-- 검색창 추가 -->
+                <div class="search-bar">
+                    <input type="text" id="search-input" placeholder="검색어를 입력하세요" onkeyup="searchUsers()"/>
+                </div>
 
-                    <!-- 탭을 검색창 아래에 두기 위한 구조 변경 -->
-                    <div class="tabs">
-                        <div id="followers-tab" class="tab active" onclick="openTab('followers')">팔로워</div>
-                        <div id="following-tab" class="tab" onclick="openTab('following')">팔로잉</div>
-                        <div id="allUsers-tab" class="tab" onclick="openTab('allUsers')">전체 사용자</div>
-                    </div>
+                <!-- 탭을 검색창 아래에 두기 위한 구조 변경 -->
+                <div class="tabs">
+                    <div id="followers-tab" class="tab active" onclick="openTab('followers')">팔로워</div>
+                    <div id="following-tab" class="tab" onclick="openTab('following')">팔로잉</div>
+                    <div id="allUsers-tab" class="tab" onclick="openTab('allUsers')">전체 사용자</div>
+                </div>
 
-                    <!-- 팔로워 탭 콘텐츠 -->
-                    <div id="followers" class="tab-content active">
-                        <h5>나를 팔로우하는 사람들</h5>
-                        <table>
-                            <thead>
-                            <tr>
-                                <th>목록</th>
-                                <th>팔로워 ID</th>
-                                <th>채팅</th>
-                                <th>쪽지</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr th:each="follow, iterStat : ${followers}">
-                                <td th:text="${iterStat.count}">1</td>
-                                <td th:text="${follow.followerId}">followerId</td>
-                                <td>
-                                    <form th:action="@{/chat/room}" method="get">
-                                        <input type="hidden" name="participant1Id" th:value="${#authentication.name}"/>
-                                        <input type="hidden" name="participant2Id" th:value="${follow.followerId}"/>
-                                        <button type="submit">채팅</button>
-                                    </form>
-                                </td>
-                                <td>
-                                    <form th:action="@{/SseHome}" method="get">
-                                        <input type="hidden" name="recipientId" th:value="${follow.followerId}"/>
-                                        <button type="submit">쪽지</button>
-                                    </form>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
+                <!-- 팔로워 탭 콘텐츠 -->
+                <div id="followers" class="tab-content active">
+                    <h5>나를 팔로우하는 사람들</h5>
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>목록</th>
+                            <th>팔로워 ID</th>
+                            <th>채팅</th>
+                            <th>쪽지</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="follow, iterStat : ${followers}">
+                            <td th:text="${iterStat.count}">1</td>
+                            <td th:text="${follow.followerId}">followerId</td>
+                            <td>
+                                <form th:action="@{/chat/room}" method="get">
+                                    <input type="hidden" name="participant1Id" th:value="${#authentication.name}"/>
+                                    <input type="hidden" name="participant2Id" th:value="${follow.followerId}"/>
+                                    <button type="submit">채팅</button>
+                                </form>
+                            </td>
+                            <td>
+                                <form th:action="@{/SseHome}" method="get">
+                                    <input type="hidden" name="recipientId" th:value="${follow.followerId}"/>
+                                    <button type="submit">쪽지</button>
+                                </form>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
 
-                    <!-- 팔로잉 탭 콘텐츠 -->
-                    <div id="following" class="tab-content">
-                        <h5>내가 팔로우하고 있는 사람들</h5>
-                        <table>
-                            <thead>
-                            <tr>
-                                <th>목록</th>
-                                <th>팔로잉 ID</th>
-                                <th>채팅</th>
-                                <th>쪽지</th>
-                                <th>팔로우 취소</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr th:each="follow, iterStat : ${following}">
-                                <td th:text="${iterStat.count}">1</td>
-                                <td th:text="${follow.followingId}">followingId</td>
-                                <td>
-                                    <form th:action="@{/chat/room}" method="get">
-                                        <input type="hidden" name="participant1Id" th:value="${#authentication.name}" />
-                                        <input type="hidden" name="participant2Id" th:value="${follow.followingId}" />
-                                        <button type="submit">채팅</button>
-                                    </form>
-                                </td>
-                                <td>
-                                    <form th:action="@{/SseHome}" method="get">
-                                        <input type="hidden" name="recipientId" th:value="${follow.followingId}" />
-                                        <button type="submit">쪽지</button>
-                                    </form>
-                                </td>
+                <!-- 팔로잉 탭 콘텐츠 -->
+                <div id="following" class="tab-content">
+                    <h5>내가 팔로우하고 있는 사람들</h5>
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>목록</th>
+                            <th>팔로잉 ID</th>
+                            <th>채팅</th>
+                            <th>쪽지</th>
+                            <th>팔로우 취소</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="follow, iterStat : ${following}">
+                            <td th:text="${iterStat.count}">1</td>
+                            <td th:text="${follow.followingId}">followingId</td>
+                            <td>
+                                <form th:action="@{/chat/room}" method="get">
+                                    <input type="hidden" name="participant1Id" th:value="${#authentication.name}"/>
+                                    <input type="hidden" name="participant2Id" th:value="${follow.followingId}"/>
+                                    <button type="submit">채팅</button>
+                                </form>
+                            </td>
+                            <td>
+                                <form th:action="@{/SseHome}" method="get">
+                                    <input type="hidden" name="recipientId" th:value="${follow.followingId}"/>
+                                    <button type="submit">쪽지</button>
+                                </form>
+                            </td>
+                            <td>
+                                <form action="/follow/delete" method="post" onsubmit="confirmUnfollow(event, this)">
+                                    <input type="hidden" name="followingId" th:value="${follow.followingId}"/>
+                                    <button type="submit">팔로우 취소</button>
+                                </form>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
 
-                                <td>
-                                    <form action="/follow/delete" method="post" onsubmit="confirmUnfollow(event, this)">
-                                        <input type="hidden" name="followingId" th:value="${follow.followingId}" />
-                                        <button type="submit">팔로우 취소</button>
-                                    </form>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <!-- 전체 사용자 탭 콘텐츠 -->
-                    <div id="allUsers" class="tab-content">
-                        <h5>전체 사용자 목록</h5>
-                        <table>
-                            <thead>
-                            <tr>
-                                <th>목록</th>
-                                <th>사용자 ID</th>
-                                <th>닉네임</th>
-                                <th>팔로우 하기</th>
-                            </tr>
-                            </thead>
-                            <tbody id="allUsersTableBody">
-                            </tbody>
-                        </table>
-                    </div>
+                <!-- 전체 사용자 탭 콘텐츠 -->
+                <div id="allUsers" class="tab-content">
+                    <h5>전체 사용자 목록</h5>
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>목록</th>
+                            <th>사용자 ID</th>
+                            <th>닉네임</th>
+                            <th>팔로우 하기</th>
+                        </tr>
+                        </thead>
+                        <tbody id="allUsersTableBody">
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
-
     </div>
 </div>
+
 
 <!-- 푸터 부분 불러오기 -->
 <footer th:replace="~{fragments/footer :: footer}"></footer>
