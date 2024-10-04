@@ -43,7 +43,7 @@ public class PersonalNoteService {
      * @return PersonalNoteDTO 리스트
      */
     public List<PersonalNoteDTO> getNotesByDiaryNum(Integer diaryNum) {
-        List<PersonalNoteEntity> noteEntities = personalNoteRepository.findByPersonalDiary_PersonalDiaryNum(diaryNum);
+        List<PersonalNoteEntity> noteEntities = personalNoteRepository.findByPersonalDiary_PersonalDiaryNumOrderByCreatedDateDesc(diaryNum);
         return noteEntities.stream()
                 .map(this::convertEntityToDTO)
                 .collect(Collectors.toList());

@@ -11,7 +11,7 @@ import java.util.List;
 public interface PersonalNoteRepository extends JpaRepository<PersonalNoteEntity, Integer> {
 
     // 다이어리 번호로 PersonalNote 목록을 찾는 메서드
-    List<PersonalNoteEntity> findByPersonalDiary_PersonalDiaryNum(Integer personalDiaryNum);
+    List<PersonalNoteEntity> findByPersonalDiary_PersonalDiaryNumOrderByCreatedDateDesc(Integer personalDiaryNum);
 
     // Granted가 전체 공개인 노트 목록을 찾는 메서드 (GrantedNum = 3)
     @Query("SELECT p FROM PersonalNoteEntity p WHERE p.granted.grantedNum = 3")

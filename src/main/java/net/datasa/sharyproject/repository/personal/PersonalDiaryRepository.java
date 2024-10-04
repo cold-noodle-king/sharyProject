@@ -20,7 +20,7 @@ public interface PersonalDiaryRepository extends JpaRepository<PersonalDiaryEnti
      * @param memberId 회원 ID
      * @return 회원의 개인 다이어리 리스트
      */
-    List<PersonalDiaryEntity> findByMember_MemberId(String memberId);
+    List<PersonalDiaryEntity> findByMember_MemberIdOrderByCreatedDateDesc(String memberId);
 
     /**
      * 특정 카테고리 번호에 해당하는 모든 다이어리를 조회합니다.
