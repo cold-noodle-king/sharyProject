@@ -72,7 +72,7 @@ public class PersonalDiaryService {
         String currentMemberId = SecurityContextHolder.getContext().getAuthentication().getName();
 
         // 로그인된 사용자의 다이어리 목록을 조회
-        List<PersonalDiaryEntity> diaryEntities = personalDiaryRepository.findByMember_MemberId(currentMemberId);
+        List<PersonalDiaryEntity> diaryEntities = personalDiaryRepository.findByMember_MemberIdOrderByCreatedDateDesc(currentMemberId);
 
         // 조회한 엔티티를 DTO로 변환하여 반환
         return diaryEntities.stream()
