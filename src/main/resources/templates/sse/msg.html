@@ -5,16 +5,76 @@
     <title>알림함</title>
 
     <!-- Bootstrap CSS -->
-    <link
-            rel="stylesheet"
-            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
-    />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
 
     <!-- jQuery -->
     <script src="/js/jquery-3.7.1.min.js"></script>
 
-
+    <!-- 스타일 시트 -->
     <style>
+        .notification-wrapper {
+            width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        h1 {
+            text-align: center;
+            background-color: #6c63ff;
+            color: white;
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 10px 10px 0 0;
+        }
+
+        .notification-box {
+            margin: 20px 0;
+        }
+
+        .message,
+        .notification {
+            display: flex;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #6c63ff;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 18px;
+            margin-right: 15px;
+        }
+
+        .content {
+            background-color: #f1f1f1;
+            border-radius: 10px;
+            padding: 10px;
+            word-break: break-word;
+        }
+
+        /* 홈페이지로 돌아가기 버튼 스타일 */
+        .back-home {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .back-home .btn {
+            width: 150px;
+        }
+    </style>
+<!--    <style>
         /* 기존 스타일 그대로 유지 */
         body {
             font-family: Arial, sans-serif;
@@ -96,31 +156,26 @@
             background-color: #FFFACD; /* 레몬색 배경 */
             font-size: 16px; /* 글씨 크기 */
         }
-    </style>
+    </style>-->
 </head>
 <body>
-<h1>알림함</h1>
-<div class="notification-box">
-    <div id="msgView"></div>
+<div class="notification-wrapper">
+    <h1>알림함</h1>
+    <div class="notification-box">
+        <div id="msgView"></div>
+    </div>
 </div>
 
-<!-- 토스트 컨테이너 -->
-<div aria-live="polite" aria-atomic="true" class="position-relative">
-    <!-- 위치를 조정하려면 position-fixed로 변경하고 위치를 지정할 수 있습니다 -->
-    <div
-            id="toastContainer"
-            class="toast-container position-fixed top-0 end-0 p-3"
-    ></div>
+<!-- 하단에 고정된 '홈페이지로 돌아가기' 버튼 -->
+<div class="back-home">
+    <a href="/home" class="btn btn-secondary">홈페이지로 돌아가기</a>
 </div>
 
-<!-- 메인 페이지로 돌아가기 버튼 추가 -->
-<a class="main-btn" th:href="@{/home}">홈페이지로 돌아가기</a>
-
-<!-- Bootstrap JS (Popper.js 포함) -->
+<!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 <!-- 알림함 JavaScript 코드 -->
-    <script th:inline="javascript">
+    <!--<script th:inline="javascript">
 
         // 채팅방으로 이동하는 함수 추가 (전역 범위로 이동)
         function moveToChatRoom(chatId) {
@@ -128,14 +183,13 @@
 
         }
 
-        $(document).ready(function () {
-            // 알림 데이터를 담을 배열
-            let notifications = [];
+        $(document).ready(function () { // 페이지 로드 후 실행되는 jQuery
+            let notifications = []; // 알림 데이터를 담을 배열
 
             // 모든 알림 불러오기 (페이지 로드 시 기존 알림 표시)
-            $.get("/allNotifications", function (data) {
+            $.get("/allNotifications", function (data) { // 서버에서 모든 알림 데이터를 가져옴
                 data.forEach(item => {
-                    addNotificationItem(item);
+                    addNotificationItem(item); // 가져온 알림을 화면에 추가
                 });
             });
 
@@ -144,14 +198,14 @@
 
             // SSE 이벤트 처리 - 'message' 이벤트 수신 시 처리 (쪽지)
             eventSource.addEventListener('message', function (event) {
-                let data = JSON.parse(event.data);
-                addNotificationItem(data);
+                let data = JSON.parse(event.data); // 수신된 데이터를 JSON으로 변환
+                addNotificationItem(data); // 알림 목록에 추가
             });
 
             // SSE 이벤트 처리 - 'notification' 이벤트 수신 시 처리 (일반 알림)
             eventSource.addEventListener('notification', function (event) {
                 let data = JSON.parse(event.data);
-                addNotificationItem(data);
+                addNotificationItem(data); // 알림 목록에 추가
             });
 
             // SSE 이벤트 처리 - 'chat' 이벤트 수신 시 처리 (채팅 메시지)
@@ -164,14 +218,12 @@
 
             // 알림 아이템을 추가하는 함수
             function addNotificationItem(item) {
-                // 알림 배열에 새로운 아이템 추가
-                notifications.push(item);
+                notifications.push(item); // 알림 배열에 새로운 아이템 추가
 
-                // createdAt 기준으로 정렬 (최신 순)
-                notifications.sort(
-                    (a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+                // 알림 목록을 최신 순으로 정렬
+                notifications.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
-                // 화면 초기화
+                // 알림 표시 영역 초기화
                 $('#msgView').empty();
 
                 // 정렬된 알림들을 화면에 다시 렌더링
@@ -179,8 +231,7 @@
                     let formattedDate = new Date(item.createdAt).toLocaleString();
                     let html = '';
 
-                    if (item.type === 'message') {
-                        //쪽지인 경우
+                    if (item.type === 'message') { // 쪽지 알림일 경우
                         html = `
                     <div class="message">
                         <div class="avatar">${item.sender.charAt(0).toUpperCase()}</div>
@@ -190,8 +241,7 @@
                             <div class="time">${formattedDate}</div>
                         </div>
                     </div>`;
-                    }  else if (item.type === 'notification') {
-                        // 일반 알림인 경우
+                    }  else if (item.type === 'notification') {// 일반 알림인 경우
                         if (item.notificationType === 'join_request') {
                             // 공유 다이어리 가입 요청 알림
                             html = `
@@ -279,11 +329,114 @@
             }
 
 
-
-
         });
-    </script>
+    </script>-->
 
+<script>
+    $(document).ready(function () {
+        let notifications = [];
+
+        // 모든 알림 불러오기
+        $.get("/allNotifications", function (data) {
+            data.forEach(item => {
+                addNotificationItem(item);
+            });
+        });
+
+        // SSE 연결
+        const eventSource = new EventSource("/subscribe");
+
+        // SSE 메시지 이벤트 처리
+        eventSource.addEventListener('message', function (event) {
+            let data = JSON.parse(event.data);
+            addNotificationItem(data);
+        });
+
+        eventSource.addEventListener('notification', function (event) {
+            let data = JSON.parse(event.data);
+            addNotificationItem(data);
+        });
+
+        eventSource.addEventListener("chat", function (event) {
+            let data = JSON.parse(event.data);
+            addNotificationItem(data);
+            showToastNotification(data);
+        });
+
+        // 알림 아이템 추가 함수
+        function addNotificationItem(item) {
+            notifications.push(item);
+
+            // 최신 알림으로 정렬
+            notifications.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+            // 알림 목록 다시 렌더링
+            $('#msgView').empty();
+            notifications.forEach(item => {
+                let formattedDate = new Date(item.createdAt).toLocaleString();
+                let html = '';
+
+                if (item.type === 'message') {
+                    html = `<div class="message">
+                                <div class="avatar">${item.sender.charAt(0).toUpperCase()}</div>
+                                <div class="content">
+                                    <div class="sender">${item.sender}</div>
+                                    <div class="text">${item.content}</div>
+                                    <div class="time">${formattedDate}</div>
+                                </div>
+                            </div>`;
+                } else if (item.type === 'notification') {
+                    if (item.notificationType === 'join_request') {
+                        html = `<div class="notification">
+                                    <div class="avatar">요청</div>
+                                    <div class="content">
+                                        <div class="sender">가입 요청</div>
+                                        <div class="text">${item.content}</div>
+                                        <div class="time">${formattedDate}</div>
+                                    </div>
+                                </div>`;
+                    } else if (item.notificationType === 'join_accept') {
+                        html = `<div class="notification">
+                                    <div class="avatar">수락</div>
+                                    <div class="content">
+                                        <div class="sender">가입 수락</div>
+                                        <div class="text">${item.content}</div>
+                                        <div class="time">${formattedDate}</div>
+                                    </div>
+                                </div>`;
+                    } else {
+                        html = `<div class="notification">
+                                    <div class="avatar">알림</div>
+                                    <div class="content">
+                                        <div class="sender">알림</div>
+                                        <div class="text">${item.content}</div>
+                                        <div class="time">${formattedDate}</div>
+                                    </div>
+                                </div>`;
+                    }
+                }
+                $('#msgView').append(html);
+            });
+        }
+
+        // 토스트 알림 함수
+/*        function showToastNotification(data) {
+            let toastHtml = `<div class="toast toast-custom" role="alert" aria-live="assertive" aria-atomic="true">
+                                <div class="toast-body">
+                                    <strong>${data.sender}</strong>: ${data.content}
+                                    <div class="mt-2 pt-2 border-top">
+                                        <button type="button" class="btn btn-primary btn-sm" onclick="moveToChatRoom(${data.chatId})">채팅방으로 이동</button>
+                                        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="toast">닫기</button>
+                                    </div>
+                                </div>
+                             </div>`;
+            let $toast = $(toastHtml);
+            $("#toastContainer").append($toast);
+            let toast = new bootstrap.Toast($toast[0], { delay: 10000 });
+            toast.show();
+        }*/
+    });
+</script>
 
 
 </body>
