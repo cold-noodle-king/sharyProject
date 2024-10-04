@@ -1,5 +1,7 @@
 package net.datasa.sharyproject.controller.mypage;
 
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.datasa.sharyproject.domain.dto.member.MemberDTO;
@@ -9,13 +11,20 @@ import net.datasa.sharyproject.domain.entity.mypage.ProfileEntity;
 import net.datasa.sharyproject.security.AuthenticatedUser;
 import net.datasa.sharyproject.service.member.MemberService;
 import net.datasa.sharyproject.service.mypage.ProfileService;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -30,6 +39,46 @@ public class MypageController {
     private final ProfileService profileService;
     //private MemberEntity memberEntity;
     //private Object profile;
+
+
+    /**
+     * 구글 OAuth 2.0 인증 후 리디렉션 콜백 처리
+     * @param code 구글 인증 코드
+     * @return 캘린더 페이지로 리디렉션
+     */
+    @GetMapping("/oauth2/callback")
+    public String oauth2Callback(@RequestParam("code") String code, Model model) {
+        if (code != null) {
+            log.info("Google OAuth 인증 코드: {}", code);
+
+            // RestTemplate을 사용하여 토큰을 가져오는 예제입니다.
+            RestTemplate restTemplate = new RestTemplate();
+            String tokenUrl = "https://oauth2.googleapis.com/token";
+
+            // 요청 헤더 설정
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+
+            // 요청 바디 설정
+            MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+            params.add("code", code);
+            params.add("client_id", "659910260936-5vvq4h6cklqhc4g6jj457shk1jctgu0i.apps.googleusercontent.com");
+            params.add("client_secret", "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");
+            params.add("redirect_uri", "https://6c25-218-239-246-19.ngrok-free.app/mypage/calendar");
+            params.add("grant_type", "authorization_code");
+
+            // 요청 생성
+            HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(params, headers);
+
+            // POST 요청으로 토큰 받기
+            ResponseEntity<String> response = restTemplate.postForEntity(tokenUrl, request, String.class);
+
+            log.info("토큰 응답: {}", response.getBody());
+            // 이후 토큰을 사용하여 구글 캘린더 API 요청을 처리할 수 있습니다.
+        } else log.error("인증 코드가 없습니다.");
+
+        return "redirect:/mypage/calendar";
+    }
 
     /**
      * 메인페이지 첫 화면
@@ -263,11 +312,17 @@ public class MypageController {
 
 
     @GetMapping("calendar")
-    public String calendar(@AuthenticationPrincipal AuthenticatedUser user, Model model) {
+    public String calendar(@AuthenticationPrincipal AuthenticatedUser user, Model model
+            , HttpServletResponse response) {
+
+
         if (user == null) {
             log.error("인증된 사용자가 없습니다.");
             throw new RuntimeException("인증된 사용자가 없습니다.");
         }
+
+        // Cross-Origin-Opener-Policy 헤더를 제거합니다.
+        response.setHeader("Cross-Origin-Opener-Policy", "unsafe-none");
 
         String username = user.getUsername();
         MemberEntity member = memberService.findById(username)
@@ -291,6 +346,8 @@ public class MypageController {
 
         model.addAttribute("profile", profile);
         model.addAttribute("member", member);
+
+
 
         return "mypage/calendar";
     }

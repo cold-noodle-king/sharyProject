@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>캘린더</title>
@@ -20,18 +20,106 @@
     <link rel="stylesheet" href="../footer/css/styles.css">
     <link th:href="@{/css/mypage/sideBar.css}" rel="stylesheet">
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('DOMContentLoaded 이벤트 발생');
-            var calendarEl = document.getElementById('calendar');
-            var calendar = new FullCalendar.Calendar(calendarEl, {
-                initialView: 'dayGridMonth'
-            });
-            calendar.render();
-            console.log("풀캘린더 렌더링 완료");
-        });
-    </script>
+    <!-- Google API 및 GIS 라이브러리 로드는 body 끝부분에서 합니다. -->
 
+    <script>
+        let tokenClient;
+        let gapiInited = false;
+        let gisInited = false;
+
+        const CLIENT_ID = '659910260936-5vvq4h6cklqhc4g6jj457shk1jctgu0i.apps.googleusercontent.com'; // 여기에 실제 CLIENT_ID를 입력하세요.
+        const API_KEY = 'AIzaSyDTXzhX0bEHUiELVeNkyaPSzOlWMllUiCM'; // 여기에 실제 API_KEY를 입력하세요.
+        const DISCOVERY_DOC = 'https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest';
+        const SCOPES = 'https://www.googleapis.com/auth/calendar.events.readonly';
+        const REDIRECT_URI = 'https://6c25-218-239-246-19.ngrok-free.app/mypage/calendar'; // 여기에 리디렉션 URL 입력
+
+        function gapiLoaded() {
+            gapi.load('client', initializeGapiClient);
+        }
+
+        async function initializeGapiClient() {
+            await gapi.client.init({
+                apiKey: API_KEY,
+                discoveryDocs: [DISCOVERY_DOC],
+            });
+            gapiInited = true;
+            maybeEnableButtons();
+        }
+
+        function gisLoaded() {
+            tokenClient = google.accounts.oauth2.initCodeClient({
+                client_id: CLIENT_ID,
+                scope: SCOPES,
+                redirect_uri: REDIRECT_URI
+            });
+            gisInited = true;
+            maybeEnableButtons();
+        }
+
+        function maybeEnableButtons() {
+            if (gapiInited && gisInited) {
+                document.getElementById('authorize_button').style.display = 'block';
+            }
+        }
+
+        function handleAuthClick() {
+            tokenClient.requestCode(); // 리디렉션 방식으로 액세스 토큰 요청
+        }
+
+        async function listUpcomingEvents() {
+            try {
+                const response = await gapi.client.calendar.events.list({
+                    'calendarId': 'primary',
+                    'timeMin': (new Date()).toISOString(),
+                    'showDeleted': false,
+                    'singleEvents': true,
+                    'maxResults': 10,
+                    'orderBy': 'startTime'
+                });
+
+                // 이벤트가 제대로 응답되었는지 확인하는 로그 추가
+                console.log("캘린더 이벤트:", response);
+
+                const events = response.result.items;
+                console.log(events); // 이벤트 데이터 로그
+
+                const fullCalendarEvents = events.map(event => ({
+                    title: event.summary,
+                    start: event.start.dateTime || event.start.date,
+                    end: event.end.dateTime || event.end.date, // 종료 시간 추가
+                    allDay: !event.start.dateTime
+                }));
+
+                // FullCalendar 렌더링
+                const calendarEl = document.getElementById('calendar');
+                const calendar = new FullCalendar.Calendar(calendarEl, {
+                    initialView: 'dayGridMonth',
+                    events: fullCalendarEvents
+                });
+                calendar.render();
+            } catch (err) {
+                console.error("Error fetching events:", err);
+            }
+        }
+
+        window.onload = function() {
+            // GIS 클라이언트 로드
+            const script1 = document.createElement('script');
+            script1.src = 'https://accounts.google.com/gsi/client';
+            script1.onload = gisLoaded;
+            document.body.appendChild(script1);
+
+            // GAPI 클라이언트 로드
+            const script2 = document.createElement('script');
+            script2.src = 'https://apis.google.com/js/api.js';
+            script2.onload = gapiLoaded;
+            document.body.appendChild(script2);
+
+            // 초기에는 버튼을 숨깁니다.
+            document.getElementById('authorize_button').style.display = 'none';
+            document.getElementById('signout_button').style.display = 'none';
+        };
+    </script>
 </head>
 <body>
 <div class="wrapper">
@@ -41,7 +129,7 @@
     <!-- 사이드바와 메인 콘텐츠를 포함하는 레이아웃 -->
     <div class="content">
         <!-- 사이드바 -->
-        <div class="sidebar">
+        <div class="sidebar" id="sidebar-menu">
             <!-- 사이드바 내용 -->
             <div class="sidebar-content">
                 <!-- 프로필 정보 추가 -->
@@ -54,7 +142,7 @@
                 <a th:href="@{/mypage/profile}">프로필</a>
                 <a th:href="@{/mypage/follow}">친구</a>
                 <a th:href="@{/mypage/message}">채팅</a>
-                <a th:href="@{/mypage/stats}">상연님 기깔나게 지어주세요</a>
+                <a th:href="@{/mypage/stats}">통계</a>
             </div>
             <br>
             <!-- 회원탈퇴 항목은 사이드바 하단에 배치 -->
@@ -68,6 +156,10 @@
             <section class="page-content">
                 <h2>Google Calendar Events</h2>
 
+                <!-- 사용자 정의 로그인 및 로그아웃 버튼 -->
+                <button id="authorize_button" style="display: none;" onclick="handleAuthClick()">Google 로그인</button>
+                <button id="signout_button" style="display: none;" onclick="handleSignoutClick()">로그아웃</button>
+
                 <!-- 캘린더가 표시될 영역 -->
                 <div id="calendar"></div>
             </section>
@@ -79,9 +171,6 @@
 
 <!-- 부트스트랩 JS 로드 -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-<!-- FontAwesome 아이콘 로드 -->
-<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
-
 
 </body>
 </html>
