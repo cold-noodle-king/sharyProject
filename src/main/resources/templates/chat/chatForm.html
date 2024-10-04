@@ -1,6 +1,16 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+    <!-- 필요한 스타일시트 링크 -->
+    <link rel="stylesheet" href="/header/css/styles.css">
+    <link rel="stylesheet" href="/footer/css/styles.css">
+
+    <link th:href="@{/css/mypage/sideBar.css}" rel="stylesheet">
+
+
+    <!-- Google폰트 사용 링크 -->
+    <link href='//spoqa.github.io/spoqa-han-sans/css/SpoqaHanSansNeo.css' rel='stylesheet' type='text/css'>
+
     <meta charset="UTF-8">
     <title>채팅 시작하기</title>
     <style>
@@ -8,7 +18,7 @@
             font-family: 'Arial', sans-serif;
             background-color: #f0f0f0;
             margin: 0;
-            padding: 20px;
+            /*padding: 20px;*/
         }
 
         h2 {
@@ -19,11 +29,16 @@
 
         .chat-container {
             max-width: 600px;
-            margin: 0 auto;
             background-color: #fff;
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin: auto;
+            flex-grow: 1; /* 남은 공간을 모두 차지하도록 설정 */
+        }
+
+        .content {
+            display: flex;
         }
 
         .tabs {
@@ -90,6 +105,11 @@
         button:hover {
             background-color: #3498db;
         }
+
+
+
+
+
     </style>
     <script>
         function openTab(tabName) {
@@ -110,65 +130,106 @@
             document.getElementById(tabName + "-tab").classList.add("active");
         }
     </script>
+
+    <!-- Google폰트 사용 링크 -->
+    <link href='//spoqa.github.io/spoqa-han-sans/css/SpoqaHanSansNeo.css' rel='stylesheet' type='text/css'>
+
 </head>
 <body onload="openTab('following')"> <!-- 페이지 로드 시 기본적으로 '팔로잉' 탭이 열리도록 설정 -->
-<div class="chat-container">
-    <h2>[ Shary Talk ]</h2>
 
-    <div class="tabs">
-        <div id="following-tab" class="tab active" onclick="openTab('following')">팔로잉</div>
-        <div id="followers-tab" class="tab" onclick="openTab('followers')">팔로워</div>
+<!-- header.html의 헤더 부분 불러오기 -->
+<div th:replace="~{fragments/header :: header}"></div>
+
+<!-- 사이드바와 메인 콘텐츠를 포함하는 레이아웃 -->
+<div class="content">
+    <!-- 사이드바 -->
+    <div class="sidebar">
+        <div class="sidebar-content">
+            <img th:src="${profile?.profilePicture != null} ? ${profile.profilePicture} : '/images/profile.png'"
+                 alt="프로필 사진" class="profile-img">
+            <p th:text="${member.nickname}"></p>
+            <p th:text="${profile.ment}"></p>
+
+            <a th:href="@{/mypage/info}">개인정보</a>
+            <a th:href="@{/mypage/profile}">프로필</a>
+            <a th:href="@{/followAll}">친구</a>
+            <a th:href="@{/chat/chatForm}">채팅</a>
+            <a th:href="@{/mypage/stats}">통계</a>
+            <a th:href="@{/mypage/calendar}">캘린더</a>
+
+        </div>
+        <br>
+        <!-- 회원탈퇴 항목 -->
+        <div class="logout">
+            <a th:href="@{/member/logout}">회원탈퇴</a>
+        </div>
     </div>
 
-    <!-- 팔로잉 탭 콘텐츠 -->
-    <div id="following" class="tab-content active">
-        <p>팔로잉 중인 사용자와 대화를 시작하세요!</p>
-        <table>
-            <thead>
-            <tr>
-                <th>팔로잉 ID</th>
-                <th>채팅</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="user : ${following}">
-                <td th:text="${user.followingId}"></td>
-                <td>
-                    <form th:action="@{/chat/room}" method="get">
-                        <input type="hidden" name="participant1Id" th:value="${#authentication.name}" />
-                        <input type="hidden" name="participant2Id" th:value="${user.followingId}" />
-                        <button type="submit">메시지</button>
-                    </form>
-                </td>
-            </tr>
-            </tbody>
-        </table>
+    <div class="chat-container">
+        <h2>[ Shary Talk ]</h2>
+
+        <div class="tabs">
+            <div id="following-tab" class="tab active" onclick="openTab('following')">팔로잉</div>
+            <div id="followers-tab" class="tab" onclick="openTab('followers')">팔로워</div>
+        </div>
+
+        <!-- 팔로잉 탭 콘텐츠 -->
+        <div id="following" class="tab-content active">
+            <p>팔로잉 중인 사용자와 대화를 시작하세요!</p>
+            <table>
+                <thead>
+                <tr>
+                    <th>팔로잉 ID</th>
+                    <th>채팅</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="user : ${following}">
+                    <td th:text="${user.followingId}"></td>
+                    <td>
+                        <form th:action="@{/chat/room}" method="get">
+                            <input type="hidden" name="participant1Id" th:value="${#authentication.name}" />
+                            <input type="hidden" name="participant2Id" th:value="${user.followingId}" />
+                            <button type="submit">메시지</button>
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 팔로워 탭 콘텐츠 -->
+        <div id="followers" class="tab-content">
+            <p>나를 팔로우하는 사용자와 대화를 시작하세요!</p>
+            <table>
+                <thead>
+                <tr>
+                    <th>팔로워 ID</th>
+                    <th>채팅</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="user : ${followers}">
+                    <td th:text="${user.followerId}"></td>
+                    <td>
+                        <form th:action="@{/chat/room}" method="get">
+                            <input type="hidden" name="participant1Id" th:value="${#authentication.name}" />
+                            <input type="hidden" name="participant2Id" th:value="${user.followerId}" />
+                            <button type="submit">메시지</button>
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 
-    <!-- 팔로워 탭 콘텐츠 -->
-    <div id="followers" class="tab-content">
-        <p>나를 팔로우하는 사용자와 대화를 시작하세요!</p>
-        <table>
-            <thead>
-            <tr>
-                <th>팔로워 ID</th>
-                <th>채팅</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="user : ${followers}">
-                <td th:text="${user.followerId}"></td>
-                <td>
-                    <form th:action="@{/chat/room}" method="get">
-                        <input type="hidden" name="participant1Id" th:value="${#authentication.name}" />
-                        <input type="hidden" name="participant2Id" th:value="${user.followerId}" />
-                        <button type="submit">메시지</button>
-                    </form>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
 </div>
+
+
+
+<!-- footer.html의 푸터 부분 불러오기 -->
+<div th:replace="~{fragments/footer :: footer}"></div>
+
 </body>
 </html>
