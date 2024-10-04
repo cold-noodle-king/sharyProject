@@ -79,11 +79,13 @@
                      alt="프로필 사진" class="profile-img">
                 <p th:text="${member.nickname}"></p>
                 <p th:text="${profile.ment}"></p>
+
                 <a th:href="@{/mypage/info}">개인정보</a>
                 <a th:href="@{/mypage/profile}">프로필</a>
                 <a th:href="@{/followAll}">친구</a>
                 <a th:href="@{/chat/chatForm}">채팅</a>
-                <a th:href="@{/mypage/stats}">상연님 기깔나게 지어주세요</a>
+                <a th:href="@{/mypage/stats}">통계</a>
+                <a th:href="@{/mypage/calendar}">캘린더</a>
 
             </div>
             <br>

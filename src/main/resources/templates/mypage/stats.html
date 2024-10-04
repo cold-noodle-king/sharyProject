@@ -36,17 +36,21 @@
         <!-- 사이드바 -->
         <div class="sidebar">
             <div class="sidebar-content">
-                <!-- 프로필 이미지와 닉네임, 간단한 소개 -->
-                <img src="/images/emotions/happy.png" alt="프로필사진" class="profile-img">
-                <p class="nickname">사용자 닉네임</p>
-                <p class="profile-intro">짧은 프로필 소개글</p>
+                <img th:src="${profile?.profilePicture != null} ? ${profile.profilePicture} : '/images/profile.png'"
+                     alt="프로필 사진" class="profile-img">
+                <p th:text="${member.nickname}"></p>
+                <p th:text="${profile.ment}"></p>
+
                 <a th:href="@{/mypage/info}">개인정보</a>
                 <a th:href="@{/mypage/profile}">프로필</a>
-                <a th:href="@{/mypage/follow}">친구</a>
-                <a th:href="@{/mypage/message}">채팅</a>
+                <a th:href="@{/followAll}">친구</a>
+                <a th:href="@{/chat/chatForm}">채팅</a>
                 <a th:href="@{/mypage/stats}">통계</a>
+                <a th:href="@{/mypage/calendar}">캘린더</a>
+
             </div>
-            <!-- 회원탈퇴 버튼 -->
+            <br>
+            <!-- 회원탈퇴 항목 -->
             <div class="logout">
                 <a th:href="@{/member/logout}">회원탈퇴</a>
             </div>
