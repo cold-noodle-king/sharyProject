@@ -13,6 +13,7 @@
     <link href="../header/css/styles.css" rel="stylesheet">
     <link rel="stylesheet" href="../footer/css/styles.css">
     <link th:href="@{/css/mypage/sideBar.css}" rel="stylesheet">
+    <link th:href="@{/css/mypage/infoForm.css}" rel="stylesheet">
 
     <!-- Google폰트 사용 링크 -->
     <link href='//spoqa.github.io/spoqa-han-sans/css/SpoqaHanSansNeo.css' rel='stylesheet' type='text/css'>
@@ -96,54 +97,50 @@
         </div>
         <!-- 메인 콘텐츠 -->
         <div class="main-content">
-            <section class="page-content">
+            <section class="page-content p-4 shadow-sm rounded bg-light-purple">
                 <form id="updateInfo" th:action="@{/mypage/info}" method="post">
                     <table>
                         <tr>
                             <th>ID</th>
-                            <td>
-                                <span th:text="${member.memberId}"></span>
-                                <input type="hidden" name="memberId" th:value="${member.memberId}"/>
-                            </td>
+                            <td><span th:text="${member.memberId}"></span></td>
+                            <td></td> <!-- 빈 셀 추가 -->
                         </tr>
                         <tr>
                             <th>비밀번호</th>
-                            <td><input type="password" name="memberPw" id="memberPw"
-                                       placeholder="비밀번호를 변경하려면 입력하세요."><br>
-                                <input type="password" id="memberPw2" placeholder="비밀번호 다시 입력"></td>
+                            <td><input type="password" name="memberPw" id="memberPw" placeholder="비밀번호를 변경하려면 입력하세요."></td>
+                            <td></td> <!-- 빈 셀 추가 -->
+                        </tr>
+                        <tr>
+                            <th>비밀번호 확인</th>
+                            <td><input type="password" id="memberPw2" placeholder="비밀번호 다시 입력"></td>
+                            <td></td> <!-- 빈 셀 추가 -->
                         </tr>
                         <tr>
                             <th>이름</th>
-                            <td><input type="text" name="fullName" id="fullName" th:value="${member.fullName}"
-                                       placeholder="이름 입력"></td>
+                            <td><input type="text" name="fullName" id="fullName" th:value="${member.fullName}" placeholder="이름 입력"></td>
+                            <td></td> <!-- 빈 셀 추가 -->
                         </tr>
                         <tr>
                             <th>닉네임</th>
-                            <td>
-                                <input type="text" name="nickname" id="nickname" th:value="${member.nickname}"
-                                       readonly="readonly">
-                                <input type="button" id="nickCheck" value="중복">
-                            </td>
+                            <td><input type="text" name="nickname" id="nickname" th:value="${member.nickname}"></td>
+                            <td><input type="button" id="nickCheck" value="중복"></td>
                         </tr>
                         <tr>
                             <th>이메일</th>
-                            <td><input type="text" name="email" id="email" th:value="${member.email}"
-                                       placeholder="이메일 입력"></td>
+                            <td><input type="text" name="email" id="email" th:value="${member.email}" placeholder="이메일 입력"></td>
+                            <td></td> <!-- 빈 셀 추가 -->
                         </tr>
                         <tr>
                             <th>전화번호</th>
-                            <td><input type="text" name="phoneNumber" th:value="${member.phoneNumber}"
-                                       placeholder="'-' 포함 전화번호 입력"></td>
+                            <td><input type="text" name="phoneNumber" th:value="${member.phoneNumber}" placeholder="'-' 포함 전화번호 입력"></td>
+                            <td></td> <!-- 빈 셀 추가 -->
                         </tr>
-
                     </table>
                     <br>
 
                     <input type="submit" value="수정"/>
                     <input type="reset" value="취소"/>
-
                 </form>
-
             </section>
         </div>
     </div>
