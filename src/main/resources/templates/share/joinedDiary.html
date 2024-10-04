@@ -24,6 +24,9 @@
     <link th:href="@{/header/css/styles.css}" rel="stylesheet">
     <link th:href="@{/footer/css/styles.css}" rel="stylesheet">
 
+    <!-- weather 스타일 시트 -->
+    <link rel="stylesheet" th:href="@{/css/weather.css}">
+
     <!-- MyNote 페이지 전용 CSS 파일 -->
     <link href="/css/share/MyNote.css" rel="stylesheet">
 
@@ -194,8 +197,9 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 
     <!-- 노트 보기 JS -->
-
     <script th:src="@{/js/share/viewNote.js}"></script>
+    <!-- weather.js 파일 로드 -->
+    <script th:src="@{/js/main/weather.js}"></script>
 </div>
 </body>
 

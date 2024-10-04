@@ -11,6 +11,9 @@
 
     <!-- css파일 불러오기 -->
     <link href="/css/share/MyNote.css" rel="stylesheet">
+    <!-- weather 스타일 시트 -->
+    <link rel="stylesheet" th:href="@{/css/weather.css}">
+
 
     <!-- moment.js 라이브러리 로드 -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
@@ -327,5 +330,7 @@
 
 <!-- 노트 보기 JS -->
 <script th:src="@{/js/share/viewNote.js}"></script>
+<!-- weather.js 파일 로드 -->
+<script th:src="@{/js/main/weather.js}"></script>
 </body>
 </html>

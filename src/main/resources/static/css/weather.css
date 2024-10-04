@@ -61,7 +61,7 @@
 #headerTemperature {
     margin-left: 5px;
     font-size: 14px;
-    color: #000;
+    color: #ffffff;
     background-color: transparent;
     position: relative; /* 위치 조정을 위해 추가 */
     bottom: 13px; /* 원하는 만큼 값을 조절하여 위로 올리기 */
