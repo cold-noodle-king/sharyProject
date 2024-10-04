@@ -52,6 +52,7 @@ public class SseService {
     //SSE 알림 전송
     public void sendNotification(String memberId, String content, String notificationType) {
         SseEmitter emitter = emitterMap.get(memberId);
+
         if (emitter != null) {
             try {
                 String jsonNotification = String.format(
@@ -59,9 +60,12 @@ public class SseService {
                         content, LocalDateTime.now().toString(), notificationType);
                 emitter.send(SseEmitter.event().name("notification").data(jsonNotification));
             } catch (IOException e) {
-                emitterMap.remove(memberId);
+                emitterMap.remove(memberId); // Emitter 제거
                 log.error("알림 전송 실패: {}", e.getMessage());
+                retryNotification(memberId, content, notificationType); // 재시도 로직 추가
             }
+        } else {
+            log.warn("수신자의 SSE Emitter를 찾을 수 없음 - 수신자 ID: {}", memberId);
         }
     }
 
@@ -99,28 +103,25 @@ public class SseService {
 
     // 새로운 채팅 메시지를 수신자에게 전송하는 메서드 수정
     public void sendChatMessage(String recipientId, String senderId, ChatMessageDTO messageDTO) {
-        // 수신자에게만 메시지를 전송
-        if (!recipientId.equals(senderId)) {
-            SseEmitter emitter = emitterMap.get(recipientId);
+        SseEmitter emitter = emitterMap.get(recipientId);
 
-            if (emitter != null) {
-                try {
-                    String jsonMessage = String.format(
-                            "{\"type\":\"chat\", \"sender\":\"%s\", \"content\":\"%s\", \"chatId\":%d, \"createdAt\":\"%s\"}",
-                            senderId,
-                            messageDTO.getMessageContent(),
-                            messageDTO.getChatId(),
-                            messageDTO.getCreatedDate().toString()
-                    );
-                    emitter.send(SseEmitter.event().name("chat").data(jsonMessage));
-                    log.debug("채팅 메시지 전송 성공 - 수신자: {}, 메시지: {}", recipientId, jsonMessage);
-                } catch (IOException e) {
-                    emitterMap.remove(recipientId);
-                    log.error("채팅 메시지 전송 실패: {}", e.getMessage());
-                }
-            } else {
-                log.warn("수신자의 SSE Emitter를 찾을 수 없음 - 수신자 ID: {}", recipientId);
+        if (emitter != null) {
+            try {
+                String jsonMessage = String.format(
+                        "{\"type\":\"chat\", \"sender\":\"%s\", \"content\":\"%s\", \"chatId\":%d, \"createdAt\":\"%s\"}",
+                        senderId,
+                        messageDTO.getMessageContent(),
+                        messageDTO.getChatId(),
+                        messageDTO.getCreatedDate().toString()
+                );
+                emitter.send(SseEmitter.event().name("chat").data(jsonMessage));
+                log.debug("채팅 메시지 전송 성공 - 수신자: {}, 메시지: {}", recipientId, jsonMessage);
+            } catch (IOException e) {
+                emitterMap.remove(recipientId);
+                log.error("채팅 메시지 전송 실패: {}", e.getMessage());
             }
+        } else {
+            log.warn("수신자의 SSE Emitter를 찾을 수 없음 - 수신자 ID: {}", recipientId);
         }
     }
 }

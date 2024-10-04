@@ -6,6 +6,12 @@
     <meta charset="UTF-8">
     <title>header</title>
 
+    <!-- 메타 태그 추가(모든 페이지에서 로그인한 사용자의 ID공유) -->
+    <meta name="current-user-id" content="[[${#authentication.name}]]">
+
+    <!-- Toastify 스타일 시트 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+
     <!-- Font Awesome CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css">
 
@@ -14,12 +20,6 @@
 
     <!-- Google폰트 사용 링크 -->
     <link href='//spoqa.github.io/spoqa-han-sans/css/SpoqaHanSansNeo.css' rel='stylesheet' type='text/css'>
-
-    <!-- jQuery 라이브러리 -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-    <link href="https://spoqa.github.io/spoqa-han-sans/css/SpoqaHanSansNeo.css" rel="stylesheet" type="text/css">
-
 
     <!-- Custom CSS -->
     <style>
@@ -90,6 +90,7 @@
 
                     <!-- 날씨 아이콘 -->
                     <li class="nav-item">
+                        <a class="weather-icon">날씨</a>
 <!--                        <img class="weather-icon" th:src="@{/images/weather/sunny.png}">-->
                     </li>
                 </ul>
@@ -98,68 +99,17 @@
     </nav>
 </div>
 
-<!-- jQuery (Bootstrap JS보다 먼저 로드) -->
+<!-- jQuery 라이브러리 (common.js보다 먼저 로드) -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Toastify JS 로드 (common.js보다 먼저 로드) -->
+<script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
+<!-- 공통 JS 로드 -->
+<script th:src="@{/js/common.js}"></script>
+
 <!-- Bootstrap JS (Popper 포함) -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-
-<!-- 사용자 정의 JavaScript -->
-<script th:inline="javascript">
-    $(document).ready(function() {
-        const $notificationBadge = $('#notification-badge');
-
-        // 배지를 표시하는 함수
-        function showNotificationBadge() {
-            console.log("배지 표시");
-            $notificationBadge.removeClass('hidden');
-        }
-
-        // 배지를 숨기는 함수
-        function hideNotificationBadge() {
-            console.log("배지 숨김");
-            $notificationBadge.addClass('hidden');
-        }
-
-        // 읽지 않은 알림이 있는지 서버에 요청하는 함수
-        function checkUnreadNotifications() {
-            $.get('/unreadNotificationsCount', function(response) {
-                var count = parseInt(response);
-                console.log("읽지 않은 알림 수: ", count);  // 읽지 않은 알림 수 로그 출력
-                if (count > 0) {
-                    showNotificationBadge();  // 읽지 않은 알림이 있으면 배지 표시
-                } else {
-                    hideNotificationBadge();  // 없으면 배지 숨김
-                }
-            }).fail(function(error) {
-                console.error('Error fetching unread notifications count:', error);
-                hideNotificationBadge();  // 서버 오류일 경우에도 배지 숨김
-            });
-        }
-
-        // 페이지 로드 시 읽지 않은 알림이 있는지 확인
-        checkUnreadNotifications();  // 페이지 로딩 시 숨겨진 배지를 알림 수에 따라 표시
-
-        // SSE 연결 설정 (서버에서 새로운 알림이 오면 배지를 표시)
-        const eventSource = new EventSource("/subscribe");
-
-        // SSE를 통해 새로운 알림이 수신되면 배지를 표시
-        eventSource.addEventListener('notification', function(event) {
-            console.log("새로운 알림 수신");
-            showNotificationBadge();  // 새로운 알림이 오면 배지 표시
-        });
-
-        // 알림 페이지에 접속하면 알림을 읽음 처리하고 배지를 숨김
-        if (window.location.pathname.includes('/notifications')) {
-            console.log("알림 읽음 처리 요청 중...");
-            $.post('/markNotificationsAsRead', function() {
-                console.log("알림 읽음 처리 완료 및 배지 숨김");
-                hideNotificationBadge();  // 알림 페이지를 확인하면 배지를 숨김
-            }).fail(function(error) {
-                console.error('알림 읽음 처리 오류:', error);
-            });
-        }
-    });
-</script>
 </body>
 </html>

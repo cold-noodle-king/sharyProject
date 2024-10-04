@@ -41,7 +41,7 @@ public class ChatController {
         return "chat/chatRoom";
     }*/
 
-    @GetMapping("/room")
+/*    @GetMapping("/room")
     public String getChatRoom(@RequestParam("participant1Id") String participant1Id,
                               @RequestParam("participant2Id") String participant2Id, Model model) {
         // 두 사용자의 관계에 해당하는 채팅방을 찾거나 생성
@@ -51,6 +51,34 @@ public class ChatController {
         List<ChatMessageDTO> messages = chatService.getMessages(chat.getChatId());
 
         // 모델에 채팅방과 메시지 추가
+        model.addAttribute("chat", chat);
+        model.addAttribute("messages", messages);
+
+        return "chat/chatRoom";
+    }*/
+
+    //
+    @GetMapping("/room")
+    public String chatRoom(
+            @RequestParam(value = "chatId", required = false) Integer chatId,
+            @RequestParam(value = "participant1Id", required = false) String participant1Id,
+            @RequestParam(value = "participant2Id", required = false) String participant2Id,
+            Model model) {
+
+        ChatDTO chat;
+
+        if (chatId != null) {
+            // chatId로 채팅방 조회
+            chat = chatService.getChatById(chatId);
+        } else if (participant1Id != null && participant2Id != null) {
+            // participantId로 채팅방 조회 또는 생성
+            chat = chatService.findOrCreateChat(participant1Id, participant2Id);
+        } else {
+            throw new IllegalArgumentException("채팅방을 찾을 수 없습니다.");
+        }
+
+        List<ChatMessageDTO> messages = chatService.getMessages(chat.getChatId());
+
         model.addAttribute("chat", chat);
         model.addAttribute("messages", messages);
 

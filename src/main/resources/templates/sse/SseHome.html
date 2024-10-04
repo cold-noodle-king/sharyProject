@@ -95,79 +95,79 @@
 
     <script src="/js/jquery-3.7.1.min.js"></script>
 
-<!--    <script>
-        $(document).ready(function() {
+    <!--    <script>
+            $(document).ready(function() {
 
-            // 보내기 버튼 클릭하면 전송
-            $('#sendButton').click(sendTest);
+                // 보내기 버튼 클릭하면 전송
+                $('#sendButton').click(sendTest);
 
-            // 메시지 입력하다 엔터치는 경우에도 전송
-            $('#msg').keydown(function(event) {
-                if (event.key === 'Enter' || event.keyCode === 13) {
-                    sendTest();
+                // 메시지 입력하다 엔터치는 경우에도 전송
+                $('#msg').keydown(function(event) {
+                    if (event.key === 'Enter' || event.keyCode === 13) {
+                        sendTest();
+                    }
+                });
+
+                // 알림 데이터를 담을 배열
+                let notifications = [];
+
+                // SSE 연결 설정
+                const eventSource = new EventSource("/subscribe");
+
+                // SSE 이벤트 처리
+                eventSource.addEventListener('notification', function(event) {
+                    let data = JSON.parse(event.data);
+                    addNotificationItem(data);
+                });
+    addNotificationItem
+                function addNotificationItem(item) {
+                    notifications.push(item);
+
+                    // 알림 표시
+                    displayNotifications();
+                }
+
+                function displayNotifications() {
+                    let notificationDiv = $('#notificationDiv');
+                    notificationDiv.empty();
+
+                    notifications.forEach(item => {
+                        let formattedDate = new Date(item.createdAt).toLocaleString();
+                        let html = `
+                        <div class="notification">
+                            <div class="content">
+                                <div class="text">${item.content}</div>
+                                <div class="time">${formattedDate}</div>
+                            </div>
+                        </div>`;
+                        notificationDiv.append(html);
+                    });
                 }
             });
 
-            // 알림 데이터를 담을 배열
-            let notifications = [];
+            function sendTest() {
+                let id = $('#id').val();
+                let msg = $('#msg').val();
 
-            // SSE 연결 설정
-            const eventSource = new EventSource("/subscribe");
+                if (id == '' || msg == '') {
+                    alert('수신인 아이디와 메시지 내용을 입력하세요.');
+                    return;
+                }
 
-            // SSE 이벤트 처리
-            eventSource.addEventListener('notification', function(event) {
-                let data = JSON.parse(event.data);
-                addNotificationItem(data);
-            });
-addNotificationItem
-            function addNotificationItem(item) {
-                notifications.push(item);
-
-                // 알림 표시
-                displayNotifications();
-            }
-
-            function displayNotifications() {
-                let notificationDiv = $('#notificationDiv');
-                notificationDiv.empty();
-
-                notifications.forEach(item => {
-                    let formattedDate = new Date(item.createdAt).toLocaleString();
-                    let html = `
-                    <div class="notification">
-                        <div class="content">
-                            <div class="text">${item.content}</div>
-                            <div class="time">${formattedDate}</div>
-                        </div>
-                    </div>`;
-                    notificationDiv.append(html);
+                $.ajax({
+                    url : 'send',
+                    type: 'post',
+                    data : {memberId : id, message : msg},
+                    success : function () {
+                        $('#msg').val('');
+                        console.log('전송완료');
+                    },
+                    error : function (err) {
+                        console.log(JSON.stringify(err));
+                    }
                 });
             }
-        });
-
-        function sendTest() {
-            let id = $('#id').val();
-            let msg = $('#msg').val();
-
-            if (id == '' || msg == '') {
-                alert('수신인 아이디와 메시지 내용을 입력하세요.');
-                return;
-            }
-
-            $.ajax({
-                url : 'send',
-                type: 'post',
-                data : {memberId : id, message : msg},
-                success : function () {
-                    $('#msg').val('');
-                    console.log('전송완료');
-                },
-                error : function (err) {
-                    console.log(JSON.stringify(err));
-                }
-            });
-        }
-    </script>-->
+        </script>-->
     <script src="/js/jquery-3.7.1.min.js"></script>
     <script>
         $(document).ready(function() {

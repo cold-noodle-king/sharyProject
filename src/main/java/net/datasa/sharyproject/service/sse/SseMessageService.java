@@ -1,10 +1,8 @@
 package net.datasa.sharyproject.service.sse;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import net.datasa.sharyproject.domain.dto.sse.MessageDTO;
 import net.datasa.sharyproject.domain.dto.sse.NotificationDTO;
-import net.datasa.sharyproject.domain.entity.member.MemberEntity;
 import net.datasa.sharyproject.domain.entity.sse.NotificationEntity;
 import net.datasa.sharyproject.domain.entity.sse.SseMessageEntity;
 import net.datasa.sharyproject.repository.member.MemberRepository;
@@ -19,7 +17,6 @@ import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
-@Slf4j
 public class SseMessageService {
 
     private final MemberRepository memberRepository;
@@ -28,27 +25,11 @@ public class SseMessageService {
 
 
     // 메시지를 DB에 저장
-/*    @Transactional
+    @Transactional
     public void saveMessage(String fromId, String toId, String content) {
         SseMessageEntity messageEntity = SseMessageEntity.builder()
                 .fromMember(memberRepository.findById(fromId).orElseThrow())
                 .toMember(memberRepository.findById(toId).orElseThrow())
-                .content(content)
-                .createDate(LocalDateTime.now())
-                .build();
-
-        sseMessageRepository.save(messageEntity);
-    }*/
-    @Transactional
-    public void saveMessage(String fromId, String toId, String content) {
-        MemberEntity fromMember = memberRepository.findById(fromId)
-                .orElseThrow(() -> new IllegalArgumentException("발신자 정보를 찾을 수 없습니다."));
-        MemberEntity toMember = memberRepository.findById(toId)
-                .orElseThrow(() -> new IllegalArgumentException("수신자 정보를 찾을 수 없습니다."));
-
-        SseMessageEntity messageEntity = SseMessageEntity.builder()
-                .fromMember(fromMember)
-                .toMember(toMember)
                 .content(content)
                 .createDate(LocalDateTime.now())
                 .build();
@@ -110,54 +91,4 @@ public class SseMessageService {
                         message.getCreateDate()))
                 .collect(Collectors.toList());
     }
-
-
-/*    @Transactional(readOnly = true)
-    public int getUnreadNotificationsCount(String memberId) {
-        int notificationCount = notificationRepository.countByReceiver_MemberIdAndIsReadFalse(memberId);
-        int messageCount = sseMessageRepository.countByToMember_MemberIdAndIsReadFalse(memberId);
-        return notificationCount + messageCount;
-    }*/
-
-/*
-    @Transactional(readOnly = true)
-    public int getUnreadNotificationsCount(String memberId) {
-        int notificationCount = notificationRepository.countByReceiver_MemberIdAndIsReadFalse(memberId);
-        int messageCount = sseMessageRepository.countByToMember_MemberIdAndIsReadFalse(memberId);
-        // log.debug("Unread counts for user {}: notifications={}, messages={}", memberId, notificationCount, messageCount);
-        return notificationCount + messageCount;
-    }
-*/
-
-
-
-    //알림 읽은 수 API 추가
-/*    @Transactional(readOnly = true)
-    public int getReadNotificationsCount(String memberId) {
-        // 읽은 알림 수 조회 (is_read=true)
-        int readNotificationCount = notificationRepository.countByReceiver_MemberIdAndIsReadTrue(memberId);
-        return readNotificationCount;
-    }*/
-
-
-    // 읽지 않은 알림 수를 반환하는 메서드
-    @Transactional(readOnly = true)
-    public int getUnreadNotificationsCount(String memberId) {
-        // 알림과 쪽지의 읽지 않은 수를 모두 계산
-        int notificationCount = notificationRepository.countByReceiver_MemberIdAndIsReadFalse(memberId);
-        int messageCount = sseMessageRepository.countByToMember_MemberIdAndIsReadFalse(memberId);
-        return notificationCount + messageCount;
-    }
-
-
-    // 모든 알림을 읽음으로 처리하는 메서드
-    @Transactional
-    public void markAllAsRead(String memberId) {
-        // 모든 알림과 쪽지를 읽음 처리
-        notificationRepository.markAllAsReadByReceiverId(memberId);
-        sseMessageRepository.markAllAsReadByToMemberId(memberId);
-        log.info("알림 읽음 처리 완료: {}", memberId);
-    }
-
-
 }
