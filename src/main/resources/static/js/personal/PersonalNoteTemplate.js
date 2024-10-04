@@ -50,8 +50,12 @@ $(document).ready(function() {
         }
     });
 
-    // 취소 버튼 클릭 시 이전 페이지로 이동
+    // 취소 버튼 클릭 시 diaryNum을 포함해서 MyNote 페이지로 이동
     $('#cancelBtn').on('click', function() {
-        window.location.href = '/note/NoteList'; // 이전 페이지로 이동
+        if (diaryNum) {
+            window.location.href = `/personal/MyNote/${diaryNum}`; // diaryNum을 포함한 MyNote 경로로 이동
+        } else {
+            alert('다이어리 번호가 없습니다.');
+        }
     });
 });

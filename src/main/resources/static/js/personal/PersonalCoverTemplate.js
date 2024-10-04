@@ -88,6 +88,11 @@ $(document).ready(function() {
         }
     });
 
+    // 취소 버튼 클릭 시 MyDiary 페이지로 이동
+    $('#cancelBtn').on('click', function() {
+        window.location.href = '/personal/MyDiary';
+    });
+
     // 모달에서 No 버튼 클릭 시 MyDiary 페이지로 이동
     $('#noBtn').on('click', function() {
         window.location.href = '/personal/MyDiary';
