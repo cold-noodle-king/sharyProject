@@ -11217,7 +11217,7 @@ p {
   #mainNav.navbar-shrink {
     padding-top: 1rem;
     padding-bottom: 1rem;
-    background-color: #c184c1;
+    background-color: #d3b3d3;
   }
   #mainNav.navbar-shrink .navbar-brand {
     font-size: 1.25em;
@@ -11279,6 +11279,10 @@ header.masthead .masthead-heading {
 }
 
 /* 둘러보기 포트폴리오 부분 */
+
+#portfolio {
+  background-color: #ffffff;
+}
 
 /* 포트폴리오 항목 이미지 스타일 */
 #portfolio .portfolio-item img {
@@ -12076,8 +12080,8 @@ h1, h2, h3,
 
 /* h3와 p에 백그라운드 컬러 추가 (옵션) */
 #about h3, #about p {
-  background-color: #f0f0f0; /* 배경 색을 원하는 색으로 변경 */
-  color: #959596;
+  background-color: #FFFFE6FF; /* 배경 색을 원하는 색으로 변경 */
+  color: #a4a4a5;
 }
 
 

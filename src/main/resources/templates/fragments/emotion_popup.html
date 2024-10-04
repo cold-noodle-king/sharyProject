@@ -31,7 +31,7 @@
         /* 전체 컨테이너 스타일 */
         .emotion-container {
             width: 100%;
-            max-width: 400px;
+            max-width: 500px;
             margin: 10px auto;
             text-align: center;
         }
@@ -168,6 +168,7 @@
     });
 
     // 각 감정에 맞는 배경 색상 설정 함수
+    // 각 감정에 맞는 배경 색상 설정 함수
     function getBackgroundForEmotion(emotion) {
         switch (emotion) {
             case '행복':
@@ -177,15 +178,16 @@
             case '화남':
                 return 'linear-gradient(to bottom, #ffb3ba, #ff9999)';  // 연한 빨강 배경
             case '놀람':
-                return 'linear-gradient(to bottom, #fbc2eb, #a18cd1)';  // 보라색과 핑크
+                return 'linear-gradient(to bottom, #d4fc79, #96e6a1)';  // 연한 초록색 배경
             case '두려움':
-                return 'linear-gradient(to bottom, #ffc3a0, #ffafbd)';  // 연한 오렌지
+                return 'linear-gradient(to bottom, #fbc2eb, #a18cd1)';  // 보라색과 핑크
             case '사랑':
                 return 'linear-gradient(to bottom, #ffd1dc, #ff9aa2)';  // 연한 핑크
             default:
                 return 'linear-gradient(to bottom, #f8e3f2, #d8b6d5)';  // 기본 배경
         }
     }
+
 </script>
 
 </body>
