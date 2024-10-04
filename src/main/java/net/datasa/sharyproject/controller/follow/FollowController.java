@@ -4,7 +4,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.datasa.sharyproject.domain.dto.follow.FollowDTO;
 import net.datasa.sharyproject.domain.dto.member.MemberDTO;
+import net.datasa.sharyproject.domain.entity.member.MemberEntity;
+import net.datasa.sharyproject.domain.entity.mypage.ProfileEntity;
+import net.datasa.sharyproject.security.AuthenticatedUser;
 import net.datasa.sharyproject.service.follow.FollowService;
+import net.datasa.sharyproject.service.member.MemberService;
+import net.datasa.sharyproject.service.mypage.ProfileService;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,6 +26,8 @@ import java.util.List;
 public class FollowController {
 
     private final FollowService followService;
+    private final MemberService memberService;
+    private final ProfileService profileService;
 
     /**
      * follow 기능
@@ -27,6 +35,7 @@ public class FollowController {
      */
     @GetMapping("/follow")
     public String follow() {
+
         return "follow/follow";
     }
 
@@ -50,9 +59,31 @@ public class FollowController {
      * @return
      */
     @GetMapping("/followAll")
-    public String getFollowList(Model model) {
+    public String getFollowList(@AuthenticationPrincipal AuthenticatedUser user, Model model) {
         List<FollowDTO> followers = followService.getFollowersForCurrentUser();
         List<FollowDTO> following = followService.getFollowingForCurrentUser();
+
+        MemberDTO memberDTO = memberService.getMember(user.getUsername());
+        model.addAttribute("member", memberDTO);
+
+        log.info("개인정보 내용 : {}", memberDTO);
+
+        MemberEntity member = memberService.findById(user.getMemberId())
+                .orElseThrow(() -> new RuntimeException("사용자 (" + user + ")를 찾을 수 없습니다."));
+        // 프로필 정보를 데이터베이스에서 가져옴
+        ProfileEntity profile = profileService.findByMember(member)
+                .orElseGet(() -> {
+                    // 프로필 정보가 없으면 기본 프로필을 생성하여 반환
+                    ProfileEntity defaultProfile = ProfileEntity.builder()
+                            .member(member)
+                            .profilePicture("/images/profile.png")  // 기본 이미지 설정
+                            .ment("")  // 기본 소개글 설정
+                            .build();
+                    profileService.saveProfile(defaultProfile);  // 생성한 기본 프로필을 저장
+                    return defaultProfile;
+                });
+
+        model.addAttribute("profile", profile);
 
         model.addAttribute("followers", followers);
         model.addAttribute("following", following);
