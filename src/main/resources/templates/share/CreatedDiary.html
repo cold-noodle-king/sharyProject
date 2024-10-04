@@ -24,13 +24,12 @@
     <link rel="stylesheet" th:href="@{/css/weather.css}">
 
 
-
     <!-- 헤더와 푸터용 스타일 -->
     <link th:href="@{/header/css/styles.css}" rel="stylesheet">
     <link th:href="@{/footer/css/styles.css}" rel="stylesheet">
 
     <!-- MyNote 페이지 전용 CSS 파일 -->
-    <link href="/css/share/MyNote.css" rel="stylesheet">
+    <link th:href="@{/css/share/MyNote.css}" rel="stylesheet">
 
     <!-- Google폰트 사용 링크 -->
     <link href='//spoqa.github.io/spoqa-han-sans/css/SpoqaHanSansNeo.css' rel='stylesheet' type='text/css'>
@@ -45,8 +44,10 @@
 <div id="my-note-main" class="container mt-5">
     <h2><p th:text="${diary.shareDiaryName}"></p></h2>
     <div>
-        <p>방장: <span th:text="${diary.nickname}"></span> 카테고리: <span th:text="${diary.categoryName}"></span>
-            &nbsp;<a th:href="@{/share/manageDiary(diaryNum=${diary.shareDiaryNum})}" class="btn btn-custom">다이어리 관리</a>
+        <strong>방장</strong> <span th:text="${diary.nickname}"></span>
+        <strong>카테고리</strong> <span th:text="${diary.categoryName}"></span>
+        <strong>멤버 수</strong> <span th:text="${memberCount}">0</span>
+        &nbsp;<a th:href="@{/share/manageDiary(diaryNum=${diary.shareDiaryNum})}" class="btn btn-custom">다이어리 관리</a>
     </div>
     <br>
 
@@ -177,7 +178,6 @@
                                 <span class="emoji-c8ount" id="wowCnt">0</span>
                             </div>
                         </div>
-                        <br>
                         <p id="allCnt">공감❤️<span id="likeCnt">0</span></p>
                     </div>
 

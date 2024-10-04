@@ -233,9 +233,9 @@ function commentList(noteNum) {
                 // 댓글 HTML 구성
                 let html = `
                     <tr>
-                        <td style="width: 80px">${com.nickname}</td>
-                        <td style="width: 230px">${com.contents}</td>
-                        <td>${moment(com.createdDate).format('YY.MM.DD')}</td>
+                        <td style="width: 80px"><strong>${com.nickname}</strong></td>
+                        <td style="width: 210px">${com.contents}</td>
+                        <td>${moment(com.createdDate).format('MM.DD.')}</td>
                         <td><a href="#" class="delReply" data-note-num="${com.shareNoteNum}" data-reply-num="${com.replyNum}">${deleteIconHtml}</a></td>
                     </tr>
                 `;
