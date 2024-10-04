@@ -148,7 +148,7 @@
                         <p id="noteHashtags">[해시태그]</p> <!-- 해시태그 텍스트 -->
                     </div>
 
-                    <!-- 좋아요 버튼 섹션 -->
+                   <!-- &lt;!&ndash; 좋아요 버튼 섹션 &ndash;&gt;
                     <div id="likeBox">
                         <input type="hidden" id="cnt">
                         <div class="emoji-buttons">
@@ -159,7 +159,35 @@
                             <span class="likeBtn" data-emoji="5">😮</span><span id="wowCnt"></span>
                         </div>
                         <p>공감❤️<span id="likeCnt"></span></p>
+                    </div>-->
+                    <!-- 좋아요 버튼 섹션 -->
+                    <div id="likeBox">
+                        <input type="hidden" id="cnt">
+                        <div class="emoji-buttons">
+                            <div class="emoji-container">
+                                <span class="likeBtn" data-emoji="1">😊</span>
+                                <span class="emoji-count" id="joyCnt">0</span>
+                            </div>
+                            <div class="emoji-container">
+                                <span class="likeBtn" data-emoji="2">😍</span>
+                                <span class="emoji-count" id="loveCnt">0</span>
+                            </div>
+                            <div class="emoji-container">
+                                <span class="likeBtn" data-emoji="3">😢</span>
+                                <span class="emoji-count" id="sadCnt">0</span>
+                            </div>
+                            <div class="emoji-container">
+                                <span class="likeBtn" data-emoji="4">😡</span>
+                                <span class="emoji-count" id="angryCnt">0</span>
+                            </div>
+                            <div class="emoji-container">
+                                <span class="likeBtn" data-emoji="5">😮</span>
+                                <span class="emoji-count" id="wowCnt">0</span>
+                            </div>
+                        </div>
+                        <p>공감❤️<span id="likeCnt">0</span></p>
                     </div>
+
 
 
                 </div> <!-- content-wrapper 끝 -->

@@ -19,6 +19,9 @@
     <link href="../header/css/styles.css" rel="stylesheet">
     <link rel="stylesheet" href="../footer/css/styles.css">
     <link th:href="@{/css/mypage/sideBar.css}" rel="stylesheet">
+    <!-- weather 스타일 시트 -->
+    <link rel="stylesheet" th:href="@{/css/weather.css}">
+
 
     <!-- Google API 및 GIS 라이브러리 로드는 body 끝부분에서 합니다. -->
 
@@ -171,6 +174,8 @@
 
 <!-- 부트스트랩 JS 로드 -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<!-- weather.js 파일 로드 -->
+<script th:src="@{/js/main/weather.js}"></script>
 
 </body>
 </html>

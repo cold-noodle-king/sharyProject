@@ -1,6 +1,7 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://thymeleaf.org">
-<head>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"><head>
     <meta charset="UTF-8">
     <title>통계</title>
 
@@ -15,6 +16,9 @@
     <link rel="stylesheet" href="../footer/css/styles.css">
     <link th:href="@{/css/mypage/sideBar.css}" rel="stylesheet">
     <link th:href="@{/css/mypage/stats.css}" rel="stylesheet">
+    <!-- weather 스타일 시트 -->
+    <link rel="stylesheet" th:href="@{/css/weather.css}">
+
 
     <!-- Google폰트 사용 링크 -->
     <link href='//spoqa.github.io/spoqa-han-sans/css/SpoqaHanSansNeo.css' rel='stylesheet' type='text/css'>
@@ -174,5 +178,7 @@
 <!-- 외부 JS 파일 로드 -->
 <script th:src="@{/js/mypage/stats.js}"></script>
 
+<!-- weather.js 파일 로드 -->
+<script th:src="@{/js/main/weather.js}"></script>
 </body>
 </html>
