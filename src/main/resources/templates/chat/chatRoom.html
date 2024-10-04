@@ -175,13 +175,13 @@
                     // 입력 필드 초기화
                     $('textarea[name="messageContent"]').val('');
 
-                   /* // 메시지 추가
-                    addMessage({
-                        sender: message.senderId,
-                        content: message.messageContent,
-                        chatId: message.chatId,
-                        createdAt: message.createdDate
-                    });*/
+                    /* // 메시지 추가
+                     addMessage({
+                         sender: message.senderId,
+                         content: message.messageContent,
+                         chatId: message.chatId,
+                         createdAt: message.createdDate
+                     });*/
                 });
 
                 return false;
@@ -225,7 +225,9 @@
         <button type="submit">보내기</button>
     </form>
 
-    <a href="/home">홈페이지로 돌아가기</a>
+    <!--    <a href="/home">홈페이지로 돌아가기</a>-->
+    <a href="/followAll">뒤로가기</a>
+
     <!-- weather.js 파일 로드 -->
     <script th:src="@{/js/main/weather.js}"></script>
 </div>
