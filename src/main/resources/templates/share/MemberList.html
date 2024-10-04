@@ -60,8 +60,7 @@
                 <tr th:each="list, i : ${list}">
                     <td th:text="${i.count}"></td>
                     <td>
-                        <img th:src="${profile?.profilePicture != null} ? ${profile.profilePicture} : '/images/profile.png'"
-                             alt="프로필 사진" class="profile-img">
+                        <img th:src="@{${list.profilePicture}}" alt="프로필 사진" />
                     </td>
                     <td th:text="${list.nickname}"></td>
                     <td th:text="${#temporals.format(list.joinDate, 'yyyy-MM-dd')}"></td>

@@ -20,5 +20,7 @@ public class ShareMemberDTO {
     private String managerName;      // 매니저 닉네임
     private String status;           // 요청 상태
     private LocalDateTime joinDate;  // 가입일
+    private String profilePicture; // 프로필 사진 URL 추가
+
 
 }

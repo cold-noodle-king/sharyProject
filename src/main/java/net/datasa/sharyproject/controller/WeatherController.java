@@ -24,6 +24,12 @@ public class WeatherController {
 
     private final WeatherService weatherService;
 
+    /**
+     *
+     * @param model
+     * @return
+     * @throws Exception
+     */
     @GetMapping("/weather")
     public String getWeather(Model model) throws Exception {
         // 오늘의 날씨 정보
