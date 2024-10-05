@@ -102,7 +102,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const slides = document.querySelectorAll('.portfolio-item'); // 모든 슬라이드 아이템 선택
     const prevBtn = document.getElementById('prevBtn'); // 이전 버튼 선택
     const nextBtn = document.getElementById('nextBtn'); // 다음 버튼 선택
-    const slidesToShow = 3; // 한 번에 보여줄 슬라이드 수
+    const slidesToShow = 5; // 한 번에 보여줄 슬라이드 수
     let currentIndex = 0; // 현재 슬라이드 인덱스
 
     function updateSliderPosition() {
