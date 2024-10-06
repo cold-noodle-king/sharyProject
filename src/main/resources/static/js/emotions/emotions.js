@@ -132,8 +132,8 @@ document.addEventListener('DOMContentLoaded', function () {
             "spotify:track:1r9xUipOqoNwggBpENDsvJ?si=ed18ce5794564ad0", // "Enemy" - Imagine Dragons
             "spotify:track:4mlQPWeSMkwJQcYTr9razZ?si=e0bb24330cec4cfd", // "보여줄게" - 에일리
             "spotify:track:4EwNWRBWdZ6bgvxRHlZ8OO?si=b19fcb8fb63748e9", // "삐딱하게" - GD
-            "spotify:track:4mlQPWeSMkwJQcYTr9razZ?si=e0bb24330cec4cfd", // "보여줄게" - 에일리
-            "spotify:track:4mlQPWeSMkwJQcYTr9razZ?si=e0bb24330cec4cfd", // "보여줄게" - 에일리
+            "spotify:track:4ebNVkfNL5kHuxr3o5K93R?si=b0854a7fd46c40af", // "GO AWAY" - 2NE1
+            "spotify:track:454I78HEySdcHE8fcVabTb?si=91e1c166e0fd4c9f", // "암스테르담" - 낫띵 벗 띠브즈
             "spotify:track:60a0Rd6pjrkxjPbaKzXjfq"  // "In the End" - Linkin Park
         ],
         "놀람": [
@@ -143,14 +143,18 @@ document.addEventListener('DOMContentLoaded', function () {
             "spotify:track:4uLU6hMCjMI75M1A2tKUQC"  // "Bohemian Rhapsody" - Queen
         ],
         "두려움": [
-            "spotify:track:6nDKrPlXdpomGBgAlO7UdP", // "Haunted" - Taylor Swift
-            "spotify:track:2jLLAJ2wY0JHQOUfYn7LhA", // "Disturbia" - Rihanna
-            "spotify:track:1DFD5Fotzgn6yYXkYsKiGs"  // "Psycho" - Post Malone
+            "spotify:track:3i7sd3kjMGaAPguhyMCfVV?si=5d7ff8a5140c40d7", // "낙화" - 자우림
+            "spotify:track:15OqAO7mTGP98dSylxy5J0?si=208f51451a294bd7", // "창귀" - 안예은
+            "spotify:track:5o0hXCXwwswm8Ij2w2ZxfK?si=a7658b4ba20c4722", // "도깨비불" - 에스파
+            "spotify:track:2Fxmhks0bxGSBdJ92vM42m?si=694ca82bfc074501", // "배드가이" - 빌리 아일리쉬
+            "spotify:track:5NSPsOGVNWYOMeeyZPF7HY?si=f15d43b7242e4da3",  // "중독" - 엑소
+            "spotify:track:7n0D1iLva5zp4JcnlIMeVa?si=fd076aea395e4012"  // "늑대와 미녀" - 엑소
         ],
         "사랑": [
-            "spotify:track:6cxbaStUOFS9Ssz3bHVVDJ?si=5a294cebf2594738", // "사랑은 은하수 다방에서" - 10CM
             "spotify:track:1qosh64U6CR5ki1g1Rf2dZ?si=4fcbf310d0ca45db", // "Love Lee" - 악동뮤지션
+            "spotify:track:6cxbaStUOFS9Ssz3bHVVDJ?si=5a294cebf2594738", // "사랑은 은하수 다방에서" - 10CM
             "spotify:track:1rVPj9cryjgB7MdaU6sqN3?si=a81e49e89cc348b4",  // "봄봄봄" - 로이킴
+            "spotify:track:1QeLSyqfbuOPZTIVT4QIn5?si=9bb1dbc0e7944fc5",  // "A Book of Love" - 하현상
             "spotify:track:1rVPj9cryjgB7MdaU6sqN3?si=a81e49e89cc348b4"  // "Love Blossom" - K.WILL
         ]
     };
