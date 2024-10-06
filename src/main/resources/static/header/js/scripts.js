@@ -86,7 +86,7 @@ document.addEventListener("DOMContentLoaded", function() {
             track.style.transition = 'none'; // 애니메이션 끊김 방지
             track.style.transform = 'translateX(0)'; // 위치 초기화
             requestAnimationFrame(() => {
-                track.style.transition = 'transform 10s linear'; // 부드러운 애니메이션 재시작
+                track.style.transition = 'transform 30s linear'; // 부드러운 애니메이션 재시작
                 track.style.transform = 'translateX(-100%)'; // 트랙을 다시 이동
             });
         }
@@ -102,7 +102,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const slides = document.querySelectorAll('.portfolio-item'); // 모든 슬라이드 아이템 선택
     const prevBtn = document.getElementById('prevBtn'); // 이전 버튼 선택
     const nextBtn = document.getElementById('nextBtn'); // 다음 버튼 선택
-    const slidesToShow = 5; // 한 번에 보여줄 슬라이드 수
+    const slidesToShow = 3; // 한 번에 보여줄 슬라이드 수
     let currentIndex = 0; // 현재 슬라이드 인덱스
 
     function updateSliderPosition() {
@@ -120,26 +120,28 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // 이전 버튼 클릭 이벤트
     prevBtn.addEventListener('click', () => {
-        if (currentIndex > 0) {
-            currentIndex--;
-        } else {
-            currentIndex = slides.length - slidesToShow; // 첫 번째 슬라이드로 돌아가기
+        currentIndex -= slidesToShow;
+        if (currentIndex < 0) {
+            // 마지막 슬라이드 그룹으로 이동
+            currentIndex = slides.length - slidesToShow;
+            if (currentIndex < 0) currentIndex = 0;
         }
         updateSliderPosition();
     });
 
     // 다음 버튼 클릭 이벤트
     nextBtn.addEventListener('click', () => {
-        if (currentIndex < slides.length - slidesToShow) {
-            currentIndex++;
-        } else {
-            currentIndex = 0; // 첫 번째 슬라이드로 돌아가기
+        currentIndex += slidesToShow;
+        if (currentIndex >= slides.length) {
+            // 첫 번째 슬라이드로 돌아가기
+            currentIndex = 0;
         }
         updateSliderPosition();
     });
 
     updateSliderPosition(); // 초기 슬라이드 위치 설정
 });
+
 
 // 메인페이지 wave 부분
 document.addEventListener('DOMContentLoaded', function() {
