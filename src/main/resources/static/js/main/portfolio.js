@@ -129,6 +129,37 @@ $(document).ready(function () {
         $('#modalTab a[href="#profileContent"]').tab('show');
         $('#profile-tab').trigger('click'); // 프로필 정보를 탭 전환 시 가져오기
     });
+    // 좋아요 버튼 처리 로직
+    $(document).on('click', '#likeButton', function () {
+        var noteNum = $('#hiddenNoteNum').val(); // 노트 번호 가져오기
+
+        // 현재 좋아요 수 가져오기
+        var likeCnt = parseInt($('#hiddenLikeCount').val());
+
+        $.ajax({
+            url: '/portfolio/like/' + noteNum, // 수정된 URL
+            type: 'POST',
+            dataType: 'json',
+            success: function (res) {
+                if (res.likeClicked === false) {
+                    // 좋아요 취소된 경우
+                    alert('좋아요가 취소되었습니다.');
+                } else {
+                    // 좋아요 된 경우
+                    alert('좋아요를 눌렀습니다.');
+                }
+                likeCnt = res.likeCount;
+                $('#likeCount').html(likeCnt);  // 새로운 좋아요 수 업데이트
+                $('#likeCountText').text(likeCnt);  // 좋아요 수 텍스트 업데이트
+                $('#hiddenLikeCount').val(likeCnt);  // 숨겨진 필드에 새로운 좋아요 수 설정
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.error('좋아요 요청 중 오류 발생:', textStatus, errorThrown);
+                alert('좋아요 처리 중 오류가 발생했습니다.');
+            }
+        });
+    });
+
 
     // 팔로우 버튼 클릭 시 followAll 페이지로 이동
     $('#followButton').on('click', function (e) {
