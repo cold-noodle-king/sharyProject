@@ -110,26 +110,30 @@ document.addEventListener('DOMContentLoaded', function () {
     // 감정별 여러 트랙 URI 맵핑
     const emotionTracks = {
         "행복": [
-            "spotify:track:60nZcImufyMA1MKQY3dcCH?si=85311777eb444bf2", // "Happy" - Pharrell Williams
-            "spotify:track:7GVUmCP00eSsqc4tzj1sDD?si=f424ec6a8a254d7a",  // "come and get your love" - 아이유
-            "spotify:track:0GsRx0gPft6RmijIwMsKmG?si=31db09799cc04ffc",  // "금요일에 만나요" - 아이유
-            "spotify:track:4ppKRxity3jJd2hGoVyD4u?si=1d117fb66d0c46f6", // "No makeup" - 자이언티
-            "spotify:track:1pz24zu5H9A0S1a2NKT4F0?si=27f27692be264a27",  // "SoulMate" - ZICO
+            "spotify:track:4Q8XZAsvHH5wCPisKMisH5?si=19ab3e39ae4b4bfd", // "풍선" - 동방신기
+            "spotify:track:3GcTcXCJLVdy7iYhSKPGUp?si=a15978c2908b4aad",  // "비행기" - 거북이
+            "spotify:track:6f4CAdAmrOfGH3FOfwHMSV?si=2d5ced3db4404002", // "후라이의 꿈" - 악뮤
+            "spotify:track:4dMGKGfaWMZNLQEjkd8lme?si=1528ba9174e8446f",  // "여행" - 볼빨간사춘기
             "spotify:track:15c7KZTrsCUxCQcOdUVELc?si=10985b832de64324",  // "우주를 줄게" - 볼빨간사춘기
+            "spotify:track:3BMAWsBp4jc35mCmebC3WT?si=00287a8bef0b4995",  // "Welcome to the show" - 데이식스
             "spotify:track:03qu1u4hDyepQQi2lNxCka?si=19b5f9fb31c54239"  // "신호등" - 이무진
-
         ],
         "슬픔": [
-            "spotify:track:2njgIBj0nJ1UUFYNuW06et?si=5337a89a01644761", // "비가 오는 날엔" - 비스트 (B2ST)
-            "spotify:track:1VnjByC7TUx5A73A4qtgoo?si=7e19abf3e28b4010", // "우산" - 에픽하이
-            "spotify:track:4RqL3r72UOdolRaOwykb32?si=1e96cbbb917441aa", // "서쪽하늘" - 울랄라세션
             "spotify:track:2zlgwqw8BLX2JGB76LIFeF?si=ddce96a8d98a4bff", // "그리워하다" - 비투비
+            "spotify:track:1VnjByC7TUx5A73A4qtgoo?si=7e19abf3e28b4010", // "우산" - 에픽하이
+            "spotify:track:1OhIn0L6iofnk5bjalWfHq?si=855c1454f5194ac6", // "소나기" - 이클립스
+            "spotify:track:3uBAtRvr4roYk5CshWaKLC?si=93b224f2823a4920", // "열애중" - 벤
+            "spotify:track:2njgIBj0nJ1UUFYNuW06et?si=5337a89a01644761", // "비가 오는 날엔" - 비스트 (B2ST)
+            "spotify:track:4RqL3r72UOdolRaOwykb32?si=1e96cbbb917441aa", // "서쪽하늘" - 울랄라세션
             "spotify:track:1tSE6WK5ZavbqYQoiPoeu0?si=209de55051124fec", // "이별길" - IKON
             "spotify:track:0Ryd8975WihbObpp5cPW1t"  // "Goodbye My Lover" - James Blunt
         ],
         "화남": [
-            "spotify:track:6VRhkROS2SZHGlp0pxndbJ?si=50723db511c04566", // "Banggarang" - Skrillex
-            "spotify:track:6N9ZOtguCnnrvwH7zD82WJ?si=462667fe661a4330", // "GDFR" - Flo Rida
+            "spotify:track:1r9xUipOqoNwggBpENDsvJ?si=ed18ce5794564ad0", // "Enemy" - Imagine Dragons
+            "spotify:track:4mlQPWeSMkwJQcYTr9razZ?si=e0bb24330cec4cfd", // "보여줄게" - 에일리
+            "spotify:track:4EwNWRBWdZ6bgvxRHlZ8OO?si=b19fcb8fb63748e9", // "삐딱하게" - GD
+            "spotify:track:4mlQPWeSMkwJQcYTr9razZ?si=e0bb24330cec4cfd", // "보여줄게" - 에일리
+            "spotify:track:4mlQPWeSMkwJQcYTr9razZ?si=e0bb24330cec4cfd", // "보여줄게" - 에일리
             "spotify:track:60a0Rd6pjrkxjPbaKzXjfq"  // "In the End" - Linkin Park
         ],
         "놀람": [

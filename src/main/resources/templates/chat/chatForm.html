@@ -10,6 +10,8 @@
     <!-- weather 스타일 시트 -->
     <link rel="stylesheet" th:href="@{/css/weather.css}">
 
+    <!-- Bootstrap Icons 추가 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 
 
     <!-- Google폰트 사용 링크 -->
@@ -21,6 +23,19 @@
         /* 기존 CSS와 동일한 스타일을 유지하기 위한 수정된 CSS 코드 */
         body {
             height: 100%;
+        }
+
+        /* Shary Talk 부분 배경색 변경 및 아이콘 추가 */
+        .chat-header {
+            text-align: center;
+            font-size: 30px;
+            background-color: #fff7e6; /* 연한 연보라색 */
+            padding: 15px;
+            border-radius: 15px;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
         .chat-container {
@@ -68,10 +83,10 @@
             background-color: #cdb6eb;
         }
 
-        /*.tab.active {*/
-        /*    background-color: #b08ed9;*/
-        /*    color: white;*/
-        /*}*/
+        .tab.active {
+            background-color: #b08ed9;
+            color: white;
+        }
 
         .tab-content {
             display: none;
@@ -228,7 +243,9 @@
     </div>
 
     <div class="chat-container">
-        <h2>[ Shary Talk ]</h2>
+        <div class="chat-header">
+            Shary Talk <i class="bi bi-chat-heart"></i>
+        </div>
 
         <div class="tabs">
             <div id="following-tab" class="tab active" onclick="openTab('following')">팔로잉</div>

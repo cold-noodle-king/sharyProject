@@ -2,6 +2,19 @@ body {
     height: 100%;
 }
 
+/* Social 부분 배경색 변경 및 아이콘 추가 */
+.chat-header {
+    text-align: center;
+    font-size: 30px;
+    background-color: #fff7e6; /* 연한 연보라색 */
+    padding: 15px;
+    border-radius: 15px;
+    color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 /* 메인 콘텐츠 전체를 감싸는 wrapper */
 .main-content-wrapper {
     padding: 30px;

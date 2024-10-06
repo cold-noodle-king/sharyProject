@@ -81,6 +81,21 @@
             width: 80%; /* 슬라이더 너비 조정 */
         }
 
+        /* 이미지 회전 애니메이션 */
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg); /* 0도에서 시작 */
+            }
+            to {
+                transform: rotate(360deg); /* 360도까지 회전 */
+            }
+        }
+
+        /* 애니메이션 적용 클래스 */
+        .rotate {
+            animation: rotate 1s ease-in-out; /* 1초 동안 회전 */
+        }
+
     </style>
 </head>
 <body>
@@ -162,12 +177,20 @@
 
     emotionImages.forEach(image => {
         image.addEventListener('click', () => {
+            // 배경 변경
             document.body.style.background = getBackgroundForEmotion(image.alt);
             document.body.style.transition = 'background 1s ease'; // 배경 전환 효과 추가
+
+            // 회전 애니메이션 추가
+            image.classList.add('rotate');
+
+            // 애니메이션이 끝난 후 클래스 제거 (다시 클릭할 때 회전 가능하게)
+            image.addEventListener('animationend', () => {
+                image.classList.remove('rotate');
+            });
         });
     });
 
-    // 각 감정에 맞는 배경 색상 설정 함수
     // 각 감정에 맞는 배경 색상 설정 함수
     function getBackgroundForEmotion(emotion) {
         switch (emotion) {
