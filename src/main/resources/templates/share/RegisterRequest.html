@@ -82,12 +82,14 @@
                 <tr>
                     <th>No.</th>
                     <th>닉네임</th>
+                    <th>가입 요청일</th>
                     <th></th>
                     <th></th>
                 </tr>
                 <tr th:each="list, i : ${requestList}">
                     <td><p th:text="${i.count}"></p></td>
                     <td><p th:text="${list.nickname}"></p></td>
+                    <td><p th:text="${#temporals.format(list.joinDate, 'yyyy-MM-dd HH:mm:ss')}"></p></td>
                     <td></td>
                     <td>
                         <button class="okBtn" th:data-diary-num="${list.shareDiaryNum}" th:data-member-id="${list.memberId}">수락</button>

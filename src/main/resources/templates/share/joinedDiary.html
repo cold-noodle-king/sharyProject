@@ -43,9 +43,9 @@
 <div id="my-note-main" class="container mt-5">
     <h2><p th:text="${diary.shareDiaryName}"></p></h2>
     <div>
-        <strong>방장</strong> <span th:text="${diary.nickname}"></span>
-        <strong>카테고리</strong> <span th:text="${diary.categoryName}"></span>
-        <strong>멤버 수</strong> <span th:text="${memberCount}">0</span>
+        <strong>방장</strong> <span class="header-content" th:text="${diary.nickname}"></span>&nbsp;|
+        <strong>카테고리</strong> <span class="header-content" th:text="${diary.categoryName}"></span>&nbsp;|
+        <strong>멤버 수</strong> <span class="header-content" th:text="${memberCount} + 1">0</span>
     </div>
     <br>
 

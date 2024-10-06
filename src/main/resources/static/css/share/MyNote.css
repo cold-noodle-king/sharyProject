@@ -365,3 +365,12 @@
 .btn-custom img {
     margin-right: 8px !important; /* 아이콘과 텍스트 사이의 간격 */
 }
+
+strong{
+    font-size: large;
+}
+
+.header-content{
+    font-size: large;
+
+}

@@ -120,7 +120,7 @@ public class SharememberController {
         return "share/RegisterRequest";
     }
 
-    // 누들킹 이거 요청 수락해도 리스트 계속 잔존해있어서 수정했옹(윤조)
+    // 공유 다이어리 가입 요청 수락 메서드
     @ResponseBody
     @PostMapping("/acceptRequest")
     public ResponseEntity<String> acceptRequest(@RequestBody AcceptRequestDTO requestDTO) {

@@ -64,21 +64,21 @@
 
 /* 수락 버튼 스타일 */
 .okBtn {
-    background-color: #bd83c6; /* 파란색 */
+    background-color: #c694cf; /* 파란색 */
 }
 
 .okBtn:hover {
-    background-color: #1d6de3;
+    background-color: #a973d6;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 /* 거절 버튼 스타일 */
 .noBtn {
-    background-color: #a581c3; /* 빨간색 */
+    background-color: #c694cf; /* 빨간색 */
 }
 
 .noBtn:hover {
-    background-color: #c0392b;
+    background-color: #a973d6;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
 }
 
