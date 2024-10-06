@@ -1,0 +1,100 @@
+/* 메인 컨테이너 스타일 */
+#main {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    margin-top: 80px;
+    text-align: center;
+}
+
+/* 페이지 제목 스타일 */
+#main h2 {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-bottom: 40px;
+    color: #000000;
+    text-align: center;
+}
+
+/* 가입 요청이 없을 때 메시지 스타일 */
+.diary-container p {
+    font-size: 1.2rem;
+    color: #333;
+}
+
+/* 가입 요청 테이블 스타일 */
+.diary-container table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.diary-container th, .diary-container td {
+    padding: 12px;
+    text-align: center;
+    border-bottom: 1px solid #e9ecef;
+}
+
+/* 테이블 헤더 스타일 */
+.diary-container th {
+    background-color: #f7f7f7;
+    font-weight: bold;
+    color: #333;
+}
+
+/* 모든 튜플의 배경색을 하얀색으로 */
+.diary-container tbody tr {
+    background-color: #ffffff; /* 하얀색 배경 */
+}
+
+/* 버튼 스타일 */
+.okBtn, .noBtn {
+    background-color: #1abc9c;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* 수락 버튼 스타일 */
+.okBtn {
+    background-color: #bd83c6; /* 파란색 */
+}
+
+.okBtn:hover {
+    background-color: #1d6de3;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* 거절 버튼 스타일 */
+.noBtn {
+    background-color: #a581c3; /* 빨간색 */
+}
+
+.noBtn:hover {
+    background-color: #c0392b;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* 돌아가기 버튼 스타일 */
+#goBack {
+    background-color: #1abc9c;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+#goBack:hover {
+    background-color: #16a085;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}

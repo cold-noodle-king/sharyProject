@@ -57,7 +57,7 @@
     <link rel="stylesheet" href="../footer/css/styles.css">
 
     <!-- MyDiary 페이지 전용 CSS 파일 -->
-    <link href="/css/share/MyDiary.css" rel="stylesheet">
+    <link href="/css/share/registerRequest.css" rel="stylesheet">
 
     <!-- Google폰트 사용 링크 -->
     <link href='//spoqa.github.io/spoqa-han-sans/css/SpoqaHanSansNeo.css' rel='stylesheet' type='text/css'>
@@ -79,13 +79,20 @@
         </div>
         <div th:if="${not #lists.isEmpty(requestList)}">
             <table>
+                <tr>
+                    <th>No.</th>
+                    <th>닉네임</th>
+                    <th></th>
+                    <th></th>
+                </tr>
                 <tr th:each="list, i : ${requestList}">
                     <td><p th:text="${i.count}"></p></td>
-                    <td><p th:text="${list.shareDiaryNum}"></p></td>
-                    <td><p th:text="${list.memberId}"></p></td>
                     <td><p th:text="${list.nickname}"></p></td>
-                    <td><button class="okBtn" th:data-diary-num="${list.shareDiaryNum}" th:data-member-id="${list.memberId}">수락</button></td>
-                    <td><button class="noBtn" th:data-diary-num="${list.shareDiaryNum}" th:data-member-id="${list.memberId}">거절</button></td>
+                    <td></td>
+                    <td>
+                        <button class="okBtn" th:data-diary-num="${list.shareDiaryNum}" th:data-member-id="${list.memberId}">수락</button>
+                        <button class="noBtn" th:data-diary-num="${list.shareDiaryNum}" th:data-member-id="${list.memberId}">거절</button>
+                    </td>
                 </tr>
             </table>
         </div>

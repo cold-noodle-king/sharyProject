@@ -174,6 +174,14 @@ public class ShareDiaryService {
 
         for (ShareDiaryEntity shareDiaryEntity : shareDiaryEntities) {
             ShareDiaryDTO shareDiaryDTO = convertEntityToDTO(shareDiaryEntity);
+
+            // 다이어리 번호를 가져와 멤버 수를 조회
+            Integer diaryNum = shareDiaryEntity.getShareDiaryNum();
+            int memberCount = getMemberCount(diaryNum);
+
+            // 멤버 수를 DTO에 설정
+            shareDiaryDTO.setMemberCount(memberCount);
+
             shareDiaryList.add(shareDiaryDTO);
         }
 
@@ -244,9 +252,18 @@ public class ShareDiaryService {
         List<ShareDiaryEntity> entity = shareDiaryRepository.findByCategory_CategoryNum(categoryNum);
         log.debug("카테고리별 다이어리 리스트:{}", entity);
 
-        // ShareDiaryEntity를 ShareDiaryDTO로 변환하여 반환
+
+        // 각 다이어리별 멤버 수를 카운트하여 DTO에 추가
         return entity.stream()
-                .map(this::convertEntityToDTO)  // 엔티티를 DTO로 변환하는 매퍼 메서드 가정
+                .map(shareDiaryEntity -> {
+                    ShareDiaryDTO shareDiaryDTO = convertEntityToDTO(shareDiaryEntity);
+
+                    // 다이어리별 멤버 수를 조회하여 DTO에 설정
+                    int memberCount = getMemberCount(shareDiaryEntity.getShareDiaryNum());
+                    shareDiaryDTO.setMemberCount(memberCount);
+
+                    return shareDiaryDTO;
+                })
                 .collect(Collectors.toList());
     }
 
@@ -304,6 +321,7 @@ public class ShareDiaryService {
         shareMemberEntity.setMember(memberEntity);
         shareMemberEntity.setManager(shareDiaryEntity.getMember());
         shareMemberEntity.setShareDiary(shareDiaryEntity);
+        shareMemberEntity.setJoinDate(LocalDateTime.now());
         shareMemberEntity.setStatus("PENDING"); // 가입 요청 시 기본 상태를 보류로 설정
 
         log.debug("저장되는 엔티티: {}", shareMemberEntity);
@@ -435,12 +453,20 @@ public class ShareDiaryService {
         return memberDTOs;
     }
 
-    // 멤버 수를 가져오는 메서드 추가
+    /**
+     * 공유 다이어리별 멤버 수를 가져오는 메서드
+     * @param diaryNum
+     * @return
+     */
     public int getMemberCount(Integer diaryNum) {
         return shareMemberRepository.countByShareDiary_ShareDiaryNumAndStatus(diaryNum, "ACCEPTED");
     }
-    
-    // ShareMemberEntity를 ShareMemberDTO로 변환하는 헬퍼 메서드
+
+    /**
+     * ShareMemberEntity를 ShareMemberDTO로 변환하는 헬퍼 메서드
+     * @param member
+     * @return
+     */
     private ShareMemberDTO convertShareMemberEntityToDTO(ShareMemberEntity member) {
         return ShareMemberDTO.builder()
                 .shareMemberNum(member.getShareMemberNum())
@@ -454,7 +480,11 @@ public class ShareDiaryService {
                 .build();
     }
 
-    // ShareDiaryEntity를 ShareDiaryDTO로 변환하는 헬퍼 메서드
+    /**
+     * ShareDiaryEntity를 ShareDiaryDTO로 변환하는 헬퍼 메서드
+     * @param diary
+     * @return
+     */
     private ShareDiaryDTO convertEntityToDTO(ShareDiaryEntity diary) {
         // 공유 멤버 리스트를 DTO로 변환
         List<ShareMemberDTO> shareMemberDTOList = new ArrayList<>();
@@ -492,6 +522,12 @@ public class ShareDiaryService {
                 .build();
     }
 
+    /**
+     * 공유 다이어리를 생성한 사람이 현재 로그인한 사용자인지 확인하는 메서드
+     * @param diaryNum
+     * @param memberId
+     * @return
+     */
     public boolean isDiaryCreatedByUser(Integer diaryNum, String memberId) {
         ShareDiaryEntity diary = shareDiaryRepository.findById(diaryNum).orElseThrow(() -> new RuntimeException("Diary not found"));
         return diary.getMember().getMemberId().equals(memberId);  // 다이어리의 생성자가 현재 사용자와 같은지 확인

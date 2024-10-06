@@ -37,15 +37,19 @@
     <br>
     <h2>다이어리 관리</h2>
     <br>
+    <br>
     <div class="list-container">
         <div>
             <p><a th:href="@{/share/infoUpdate(diaryNum=${diary.shareDiaryNum})}">다이어리 정보 수정</a></p>
             <p><a th:href="@{/sharemember/viewMember(diaryNum=${diary.shareDiaryNum})}">멤버 관리</a></p>
             <p><a th:href="@{/share/viewBoard(diaryNum=${diary.shareDiaryNum})}">게시물 관리</a></p>
             <p><a th:href="@{/share/viewReply(diaryNum=${diary.shareDiaryNum})}">댓글 관리</a></p>
-            <p><a th:href="@{/share/deleteDiary(diaryNum=${diary.shareDiaryNum})}">다이어리 삭제</a></p>
+            <p><a th:href="@{/share/main}">다이어리 삭제</a></p>
         </div>
     </div>
+    <br>
+    <br>
+    <br>
 
     <!-- 메뉴 버튼 (햄버거 아이콘) -->
     <div class="text-center mt-4">
@@ -53,6 +57,8 @@
          다이어리로 돌아가기 <!-- 햄버거 아이콘과 함께 메뉴 텍스트 -->
         </button>
     </div>
+    <br>
+
 </div>
 
 <!-- 푸터 부분 불러오기 -->

@@ -1,0 +1,90 @@
+/* 메인 컨테이너 스타일 */
+#main {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    margin-top: 80px;
+    text-align: center;
+}
+
+#header-container{
+    text-align: left;
+}
+
+/* 페이지 제목 스타일 */
+#main h2 {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-bottom: 40px;
+    color: #000000;
+    text-align: center;
+}
+
+/* 다이어리 컨테이너 */
+.diary-container {
+    margin-bottom: 40px;
+}
+
+/* 방장 정보 텍스트 */
+.diary-header{
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 20px;
+}
+.header-content{
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+}
+
+/* 멤버 리스트 테이블 스타일 */
+.diary-container table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.diary-container th, .diary-container td {
+    padding: 12px;
+    text-align: center;
+    border-bottom: 1px solid #e9ecef;
+}
+
+/* 테이블 헤더 스타일 */
+.diary-container th {
+    background-color: #f7f7f7;
+    font-weight: bold;
+    color: #333;
+}
+
+/* 모든 튜플의 배경색을 하얀색으로 */
+.diary-container tbody tr {
+    background-color: #ffffff; /* 하얀색 배경 */
+}
+
+/* 프로필 이미지 스타일 */
+.diary-container img {
+    width: 70px;
+    height: 70px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+/* 돌아가기 버튼 스타일 */
+#goBack {
+    background-color: #1abc9c;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+#goBack:hover {
+    background-color: #16a085;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}

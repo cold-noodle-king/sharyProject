@@ -21,7 +21,7 @@
     <link rel="stylesheet" href="../footer/css/styles.css">
 
     <!-- MyDiary 페이지 전용 CSS 파일 -->
-    <link href="/css/share/MyDiary.css" rel="stylesheet">
+    <link href="/css/share/viewMember.css" rel="stylesheet">
 
     <!-- Google폰트 사용 링크 -->
     <link href='//spoqa.github.io/spoqa-han-sans/css/SpoqaHanSansNeo.css' rel='stylesheet' type='text/css'>
@@ -44,19 +44,23 @@
     <br>
     <h2>멤버 관리</h2>
     <br>
+    <br>
+    <br>
     <div class="diary-container">
-        <div>
-            <p><a th:href="@{/sharemember/memberList(diaryNum=${diary.shareDiaryNum})}">전체 멤버 보기</a></p>
-            <p><a th:href="@{/sharemember/registerRequest(diaryNum=${diary.shareDiaryNum})}">가입 요청 관리</a></p>
+        <div class="list-container">
+            <p><a class="btn btn-primary" th:href="@{/sharemember/memberList(diaryNum=${diary.shareDiaryNum})}">전체 멤버 보기</a></p>
+            <p><a class="btn btn-secondary" th:href="@{/sharemember/registerRequest(diaryNum=${diary.shareDiaryNum})}">가입 요청 관리</a></p>
         </div>
     </div>
 
+    <br><br><br><br>
     <!-- 메뉴 버튼 (햄버거 아이콘) -->
     <div class="text-center mt-4">
         <button id="goBack" class="btn btn-primary">
             돌아가기
         </button>
     </div>
+    <br><br><br><br><br><br>
 </div>
 
 <!-- 푸터 부분 불러오기 -->

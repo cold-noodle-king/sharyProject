@@ -4,7 +4,7 @@
     padding: 30px;
     border-radius: 10px;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-    margin-top: 80px; /* 헤더와의 간격 더 추가 */
+    margin-top: 80px; /* 헤더와의 간격 추가 */
     text-align: center; /* 중앙 정렬 */
 }
 
@@ -41,14 +41,14 @@
     text-decoration: none; /* 링크 밑줄 제거 */
     transition: background-color 0.3s ease, box-shadow 0.3s ease;
     font-size: 1.1rem;
+    border: none; /* 테두리 제거 */
+
 }
 
 /* 링크에 마우스 오버 시 효과 */
 .list-container a:hover {
     background-color: #ac79cd;
     box-shadow: 0px 4px 8px rgb(255, 239, 242);
-    color: white; /* 글씨 색상을 하얀색으로 유지 */
-
 }
 
 /* 다이어리로 돌아가기 버튼 스타일 */

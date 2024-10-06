@@ -617,30 +617,5 @@ public class ShareController {
         return dto;
     }
 
-    @GetMapping("/weather")
-    public String weather(Model model) {
-        // 날씨 API에서 가져온 데이터를 여기서 처리 (예시로 임시 데이터 사용)
-        int currentTemp = 15; // 현재 온도
-        int maxTemp = 20; // 최고 온도
-        int minTemp = 14; // 최저 온도
-        int tempDifference = 6; // 어제와의 온도 차이
 
-        // 시간별 예보 데이터 (임시 데이터)
-        List<Map<String, Object>> hourlyForecast = new ArrayList<>();
-        for (int i = 4; i <= 8; i++) {
-            Map<String, Object> forecast = new HashMap<>();
-            forecast.put("time", "오후 " + i + "시");
-            forecast.put("temp", 20 - i);
-            hourlyForecast.add(forecast);
-        }
-
-        // 데이터를 모델에 추가하여 Thymeleaf 템플릿에 전달
-        model.addAttribute("currentTemp", currentTemp);
-        model.addAttribute("maxTemp", maxTemp);
-        model.addAttribute("minTemp", minTemp);
-        model.addAttribute("tempDifference", tempDifference);
-        model.addAttribute("hourlyForecast", hourlyForecast);
-
-        return "weather"; // weather.html로 이동
-    }
 }

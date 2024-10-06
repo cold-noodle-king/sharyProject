@@ -34,6 +34,9 @@ public class ShareDiaryDTO {
     // 다이어리 소개글
     private String diaryBio;
 
+    // 공유다이어리 멤버 수
+    private int memberCount;
+
     // 공유다이어리 멤버
     private List<ShareMemberDTO> shareMemberList;
 }

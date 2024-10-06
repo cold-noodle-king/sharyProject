@@ -29,8 +29,8 @@ public class WeatherService {
     private final String BASE_URL_ULTRA = "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/";
     private final ObjectMapper objectMapper = new ObjectMapper();
     private final String stnIds = "108"; // 서울 지점 번호
-    private final String nx = "60"; // 서울시 X 좌표
-    private final String ny = "127"; // 서울시 Y 좌표
+    private final String nx = "61"; // 강남구 삼성1동 X 좌표
+    private final String ny = "125"; // 강남구 삼성1동 Y 좌표
 
     /**
      * 지난 일주일의 날씨 정보를 가져오는 메서드
@@ -178,8 +178,6 @@ public class WeatherService {
         }
     }
 
-
-
     /**
      * 공통 API 호출 메서드
      * @param apiUrl
@@ -208,31 +206,6 @@ public class WeatherService {
         conn.disconnect();
 
         return sb.toString();
-    }
-
-    private String getBaseTime(int hour, int minute) {
-        // 초단기예보는 매시각 30분에 발표되므로, 현재 시간 기준으로 가장 가까운 발표 시간을 계산
-        if (minute < 45) {
-            hour = hour - 1;
-        }
-        if (hour < 0) {
-            hour = 23;
-        }
-        return String.format("%02d30", hour); // 30분 기준
-    }
-
-    private String getForecastTime(LocalDateTime dateTime) {
-        // 현재 시간 이후의 가장 가까운 예보 시간을 계산
-        int minute = dateTime.getMinute();
-        int hour = dateTime.getHour();
-
-        if (minute >= 45) {
-            hour = hour + 1;
-        }
-        if (hour >= 24) {
-            hour = 0;
-        }
-        return String.format("%02d00", hour);
     }
 
     private WeatherDescription getWeatherDescription(String ptyCode, String skyCode) {

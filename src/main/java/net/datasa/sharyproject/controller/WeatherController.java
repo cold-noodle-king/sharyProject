@@ -24,12 +24,13 @@ public class WeatherController {
 
     private final WeatherService weatherService;
 
-    /**
-     *
+  /*  
+    *//**
+     * 날씨 API테스트용 메서드
      * @param model
      * @return
      * @throws Exception
-     */
+     *//*
     @GetMapping("/weather")
     public String getWeather(Model model) throws Exception {
         // 오늘의 날씨 정보
@@ -44,9 +45,13 @@ public class WeatherController {
 
 
         return "weather";
-    }
+    }*/
 
-    // AJAX 요청에 JSON 데이터를 반환하는 메서드 추가
+    /**
+     * ajax로 날씨 정보를 요청하여 반환받는 메서드
+     * @return
+     * @throws Exception
+     */
     @GetMapping("/weatherData")
     @ResponseBody
     public Map<String, Object> getWeatherData() throws Exception {
@@ -65,6 +70,10 @@ public class WeatherController {
         return response;
     }
 
+    /**
+     * 오늘 날씨와 날씨에 따른 아이콘을 반환받는 메서드
+     * @return
+     */
     @ResponseBody
     @GetMapping("/currentWeatherData")
     public Map<String, Object> getCurrentWeatherData() {

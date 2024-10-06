@@ -73,15 +73,20 @@ public class SharememberController {
                     return defaultProfile;
                 });
 
+        // 공유 다이어리 멤버 수를 카운트해서 가져옴
+        int memberCount  = shareDiaryService.getMemberCount(diaryNum);
+
         ShareDiaryDTO dto = shareDiaryService.getDiary(diaryNum);
         model.addAttribute("diary", dto);
         List<ShareMemberDTO> dtoList = shareDiaryService.getMemberList(diaryNum, user.getUsername());
         model.addAttribute("list", dtoList);
         model.addAttribute("profile", profile);
+        model.addAttribute("memberCount", memberCount);
 
         return "share/MemberList";
     }
 
+    // 가입 요청 메서드
     @GetMapping("join")
     @ResponseBody
     public String join(@RequestParam("diaryNum") Integer diaryNum,
@@ -114,19 +119,6 @@ public class SharememberController {
 
         return "share/RegisterRequest";
     }
-
-/*    @ResponseBody
-    @PostMapping("/acceptRequest")
-    public ResponseEntity<String> acceptRequest(@RequestBody Map<String, Object> requestData) {
-        Integer diaryNum = (Integer) requestData.get("diaryNum");
-        String memberId = (String) requestData.get("member");
-
-        log.debug("다이어리넘버: {}, 요청한사용자: {}", diaryNum, memberId);
-
-        shareDiaryService.acceptRegister(diaryNum, memberId);
-
-        return ResponseEntity.ok("가입 요청을 수락하였습니다.");
-    }*/
 
     // 누들킹 이거 요청 수락해도 리스트 계속 잔존해있어서 수정했옹(윤조)
     @ResponseBody

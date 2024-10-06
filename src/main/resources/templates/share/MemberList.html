@@ -22,7 +22,7 @@
     <link rel="stylesheet" href="../footer/css/styles.css">
 
     <!-- MyDiary 페이지 전용 CSS 파일 -->
-    <link href="/css/share/MyDiary.css" rel="stylesheet">
+    <link href="/css/share/memberList.css" rel="stylesheet">
 
     <!-- Google폰트 사용 링크 -->
     <link href='//spoqa.github.io/spoqa-han-sans/css/SpoqaHanSansNeo.css' rel='stylesheet' type='text/css'>
@@ -46,16 +46,18 @@
     <h2>전체 멤버 리스트</h2>
     <br>
     <div class="diary-container">
-        <div>
-            <p>방장: <span th:text="${diary.nickname}"></span></p>
+        <div id="header-container">
+            <span class="diary-header">방장</span> <span class="header-content" th:text="${diary.nickname}"></span>&nbsp;
+            <span class="diary-header">| 전체 멤버 수</span> <span class="header-content" th:text="${memberCount}"></span>
         </div>
+        <br><br>
         <div>
             <table>
                 <tr>
-                    <td>번호</td>
-                    <td>프로필</td>
-                    <td>닉네임</td>
-                    <td>가입일</td>
+                    <th>No.</th>
+                    <th>프로필</th>
+                    <th>닉네임</th>
+                    <th>가입일</th>
                 </tr>
                 <tr th:each="list, i : ${list}">
                     <td th:text="${i.count}"></td>
@@ -68,13 +70,14 @@
             </table>
         </div>
     </div>
-
+    <br><br><br>
     <!-- 메뉴 버튼 (햄버거 아이콘) -->
     <div class="text-center mt-4">
         <button id="goBack" class="btn btn-primary">
-            멤버 관리 페이지로
+            돌아가기
         </button>
     </div>
+    <br><br><br>
 </div>
 
 
