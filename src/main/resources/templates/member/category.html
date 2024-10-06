@@ -18,6 +18,74 @@
 
     <!-- Google폰트 사용 링크 -->
     <link href='//spoqa.github.io/spoqa-han-sans/css/SpoqaHanSansNeo.css' rel='stylesheet' type='text/css'>
+
+    <style>
+
+        /* 전체 페이지에서 스크롤이 발생하지 않도록 설정 */
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+        }
+
+        /* 헤더와 메인 컨텐츠 사이의 간격을 줄이기 위해 패딩을 조정 */
+        #main {
+            padding-top: 30px; /* 헤더와의 간격을 줄이기 위해 기존 값을 20px로 설정 */
+            padding-bottom: 5px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: calc(100% - 100px); /* 푸터 높이를 제외한 전체 높이 */
+        }
+        /* 부트스트랩의 기본 버튼 스타일을 덮어씁니다 */
+        .btn-style {
+            width: 60px !important;
+            padding: 10px !important;
+            font-size: 16px !important;
+            border-radius: 10px !important;
+            background-color: #2c3e50 !important;
+            border-color: #1abc9c !important;
+            border: none !important;  /* 테두리 없애기 */
+            color: white !important;
+            /*transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease !important;*/
+        }
+
+        /* 호버 시 효과 */
+        .btn-style:hover {
+            background-color: #15967d !important; /* 원하는 호버 시 배경색 */
+            border-color: #1abc9c !important; /* 원하는 호버 시 테두리 색 */
+            color: white !important; /* 호버 시 텍스트 색상 */
+        }
+
+        /* 카드 높이 조정 */
+        .card {
+            min-height: 400px; /* 카드의 최소 높이를 400px로 설정 */
+            min-width: 300px;
+            border-radius: 30px !important; /* 모서리를 둥글게 설정 */
+        }
+
+        /*!* 헤더 고정 *!*/
+        /*header {*/
+        /*    position: fixed;*/
+        /*    top: 0;*/
+        /*    width: 100%;*/
+        /*    z-index: 1000;*/
+        /*}*/
+
+         푸터 고정
+        footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+
+        /* 메인 컨텐츠에 패딩 추가 */
+        #main {
+            padding-top: 5px !important; /* 헤더 높이만큼 위쪽 패딩 */
+            padding-bottom: 5px !important; /* 푸터 높이만큼 아래쪽 패딩 */
+        }
+    </style>
 </head>
 <body>
 <!-- 헤더 부분 불러오기 -->
@@ -30,7 +98,8 @@
             <!-- 페이지 제목 -->
             <h3 class="title mb-4">관심 카테고리를 선택해주세요!</h3>
             <h5><span th:text="${member.nickname}"></span> 님을 위한 맞춤 다이어리를 추천해드립니다.</h5>
-
+            <h6>(최대 3개 선택)</h6>
+<br><br>
             <!-- 카테고리 선택 폼 -->
             <form id="categoryForm" action="/member/category" method="post">
                 <!-- hidden으로 memberId 추가 -->
@@ -47,9 +116,9 @@
                 </div>
 
                 <!-- 저장 및 취소 버튼 -->
-                <div class="btn-group">
-                    <button id="save" type="button" class="btn btn-secondary me-2">저장</button>
-                    <button><a href="/home">취소</a></button>
+                <div>
+                    <button id="save" type="button" class="btn-style">저장</button>
+                    <button type="button" onclick="location.href='/home'" class="btn-style">취소</button>
                 </div>
             </form>
         </div>

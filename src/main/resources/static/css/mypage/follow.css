@@ -10,7 +10,12 @@ body {
     border-radius: 12px;
     box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
     margin: 20px auto; /* 중앙 정렬 */
-    margin-top: 100px;
+    margin-top: 150px;
+    max-height: 80vh; /* 화면의 80% 높이까지만 차지하도록 설정 */
+    overflow-y: auto; /* 내용이 많을 때 세로 스크롤 생성 */
+    /* Chrome에서의 스크롤바 꾸미기 적용 */
+    scrollbar-width: thin; /* 스크롤바의 너비를 얇게 */
+    scrollbar-color: #b08ed9 #f1f1f1; /* 스크롤바 색상 (보라색 핸들, 회색 트랙) */
 }
 
 /* 메인 콘텐츠 내부 스타일 */
@@ -152,3 +157,6 @@ button.unfollow:hover {
         max-width: 350px;
     }
 }
+
+
+
