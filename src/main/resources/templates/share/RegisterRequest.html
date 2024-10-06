@@ -74,22 +74,29 @@
     <h2>가입 요청 현황</h2>
     <br>
     <div class="diary-container">
+        <br>
         <div th:if="${#lists.isEmpty(requestList)}">
+            <br><br>
            <p>가입 요청이 없습니다.</p>
+            <br><br><br><br>
         </div>
         <div th:if="${not #lists.isEmpty(requestList)}">
             <table>
                 <tr>
                     <th>No.</th>
+                    <th>프로필</th>
                     <th>닉네임</th>
                     <th>가입 요청일</th>
                     <th></th>
                     <th></th>
                 </tr>
                 <tr th:each="list, i : ${requestList}">
-                    <td><p th:text="${i.count}"></p></td>
-                    <td><p th:text="${list.nickname}"></p></td>
-                    <td><p th:text="${#temporals.format(list.joinDate, 'yyyy-MM-dd HH:mm:ss')}"></p></td>
+                    <td th:text="${i.count}"></td>
+                    <td>
+                        <img th:src="@{${list.profilePicture}}" alt="프로필 사진" />
+                    </td>
+                    <td th:text="${list.nickname}"></td>
+                    <td th:text="${#temporals.format(list.joinDate, 'yyyy-MM-dd HH:mm:ss')}"></td>
                     <td></td>
                     <td>
                         <button class="okBtn" th:data-diary-num="${list.shareDiaryNum}" th:data-member-id="${list.memberId}">수락</button>
@@ -99,13 +106,14 @@
             </table>
         </div>
     </div>
-
+    <br><br><br><br><br><br>
     <!-- 메뉴 버튼 (햄버거 아이콘) -->
     <div class="text-center mt-4">
         <button id="goBack" class="btn btn-primary">
             멤버 관리 페이지로
         </button>
     </div>
+    <br><br><br>
 </div>
 
 

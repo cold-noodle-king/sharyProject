@@ -116,6 +116,7 @@ public class SharememberController {
         List<ShareMemberDTO> dtoList = shareDiaryService.getPendingMembers(diaryNum);
         model.addAttribute("requestList", dtoList);
         model.addAttribute("diary", dto);
+        log.debug("dtoList: {}", dtoList);
 
         return "share/RegisterRequest";
     }
