@@ -29,7 +29,7 @@ public class ProfileService {
 
     public ProfileDTO updateProfile(MultipartFile profileImage, String ment, ProfileEntity profile) {
         // 기존 프로필이 있는지 확인
-      //  ProfileEntity profile = profileRepository.findByMember(member).orElse(null);
+        //  ProfileEntity profile = profileRepository.findByMember(member).orElse(null);
 
         // 기존 프로필이 없으면 새로 생성
         /*if (profile == null) {

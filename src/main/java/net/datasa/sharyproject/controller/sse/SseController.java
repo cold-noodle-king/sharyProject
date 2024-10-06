@@ -1,5 +1,7 @@
 package net.datasa.sharyproject.controller.sse;
 
+// SseController: SSE 기능을 제공하는 컨트롤러
+// 주요 기능: SSE 구독, 메시지 전송, 알림 관리
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.datasa.sharyproject.domain.dto.sse.MessageDTO;
@@ -25,15 +27,15 @@ import java.util.List;
 @Controller
 public class SseController {
 
-    private final SseService sseService;
-    private final SseMessageService sseMessageService; // MessageService 주입
+    private final SseService sseService;    // SSE 서비스
+    private final SseMessageService sseMessageService; // MessageService
 
     /**
      * SSE 홈 페이지로 이동
      */
     @GetMapping("/SseHome")
     public String SseHome() {
-        return "sse/SseHome"; // 반환하는 문자열은 템플릿의 경로입니다.
+        return "sse/SseHome"; // SSE 홈 템플릿 리턴
     }
 
     /**
@@ -53,11 +55,11 @@ public class SseController {
     public SseEmitter subscribe(@AuthenticationPrincipal AuthenticatedUser user) {
 
         log.debug("구독할 로그인 아이디 : {}", user.getUsername());
-        return sseService.subscribe(user.getUsername());
+        return sseService.subscribe(user.getUsername());   // 사용자 ID로 SSE 구독
     }
 
     /**
-     * 메시지 보내기
+     * 메시지를 전송하는 메서드(SSE로 실시간 전송)
      */
     @ResponseBody
     @PostMapping("send")
@@ -114,7 +116,7 @@ public class SseController {
         // createdAt 기준으로 정렬 (최신 순)
         unifiedNotifications.sort((n1, n2) -> n2.getCreatedAt().compareTo(n1.getCreatedAt()));
 
-        return unifiedNotifications;
+        return unifiedNotifications;    // 통합된 알림 목록 반환    
     }
 
 /*    @ResponseBody

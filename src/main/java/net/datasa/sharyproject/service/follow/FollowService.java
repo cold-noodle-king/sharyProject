@@ -166,7 +166,7 @@ public class FollowService {
                         entity.getFollowDate()))
                 .collect(Collectors.toList());
     }*/
-    
+
 
     /**
      * 전체 사용자 검색 기능 추가

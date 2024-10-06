@@ -27,17 +27,18 @@ import java.util.List;
 @Slf4j
 public class ChatController {
 
-    private final ChatService chatService;
-    private final FollowService followService;
-    private final MemberService memberService;
-    private final ProfileService profileService;
+    private final ChatService chatService;      // 채팅 서비스
+    private final FollowService followService; // 팔로우 서비스
+    private final MemberService memberService; // 회원 서비스
+    private final ProfileService profileService; // 프로필 서비스
 
+    // 채팅 홈 화면을 보여주는 메서드(팔로워들과의 모든 채팅 목록을 보여줌)
     @GetMapping
     public String showChatHome(Model model) {
-        String currentUserId = followService.getCurrentUserId();
-        List<ChatDTO> chats = chatService.getAllChatsForUser(currentUserId);
-        model.addAttribute("chats", chats);
-        return "chat/chatHome";
+        String currentUserId = followService.getCurrentUserId(); // 현재 사용자 ID 가져오기
+        List<ChatDTO> chats = chatService.getAllChatsForUser(currentUserId); //사용자가 참여한 모든 채팅 가져오기
+        model.addAttribute("chats", chats); // 채팅 목록을 모델에 추가
+        return "chat/chatHome"; // 홈 화면 리턴
     }
 
 /*  @GetMapping("/room")
@@ -66,7 +67,7 @@ public class ChatController {
         return "chat/chatRoom";
     }*/
 
-    //
+    // 특정 채팅방에 대한 정보와 메시지를 보여주는 메서드
     @GetMapping("/room")
     public String chatRoom(
             @RequestParam(value = "chatId", required = false) Integer chatId,
@@ -76,6 +77,7 @@ public class ChatController {
 
         ChatDTO chat;
 
+        // chatId로 채팅방 조회, 없을 경우 참여자 ID로 채팅방 조회 또는 생성
         if (chatId != null) {
             // chatId로 채팅방 조회
             chat = chatService.getChatById(chatId);
@@ -86,12 +88,13 @@ public class ChatController {
             throw new IllegalArgumentException("채팅방을 찾을 수 없습니다.");
         }
 
+        // 해당 채팅방의 메시지를 가져와 모델에 추가
         List<ChatMessageDTO> messages = chatService.getMessages(chat.getChatId());
 
         model.addAttribute("chat", chat);
         model.addAttribute("messages", messages);
 
-        return "chat/chatRoom";
+        return "chat/chatRoom"; // 채팅방 화면 리턴
     }
 
 
@@ -138,15 +141,15 @@ public class ChatController {
         return "redirect:/chat/room?participant1Id=" + chat.getParticipant1Id() + "&participant2Id=" + chat.getParticipant2Id();
     }*/
 
+    // 채팅 메시지를 전송하는 메서드 (Ajax 요청)
     @PostMapping("/send")
     @ResponseBody
     public ResponseEntity<ChatMessageDTO> sendMessage(@RequestParam("chatId") int chatId,
                                                       @RequestParam("messageContent") String content) {
-        String currentUserId = followService.getCurrentUserId();
-        ChatMessageDTO messageDTO = chatService.sendMessage(chatId, currentUserId, content);
+        String currentUserId = followService.getCurrentUserId();    // 현재 사용자 ID 가져오기
+        ChatMessageDTO messageDTO = chatService.sendMessage(chatId, currentUserId, content);    //메시지 전송
 
-        // 메시지 DTO 반환
-        return ResponseEntity.ok(messageDTO);
+        return ResponseEntity.ok(messageDTO); // 전송된 메시지를 반환
     }
 
     @GetMapping("/chat/start")
