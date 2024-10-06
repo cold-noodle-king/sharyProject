@@ -353,7 +353,55 @@ public class ShareDiaryService {
      * @param diaryNum 공유 다이어리 번호
      * @return 상태가 'PENDING'인 공유 멤버 DTO 리스트
      */
+    /**
+     * 상태가 'PENDING'인 공유 멤버 리스트를 가져오는 메서드
+     * @param diaryNum 공유 다이어리 번호
+     * @return 상태가 'PENDING'인 공유 멤버 DTO 리스트
+     */
     public List<ShareMemberDTO> getPendingMembers(Integer diaryNum) {
+        // 공유 다이어리 엔티티 조회
+        ShareDiaryEntity shareDiaryEntity = shareDiaryRepository.findById(diaryNum)
+                .orElseThrow(() -> new EntityNotFoundException("다이어리를 찾을 수 없습니다."));
+
+        // 상태가 'PENDING'인 공유 멤버 엔티티 리스트 조회
+        List<ShareMemberEntity> pendingMembers = shareMemberRepository.findByShareDiaryAndStatus(shareDiaryEntity, "PENDING");
+
+        // 엔티티를 DTO로 변환하면서 프로필 정보 추가
+        List<ShareMemberDTO> pendingMemberDTOs = pendingMembers.stream()
+                .map(shareMemberEntity -> {
+                    MemberEntity member = shareMemberEntity.getMember();
+
+                    // 프로필 정보 조회
+                    ProfileEntity profile = profileService.findByMember(member)
+                            .orElseGet(() -> {
+                                // 프로필 정보가 없으면 기본 프로필 생성
+                                ProfileEntity defaultProfile = ProfileEntity.builder()
+                                        .member(member)
+                                        .profilePicture("/images/profile.png") // 기본 이미지 설정
+                                        .ment("") // 기본 소개글 설정
+                                        .build();
+                                profileService.saveProfile(defaultProfile);
+                                return defaultProfile;
+                            });
+
+                    // DTO 변환
+                    return ShareMemberDTO.builder()
+                            .shareMemberNum(shareMemberEntity.getShareMemberNum())
+                            .memberId(member.getMemberId())
+                            .nickname(member.getNickname())
+                            .profilePicture(profile.getProfilePicture()) // 프로필 사진 추가
+                            .status(shareMemberEntity.getStatus())
+                            .joinDate(shareMemberEntity.getJoinDate())
+                            // 필요한 다른 필드들...
+                            .build();
+                })
+                .collect(Collectors.toList());
+
+        log.debug("가입 요청 리스트: {}", pendingMemberDTOs);
+        return pendingMemberDTOs;
+    }
+
+   /* public List<ShareMemberDTO> getPendingMembers(Integer diaryNum) {
         // 공유 다이어리 엔티티 조회
         ShareDiaryEntity shareDiaryEntity = shareDiaryRepository.findById(diaryNum)
                 .orElseThrow(() -> new EntityNotFoundException("다이어리를 찾을 수 없습니다."));
@@ -369,7 +417,7 @@ public class ShareDiaryService {
         log.debug("가입 요청 리스트:{}", pendingMemberDTOs);
         return pendingMemberDTOs;
     }
-
+*/
     /**
      * 공유 다이어리 가입 요청을 수락하는 메서드
      * @param diaryNum
@@ -449,7 +497,7 @@ public class ShareDiaryService {
                 })
                 .collect(Collectors.toList());
 
-        log.debug("가입 요청 리스트:{}", memberDTOs);
+        log.debug("멤버 리스트:{}", memberDTOs);
         return memberDTOs;
     }
 

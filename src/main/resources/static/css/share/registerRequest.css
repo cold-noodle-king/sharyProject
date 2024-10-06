@@ -21,7 +21,7 @@
 
 /* 가입 요청이 없을 때 메시지 스타일 */
 .diary-container p {
-    font-size: 1.2rem;
+    font-size: 1.5rem;
     color: #333;
 }
 
@@ -32,10 +32,12 @@
     margin-top: 20px;
 }
 
+/* 테이블 셀의 텍스트 크기 조정 */
 .diary-container th, .diary-container td {
     padding: 12px;
     text-align: center;
     border-bottom: 1px solid #e9ecef;
+    font-size: 1.1rem; /* 텍스트 크기를 1.2rem로 조정 */
 }
 
 /* 테이블 헤더 스타일 */
@@ -43,11 +45,17 @@
     background-color: #f7f7f7;
     font-weight: bold;
     color: #333;
+    font-size: 1.1rem; /* 헤더 텍스트 크기 */
 }
 
-/* 모든 튜플의 배경색을 하얀색으로 */
-.diary-container tbody tr {
-    background-color: #ffffff; /* 하얀색 배경 */
+
+
+/* 가입 요청이 없을 때 한 줄로 보여주는 스타일 */
+.diary-container td[colspan="5"] {
+    text-align: center;
+    color: #888;
+    font-size: 1.2rem;
+    padding: 20px 0;
 }
 
 /* 버튼 스타일 */
@@ -97,4 +105,12 @@
 #goBack:hover {
     background-color: #16a085;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* 프로필 이미지 스타일 */
+.diary-container img {
+    width: 70px;
+    height: 70px;
+    object-fit: cover;
+    border-radius: 50%;
 }

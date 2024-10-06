@@ -156,11 +156,11 @@ $(document).ready(function () {
             error: function (jqXHR, textStatus, errorThrown) {
                 console.error('좋아요 요청 중 오류 발생:', textStatus, errorThrown);
                 alert('좋아요 처리 중 오류가 발생했습니다.');
-            }
+            } 
         });
     });
 
-
+//주석달기
     // 팔로우 버튼 클릭 시 followAll 페이지로 이동
     $('#followButton').on('click', function (e) {
         e.preventDefault();
