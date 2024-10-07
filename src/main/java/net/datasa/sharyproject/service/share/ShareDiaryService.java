@@ -306,6 +306,10 @@ public class ShareDiaryService {
         Optional<ShareDiaryEntity> existingMember = shareMemberRepository
                 .findAcceptedShareDiaryByDiaryNumAndMemberId(diaryNum, memberId);
 
+        // 해당 다이어리와 멤버가 이미 가입되어 있는지 확인
+        Optional<ShareDiaryEntity> rejectedMember = shareMemberRepository
+                .findRejectedShareDiaryByDiaryNumAndMemberId(diaryNum, memberId);
+
         if (existingRequest.isPresent()) {
             // 이미 가입 요청을 한 경우 예외를 던짐
             throw new IllegalStateException("이미 가입 요청을 보낸 다이어리입니다.");
@@ -315,6 +319,12 @@ public class ShareDiaryService {
             // 이미 가입을 한 경우 예외를 던짐
             throw new IllegalStateException("이미 가입이 완료된 다이어리입니다.");
         }
+
+        if (rejectedMember.isPresent()) {
+            // 이미 가입을 한 경우 예외를 던짐
+            throw new IllegalStateException("가입이 거절된 다이어리입니다.");
+        }
+
 
         // 새로운 가입 요청 생성
         ShareMemberEntity shareMemberEntity = new ShareMemberEntity();

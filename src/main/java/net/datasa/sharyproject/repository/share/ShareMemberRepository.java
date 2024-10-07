@@ -33,6 +33,10 @@ public interface ShareMemberRepository extends JpaRepository<ShareMemberEntity, 
     @Query("SELECT sm.shareDiary FROM ShareMemberEntity sm WHERE sm.shareDiary.shareDiaryNum = :diaryNum AND sm.member.memberId = :memberId AND sm.status = 'PENDING'")
     Optional<ShareDiaryEntity> findPendingShareDiaryByDiaryNumAndMemberId(Integer diaryNum, String memberId);
 
+    // 특정 memberId와 shareDiaryNum에 해당하며, status가 REJECTED인 ShareDiaryEntity를 가져오는 쿼리
+    @Query("SELECT sm.shareDiary FROM ShareMemberEntity sm WHERE sm.shareDiary.shareDiaryNum = :diaryNum AND sm.member.memberId = :memberId AND sm.status = 'REJECTED'")
+    Optional<ShareDiaryEntity> findRejectedShareDiaryByDiaryNumAndMemberId(Integer diaryNum, String memberId);
+
     // 상태가 ACCEPTED인 멤버 수를 세는 메서드
     int countByShareDiary_ShareDiaryNumAndStatus(Integer shareDiaryNum, String status);
 

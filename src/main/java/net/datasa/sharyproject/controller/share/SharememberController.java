@@ -145,7 +145,7 @@ public class SharememberController {
     @ResponseBody
     @PostMapping("/reject")
     public ResponseEntity<String> rejectRequest(@RequestParam("diaryNum") Integer diaryNum,
-                                                @RequestParam("String") String memberId) {
+                                                @RequestParam("memberId") String memberId) {
         try {
             log.debug("diaryNum{}", diaryNum);
             log.debug("거절할 아이디: {}", memberId);

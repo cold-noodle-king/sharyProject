@@ -15,7 +15,7 @@
 
     <!-- js파일 로드 -->
     <!--    <script th:src="@{/js/share/registerRequest.js}"></script>-->
-    <script>
+    <script th:inline="javascript">
         $(document).ready(function () {
             $('#goBack').click(function () {
                 window.location.href = '/sharemember/viewMember?diaryNum=' + [[${diary.shareDiaryNum}]];
@@ -59,7 +59,7 @@
                     $.ajax({
                         type: 'POST',
                         url: '/sharemember/reject',
-                        data: JSON.stringify({diaryNum: diaryNum, memberId: memberId}),
+                        data: {diaryNum: diaryNum, memberId: memberId},
                         success: function (response) {
                             console.log('Success:', response);
                             // 필요한 경우 성공 후 다른 동작 수행
