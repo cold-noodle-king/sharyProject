@@ -116,7 +116,8 @@ public class SharememberController {
         List<ShareMemberDTO> dtoList = shareDiaryService.getPendingMembers(diaryNum);
         model.addAttribute("requestList", dtoList);
         model.addAttribute("diary", dto);
-        log.debug("dtoList: {}", dtoList);
+        model.addAttribute("diaryNum", diaryNum);
+        log.debug("가입 요청 리스트: {}", dtoList);
 
         return "share/RegisterRequest";
     }
@@ -137,6 +138,24 @@ public class SharememberController {
         } catch (Exception e) {
             log.error("Error accepting join request", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("가입 요청 수락 중 오류 발생");
+        }
+    }
+
+    // 공유 다이어리 가입 요청 거절 메서드
+    @ResponseBody
+    @PostMapping("/reject")
+    public ResponseEntity<String> rejectRequest(@RequestParam("diaryNum") Integer diaryNum,
+                                                @RequestParam("String") String memberId) {
+        try {
+            log.debug("diaryNum{}", diaryNum);
+            log.debug("거절할 아이디: {}", memberId);
+
+            shareDiaryService.rejectRegister(diaryNum, memberId);
+
+            return ResponseEntity.ok("가입 요청을 거절하였습니다.");
+        } catch (Exception e) {
+            log.error("Error accepting join request", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("가입 요청 거절 중 오류 발생");
         }
     }
 }

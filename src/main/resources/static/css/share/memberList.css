@@ -89,13 +89,13 @@
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-#ban {
+.ban {
     display: block;
     background-color: #d3a1d3;
     color: white;
     padding: 7px;
     text-align: center;
-    border-radius: 10px;
+    border-radius: 5px;
     text-decoration: none; /* 링크 밑줄 제거 */
     transition: background-color 0.3s ease, box-shadow 0.3s ease;
     font-size: 0.9rem;

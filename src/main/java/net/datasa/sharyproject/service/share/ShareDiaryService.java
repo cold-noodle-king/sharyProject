@@ -246,7 +246,7 @@ public class ShareDiaryService {
             case "취미":
                 categoryNum = 5; break;
             case "운동":
-                categoryNum = 5; break;
+                categoryNum = 6; break;
         }
 
         List<ShareDiaryEntity> entity = shareDiaryRepository.findByCategory_CategoryNum(categoryNum);
@@ -353,11 +353,6 @@ public class ShareDiaryService {
      * @param diaryNum 공유 다이어리 번호
      * @return 상태가 'PENDING'인 공유 멤버 DTO 리스트
      */
-    /**
-     * 상태가 'PENDING'인 공유 멤버 리스트를 가져오는 메서드
-     * @param diaryNum 공유 다이어리 번호
-     * @return 상태가 'PENDING'인 공유 멤버 DTO 리스트
-     */
     public List<ShareMemberDTO> getPendingMembers(Integer diaryNum) {
         // 공유 다이어리 엔티티 조회
         ShareDiaryEntity shareDiaryEntity = shareDiaryRepository.findById(diaryNum)
@@ -430,6 +425,8 @@ public class ShareDiaryService {
                 .orElseThrow(() -> new EntityNotFoundException("가입 요청을 찾을 수 없습니다."));
 
         log.debug("가져온 회원 정보:{}", entity);
+        log.debug("diaryNum: {}, memberId: {}", diaryNum, memberId);
+
 
         // 상태를 ACCEPTED로 변경하고 가입 날짜 설정
         entity.setStatus("ACCEPTED");
@@ -456,6 +453,25 @@ public class ShareDiaryService {
 
         // SSE 알림 전송
         sseService.sendNotification(requester.getMemberId(), message, "join_accept");
+    }
+
+    /**
+     * 공유 다이어리 가입 요청을 거절하는 메서드
+     * @param diaryNum
+     * @param memberId
+     */
+    public void rejectRegister(Integer diaryNum, String memberId){
+        // 공유 멤버 엔티티 조회
+        ShareMemberEntity entity = shareMemberRepository
+                .findByShareDiary_ShareDiaryNumAndMember_MemberId(diaryNum, memberId)
+                .orElseThrow(() -> new EntityNotFoundException("가입 요청을 찾을 수 없습니다."));
+
+        log.debug("거절할  회원 정보:{}", entity);
+        log.debug("diaryNum: {}, memberId: {}", diaryNum, memberId);
+
+
+        // 상태를 REJECTED로 변경
+        entity.setStatus("REJECTED");
     }
 
     public List<ShareMemberDTO> getMemberList(Integer diaryNum, String memberId) {

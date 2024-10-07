@@ -374,3 +374,11 @@ strong{
     font-size: large;
 
 }
+
+.modal {
+    z-index: 1050; /* 모달의 z-index 값을 높임 */
+}
+
+footer {
+    z-index: 100; /* footer의 z-index를 낮춤 */
+}
