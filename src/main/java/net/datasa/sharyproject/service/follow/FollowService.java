@@ -2,6 +2,7 @@ package net.datasa.sharyproject.service.follow;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import net.datasa.sharyproject.domain.dto.follow.FollowDTO;
 import net.datasa.sharyproject.domain.dto.member.MemberDTO;
 import net.datasa.sharyproject.domain.entity.follow.FollowEntity;
@@ -24,6 +25,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Transactional
 @Service
+@Slf4j
 public class FollowService {
 
     private final FollowRepository followRepository;
@@ -78,7 +80,7 @@ public class FollowService {
     }
 
     // 팔로우 기능
-    public void follow(String followerId, String followingId) {
+/*    public void follow(String followerId, String followingId) {
         FollowId followId = new FollowId(followerId, followingId);
 
         // 팔로우 관계가 이미 존재하는지 확인
@@ -86,6 +88,30 @@ public class FollowService {
 
         if (existingFollow.isPresent()) {
             throw new RuntimeException("이미 팔로우하고 있는 사용자입니다."); // 이미 팔로우 중인 경우 예외 발생
+        }
+
+        // 팔로우 관계가 존재하지 않으면 저장
+        FollowEntity followEntity = FollowEntity.builder()
+                .followerId(followerId)
+                .followingId(followingId)
+                .followDate(LocalDateTime.now())
+                .build();
+        followRepository.save(followEntity);
+
+        // 팔로우 알림 전송
+        sendFollowNotification(followerId, followingId);
+    }*/
+    // 팔로우 기능
+    public void follow(String followerId, String followingId) {
+        FollowId followId = new FollowId(followerId, followingId);
+
+        // 팔로우 관계가 이미 존재하는지 확인
+        Optional<FollowEntity> existingFollow = followRepository.findById(followId);
+
+        if (existingFollow.isPresent()) {
+            // 이미 팔로우 중이면 경고 메시지를 남기고 중단
+            log.warn("사용자 {}는 이미 {}를 팔로우 중입니다.", followerId, followingId);
+            return;  // 이미 팔로우된 경우 추가 작업 수행하지 않음
         }
 
         // 팔로우 관계가 존재하지 않으면 저장
@@ -251,6 +277,17 @@ public class FollowService {
                 .filter(follow -> follow.getFollowingId().toLowerCase().contains(query.toLowerCase()))
                 .map(follow -> new FollowDTO(follow.getFollowerId(), follow.getFollowingId(), follow.getFollowDate()))
                 .collect(Collectors.toList());
+    }
+
+    /**
+     * 팔로우 여부 반환
+     * @param currentUserId
+     * @param targetUserId
+     * @return
+     */
+    public boolean isFollowing(String currentUserId, String targetUserId) {
+        Optional<FollowEntity> follow = followRepository.findById(new FollowId(currentUserId, targetUserId));
+        return follow.isPresent();
     }
 
 }

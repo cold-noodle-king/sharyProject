@@ -94,28 +94,38 @@ $(document).ready(function () {
     $('#profile-tab').on('click', function () {
         var memberId = $('#customModalProfilePicture').data('member-id');
 
-        if (!memberId) {
+        if (!memberId) {  // memberId가 없으면 오류 처리
             console.error('memberId가 지정되지 않았습니다.');
             return;
         }
 
-        // 프로필 정보를 가져오는 Ajax 요청
+        // AJAX 요청으로 프로필 정보를 가져오기
         $.ajax({
-            url: '/portfolio/member/profile/' + memberId,
+            url: '/member/profile/' + memberId, // 서버에서 프로필 데이터를 가져오는 URL
             type: 'GET',
             success: function (profileResponse) {
-                console.log('프로필 데이터:', profileResponse);
+                console.log('프로필 데이터:', profileResponse);  // 디버깅을 위해 서버로부터 받은 데이터 출력
 
-                // 프로필 정보 탭 업데이트
-                var profilePicturePath = profileResponse.profilePicture
+                // 프로필 이미지 경로 설정
+                let profilePicturePath = profileResponse.profilePicture
                     ? profileResponse.profilePicture.startsWith('/uploads/profile/')
                         ? profileResponse.profilePicture
                         : '/uploads/profile/' + profileResponse.profilePicture
-                    : '/images/profile.png';
+                    : '/images/profile.png';  // 프로필 이미지가 없으면 기본 이미지 사용
 
-                $('#profileModalImage').attr('src', profilePicturePath);
-                $('#profileModalNickname').text(profileResponse.nickname || '');
-                $('#profileModalMent').text(profileResponse.ment || '소개글이 없습니다.');
+                // 프로필 정보 모달에 데이터 삽입
+                $('#profileModalImage').attr('src', profilePicturePath);  // 프로필 이미지 설정
+                $('#profileModalNickname').text(profileResponse.nickname || '');  // 닉네임 설정
+                $('#profileModalMent').text(profileResponse.ment || '소개글이 없습니다.');  // 소개글 설정
+
+                // 팔로우 여부에 따른 버튼 표시
+                if (profileResponse.isFollowing) {  // 이미 팔로우 중인 경우
+                    $('#followButton').hide();  // 팔로우 버튼 숨기기
+                    $('#unFollowButton').show();  // 팔로우 취소 버튼 보이기
+                } else {  // 팔로우 중이 아닌 경우
+                    $('#unFollowButton').hide();  // 팔로우 취소 버튼 숨기기
+                    $('#followButton').show();  // 팔로우 버튼 보이기
+                }
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 console.error('프로필 정보를 가져오는 중 오류:', textStatus, errorThrown);
@@ -123,6 +133,7 @@ $(document).ready(function () {
             }
         });
     });
+
 
     // 프로필 이미지 클릭 시 프로필 탭으로 전환
     $('#customModalProfilePicture').on('click', function () {
@@ -160,13 +171,61 @@ $(document).ready(function () {
         });
     });
 
-//주석달기
-    // 팔로우 버튼 클릭 시 followAll 페이지로 이동
-    $('#followButton').on('click', function (e) {
-        e.preventDefault();
-        var followingId = $('#customModalProfilePicture').data('member-id');
-        if (followingId) {
-            window.location.href = '/followAll?search=' + encodeURIComponent(followingId);
+    // 팔로우 버튼 클릭 시
+    $('#followButton').on('click', function () {
+        let memberId = $('#customModalProfilePicture').data('member-id');
+        console.log('팔로우 버튼 클릭됨, memberId:', memberId); // 요청 시작 시 콘솔 출력
+
+        // 데이터가 제대로 전송되는지 확인
+        if (!memberId) {
+            console.error('팔로우할 memberId가 없습니다.');
+            return;
         }
+
+        // AJAX 요청을 통해 팔로우 요청 보내기
+        $.ajax({
+            url: '/follow',  // 서버에 팔로우 요청을 보낼 URL
+            type: 'POST',
+            data: {
+                followerId: memberId  // 팔로우할 사용자 ID 전송
+            },
+            success: function (response) {
+                console.log('팔로우 요청 성공:', response);  // 성공 시 응답 출력
+                if (response) {  // 서버로부터 true가 반환된 경우
+                    alert('팔로우 하였습니다.');
+                    $('#followButton').hide();  // 팔로우 버튼 숨기기
+                    $('#unFollowButton').show();  // 팔로우 취소 버튼 보이기
+                } else {
+                    alert('팔로우 처리 중 오류가 발생했습니다.');
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.error('팔로우 요청 중 오류 발생:', textStatus, errorThrown);
+                alert('팔로우 처리 중 오류가 발생했습니다.');
+            }
+        });
     });
+
+// 팔로우 취소 버튼 클릭 시
+    $('#unFollowButton').on('click', function () {
+        var memberId = $('#customModalProfilePicture').data('member-id');
+
+        $.ajax({
+            url: '/follow/delete',
+            type: 'DELETE',
+            data: {
+                followingId: memberId
+            },
+            success: function (response) {
+                alert('팔로우 취소되었습니다.');
+                $('#unFollowButton').hide();  // 팔로우 취소 버튼 숨기기
+                $('#followButton').show();  // 팔로우 버튼 보이기
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.error('팔로우 취소 요청 중 오류 발생:', textStatus, errorThrown);
+                alert('팔로우 취소 처리 중 오류가 발생했습니다.');
+            }
+        });
+    });
+
 });

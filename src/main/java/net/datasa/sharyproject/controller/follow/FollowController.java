@@ -13,12 +13,11 @@ import net.datasa.sharyproject.service.mypage.ProfileService;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -30,7 +29,7 @@ public class FollowController {
     private final ProfileService profileService;
 
     /**
-     * follow 기능
+     * follow 페이지 렌더링
      * @return
      */
     @GetMapping("/follow")
@@ -40,7 +39,7 @@ public class FollowController {
     }
 
     /**
-     * insert 기능
+     * 모든 사용자 팔로우/언팔로우 처리 기능
      * @return
      */
     @GetMapping("/insert")
@@ -54,7 +53,7 @@ public class FollowController {
     }
 
     /**
-     * 팔로우 전체 목록 페이지로 이동
+     * 현재 사용자의 팔로우 목록과 팔로워 목록 페이지로 이동
      * @param model
      * @return
      */
@@ -84,7 +83,6 @@ public class FollowController {
                 });
 
         model.addAttribute("profile", profile);
-
         model.addAttribute("followers", followers);
         model.addAttribute("following", following);
         log.info("Followers: {}", followers);
@@ -94,7 +92,7 @@ public class FollowController {
     }
 
     /**
-     * 팔로우하기
+     * 특정 사용자를 팔로우하는 로직
      * @param followerId
      * @param followingId
      * @return
@@ -111,7 +109,49 @@ public class FollowController {
         return "redirect:/followAll";
     }
 
+    /**
+     * AJAX 요청을 통해 특정 사용자 팔로우 처리
+     * @param followerId
+     * @param user
+     * @return
+     */
+    @ResponseBody
+    @PostMapping("/follow")
+    public boolean followUser(@RequestParam("followerId") String followerId,
+                              @AuthenticationPrincipal AuthenticatedUser user) {
+        try {
+            // 현재 사용자와 팔로우할 대상 사용자 정보 확인
+            log.info("팔로우 요청: followerId={}, currentUser={}", followerId, user.getUsername());
 
+            // 팔로우 요청 처리
+            followService.follow(user.getUsername(), followerId);
+        } catch (Exception e) {
+            // 예외 발생 시 로그에 출력
+            log.error("팔로우 처리 중 오류 발생: ", e);
+            return false; // 실패 시 false 반환
+        }
+        return true; // 성공 시 true 반환
+    }
+
+    /**
+     * 특정 사용자를 언팔로우 처리
+     * @param followingId
+     * @param user
+     * @return
+     */
+    @ResponseBody
+    @DeleteMapping("/follow/delete")
+    public boolean unfollowUser(@RequestParam("followingId") String followingId,
+                                @AuthenticationPrincipal AuthenticatedUser user) {
+        try {
+            // 현재 사용자가 해당 유저를 언팔로우
+            followService.unfollow(followingId);
+        } catch (Exception e) {
+            log.error("언팔로우 처리 중 오류 발생: ", e);
+            return false;
+        }
+        return true;
+    }
 
     /**
      * 언팔로우하기
@@ -162,4 +202,28 @@ public class FollowController {
         List<MemberDTO> matchingUsers = followService.searchAllUsers(query, currentUserId);
         return matchingUsers;
     }
+
+    /**
+     * 사용자 프로필 및 팔로우 상태 정보 반환
+     * @param memberId
+     * @param user
+     * @return
+     */
+    @GetMapping("/member/profile/{memberId}")
+    @ResponseBody
+    public Map<String, Object> getMemberProfile(@PathVariable String memberId, @AuthenticationPrincipal AuthenticatedUser user) {
+        Map<String, Object> response = new HashMap<>();
+
+        // 사용자 정보 불러오기
+        MemberDTO member = memberService.getMember(memberId);
+        response.put("nickname", member.getNickname());
+        //response.put("ment", member.getMent());
+
+        // 팔로우 상태 확인
+        boolean isFollowing = followService.isFollowing(user.getUsername(), memberId);
+        response.put("isFollowing", isFollowing);
+
+        return response;  // JSON 형태로 반환
+    }
+
 }

@@ -74,7 +74,16 @@
                                 <p id="profileModalMent" style="white-space: pre-wrap;">한 줄 소개</p>
 
                                 <!-- 팔로우 버튼 -->
-                                <button id="followButton" class="btn btn-primary">팔로우</button>
+                                <!--<button id="followButton" class="btn btn-primary">팔로우</button>
+                                <button id="unFollowButton" class="btn btn-primary">팔로우 취소</button>-->
+
+                                <!-- 팔로우 버튼 -->
+                                <button id="followButton" class="btn btn-primary" style="display: none;">팔로우</button>
+
+                                <!-- 팔로우 취소 버튼 -->
+                                <button id="unFollowButton" class="btn btn-danger" style="display: none;">팔로우 취소</button>
+
+
                             </div>
                         </div>
                     </div>
@@ -99,7 +108,7 @@
                         <h4 id="profileNickname">닉네임</h4>
 
                         <!-- 소개글 -->
-                        <p id="profileMent">소개글이 없습니다.</p>
+                        <pre id="profileMent">소개글이 없습니다.</pre>
                     </div>
                 </div>
             </div>
