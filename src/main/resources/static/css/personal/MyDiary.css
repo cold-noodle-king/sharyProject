@@ -5,7 +5,6 @@
     border-radius: 8px;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
     margin-top: 100px; /* 헤더와의 간격 더 추가 */
-    height: 400px;
 }
 
 /* 신규 다이어리 추가 버튼의 링크 밑줄 제거 */
