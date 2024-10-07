@@ -2,7 +2,7 @@
 #my-note-main {
     max-width: 1000px;
     margin: 0 auto;
-    padding: 20px;
+    padding: 10px;
 }
 
 /* 카테고리 링크 스타일 */
@@ -69,6 +69,11 @@
     width: 30%; /* 소개글 컬럼 너비 설정 */
 }
 
+/* 이름 컬럼 너비 조정 */
+.diary-table th.title, .diary-table td.title {
+    width: 26%; /* 소개글 컬럼 너비 설정 */
+}
+
 /* 가입 버튼 스타일 */
 .joinBtn {
     background-color: #5bafea;
@@ -84,3 +89,5 @@
     background-color: #1d6de3;
 
 }
+
+
