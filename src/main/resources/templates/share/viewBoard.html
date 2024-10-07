@@ -152,7 +152,7 @@
     <link th:href="@{/footer/css/styles.css}" rel="stylesheet">
 
     <!-- MyNote 페이지 전용 CSS 파일 -->
-    <link href="/css/share/MyNote.css" rel="stylesheet">
+    <link href="/css/share/viewBoard.css" rel="stylesheet">
 
     <!-- Google폰트 사용 링크 -->
     <link href='//spoqa.github.io/spoqa-han-sans/css/SpoqaHanSansNeo.css' rel='stylesheet' type='text/css'>
@@ -173,14 +173,11 @@
         <table>
             <thead>
                 <tr>
-                    <td>No.</td>
-                    <td>노트 제목</td>
-                    <td>작성자</td>
-                    <td>작성일</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    <th>No.</th>
+                    <th>노트 제목</th>
+                    <th>작성자</th>
+                    <th>작성일</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -196,6 +193,7 @@
                     </td>
                     <td th:text="${note.nickname}"></td>
                     <td th:text="${#temporals.format(note.createdDate, 'yyyy.MM.dd HH:mm:ss')}"></td>
+                    <td></td>
                 </tr>
             </tbody>
         </table>

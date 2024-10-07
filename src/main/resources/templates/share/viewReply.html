@@ -10,7 +10,7 @@
     <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
 
     <!-- css파일 불러오기 -->
-    <link href="/css/share/MyNote.css" rel="stylesheet">
+    <link href="/css/share/viewReply.css" rel="stylesheet">
     <!-- weather 스타일 시트 -->
     <link rel="stylesheet" th:href="@{/css/weather.css}">
 
@@ -134,7 +134,33 @@
                 // 댓글 리스트 출력
                 commentList(noteNum);
             });
+
+            $('.delBtn').on('click', function (){
+                let noteNum = $(this).data('note-num');
+                let replyNum = $(this).data('reply-num');
+                let trElement = $(this).closest('tr'); // 해당 tr 요소 가져오기
+
+                if (!confirm('댓글을 삭제하시겠습니까?')) {
+                    return;
+                } else {
+                    $.ajax({
+                        url: '/reply/delete',
+                        type: 'post',
+                        data: { noteNum: noteNum, replyNum: replyNum },
+                        success: function() {
+                            // trElement.css('display', 'none'); // 해당 tr을 숨김
+                            trElement.css('display', 'none'); // 해당 tr을 숨김
+                            alert('댓글을 삭제했습니다.');
+
+                        },
+                        error: function() {
+                            alert('댓글 삭제 중 오류가 발생했습니다.');
+                        }
+                    });
+                }
+            });
         });
+
         function commentList(noteNum) {
             $.ajax({
                 url: '/reply/commentList',
@@ -166,7 +192,7 @@
                     });
 
                     // 삭제 아이콘 클릭 이벤트 리스너 추가
-                    $('.delReply').off('click').on('click', function(e) {
+                    $('.delBtn').off('click').on('click', function(e) {
                         e.preventDefault(); // 기본 링크 동작 방지
                         let noteNum = $(this).data('note-num'); // 노트 번호 가져오기
                         let replyNum = $(this).data('reply-num'); // 댓글 번호 가져오기
@@ -225,13 +251,13 @@
         <table>
             <thead>
                 <tr>
-                    <td>No.</td>
-                    <td>노트 이름</td>
-                    <td>내용</td>
-                    <td>작성자</td>
-                    <td>작성일</td>
-                    <td></td>
-                    <td></td>
+                    <th>No.</th>
+                    <th>노트 이름</th>
+                    <th>내용</th>
+                    <th>작성자</th>
+                    <th>작성일</th>
+                    <th></th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -246,7 +272,7 @@
                     <td th:text="${note.contents}"></td>
                     <td th:text="${note.nickname}"></td>
                     <td th:text="${#temporals.format(note.createdDate, 'yyyy.MM.dd HH:mm:ss')}"></td>
-                    <td><button>삭제</button></td>
+                    <td><button class="delBtn" th:data-note-num="${note.shareNoteNum}" th:data-reply-num="${note.replyNum}">삭제</button></td>
                 </tr>
             </tbody>
         </table>
