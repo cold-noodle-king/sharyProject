@@ -114,4 +114,15 @@ public class ProfileService {
         }
     }
 
+    /**
+            * 사용자 팔로우 여부 확인 메서드
+     * @param currentUserId 현재 로그인한 사용자 ID
+     * @param targetUserId 대상 사용자 ID
+     * @return 팔로우 여부
+     */
+    public boolean isFollowing(String currentUserId, String targetUserId) {
+        // 로직 생략 (팔로우 여부를 DB에서 확인하는 기능)
+        return false;  // 예시로 항상 false 반환
+    }
+
 }

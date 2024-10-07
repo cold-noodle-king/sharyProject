@@ -56,7 +56,7 @@ public class ShareDiaryService {
     // 추가된 부분(윤조 알림)
     private final SseService sseService;
     private final NotificationRepository notificationRepository;
-    
+
     /**
      * 생성한 다이어리를 저장하는 메서드
      * @param shareDiaryDTO 생성한 다이어리 정보를 담은 DTO

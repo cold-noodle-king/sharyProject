@@ -1,4 +1,7 @@
 $(document).ready(function () {
+    // 현재 로그인한 사용자 ID 가져오기 (meta 태그에서 가져옴)
+    const currentUserId = $('meta[name="current-user-id"]').attr('content');
+
     // 포트폴리오 링크 클릭 이벤트 핸들러
     $('.portfolio-link').on('click', function (e) {
         e.preventDefault(); // 기본 클릭 동작 방지
@@ -118,14 +121,31 @@ $(document).ready(function () {
                 $('#profileModalNickname').text(profileResponse.nickname || '');  // 닉네임 설정
                 $('#profileModalMent').text(profileResponse.ment || '소개글이 없습니다.');  // 소개글 설정
 
+
+                // 현재 로그인한 사용자의 프로필이면 팔로우 버튼을 비활성화
+                if (currentUserId && memberId && currentUserId === memberId) {
+                    $('#followButton').hide();  // 팔로우 버튼 숨기기
+                    $('#unFollowButton').hide();  // 팔로우 취소 버튼도 숨기기
+                } else {
+                    // 팔로우 여부에 따른 버튼 표시
+                    if (profileResponse.isFollowing) {  // 이미 팔로우 중인 경우
+                        $('#followButton').hide();  // 팔로우 버튼 숨기기
+                        $('#unFollowButton').show();  // 팔로우 취소 버튼 보이기
+                    } else {  // 팔로우 중이 아닌 경우
+                        $('#unFollowButton').hide();  // 팔로우 취소 버튼 숨기기
+                        $('#followButton').show();  // 팔로우 버튼 보이기
+                    }
+                }
+
+
                 // 팔로우 여부에 따른 버튼 표시
-                if (profileResponse.isFollowing) {  // 이미 팔로우 중인 경우
+                /*if (profileResponse.isFollowing) {  // 이미 팔로우 중인 경우
                     $('#followButton').hide();  // 팔로우 버튼 숨기기
                     $('#unFollowButton').show();  // 팔로우 취소 버튼 보이기
                 } else {  // 팔로우 중이 아닌 경우
                     $('#unFollowButton').hide();  // 팔로우 취소 버튼 숨기기
                     $('#followButton').show();  // 팔로우 버튼 보이기
-                }
+                }*/
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 console.error('프로필 정보를 가져오는 중 오류:', textStatus, errorThrown);
@@ -140,6 +160,7 @@ $(document).ready(function () {
         $('#modalTab a[href="#profileContent"]').tab('show');
         $('#profile-tab').trigger('click'); // 프로필 정보를 탭 전환 시 가져오기
     });
+
     // 좋아요 버튼 처리 로직
     $(document).on('click', '#likeButton', function () {
         var noteNum = $('#hiddenNoteNum').val(); // 노트 번호 가져오기
