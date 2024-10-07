@@ -24,6 +24,15 @@
     <!-- Google폰트 사용 링크 -->
     <link href='//spoqa.github.io/spoqa-han-sans/css/SpoqaHanSansNeo.css' rel='stylesheet' type='text/css'>
 
+    <!-- 토스티파이 관련 -->
+    <!-- Toastify JS 로드 -->
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
+    <!-- Toastify CSS 로드 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+
+
+
     <style>
         pre{font-family: 'SpoqaHanSansNeo', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif !important;}
     </style>
@@ -201,6 +210,46 @@
             }
         };
     </script>
+
+    <!-- SSE 연결 및 Toastify 알림 스크립트 추가 -->
+    <script>
+    $(document).ready(function () {
+        // SSE 연결 설정
+        const eventSource = new EventSource("/subscribe");
+
+        // 'chat' 이벤트 리스너 추가
+        eventSource.addEventListener("chat", function (event) {
+            let data = JSON.parse(event.data);
+            showToastNotification(data);
+        });
+
+        // Toastify 알림 표시 함수
+        function showToastNotification(data) {
+            Toastify({
+                text: `${data.sender}: ${data.content}`,
+                duration: 5000, // 5초 동안 표시
+                close: true,
+                gravity: "top",
+                position: "right",
+                backgroundColor: "#4fbe87",
+                stopOnFocus: true,
+                onClick: function() {
+                    // 채팅방으로 이동하는 함수 호출
+                    moveToChatRoom(data.chatId);
+                }
+            }).showToast();  // Toastify 알림 표시
+        }
+
+        // 채팅방으로 이동하는 함수
+        function moveToChatRoom(chatId) {
+            // 해당 채팅방 URL로 리디렉션
+            window.location.href = '/chat/room?chatId=' + chatId;
+        }
+    });
+
+    const currentUserId = document.querySelector('meta[name="current-user-id"]').getAttribute('content');
+
+</script>
 
 </head>
 <body onload="openTab('allUsers')">
