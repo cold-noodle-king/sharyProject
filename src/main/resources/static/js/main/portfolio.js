@@ -101,7 +101,7 @@ $(document).ready(function () {
 
         // AJAX 요청으로 프로필 정보를 가져오기
         $.ajax({
-            url: '/member/profile/' + memberId, // 서버에서 프로필 데이터를 가져오는 URL
+            url: '/portfolio/member/profile/' + memberId, // 서버에서 프로필 데이터를 가져오는 URL
             type: 'GET',
             success: function (profileResponse) {
                 console.log('프로필 데이터:', profileResponse);  // 디버깅을 위해 서버로부터 받은 데이터 출력
