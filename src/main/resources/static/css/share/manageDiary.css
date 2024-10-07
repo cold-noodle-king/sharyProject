@@ -68,3 +68,59 @@
     background-color: #3aba8e;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
 }
+
+#inputBio{
+    width: 350px;
+}
+
+#submit{
+    display: inline-block;
+    background-color: #d3a1d3;
+    color: white;
+    padding: 10px;
+    text-align: center;
+    border-radius: 20px;
+    text-decoration: none; /* 링크 밑줄 제거 */
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    font-size: 0.8rem;
+    width: 45px;
+    border:none;
+    margin: 10px auto 0 auto; /* 버튼을 중앙 정렬 */
+
+}
+
+#submit:hover {
+    background-color: #ac79cd;
+    box-shadow: 0px 4px 8px rgb(255, 239, 242);
+    color: white; /* 글씨 색상을 하얀색으로 유지 */
+
+}
+
+/* bio-container 둥근 모서리 박스 스타일 */
+/*#bio-container {
+    background-color: #f0f0f5; !* 연한 배경색 *!
+    padding: 20px; !* 내부 여백 *!
+    border-radius: 10px; !* 둥근 모서리 *!
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); !* 그림자 효과 *!
+    margin-bottom: 20px; !* 아래 여백 추가 *!
+    width: 100%;
+    max-width: 500px; !* 최대 너비 설정 *!
+    margin: 0 auto; !* 중앙 정렬 *!
+    align-items: center;
+}*/
+
+/* input[type="text"] 태그의 테두리 스타일 */
+input[type="text"] {
+    border: 2px solid #dcdcdc; /* 연한 테두리 색상 */
+    border-radius: 6px; /* 모서리 둥글게 */
+    padding: 10px; /* 내부 여백 */
+    width: calc(100% - 24px); /* 전체 너비에 패딩과 테두리 고려 */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 살짝의 그림자 효과 */
+    transition: border-color 0.3s ease; /* 테두리 색상 변화 애니메이션 */
+}
+
+/* input 태그에 포커스될 때 테두리 색상 변경 */
+input[type="text"]:focus {
+    border-color: #ac79cd; /* 포커스 시 테두리 색상 */
+    outline: none; /* 기본 아웃라인 제거 */
+}

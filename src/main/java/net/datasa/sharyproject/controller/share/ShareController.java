@@ -285,7 +285,7 @@ public class ShareController {
      * @return
      */
     @GetMapping("deleteDiary")
-    public String deleteDiary() {
+    public String deleteDiary(@RequestParam("diaryNum") Integer diaryNum) {
 
         return "share/main";
     }
@@ -336,7 +336,7 @@ public class ShareController {
 
         shareDiaryService.updateBio(diaryNum, diaryBio, user.getUsername());
 
-        return "redirect:/share/infoUpdate?diaryNum=" + diaryNum;
+        return "redirect:/share/manageDiary?diaryNum=" + diaryNum;
     }
 
     @GetMapping("getCoverTemplates")
