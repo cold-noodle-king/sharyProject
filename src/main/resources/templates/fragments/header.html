@@ -78,7 +78,7 @@
                     <!-- 프로필 -->
                     <li class="nav-item">
                         <a href="#" id="profileModalTrigger" data-bs-toggle="modal" data-bs-target="#profileModal">
-                            <img id="headerProfileImage" th:src="@{${profile.profilePicture}}" class="rounded-circle" width="50" height="50" alt="프로필 이미지">
+                            <img id="headerProfileImage" src="/images/profile.png" class="rounded-circle" width="50" height="50" alt="프로필 이미지">
                         </a>
                     </li>
                     <!-- 종 아이콘 -->
@@ -180,6 +180,23 @@
         }
     });
 </script>
+
+    <!-- 비동기 프로필 이미지 로딩 스크립트 추가 -->
+    <script>
+        $(document).ready(function () {
+            $.ajax({
+                url: '/header/profile-image',
+                type: 'GET',
+                success: function(data) {
+                    $('#headerProfileImage').attr('src', data.profilePicture);
+                },
+                error: function() {
+                    $('#headerProfileImage').attr('src', '/images/profile.png');
+                }
+            });
+        });
+    </script>
+
 </div>
 
 </body>
