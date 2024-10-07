@@ -158,7 +158,7 @@ public class FollowController {
      * @param followingId
      * @return
      */
- /*   @PostMapping("/follow/delete")
+    @PostMapping("/follow/delete")
     public String deleteFollow(@RequestParam("followingId") String followingId) {
         try {
             followService.unfollow(followingId);
@@ -166,7 +166,7 @@ public class FollowController {
             log.error("언팔로우 중 오류 발생", e);
         }
         return "redirect:/followAll";
-    }*/
+    }
 
     /**
      * 전체 사용자 목록을 검색하는 메서드
