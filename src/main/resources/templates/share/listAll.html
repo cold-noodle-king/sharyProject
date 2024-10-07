@@ -98,7 +98,7 @@
             <tr>
                 <th>커버 이미지</th>
                 <th>카테고리</th>
-                <th>이름</th>
+                <th class="title">이름</th>
                 <th>방장</th>
                 <th>멤버 수</th>
                 <th class="intro">다이어리 소개</th> <!-- 클래스 추가 -->
@@ -111,7 +111,7 @@
                     <img th:src="@{'/images/' + ${diary.coverTemplateName} + '.png'}" alt="커버 이미지">
                 </td>
                 <td th:text="${diary.categoryName}"></td>
-                <td th:text="${diary.shareDiaryName}"></td>
+                <td class="title" th:text="${diary.shareDiaryName}"></td>
                 <td th:text="${diary.nickname}"></td>
                 <td th:text="${diary.memberCount} + 1"></td>
                 <td class="intro" th:text="${diary.diaryBio}"></td> <!-- 클래스 추가 -->
