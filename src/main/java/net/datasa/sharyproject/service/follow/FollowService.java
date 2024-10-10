@@ -22,12 +22,17 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-@RequiredArgsConstructor
-@Transactional
-@Service
-@Slf4j
+/**
+ * FollowService 클래스
+ * 이 클래스는 팔로우/언팔로우 기능, 팔로우 리스트 조회, 실시간 팔로우 알림 전송 등을 담당합니다.
+ */
+@RequiredArgsConstructor  // 의존성 주입을 위한 생성자 자동 생성
+@Transactional  // 모든 메서드가 트랜잭션 내에서 실행됨 (실패 시 롤백)
+@Service  // 이 클래스가 서비스 역할을 한다는 것을 명시
+@Slf4j  // 로그 기록을 위한 Lombok 어노테이션
 public class FollowService {
 
+    // 의존성 주입 (팔로우, 멤버, 알림과 관련된 레포지토리 및 서비스)
     private final FollowRepository followRepository;
     private final SseService sseService;  // 알림 전송 서비스 추가
     private final MemberRepository memberRepository;
@@ -35,8 +40,8 @@ public class FollowService {
 
 
     /**
-     * 현재 로그인한 사용자 ID를 반환
-     * @return
+     * 현재 로그인한 사용자의 ID를 반환하는 메서드
+     * @return 현재 로그인한 사용자의 사용자명 (username)
      */
     public String getCurrentUserId() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -48,13 +53,14 @@ public class FollowService {
     }
 
     /**
-     * 현재 사용자의 팔로워 목록을 가져옴
-     * @return
+     * 현재 사용자의 팔로워 목록을 조회하는 메서드
+     * @return 팔로워 목록 (FollowDTO 리스트)
      */
     public List<FollowDTO> getFollowersForCurrentUser() {
         String currentUserId = getCurrentUserId();
         List<FollowEntity> entities = followRepository.findByFollowingId(currentUserId);
 
+        // FollowEntity를 FollowDTO로 변환하여 반환
         return entities.stream()
                 .map(entity -> new FollowDTO(
                         entity.getFollowerId(),
@@ -64,13 +70,14 @@ public class FollowService {
     }
 
     /**
-     * 현재 사용자가 팔로우하고 있는 사용자 목록을 가져옴
-     * @return
+     * 현재 사용자가 팔로우하고 있는 사용자 목록을 조회하는 메서드
+     * @return 팔로우 목록 (FollowDTO 리스트)
      */
     public List<FollowDTO> getFollowingForCurrentUser() {
         String currentUserId = getCurrentUserId();
         List<FollowEntity> entities = followRepository.findByFollowerId(currentUserId);
 
+        // FollowEntity를 FollowDTO로 변환하여 반환
         return entities.stream()
                 .map(entity -> new FollowDTO(
                         entity.getFollowerId(),
@@ -101,7 +108,12 @@ public class FollowService {
         // 팔로우 알림 전송
         sendFollowNotification(followerId, followingId);
     }*/
-    // 팔로우 기능
+
+    /**
+     * 특정 사용자를 팔로우하는 메서드
+     * @param followerId 팔로우 하는 사람의 ID
+     * @param followingId 팔로우 받는 사람의 ID
+     */
     public void follow(String followerId, String followingId) {
         FollowId followId = new FollowId(followerId, followingId);
 
@@ -120,7 +132,7 @@ public class FollowService {
                 .followingId(followingId)
                 .followDate(LocalDateTime.now())
                 .build();
-        followRepository.save(followEntity);
+        followRepository.save(followEntity); // 팔로우 관계 저장
 
         // 팔로우 알림 전송
         sendFollowNotification(followerId, followingId);
@@ -128,11 +140,12 @@ public class FollowService {
 
 
     /**
-     * 팔로우 알림을 db에 저장하고 sse로 전송
-     * @param followerId
-     * @param followingId
+     * 팔로우 알림을 데이터베이스에 저장하고 SSE로 실시간 알림 전송
+     * @param followerId 팔로우 하는 사람의 ID
+     * @param followingId 팔로우 받는 사람의 ID
      */
     private void sendFollowNotification(String followerId, String followingId) {
+        // 팔로우 대상 사용자(MemberEntity)를 조회
         MemberEntity followingMember = memberRepository.findById(followingId)
                 .orElseThrow(() -> new IllegalArgumentException("팔로우 대상 사용자를 찾을 수 없습니다."));
 
@@ -141,30 +154,32 @@ public class FollowService {
 
         // 1. DB에 알림 저장
         NotificationEntity notification = NotificationEntity.builder()
-                .receiver(followingMember)
-                .content(message)
-                .createdAt(LocalDateTime.now())
-                .isRead(false)
-                .notificationType("follow") // 알림 타입 설정 추가
+                .receiver(followingMember)  // 알림을 받을 사용자 설정
+                .content(message)  // 알림 내용
+                .createdAt(LocalDateTime.now())  // 알림 생성 시간
+                .isRead(false)  // 읽지 않은 상태로 설정
+                .notificationType("follow")  // 알림 타입을 "팔로우"로 설정
                 .build();
-        notificationRepository.save(notification);
+        notificationRepository.save(notification);  // 알림 저장
 
         // 2. 실시간으로 SSE 알림 전송
         sseService.sendNotification(followingId, message, "follow");
     }
 
     /**
-     * 언팔로우 기능
-     * @param followingId
+     * 특정 사용자를 언팔로우하는 메서드
+     * @param followingId 언팔로우 대상자의 ID
      */
     public void unfollow(String followingId) {
-        String followerId = getCurrentUserId();
+        String followerId = getCurrentUserId();  // 현재 사용자의 ID 가져오기
         FollowId followId = new FollowId(followerId, followingId);
-        followRepository.deleteById(followId);
+        followRepository.deleteById(followId); // 팔로우 관계 삭제
     }
 
+
     /**
-     *
+     * 모든 사용자를 팔로우하는 메서드 (테스트 용도)
+     * 현재 사용자가 모든 기존 사용자를 팔로우하고, 모든 기존 사용자도 현재 사용자를 팔로우하게 함
      */
     public void insert() {
         String currentUserId = getCurrentUserId();
@@ -175,10 +190,22 @@ public class FollowService {
                 .filter(id -> !id.equals(currentUserId))
                 .collect(Collectors.toList());
 
+        // 모든 기존 사용자와 상호 팔로우 관계를 생성
         for (String existingUserId : existingUserIds) {
             follow(currentUserId, existingUserId); // 신규 사용자가 기존 사용자 모두를 팔로우
             follow(existingUserId, currentUserId); // 기존 사용자가 신규 사용자를 팔로우
         }
+    }
+
+    /**
+     * 팔로우 여부를 확인하는 메서드
+     * @param currentUserId 현재 사용자 ID
+     * @param targetUserId 팔로우 대상 사용자 ID
+     * @return 팔로우 중이면 true, 그렇지 않으면 false
+     */
+    public boolean isFollowing(String currentUserId, String targetUserId) {
+        Optional<FollowEntity> follow = followRepository.findById(new FollowId(currentUserId, targetUserId));
+        return follow.isPresent(); // 팔로우 관계가 있으면 true 반환
     }
 
 /*    public List<FollowDTO> getFollowListForCurrentUser() {
@@ -195,10 +222,10 @@ public class FollowService {
 
 
     /**
-     * 전체 사용자 검색 기능 추가
-     * @param query
-     * @param currentUserId
-     * @return
+     * 전체 사용자를 검색하는 메서드
+     * @param query 검색어
+     * @param currentUserId 현재 사용자 ID
+     * @return 검색된 사용자 목록 (MemberDTO 리스트)
      */
     public List<MemberDTO> searchAllUsers(String query, String currentUserId) {
         // 현재 사용자가 팔로우하고 있는 사용자 ID 목록 가져오기
@@ -207,6 +234,7 @@ public class FollowService {
                 .map(FollowEntity::getFollowingId)
                 .collect(Collectors.toList());
 
+        // 전체 사용자 중 검색어와 일치하는 사용자 목록을 반환
         return memberRepository.findAll().stream()
                 .filter(member -> !member.getMemberId().equals(currentUserId)) // 현재 사용자 제외
                 .filter(member -> member.getMemberId().toLowerCase().contains(query.toLowerCase()) ||
@@ -254,10 +282,10 @@ public class FollowService {
     }*/
 
     /**
-     * 팔로워 검색 기능
-     * @param query
-     * @param currentUserId
-     * @return
+     * 사용자의 팔로워를 검색하는 메서드
+     * @param query 검색어
+     * @param currentUserId 현재 사용자 ID
+     * @return 검색된 팔로워 목록 (FollowDTO 리스트)
      */
     public List<FollowDTO> searchFollowers(String query, String currentUserId) {
         return followRepository.findByFollowingId(currentUserId).stream()
@@ -267,10 +295,10 @@ public class FollowService {
     }
 
     /**
-     * 팔로잉 검색 기능
-     * @param query
-     * @param currentUserId
-     * @return
+     * 사용자의 팔로잉을 검색하는 메서드
+     * @param query 검색어
+     * @param currentUserId 현재 사용자 ID
+     * @return 검색된 팔로잉 목록 (FollowDTO 리스트)
      */
     public List<FollowDTO> searchFollowing(String query, String currentUserId) {
         return followRepository.findByFollowerId(currentUserId).stream()
@@ -279,15 +307,6 @@ public class FollowService {
                 .collect(Collectors.toList());
     }
 
-    /**
-     * 팔로우 여부 반환
-     * @param currentUserId
-     * @param targetUserId
-     * @return
-     */
-    public boolean isFollowing(String currentUserId, String targetUserId) {
-        Optional<FollowEntity> follow = followRepository.findById(new FollowId(currentUserId, targetUserId));
-        return follow.isPresent();
-    }
+
 
 }

@@ -103,6 +103,7 @@
 
 <!-- 쪽지함 메시지 박스 -->
 <div class="message-wrapper">
+  <!-- 쪽지 데이터를 담을 영역 -->
   <div id="messageView"></div>
 </div>
 
@@ -115,15 +116,16 @@
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
+<!-- 쪽지 데이터 로드 및 SSE 연결 관련 스크립트 -->
 <script>
   $(document).ready(function() {
-    // 알림 데이터를 담을 배열
+    // 쪽지 데이터를 담을 배열
     let messages = [];
 
-    // 모든 받은 쪽지 불러오기
+    // 서버로부터 받은 쪽지 데이터를 요청하고, 반환된 데이터를 처리
     $.get("/receivedMessages", function(data) {
       data.forEach(item => {
-        addMessageItem(item);
+        addMessageItem(item); // 각각의 쪽지 데이터를 화면에 추가
       });
     });
 
@@ -132,13 +134,13 @@
 
     // SSE 이벤트 처리 (message)
     eventSource.addEventListener('message', function(event) {
-      let data = JSON.parse(event.data);
-      addMessageItem(data);
+      let data = JSON.parse(event.data); // 서버로부터 받은 데이터를 JSON으로 변환
+      addMessageItem(data); // 새로운 메시지를 화면에 추가
     });
 
     // 쪽지 목록 추가하는 함수 (최신 쪽지가 위로 쌓이게 함)
     function addMessageItem(item) {
-      messages.push(item);
+      messages.push(item);  // 받은 메시지를 배열에 추가
 
       // createdAt 기준으로 정렬 (최신 순)
       messages.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
@@ -149,6 +151,7 @@
       // 정렬된 쪽지들을 다시 렌더링
       messages.forEach(item => {
         let formattedDate = new Date(item.createdAt).toLocaleString();
+        // 메시지 HTML 구조 생성
         let html = `
           <div class="message">
             <div class="avatar">${item.sender.charAt(0).toUpperCase()}</div>
@@ -158,7 +161,7 @@
               <div class="time">${formattedDate}</div>
             </div>
           </div>`;
-        $('#messageView').append(html);
+        $('#messageView').append(html); // 메시지를 메시지 뷰 영역에 추가
       });
     }
   });

@@ -178,20 +178,20 @@
         }
     </style>
 
-    <!-- 탭 전환 스크립트 -->
+    <!-- 탭 전환 스크립트: 사용자가 탭을 클릭하면 해당 탭을 보여줌 -->
     <script>
         function openTab(tabName) {
             var i, tabContent, tablinks;
             tabContent = document.getElementsByClassName("tab-content");
             for (i = 0; i < tabContent.length; i++) {
-                tabContent[i].style.display = "none";
+                tabContent[i].style.display = "none"; // 모든 탭 콘텐츠를 숨김
             }
             tablinks = document.getElementsByClassName("tab");
             for (i = 0; i < tablinks.length; i++) {
-                tablinks[i].classList.remove("active");
+                tablinks[i].classList.remove("active"); // 모든 탭에서 'active' 클래스를 제거
             }
-            document.getElementById(tabName).style.display = "block";
-            document.getElementById(tabName + "-tab").classList.add("active");
+            document.getElementById(tabName).style.display = "block";  // 선택된 탭의 콘텐츠를 보여줌
+            document.getElementById(tabName + "-tab").classList.add("active");  // 선택된 탭에 'active' 클래스 추가
         }
     </script>
 
@@ -205,26 +205,26 @@
 
             // 'chat' 이벤트 리스너 추가
             eventSource.addEventListener("chat", function (event) {
-                let data = JSON.parse(event.data);
-                console.log("Received chat event:", data); // 데이터 확인용 로그
-                showToastNotification(data);
+                let data = JSON.parse(event.data);  // 서버로부터 받은 데이터(JSON 형식)를 파싱
+                console.log("Received chat event:", data);  // 받은 데이터 확인용 로그 출력
+                showToastNotification(data);  // Toastify 알림 표시 함수 호출
             });
 
             // Toastify 알림 표시 함수
             function showToastNotification(data) {
                 Toastify({
-                    text: `${data.sender}: ${data.content}`,
-                    duration: 5000, // 5초 동안 표시
-                    close: true,
-                    gravity: "top",
-                    position: "right",
-                    backgroundColor: "#4fbe87",
-                    stopOnFocus: true,
+                    text: `${data.sender}: ${data.content}`,  // 알림 내용
+                    duration: 5000,  // 5초 동안 표시
+                    close: true,  // 닫기 버튼 추가
+                    gravity: "top",  // 알림이 상단에 표시됨
+                    position: "right",  // 알림이 오른쪽에 표시됨
+                    backgroundColor: "#4fbe87",  // 알림의 배경색
+                    stopOnFocus: true,  // 사용자가 알림을 클릭하면 알림이 사라지지 않음
                     onClick: function() {
                         // 채팅방으로 이동하는 함수 호출
                         moveToChatRoom(data.chatId);
                     }
-                }).showToast();
+                }).showToast(); // Toastify 알림 표시
             }
 
             // 채팅방으로 이동하는 함수
@@ -244,11 +244,13 @@
 <div class="content">
     <div class="sidebar">
         <div class="sidebar-content">
+            <!-- 사용자의 프로필 사진과 정보 표시 -->
             <img th:src="${profile?.profilePicture != null} ? ${profile.profilePicture} : '/images/profile.png'"
                  alt="프로필 사진" class="profile-img">
             <p th:text="${member.nickname}"></p>
             <pre th:text="${profile.ment}"></pre>
 
+            <!-- 사이드바 메뉴 항목 -->
             <a th:href="@{/mypage/info}">개인정보</a>
             <a th:href="@{/mypage/profile}">프로필</a>
             <a th:href="@{/followAll}">친구</a>
@@ -262,11 +264,13 @@
         </div>
     </div>
 
+    <!-- 메인 콘텐츠 (채팅 화면) -->
     <div class="chat-container">
         <div class="chat-header">
             Shary Talk <i class="bi bi-chat-heart"></i>
         </div>
 
+        <!-- 팔로잉/팔로워 탭 -->
         <div class="tabs">
             <div id="following-tab" class="tab active" onclick="openTab('following')">팔로잉</div>
             <div id="followers-tab" class="tab" onclick="openTab('followers')">팔로워</div>
@@ -283,9 +287,11 @@
                 </tr>
                 </thead>
                 <tbody>
+                <!-- 팔로잉 중인 사용자 목록을 반복문으로 표시 -->
                 <tr th:each="user : ${following}">
                     <td th:text="${user.followingId}"></td>
                     <td>
+                        <!-- 특정 사용자와의 채팅방으로 이동하는 폼 -->
                         <form th:action="@{/chat/room}" method="get">
                             <input type="hidden" name="participant1Id" th:value="${#authentication.name}" />
                             <input type="hidden" name="participant2Id" th:value="${user.followingId}" />
@@ -308,9 +314,11 @@
                 </tr>
                 </thead>
                 <tbody>
+                <!-- 팔로워 목록을 반복문으로 표시 -->
                 <tr th:each="user : ${followers}">
                     <td th:text="${user.followerId}"></td>
                     <td>
+                        <!-- 특정 팔로워와의 채팅방으로 이동하는 폼 -->
                         <form th:action="@{/chat/room}" method="get">
                             <input type="hidden" name="participant1Id" th:value="${#authentication.name}" />
                             <input type="hidden" name="participant2Id" th:value="${user.followerId}" />

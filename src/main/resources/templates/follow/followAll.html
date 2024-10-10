@@ -32,11 +32,12 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 
 
-
+    <!-- 기본 스타일 설정 -->
     <style>
         pre{font-family: 'SpoqaHanSansNeo', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif !important;}
     </style>
 
+    <!-- 현재 로그인한 사용자 ID를 가져오기 위한 변수 설정 -->
     <script th:inline="javascript">
         var currentUserId = /*[[${#authentication.name}]]*/ 'anonymousUser';
     </script>
@@ -47,7 +48,7 @@
             event.preventDefault();
             const result = confirm('해당 사용자를 팔로우 하시겠습니까?');
             if (result) {
-                form.submit();
+                form.submit(); // 사용자가 '확인'을 선택하면 폼을 제출
             }
         }
 
@@ -65,16 +66,20 @@
             var i, tabContent, tablinks;
             tabContent = document.getElementsByClassName("tab-content");
 
+
+            // 모든 탭의 내용을 숨김
             for (i = 0; i < tabContent.length; i++) {
                 tabContent[i].classList.remove("active");
                 tabContent[i].style.display = "none";
             }
 
+            // 모든 탭의 버튼에서 활성화 클래스를 제거
             tablinks = document.getElementsByClassName("tab");
             for (i = 0; i < tablinks.length; i++) {
                 tablinks[i].classList.remove("active");
             }
 
+            // 선택된 탭을 활성화
             document.getElementById(tabName).classList.add("active");
             document.getElementById(tabName).style.display = "block";
 
@@ -90,11 +95,12 @@
             const searchTerm = document.getElementById('search-input').value.toLowerCase();
             const activeTab = document.querySelector('.tab-content.active');
 
+            // 검색어가 없으면 검색을 하지 않음
             if (!activeTab) return;
-
             const activeTabId = activeTab.getAttribute('id');
 
             if (activeTabId === 'allUsers') {
+                // 검색어가 없으면 테이블 비움
                 if (searchTerm.trim() === '') {
                     document.getElementById('allUsersTableBody').innerHTML = '';
                     return;
@@ -154,6 +160,7 @@
                             const button = document.createElement('button');
                             button.type = 'submit';
 
+                            // 팔로우 여부에 따라 버튼 텍스트 변경
                             if (user.isFollowing) {
                                 form.action = '/follow/delete'; // 언팔로우 액션
                                 button.textContent = '팔로우 취소';
@@ -252,8 +259,9 @@
 </script>
 
 </head>
-<body onload="openTab('allUsers')">
+<body onload="openTab('allUsers')"> <!-- 페이지 로드 시 'allUsers' 탭을 자동으로 열기 -->
 
+<!-- 페이지의 주요 콘텐츠 시작 -->
 <div class="wrapper">
     <!-- 헤더 부분 불러오기 -->
     <header th:replace="~{fragments/header :: header}"></header>
@@ -268,6 +276,7 @@
                 <p th:text="${member.nickname}"></p>
                 <pre th:text="${profile.ment}"></pre>
 
+                <!-- 사이드바 메뉴 -->
                 <a th:href="@{/mypage/info}">개인정보</a>
                 <a th:href="@{/mypage/profile}">프로필</a>
                 <a th:href="@{/followAll}">친구</a>
@@ -392,8 +401,6 @@
                         </tbody>
                     </table>
                 </div>
-
-
             </div>
         </div>
     </div>

@@ -97,9 +97,14 @@
 
 </head>
 <body>
+
+<!-- 알림 전체를 감싸는 div -->
 <div class="notification-wrapper">
     <h1>알림함</h1>
+
+    <!-- 알림을 표시할 박스 -->
     <div class="notification-box">
+        <!-- 알림 목록이 추가될 div -->
         <div id="msgView"></div>
     </div>
 </div>
@@ -115,47 +120,53 @@
 <!-- 알림함 JavaScript 코드 -->
 <script>
     $(document).ready(function () {
-        let notifications = [];
+        let notifications = [];  // 알림들을 저장하는 배열
 
-        // 모든 알림 불러오기
+        // 서버에서 모든 알림 데이터를 불러오는 AJAX 요청
         $.get("/allNotifications", function (data) {
             data.forEach(item => {
-                addNotificationItem(item);
+                addNotificationItem(item); // 각 알림을 화면에 추가
             });
         });
 
-        // SSE 연결
+        // SSE(서버-클라이언트 간 실시간 통신) 연결 설정
         const eventSource = new EventSource("/subscribe");
 
         // SSE 메시지 이벤트 처리
         eventSource.addEventListener('message', function (event) {
             let data = JSON.parse(event.data);
-            addNotificationItem(data);
+            addNotificationItem(data); // 수신된 메시지를 화면에 추가
         });
 
+        // SSE 알림 이벤트 처리
         eventSource.addEventListener('notification', function (event) {
             let data = JSON.parse(event.data);
-            addNotificationItem(data);
+            addNotificationItem(data);  // 수신된 알림을 화면에 추가
         });
 
+        // SSE 채팅 이벤트 처리
         eventSource.addEventListener("chat", function (event) {
             let data = JSON.parse(event.data);
-            addNotificationItem(data);
+            addNotificationItem(data); // 수신된 채팅 메시지를 화면에 추가
         });
 
-        // 알림 아이템 추가 함수
+        /**
+         * 알림 항목을 화면에 추가하는 함수
+         * @param {Object} item - 알림 데이터
+         */
         function addNotificationItem(item) {
-            notifications.push(item);
+            notifications.push(item); // 알림 배열에 추가
 
             // 최신 알림으로 정렬
             notifications.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
             // 알림 목록 다시 렌더링
-            $('#msgView').empty();
+            $('#msgView').empty(); // 기존 내용 제거
             notifications.forEach(item => {
                 let formattedDate = new Date(item.createdAt).toLocaleString();
-                let html = '';
+                let html = ''; // 알림 HTML을 담을 변수
 
+                // 메시지 타입일 때
                 if (item.type === 'message') {
                     html = `<div class="message">
                                 <div class="avatar">N</div> <!-- '알림'을 'N'으로 변경 -->
@@ -165,8 +176,10 @@
                                     <div class="time">${formattedDate}</div>
                                 </div>
                             </div>`;
+                    // 일반 알림 타입일 때
                 } else if (item.type === 'notification') {
                     if (item.notificationType === 'join_request') {
+                        // 가입 요청 알림인 경우
                         html = `<div class="notification">
                                     <div class="avatar">N</div> <!-- '알림'을 'N'으로 변경 -->
                                     <div class="content">
@@ -176,6 +189,7 @@
                                     </div>
                                 </div>`;
                     } else if (item.notificationType === 'join_accept') {
+                        // 가입 수락 알림인 경우
                         html = `<div class="notification">
                                     <div class="avatar">N</div> <!-- '알림'을 'N'으로 변경 -->
                                     <div class="content">
@@ -185,6 +199,7 @@
                                     </div>
                                 </div>`;
                     } else {
+                        // 기타 일반 알림
                         html = `<div class="notification">
                                     <div class="avatar">N</div> <!-- '알림'을 'N'으로 변경 -->
                                     <div class="content">
@@ -195,6 +210,7 @@
                                 </div>`;
                     }
                 }
+                // 만들어진 알림 HTML을 화면에 추가
                 $('#msgView').append(html);
             });
         }

@@ -12,15 +12,21 @@
 <h1>[ 복합키 테스트 ]</h1>
 
 <p>* 아래 링크 누를 때마다 동일한 내용 저장됨</p>
+<!-- 팔로우 요청을 보내는 폼 -->
 <form action="/followUser" method="post">
-    <input type="hidden" name="followerId" value="로그인한 사용자 ID" /> <!-- 실제 로그인한 사용자 ID로 설정 -->
+    <!-- 로그인한 사용자 ID를 숨겨서 폼에 포함 -->
+    <input type="hidden" name="followerId" value="로그인한 사용자 ID" /> <!-- 실제 로그인한 사용자 ID로 설정해야 함 -->
+    <!-- 팔로우할 대상 사용자의 ID 설정 (예시로 'testUser'로 고정) -->
     <input type="hidden" name="followingId" value="testUser" />
+    <!-- 폼을 제출하는 버튼 -->
     <button type="submit">저장 테스트</button>
 </form>
 
+<!-- 사용자가 전체 팔로우 목록을 확인할 수 있는 링크 -->
 <p>* 전체 팔로우 목록</p>
 <p><a th:href="@{/followAll}">전체 팔로우 목록</a></p>
 
+<!-- 사용자가 전체 Shary 사용자 목록을 확인할 수 있는 링크 -->
 <p>* 전체 shary 사용자 목록</p>
 <p><a th:href="@{/allUsers}">전체 shary 사용자 목록</a></p>
 
