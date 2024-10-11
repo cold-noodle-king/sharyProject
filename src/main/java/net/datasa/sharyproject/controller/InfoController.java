@@ -8,7 +8,7 @@ public class InfoController {
     @GetMapping({"/",""})   //나중에 html 컨트롤러랑 경로 바꾸기
     public String info() {
 
-        return "info";
+        return "member/loginForm";
     }
 
 

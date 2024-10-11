@@ -103,6 +103,31 @@
 
         const calendarIds = ['primary', 'ko.south_korea#holiday@group.v.calendar.google.com', 'c_classroomfba7159e@group.calendar.google.com']; // 여러 캘린더 ID 목록
 
+        // 캘린더 초기화 전역 변수로 설정
+        let calendar;
+
+        // FullCalendar 초기화 함수
+        function initializeCalendar() {
+            const calendarEl = document.getElementById('calendar');
+            calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                height: 500, // 캘린더 높이 설정
+                events: [],  // 로그인 전에는 이벤트를 빈 배열로 설정
+                eventClick: function (info) {
+                    // 모달에 이벤트 정보 표시
+                    document.getElementById('eventTitle').innerText = info.event.title;
+                    document.getElementById('eventStart').innerText = info.event.start.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                    document.getElementById('eventEnd').innerText = info.event.end ? info.event.end.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'N/A';
+                    document.getElementById('eventDescription').innerHTML = info.event.extendedProps.description;
+
+                    // 모달 표시
+                    const eventModal = new bootstrap.Modal(document.getElementById('eventModal'));
+                    eventModal.show();
+                }
+            });
+            calendar.render();
+        }
+
         function gapiLoaded() {
             gapi.load('client', initializeGapiClient);
         }
@@ -153,6 +178,7 @@
             });
         }
 
+        // FullCalendar에 구글 이벤트 추가
         async function listUpcomingEvents() {
             const allEvents = [];
 
@@ -181,25 +207,8 @@
                     allEvents.push(...calendarEvents);
                 }
 
-                // FullCalendar에 이벤트 표시
-                const calendarEl = document.getElementById('calendar');
-                const calendar = new FullCalendar.Calendar(calendarEl, {
-                    initialView: 'dayGridMonth',
-                    height: 500, // 캘린더 높이를 700px로 설정
-                    events: allEvents,
-                    eventClick: function (info) {
-                        // 모달에 이벤트 정보 표시
-                        document.getElementById('eventTitle').innerText = info.event.title;
-                        document.getElementById('eventStart').innerText = info.event.start.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-                        document.getElementById('eventEnd').innerText = info.event.end ? info.event.end.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'N/A';
-                        document.getElementById('eventDescription').innerHTML = info.event.extendedProps.description;
-
-                        // 모달 표시
-                        const eventModal = new bootstrap.Modal(document.getElementById('eventModal'));
-                        eventModal.show();
-                    }
-                });
-                calendar.render();
+                // 기존 캘린더에 구글 이벤트 추가
+                calendar.addEventSource(allEvents);
 
             } catch (err) {
                 console.error("이벤트 가져오기 오류:", err);
@@ -207,6 +216,9 @@
         }
 
         window.onload = function () {
+            // FullCalendar 초기화
+            initializeCalendar();
+
             // GIS client load
             const script1 = document.createElement('script');
             script1.src = 'https://accounts.google.com/gsi/client';
@@ -284,7 +296,7 @@
                 <p><strong>■</strong> <span id="eventTitle"></span></p>
                 <p><strong>시작:</strong> <span id="eventStart"></span></p>
                 <p><strong>종료:</strong> <span id="eventEnd"></span></p>
-                <p><strong>☑️ TODO</strong> <span id="eventDescription"></span></p>
+                <p><strong>☑️ TODO</strong> <pre id="eventDescription"></pre></p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

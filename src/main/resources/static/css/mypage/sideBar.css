@@ -25,7 +25,7 @@ body, html {
 /* 사이드바 스타일 */
 .sidebar {
     width: 300px;
-    background-color: #f2e8c2;
+    background-color: #fffec6;
     padding-left: 10px;
     padding-right: 10px;
     text-align: center;
@@ -51,7 +51,7 @@ body, html {
     padding: 10px 15px;
     text-decoration: none;
     font-size: 18px;
-    color: white;
+    color: black;
     display: block;
 }
 
