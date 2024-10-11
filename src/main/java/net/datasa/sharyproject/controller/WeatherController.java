@@ -24,29 +24,6 @@ public class WeatherController {
 
     private final WeatherService weatherService;
 
-  /*  
-    *//**
-     * 날씨 API테스트용 메서드
-     * @param model
-     * @return
-     * @throws Exception
-     *//*
-    @GetMapping("/weather")
-    public String getWeather(Model model) throws Exception {
-        // 오늘의 날씨 정보
-        TodayWeatherData todayWeather = weatherService.getTodayWeather();
-        log.debug("오늘날씨:{}", todayWeather);
-
-        // 지난 일주일의 날씨 정보
-        List<NewWeatherData> lastWeekWeather = weatherService.getLastWeekWeather();
-
-        model.addAttribute("todayWeather", todayWeather);
-        model.addAttribute("lastWeekWeather", lastWeekWeather);
-
-
-        return "weather";
-    }*/
-
     /**
      * ajax로 날씨 정보를 요청하여 반환받는 메서드
      * @return

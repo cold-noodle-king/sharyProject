@@ -21,6 +21,11 @@ public class ReplyController {
 
     private final ReplyService replyService;
 
+    /**
+     * 공유 다이어리 노트에 달린 댓글을 출력하는 메서드
+     * @param noteNum
+     * @return
+     */
     @ResponseBody
     @PostMapping("commentList")
     public List<ReplyDTO> getList(@RequestParam("noteNum") Integer noteNum) {
@@ -30,6 +35,11 @@ public class ReplyController {
         return list;
     }
 
+    /**
+     * 사용자가 작성한 댓글을 저장 및 출력하는 메서드
+     * @param user
+     * @param dto
+     */
     @ResponseBody
     @PostMapping("write")
     public void write(@AuthenticationPrincipal AuthenticatedUser user,
@@ -42,6 +52,12 @@ public class ReplyController {
         replyService.save(dto);
     }
 
+    /**
+     * 댓글을 삭제하는 메서드
+     * @param user
+     * @param noteNum
+     * @param replyNum
+     */
     @ResponseBody
     @PostMapping("delete")
     public void delete(@AuthenticationPrincipal AuthenticatedUser user,
@@ -66,16 +82,4 @@ public class ReplyController {
 
     }
 
-/*
-    @ResponseBody
-    @PostMapping("update")
-    public void udpate(@ModelAttribute ReplyDTO dto
-            ,@AuthenticationPrincipal AuthenticatedUser user){
-
-        dto.setMemberId(user.getUsername());
-        log.debug("수정할 댓글: {}", dto);
-
-        replyService.update(dto);
-
-    }*/
 }

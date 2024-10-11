@@ -202,16 +202,6 @@ public class ShareController {
     }
 
     /**
-     * 다이어리 카테고리 수정 페이지로 이동하는 메서드
-     *
-     * @return
-     */
-    @GetMapping("categoryUpdate")
-    public String categoryUpdate() {
-        return "share/CategoryUpdate";
-    }
-
-    /**
      * 다이어리를 DB에 저장하는 메서드
      *
      * @param shareDiaryDTO
@@ -267,6 +257,12 @@ public class ShareController {
         return "share/viewBoard";
     }
 
+    /**
+     * 공유 다이어리 관리자가 전체 댓글을 확인할 수 있는 메서드
+     * @param diaryNum
+     * @param model
+     * @return
+     */
     @GetMapping("viewReply")
     public String viewReply(@RequestParam("diaryNum") Integer diaryNum, Model model){
 
@@ -287,19 +283,11 @@ public class ShareController {
     @GetMapping("deleteDiary")
     public String deleteDiary(@RequestParam("diaryNum") Integer diaryNum) {
 
-        return "share/main";
-    }
-
-    /**
-     * 가입한 공유다이어리를 탈퇴하는 메서드
-     *
-     * @return
-     */
-    @PostMapping("withdrawal")
-    public String withdrawal() {
+        shareDiaryService.deleteDiary(diaryNum);
 
         return "share/main";
     }
+
 
     /**
      * 공유다이어리 정보 수정 페이지 출력
@@ -339,6 +327,10 @@ public class ShareController {
         return "redirect:/share/manageDiary?diaryNum=" + diaryNum;
     }
 
+    /**
+     * 다이어리 커버를 가져오는 메서드
+     * @return
+     */
     @GetMapping("getCoverTemplates")
     @ResponseBody
     public List<CoverTemplateDTO> getCoverTemplates() {
@@ -360,7 +352,10 @@ public class ShareController {
         return "share/NoteSelect";  // 노트 템플릿 선택 페이지로 이동
     }
 
-    // 노트 템플릿 데이터를 제공하는 API
+    /**
+     * 노트 템플릿 데이터를 제공하는 API
+     * @return
+     */
     @GetMapping("getNoteTemplates")
     @ResponseBody
     public List<NoteTemplateDTO> getNoteTemplates() {
@@ -531,7 +526,6 @@ public class ShareController {
             // 서비스 호출
             shareNoteService.saveNote(noteDTO, hashtags);
 
-//            return "redirect:/share/main";
             // 다이어리가 사용자가 생성한 것인지 확인
             String loginedMemberId = principal.getName();
             boolean isCreatedDiary = shareDiaryService.isDiaryCreatedByUser(diaryNum, loginedMemberId);

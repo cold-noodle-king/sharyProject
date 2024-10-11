@@ -603,9 +603,32 @@ public class ShareDiaryService {
      * @return
      */
     public boolean isDiaryCreatedByUser(Integer diaryNum, String memberId) {
-        ShareDiaryEntity diary = shareDiaryRepository.findById(diaryNum).orElseThrow(() -> new RuntimeException("Diary not found"));
+        ShareDiaryEntity diary = shareDiaryRepository.findById(diaryNum)
+                .orElseThrow(() -> new RuntimeException("다이어리를 찾을 수 없습니다."));
         return diary.getMember().getMemberId().equals(memberId);  // 다이어리의 생성자가 현재 사용자와 같은지 확인
     }
 
+    /**
+     * 공유 다이어리를 삭제하는 메서드
+     * @param diaryNum
+     */
+    public void deleteDiary(Integer diaryNum){
+        ShareDiaryEntity diary = shareDiaryRepository.findById(diaryNum)
+                .orElseThrow(() -> new RuntimeException("다이어리를 찾을 수 없습니다."));
+
+        shareDiaryRepository.delete(diary);
+    }
+
+    /**
+     * 공유 다이어리를 탈퇴하는 메서드
+     * @param diaryNum
+     * @param memberId
+     */
+    public void withdrawal(Integer diaryNum, String memberId) {
+        ShareMemberEntity member = shareMemberRepository.findByShareDiary_ShareDiaryNumAndMember_MemberId(diaryNum, memberId)
+                .orElseThrow(RuntimeException::new);
+
+        shareMemberRepository.delete(member);
+    }
 
 }
