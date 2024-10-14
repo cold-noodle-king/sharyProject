@@ -24,7 +24,7 @@ import java.util.*;
 public class WeatherService {
 
     // URL 디코딩된 서비스 키 사용
-    private final String SERVICE_KEY = "Al7SHCwILG%2BRLK3XAOjOTNgbXPq7ohv0V0ZXjB5F9KVxB%2FqAJ8YwyvcWkpbL6Z%2BtDa%2FKSDB5jyeA8G8zH8tl%2Bg%3D%3D";
+    private final String SERVICE_KEY = "";
     private final String BASE_URL_ASOS = "http://apis.data.go.kr/1360000/AsosDalyInfoService/";
     private final String BASE_URL_ULTRA = "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/";
     private final ObjectMapper objectMapper = new ObjectMapper();
