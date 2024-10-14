@@ -12,8 +12,8 @@ document.addEventListener('DOMContentLoaded', function () {
     let player; // Spotify Player 객체
     let isSeeking = false; // 사용자가 시크바를 조작 중인지 확인하는 변수
 
-    const clientId = '40fbe4d0d0af450ba156ffd32248a4fd'; // 여기에 내 실제 클라이언트 ID를 입력
-    const redirectUri = 'http://localhost:8888/emotion-popup'; // 여기에 내 리다이렉트 URL을 입력
+    const clientId = ''; // 여기에 내 실제 클라이언트 ID를 입력
+    const redirectUri = ''; // 여기에 내 리다이렉트 URL을 입력
     const scopes = 'streaming user-read-email user-read-private user-modify-playback-state user-read-playback-state'; // 필요한 스코프 추가
 
     // URL에서 액세스 토큰 추출
